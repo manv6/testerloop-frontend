@@ -1,5 +1,6 @@
 import { ReactNodeLike } from "prop-types"
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { datesToFraction } from "../../utils/date";
 import { TimelineContext } from "./context"
 
 type TimelineProviderProps = {
@@ -30,12 +31,7 @@ export const TimelineProvider: React.FunctionComponent<TimelineProviderProps> = 
         [startTime, endTime],
     );
     const currentTimeFraction = useMemo(
-        () => {
-            if (startTime === endTime) {
-                return 0;
-            }
-            return (currentTime.getTime() - startTime.getTime()) / (endTime.getTime() - startTime.getTime());
-        },
+        () => datesToFraction(startTime, endTime, currentTime),
         [startTime, currentTime, endTime],
     );
     const seekFraction = useCallback(
@@ -56,6 +52,7 @@ export const TimelineProvider: React.FunctionComponent<TimelineProviderProps> = 
                         seek((currentTime) => {
                             const target = new Date(currentTime.getTime() + deltaTime);
                             if (target > endTime) {
+                                setPlaying(false);
                                 return endTime;
                             }
                             return target;
@@ -67,7 +64,7 @@ export const TimelineProvider: React.FunctionComponent<TimelineProviderProps> = 
                 return () => clearInterval(interval);
             }
         },
-        [isPlaying, seek, endTime],
+        [isPlaying, setPlaying, seek, endTime],
     );
 
     const [hoverTime, setHoverTime] = useState<Date | null>(null);
