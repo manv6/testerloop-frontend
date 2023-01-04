@@ -3,6 +3,7 @@ import { TimelineProvider } from './hooks/timeline';
 import { TimelineControls } from './components/TimelineControls';
 import { NetworkPanel } from './components/DevTools/Network';
 import { DomPreview } from './components/DomPreview';
+import { Steps } from './components/Steps';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <TimelineControls />
         <NetworkPanel />
         <DomPreview />
+        <Steps />
       </TimelineProvider>
     </div>
   );
