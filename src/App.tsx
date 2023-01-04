@@ -1,9 +1,8 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { TimelineProvider } from './hooks/timeline';
 import { TimelineControls } from './components/TimelineControls';
 import { NetworkPanel } from './components/DevTools/Network';
+import { DomPreview } from './components/DomPreview';
 
 function App() {
   return (
@@ -14,6 +13,7 @@ function App() {
       >
         <TimelineControls />
         <NetworkPanel />
+        <DomPreview />
       </TimelineProvider>
     </div>
   );
