@@ -10,6 +10,11 @@ export const NetworkPanel: React.FunctionComponent = (props) => {
         seekFraction,
         setHoverTimeFraction,
     } = useTimeline();
+    /**
+     * Lifted from https://github.com/overloop-io/overloop-testing-framework/blob/9238513b0fa55e14791e0cd41952219729e10b38/test-data/network/har/duckduckgo.har
+     *
+     * A fake "id" property has been added.
+     */
     const networkEvents = [
         {
             "id": "a",

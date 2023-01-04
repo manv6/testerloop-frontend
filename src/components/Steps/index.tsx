@@ -1,6 +1,11 @@
 import { FunctionComponent } from "react";
 import { useTimeline } from "../../hooks/timeline";
 
+/**
+ * Lifted from https://github.com/overloop-io/overloop-testing-framework/blob/9238513b0fa55e14791e0cd41952219729e10b38/test-data/test-results/json/cucumber-report.json
+ *
+ * Fake timestamps have been added to the steps, as they do not currently contain timestamps, only timings
+ */
 const scenario = {
     "description": "",
     "id": "search-in-duckduckgo-page;search-overloop-in-duckduckgo",

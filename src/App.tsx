@@ -9,6 +9,9 @@ function App() {
   return (
     <div className="App">
       <TimelineProvider
+        /**
+         * Fake timestamps - TODO: Take min/max time of the run to use as the timeline endpoints
+         */
         startTime={new Date(Date.parse("2022-01-01T00:00:00Z"))}
         endTime={new Date(Date.parse("2022-01-01T00:09:00Z"))}
       >
