@@ -1,4 +1,3 @@
-import './App.css';
 import { TimelineProvider } from './hooks/timeline';
 import { TimelineControls } from './components/TimelineControls';
 import { NetworkPanel } from './components/DevTools/Network';
@@ -7,7 +6,7 @@ import { Steps } from './components/Steps';
 
 function App() {
   return (
-    <div className="App">
+    <div>
       <TimelineProvider
         /**
          * Fake timestamps - TODO: Take min/max time of the run to use as the timeline endpoints

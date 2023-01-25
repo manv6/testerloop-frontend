@@ -1,0 +1,63 @@
+.root {
+    display: flex;
+}
+
+.play {
+    position: absolute;
+    bottom: 50%;
+    right: 50%;
+    transform: translate(50%, 50%);
+    border: 1px solid black;
+    width: fit-content;
+}
+
+.seeker {
+    margin: 5px;
+    border: 1px solid black;
+    position: relative;
+    flex-grow: 1;
+    border-radius: 100px;
+    overflow: hidden;
+}
+
+.fill {
+    background: #CCC;
+    border-right: 1px solid #666;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+}
+
+.hover {
+    border-right: 1px solid #000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+}
+
+.marker {
+    position: absolute;
+    height: 100%;
+    border-left: 2px solid black;
+    border-right: 2px solid black;
+
+    &-step {
+        border-color: orange;
+    }
+
+    &-network {
+        border-color: purple;
+    }
+
+    &-error {
+        border-color: red;
+    }
+}
+
+.filters {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
