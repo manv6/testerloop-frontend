@@ -1,5 +1,15 @@
-.root {
+:root {
+    --timeline-played-colour: #2C88D9;
+}
+
+.timeline {
     display: flex;
+    align-items: center;
+    margin: 10px 0;
+
+    &:hover .play {
+        display: initial;
+    }
 }
 
 .play {
@@ -7,57 +17,107 @@
     bottom: 50%;
     right: 50%;
     transform: translate(50%, 50%);
-    border: 1px solid black;
     width: fit-content;
+    background: black;
+    color: white;
+    opacity: 0.4;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    user-select: none;
+    cursor: pointer;
+    display: none;
+
+    span {
+        position: absolute;
+        bottom: 50%;
+        right: 50%;
+        transform: translate(50%, 50%);
+    }
 }
 
 .seeker {
     margin: 5px;
-    border: 1px solid black;
+    border: 3px solid lightgrey;
     position: relative;
     flex-grow: 1;
     border-radius: 100px;
     overflow: hidden;
+    height: 12vh;
+
+    &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        width: 100%;
+        bottom: 50%;
+        height: 5px;
+        transform: translateY(50%);
+        background: lightgrey;
+    }
 }
 
 .fill {
-    background: #CCC;
-    border-right: 1px solid #666;
     position: absolute;
-    top: 0;
     left: 0;
-    bottom: 0;
+    bottom: 50%;
+    height: 5px;
+    transform: translateY(50%);
+    background: var(--timeline-played-colour);
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 50%;
+        right: 0;
+        transform: translate(50%, 50%);
+        height: 20px;
+        width: 20px;
+        background: var(--timeline-played-colour);
+        border-radius: 50%;
+    }
 }
 
 .hover {
-    border-right: 1px solid #000;
     position: absolute;
-    top: 0;
     left: 0;
-    bottom: 0;
+    bottom: 50%;
+    height: 5px;
+    transform: translateY(50%);
+    background: grey;
+    
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 50%;
+        right: 0;
+        transform: translate(50%, 50%);
+        height: 10px;
+        width: 10px;
+        background: grey;
+        border-radius: 50%;
+    }
 }
 
 .marker {
     position: absolute;
     height: 100%;
-    border-left: 2px solid black;
-    border-right: 2px solid black;
-
-    &-step {
-        border-color: orange;
-    }
-
-    &-network {
-        border-color: purple;
-    }
-
-    &-error {
-        border-color: red;
-    }
+    border-left: 1.5px solid black;
+    border-right: 1.5px solid black;
 }
 
 .filters {
     display: flex;
     flex-direction: column;
-    align-items: start;
+    align-items: flex-start;
+}
+
+.filter {
+    display: flex;
+    align-items: center;
+}
+
+.legend {
+    height: 3px;
+    width: 75px;
 }

@@ -1,0 +1,33 @@
+.app {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.expandable-parent {
+    flex-grow: 1;
+    gap: 10px;
+
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 2fr 2fr;
+    grid-template-areas:
+        "steps dom console"
+        "steps dom network";
+}
+
+.expandable-steps {
+    grid-area: steps;
+}
+
+.expandable-dom {
+    grid-area: dom;
+}
+
+.expandable-console {
+    grid-area: console;
+}
+
+.expandable-network {
+    grid-area: network;
+}

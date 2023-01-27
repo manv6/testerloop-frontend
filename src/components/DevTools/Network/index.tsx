@@ -1,21 +1,16 @@
 import { useMemo, useState } from "react";
-import { useTimeline } from "../../../hooks/timeline"
 import { RequestSlice } from "./RequestSlice";
 import networkEvents from "../../../data/networkEvents";
+import styles from './Network.module.scss';
 
 export const NetworkPanel: React.FunctionComponent = () => {
-    const {
-        currentTimeFraction,
-        hoverTimeFraction,
-        seekFraction,
-        setHoverTimeFraction,
-    } = useTimeline();
-    
     const [selectedEventId, setSelectedEventId] = useState<null | string>(null)
-    const selectedEvent = useMemo(() => networkEvents.find(({ id }) => id === selectedEventId), [networkEvents, selectedEventId]);
+    const selectedEvent = useMemo(() => (
+        networkEvents.find(({ id }) => id === selectedEventId)
+    ), [networkEvents, selectedEventId]);
 
     return (
-        <>
+        <div className={styles.network}>
             <table>
                 <thead>
                     <tr>
@@ -61,7 +56,7 @@ export const NetworkPanel: React.FunctionComponent = () => {
                                     {networkEvent.request.url}
                                 </td>
                                 <td>
-                                    {networkEvent.request.queryString}
+                                    {JSON.stringify(networkEvent.request.queryString)}
                                 </td>
                                 <td>
                                     N/A
@@ -80,50 +75,7 @@ export const NetworkPanel: React.FunctionComponent = () => {
                     }
                 </tbody>
             </table>
-            <div
-                style={{
-                    gridArea: "seeker",
-                    margin: "5px",
-                    border: "1px solid black",
-                    position: "relative",
-                    height: Math.max(100, networkEvents.length * 20),
-                }}
-                onMouseMove={(ev) => {
-                    setHoverTimeFraction((ev.clientX - ev.currentTarget.offsetLeft) / ev.currentTarget.offsetWidth);
-                }}
-                onMouseLeave={(ev) => {
-                    setHoverTimeFraction(null);
-                }}
-                onClick={(ev) => {
-                    seekFraction((ev.clientX - ev.currentTarget.offsetLeft) / ev.currentTarget.offsetWidth);
-                }}
-            >
-                <div
-                    style={{
-                        background: "#CCC",
-                        borderRight: "1px solid #666",
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        bottom: 0,
-                        right: `${100 - 100 * currentTimeFraction}%`
-                    }}
-                >
-                </div>
-                {
-                    hoverTimeFraction &&
-                    <div
-                        style={{
-                            borderRight: "1px solid #000",
-                            position: 'absolute',
-                            top: 0,
-                            left: "",
-                            bottom: 0,
-                            right: `${100 - 100 * hoverTimeFraction}%`
-                        }}
-                    >
-                    </div>
-                }
+            <div>
                 {
                     networkEvents.map((networkEvent, i) => (
                         <div
@@ -180,6 +132,6 @@ export const NetworkPanel: React.FunctionComponent = () => {
                     </div>
                 }
             </div>
-        </>
+        </div>
     )
 }
