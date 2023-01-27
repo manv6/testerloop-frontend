@@ -1,7 +1,8 @@
 import React from "react";
 import cx from 'classnames';
 import { useTimeline } from "../../hooks/timeline";
-import scenario from "../../data/scenario";
+import steps from "../../data/steps";
+import styles from "./Steps.module.scss";
 
 type Props = {
     className?: string;
@@ -14,24 +15,23 @@ export const Steps: React.FC<Props> = ({ className }) => {
     } = useTimeline();
 
     return (
-        <div className={cx(className)}>
+        <div className={cx(className, styles.steps)}>
             {
-                scenario.steps.map((step, i) => (
-                    /* TODO: Don't use `i` as a key */
+                steps.map(({ options, timestamp }) => (
                     <div
-                        key={i}
+                        key={`${options.id}-${timestamp}`} // TODO: Should only need ID, but it's not currently unique
                         onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            if (step.from)
-                                seek(step.from);
+                            if (options.wallClockStartedAt)
+                                seek(options.wallClockStartedAt);
                         }}
                     >
-                        ({step.result.status})
-                        {step.keyword} {step.name}
+                        ({options.state})
+                        {options.name} {options.message}
                         {
-                            step.from && step.from <= currentTime &&
-                            step.to && step.to > currentTime &&
+                            options.wallClockStartedAt <= currentTime &&
+                            options.wallClockStartedAt > currentTime && // TODO: THIS IS WRONG. We need an ended time equivalent here
                             '(active)'
                         }
                     </div>

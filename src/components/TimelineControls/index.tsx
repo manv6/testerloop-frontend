@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react';
 import { useTimeline } from "../../hooks/timeline"
 import { datesToFraction } from "../../utils/date";
 import styles from './TimelineControls.module.scss';
-import scenario from '../../data/scenario';
+import steps from '../../data/steps';
 import networkEvents from '../../data/networkEvents';
 
 const MARKER_COLOUR_STEP = '#F7C325';
@@ -29,29 +29,32 @@ export const TimelineControls: React.FunctionComponent<{}> = () => {
     } = useTimeline();
 
     const stepMarkers = useMemo(() => 
-        scenario.steps.filter(({ result }) => result.status == 'passed').map((step) => ({
+        steps.filter(({ options }) => options.groupStart).map(({ options, timestamp }) => ({
+            id: `${options.id}-${timestamp}`,
             type: 'step',
-            start: step.from,
-            startFraction: datesToFraction(startTime, endTime, step.from!),
+            start: options.wallClockStartedAt,
+            startFraction: datesToFraction(startTime, endTime, options.wallClockStartedAt),
             colour: MARKER_COLOUR_STEP
         })
-    ), [scenario, startTime, endTime]);
+    ), [steps, startTime, endTime]);
 
     const networkMarkers = useMemo(() => networkEvents.map((evt) => ({
+        id: evt._requestId,
         type: 'network',
-        start: evt.startedDateTime,
-        startFraction: datesToFraction(startTime, endTime, evt.startedDateTime),
+        start: evt.endedDateTime,
+        startFraction: datesToFraction(startTime, endTime, evt.endedDateTime),
         colour: MARKER_COLOUR_NETWORK
     })), [networkEvents, startTime, endTime]);
 
     const errorMarkers = useMemo(() => 
-        scenario.steps.filter(({ result }) => result.status == 'failed').map((step) => ({
+        steps.filter(({ options }) => options.state == 'failed').map(({ options, timestamp }) => ({
+            id: `${options.id}-${timestamp}`,
             type: 'error',
-            start: step.from,
-            startFraction: datesToFraction(startTime, endTime, step.from!),
+            start: options.wallClockStartedAt,
+            startFraction: datesToFraction(startTime, endTime, options.wallClockStartedAt),
             colour: MARKER_COLOUR_ERROR
         })
-    ), [scenario, startTime, endTime]);
+    ), [steps, startTime, endTime]);
 
     const markers = useMemo(() => [
         ...stepMarkers,
@@ -99,6 +102,7 @@ export const TimelineControls: React.FunctionComponent<{}> = () => {
                         (filters.errors && marker.type == 'error')
                     )).map((marker) => (
                         <div 
+                            key={marker.id}
                             className={cx(
                                 styles.marker,
                                 styles[`marker-${marker.type}`]

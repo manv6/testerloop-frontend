@@ -3,6 +3,7 @@
     border: 3px solid lightgrey;
     border-radius: 5px;
     background: white;
+    overflow: hidden;
 
     // TODO: This is a simple but slightly hacky way of doing expansions
     // and it proably won't support lerping of the element's position.
@@ -15,6 +16,10 @@
         left: 0;
         right: 0;
         z-index: 10;
+    }
+
+    & > * {
+        max-height: 100%;
     }
 }
 
