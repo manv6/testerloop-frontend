@@ -1,0 +1,25 @@
+.child {
+    position: relative;
+    border: 3px solid lightgrey;
+    border-radius: 5px;
+    background: white;
+
+    // TODO: This is a simple but slightly hacky way of doing expansions
+    // and it proably won't support lerping of the element's position.
+    // We'll need to switch to something else eventually but this'll do for now.
+    &.expanded {
+        grid-area: none;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 10;
+    }
+}
+
+.expand {
+    position: absolute;
+    right: 0;
+    top: 0;
+}

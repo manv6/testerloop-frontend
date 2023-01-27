@@ -1,15 +1,20 @@
-import { FunctionComponent } from "react";
+import React from "react";
+import cx from 'classnames';
 import { useTimeline } from "../../hooks/timeline";
 import scenario from "../../data/scenario";
 
-export const Steps: FunctionComponent = () => {
+type Props = {
+    className?: string;
+};
+
+export const Steps: React.FC<Props> = ({ className }) => {
     const {
         currentTime,
         seek,
     } = useTimeline();
 
     return (
-        <div>
+        <div className={cx(className)}>
             {
                 scenario.steps.map((step, i) => (
                     /* TODO: Don't use `i` as a key */
