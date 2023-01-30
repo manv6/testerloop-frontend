@@ -1,22 +1,15 @@
+// TODO: Remove this check once temp data is removed!!
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useMemo } from 'react';
 import cx from 'classnames';
-import { useMemo, useState } from 'react';
-import { useTimeline } from "../../hooks/timeline"
-import { datesToFraction } from "../../utils/date";
+import { useTimeline } from 'src/hooks/timeline';
+import { datesToFraction } from 'src/utils/date';
 import styles from './TimelineControls.module.scss';
-import steps from '../../data/steps';
-import networkEvents from '../../data/networkEvents';
+import steps from 'src/data/steps';
+import networkEvents from 'src/data/networkEvents';
+import { EventType, FILTER_LABELS, MARKER_COLOURS } from 'src/constants/eventType';
 
-const MARKER_COLOUR_STEP = '#F7C325';
-const MARKER_COLOUR_NETWORK = 'purple';
-const MARKER_COLOUR_ERROR = 'red';
-
-export const TimelineControls: React.FunctionComponent<{}> = () => {
-    const [filters, setFilters] = useState({
-        steps: true,
-        network: true,
-        errors: true,
-    });
-    
+export const TimelineControls: React.FC = () => {
     const {
         currentTimeFraction,
         hoverTimeFraction,
@@ -25,36 +18,35 @@ export const TimelineControls: React.FunctionComponent<{}> = () => {
         setHoverTimeFraction,
         seekFraction,
         startTime,
-        endTime
+        endTime,
+        filters,
+        setFilters
     } = useTimeline();
 
-    const stepMarkers = useMemo(() => 
+    const stepMarkers = useMemo(() =>
         steps.filter(({ options }) => options.groupStart).map(({ options, timestamp }) => ({
             id: `${options.id}-${timestamp}`,
-            type: 'step',
+            type: EventType.STEP,
             start: options.wallClockStartedAt,
             startFraction: datesToFraction(startTime, endTime, options.wallClockStartedAt),
-            colour: MARKER_COLOUR_STEP
         })
-    ), [steps, startTime, endTime]);
+        ), [steps, startTime, endTime]);
 
     const networkMarkers = useMemo(() => networkEvents.map((evt) => ({
         id: evt._requestId,
-        type: 'network',
+        type: EventType.NETWORK,
         start: evt.endedDateTime,
         startFraction: datesToFraction(startTime, endTime, evt.endedDateTime),
-        colour: MARKER_COLOUR_NETWORK
     })), [networkEvents, startTime, endTime]);
 
-    const errorMarkers = useMemo(() => 
-        steps.filter(({ options }) => options.state == 'failed').map(({ options, timestamp }) => ({
+    const errorMarkers = useMemo(() =>
+        steps.filter(({ options }) => options.state === 'failed').map(({ options, timestamp }) => ({
             id: `${options.id}-${timestamp}`,
-            type: 'error',
+            type: EventType.ERROR,
             start: options.wallClockStartedAt,
             startFraction: datesToFraction(startTime, endTime, options.wallClockStartedAt),
-            colour: MARKER_COLOUR_ERROR
         })
-    ), [steps, startTime, endTime]);
+        ), [steps, startTime, endTime]);
 
     const markers = useMemo(() => [
         ...stepMarkers,
@@ -81,12 +73,12 @@ export const TimelineControls: React.FunctionComponent<{}> = () => {
                 {
                     hoverTimeFraction
                     && <div
-                            className={styles.hover}
-                            style={{
-                                right: `${100 - 100 * hoverTimeFraction}%`
-                            }}
-                        >
-                        </div>
+                        className={styles.hover}
+                        style={{
+                            right: `${100 - 100 * hoverTimeFraction}%`
+                        }}
+                    >
+                    </div>
                 }
                 <div
                     className={styles.fill}
@@ -97,11 +89,11 @@ export const TimelineControls: React.FunctionComponent<{}> = () => {
                 </div>
                 {
                     markers.filter((marker) => (
-                        (filters.steps && marker.type == 'step') ||
-                        (filters.network && marker.type == 'network') ||
-                        (filters.errors && marker.type == 'error')
+                        (filters.step && marker.type === EventType.STEP) ||
+                        (filters.network && marker.type === EventType.NETWORK) ||
+                        (filters.error && marker.type === EventType.ERROR)
                     )).map((marker) => (
-                        <div 
+                        <div
                             key={marker.id}
                             className={cx(
                                 styles.marker,
@@ -109,7 +101,7 @@ export const TimelineControls: React.FunctionComponent<{}> = () => {
                             )}
                             style={{
                                 left: `${100 * marker.startFraction}%`,
-                                borderColor: marker.colour
+                                borderColor: MARKER_COLOURS[marker.type]
                             }}
                         >
                         </div>
@@ -126,34 +118,18 @@ export const TimelineControls: React.FunctionComponent<{}> = () => {
                 </div>
             </div>
             <div className={styles.filters}>
-                <label className={styles.filter}>
-                    <div className={styles.legend} style={{ background: MARKER_COLOUR_STEP }}></div>
-                    <input 
-                        type="checkbox"
-                        defaultChecked={filters.steps}
-                        onInput={() => setFilters({ ...filters, steps: !filters.steps })} 
-                    />
-                    <span>Step Definitions</span>
-                </label>
-                <label className={styles.filter}>
-                    <div className={styles.legend} style={{ background: MARKER_COLOUR_NETWORK }}></div>
-                    <input 
-                        type="checkbox"
-                        defaultChecked={filters.network}
-                        onInput={() => setFilters({ ...filters, network: !filters.network })} 
-                    />
-                    <span>Network</span>
-                </label>
-                <label className={styles.filter}>
-                    <div className={styles.legend} style={{ background: MARKER_COLOUR_ERROR }}></div>
-                    <input 
-                        type="checkbox"
-                        defaultChecked={filters.errors}
-                        onInput={() => setFilters({ ...filters, errors: !filters.errors })}
-                    />
-                    <span>Error</span>
-                </label>
+                { Object.values(EventType).map((et) => (
+                    <label key={`filter-${et}`} className={styles.filter}>
+                        <div className={styles.legend} style={{ background: MARKER_COLOURS[et] }}></div>
+                        <input
+                            type="checkbox"
+                            defaultChecked={filters[et]}
+                            onInput={() => setFilters({ ...filters, [et]: !filters[et] })}
+                        />
+                        <span>{FILTER_LABELS[et]}</span>
+                    </label>
+                )) }
             </div>
         </div>
-    )
-}
+    );
+};

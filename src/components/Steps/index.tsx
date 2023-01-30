@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 import cx from 'classnames';
-import { useTimeline } from "../../hooks/timeline";
-import steps from "../../data/steps";
-import styles from "./Steps.module.scss";
+import { useTimeline } from 'src/hooks/timeline';
+import steps from 'src/data/steps';
+import styles from './Steps.module.scss';
 
 type Props = {
     className?: string;
@@ -38,5 +38,5 @@ export const Steps: React.FC<Props> = ({ className }) => {
                 ))
             }
         </div>
-    )
+    );
 };

@@ -1,7 +1,7 @@
 export default [
     {
-        from: new Date(Date.parse("2022-01-01T00:00:00Z")),
-        to: new Date(Date.parse("2022-01-01T00:02:00Z")),
+        from: new Date(Date.parse('2022-01-01T00:00:00Z')),
+        to: new Date(Date.parse('2022-01-01T00:02:00Z')),
         body: `
             <html>
             <head>
@@ -13,8 +13,8 @@ export default [
         `,
     },
     {
-        from: new Date(Date.parse("2022-01-01T00:02:00Z")),
-        to: new Date(Date.parse("2022-01-01T00:03:00Z")),
+        from: new Date(Date.parse('2022-01-01T00:02:00Z')),
+        to: new Date(Date.parse('2022-01-01T00:03:00Z')),
         body: `
             <html>
             <head>
@@ -27,8 +27,8 @@ export default [
         `,
     },
     {
-        from: new Date(Date.parse("2022-01-01T00:03:00Z")),
-        to: new Date(Date.parse("2022-01-01T00:09:00Z")),
+        from: new Date(Date.parse('2022-01-01T00:03:00Z')),
+        to: new Date(Date.parse('2022-01-01T00:09:00Z')),
         body: `
             <html>
             <head>

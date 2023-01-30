@@ -1,15 +1,14 @@
-import { ReactNodeLike } from "prop-types"
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { datesToFraction } from "../../utils/date";
-import { TimelineContext } from "./context"
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { EventType } from 'src/constants';
+import { datesToFraction } from 'src/utils/date';
+import { TimelineContext, TimelineContextValue } from './context';
 
-type TimelineProviderProps = {
-    children: ReactNodeLike,
+type Props = React.PropsWithChildren<{
     startTime: Date,
     endTime: Date,
-}
+}>;
 
-export const TimelineProvider: React.FunctionComponent<TimelineProviderProps> = (props) => {
+export const TimelineProvider: React.FC<Props> = (props) => {
     const {
         startTime,
         endTime,
@@ -26,7 +25,7 @@ export const TimelineProvider: React.FunctionComponent<TimelineProviderProps> = 
                     return endTime;
                 }
                 return currentTime;
-            })
+            });
         },
         [startTime, endTime],
     );
@@ -91,6 +90,9 @@ export const TimelineProvider: React.FunctionComponent<TimelineProviderProps> = 
         [startTime, endTime, setHoverTime],
     );
 
+    const [filters, setFilters] = useState(Object.values(EventType).reduce((obj, et) =>
+        ({ ...obj, [et]: true }), {}) as TimelineContextValue['filters']);
+
     const contextValue = {
         currentTime,
         currentTimeFraction,
@@ -104,6 +106,8 @@ export const TimelineProvider: React.FunctionComponent<TimelineProviderProps> = 
         setHoverTimeFraction,
         isPlaying,
         setPlaying,
+        filters,
+        setFilters,
     };
 
     return (
@@ -112,5 +116,5 @@ export const TimelineProvider: React.FunctionComponent<TimelineProviderProps> = 
         >
             {props.children}
         </TimelineContext.Provider>
-    )
+    );
 };

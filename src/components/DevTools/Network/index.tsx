@@ -1,10 +1,12 @@
-import { useMemo, useState } from "react";
-import { RequestSlice } from "./RequestSlice";
-import networkEvents from "../../../data/networkEvents";
+// TODO: Remove this check once temp data is removed!!
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useMemo, useState } from 'react';
+import { RequestSlice } from './RequestSlice';
+import networkEvents from 'src/data/networkEvents';
 import styles from './Network.module.scss';
 
-export const NetworkPanel: React.FunctionComponent = () => {
-    const [selectedEventId, setSelectedEventId] = useState<null | string>(null)
+export const NetworkPanel: React.FC = () => {
+    const [selectedEventId, setSelectedEventId] = useState<null | string>(null);
     const selectedEvent = useMemo(() => (
         networkEvents.find(({ id }) => id === selectedEventId)
     ), [networkEvents, selectedEventId]);
@@ -133,5 +135,5 @@ export const NetworkPanel: React.FunctionComponent = () => {
                 }
             </div>
         </div>
-    )
-}
+    );
+};
