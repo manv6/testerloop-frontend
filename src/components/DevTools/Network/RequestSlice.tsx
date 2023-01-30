@@ -1,8 +1,8 @@
-import { useTimeline } from "../../../hooks/timeline";
-import { datesToFraction } from "../../../utils/date";
+import React from 'react';
+import { useTimeline } from 'src/hooks/timeline';
+import { datesToFraction } from 'src/utils/date';
 
-
-type RequestSliceProps = {
+type Props = {
     event: {
         id: string
         startedDateTime: Date
@@ -12,9 +12,9 @@ type RequestSliceProps = {
         }
     }
     setSelectedEventId: (id: string) => void
-}
+};
 
-export const RequestSlice: React.FunctionComponent<RequestSliceProps> = (props) => {
+export const RequestSlice: React.FC<Props> = (props) => {
     const {
         startTime,
         endTime,
@@ -24,7 +24,7 @@ export const RequestSlice: React.FunctionComponent<RequestSliceProps> = (props) 
     return (
         <div
             style={{
-                border: "1px solid black",
+                border: '1px solid black',
                 background: 'white',
                 position: 'absolute',
                 left: `${100 * datesToFraction(startTime, endTime, props.event.startedDateTime)}%`,
@@ -49,4 +49,4 @@ export const RequestSlice: React.FunctionComponent<RequestSliceProps> = (props) 
             {props.event.request.url}
         </div>
     );
-}
+};

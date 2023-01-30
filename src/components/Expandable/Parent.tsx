@@ -11,7 +11,7 @@ const Parent: React.FC<Props> = ({ className, children }) => {
         <div className={cx(className, styles.parent)}>
             {children}
         </div>
-    )
+    );
 };
 
 export default Parent;

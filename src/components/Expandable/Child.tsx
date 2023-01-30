@@ -16,8 +16,8 @@ const Child: React.FC<Props> = ({ className, notExpandable, children }) => {
         })}>
             {
                 notExpandable ? null : (
-                    <button 
-                        className={styles.expand} 
+                    <button
+                        className={styles.expand}
                         onClick={() => setIsExpanded(!isExpanded)}
                     >
                         { isExpanded ? 'Collapse' : 'Expand' }
@@ -26,7 +26,7 @@ const Child: React.FC<Props> = ({ className, notExpandable, children }) => {
             }
             {children}
         </div>
-    )
+    );
 };
 
 export default Child;
