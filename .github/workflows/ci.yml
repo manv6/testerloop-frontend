@@ -1,4 +1,5 @@
-name: otf_dev_frontend_pipeline
+name: Build and Deploy
+
 on:
   push:
     branches:
