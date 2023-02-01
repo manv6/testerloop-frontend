@@ -1,16 +1,10 @@
 import React from 'react';
 import { useTimeline } from 'src/hooks/timeline';
 import { datesToFraction } from 'src/utils/date';
+import { EventType } from './types';
 
 type Props = {
-    event: {
-        id: string
-        startedDateTime: Date
-        endedDateTime: Date
-        request: {
-            url: string
-        }
-    }
+    event: EventType
     setSelectedEventId: (id: string) => void
 };
 
@@ -22,18 +16,7 @@ export const RequestSlice: React.FC<Props> = (props) => {
     } = useTimeline();
 
     return (
-        <div
-            style={{
-                border: '1px solid black',
-                background: 'white',
-                position: 'absolute',
-                left: `${100 * datesToFraction(startTime, endTime, props.event.startedDateTime)}%`,
-                top: 0,
-                right: `${100 - 100 * datesToFraction(startTime, endTime, props.event.endedDateTime)}%`,
-                bottom: 0,
-                overflow: 'hidden',
-                cursor: 'pointer',
-            }}
+        <tr
             onMouseMove={(ev) => {
                 ev.stopPropagation();
             }}
@@ -46,7 +29,30 @@ export const RequestSlice: React.FC<Props> = (props) => {
                 props.setSelectedEventId(props.event.id);
             }}
         >
-            {props.event.request.url}
-        </div>
+            <td>
+                {props.event.response.status}
+            </td>
+            <td>
+                {props.event.request.method}
+            </td>
+            <td>
+                {props.event.request.url}
+            </td>
+            <td>
+                {JSON.stringify(props.event.request.queryString)}
+            </td>
+            <td>
+                N/A
+            </td>
+            <td>
+                {props.event.response.content.mimeType}
+            </td>
+            <td>
+                {props.event.response._transferSize}
+            </td>
+            <td>
+                {props.event.response.bodySize}
+            </td>
+        </tr>
     );
 };
