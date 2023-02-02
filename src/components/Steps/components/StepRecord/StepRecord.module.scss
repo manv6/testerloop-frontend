@@ -1,0 +1,59 @@
+.stepRecord {
+	cursor: pointer;
+
+	&.hovered,
+	&:hover {
+		background-color: #d3cebf;
+	}
+
+	&.selected {
+		background-color: #F7E6B0;
+	}
+
+	&>.stepName,
+	&>.stepContent>.stepHeader {
+		vertical-align: top;
+		padding: 0.25rem 0.5rem;
+	}
+
+	&>.stepName {
+		text-align: right;
+		color: #2C88D9;
+		font-weight: bold;
+	}
+
+	&>.stepContent {
+		&>.stepHeader {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+
+			&>.success {
+				color: #1AAE9F;
+			}
+
+			&>.error {
+				color: #D3455B;
+			}
+
+			&>.toggleExpandedButton {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+
+				width: 32px;
+				height: 32px;
+
+				border: none;
+				border-radius: 100%;
+				cursor: pointer;
+				
+				&:hover {
+					background-color: #d3cebf;
+				}
+			}
+		}
+	}
+}
