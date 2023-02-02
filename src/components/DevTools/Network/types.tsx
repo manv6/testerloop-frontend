@@ -18,6 +18,7 @@ export interface ResponseType {
     };
     _transferSize?: number;
     bodySize?: number;
+    headers: HeaderEntryType[];
 }
 
 export interface EventType {

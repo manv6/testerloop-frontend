@@ -31,7 +31,7 @@ const SelectedNetworkEventHeaderTab: React.FC<{
             </div>
             <br />
             <div key="2">
-                <b>Sent Headers:</b>
+                <b>Request Headers:</b>
             </div>
             <Table striped bordered>
                 <thead>
@@ -42,6 +42,26 @@ const SelectedNetworkEventHeaderTab: React.FC<{
                 </thead>
                 <tbody>
                     {selectedEvent.request.headers.map(({ name, value }) => (
+                        <tr>
+                            <td>{name}</td>
+                            <td>{value}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </Table>
+            <br />
+            <div key="2">
+                <b>Response Headers:</b>
+            </div>
+            <Table striped bordered>
+                <thead>
+                    <tr>
+                        <th>Header Name</th>
+                        <th>Header Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {selectedEvent.response.headers.map(({ name, value }) => (
                         <tr>
                             <td>{name}</td>
                             <td>{value}</td>
