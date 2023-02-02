@@ -5,6 +5,8 @@ import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
 import CloseButton from 'react-bootstrap/CloseButton';
 
 import { RequestSlice } from './RequestSlice';
@@ -12,11 +14,17 @@ import networkEvents from 'src/data/networkEvents';
 import styles from './Network.module.scss';
 import { EventType } from './types';
 
-const SelectedNetworkEventPanel: React.FC<{
+const SelectedNetworkEventPostDataTab: React.FC<{
+    selectedEvent: EventType;
+}> = ({ selectedEvent }) => {
+    return <pre>{selectedEvent.request?.postData?.text}</pre>;
+};
+
+const SelectedNetworkEventHeaderTab: React.FC<{
     selectedEvent: EventType;
 }> = ({ selectedEvent }) => {
     return (
-        <div key="details" className={styles.networkDetailPanel}>
+        <>
             <br />
             <div key="1">
                 <b>Request to:</b> {selectedEvent.request.url}
@@ -41,6 +49,39 @@ const SelectedNetworkEventPanel: React.FC<{
                     ))}
                 </tbody>
             </Table>
+        </>
+    );
+};
+
+const SelectedNetworkEventPanel: React.FC<{
+    selectedEvent: EventType;
+    activeTabKey?: string | null;
+    onSelectTab: (x: string | null) => void;
+}> = ({ selectedEvent, activeTabKey, onSelectTab }) => {
+    return (
+        <div key="details" className={styles.networkDetailPanel}>
+            <Tabs
+                transition={false}
+                onSelect={onSelectTab}
+                className="mb-3"
+                {...Object.assign(
+                    {},
+                    activeTabKey ? { activeKey: activeTabKey } : null
+                )}
+            >
+                <Tab eventKey="headers" title="Headers">
+                    <SelectedNetworkEventHeaderTab
+                        selectedEvent={selectedEvent}
+                    />
+                </Tab>
+                {selectedEvent.request?.postData && (
+                    <Tab eventKey="postData" title="Post">
+                        <SelectedNetworkEventPostDataTab
+                            selectedEvent={selectedEvent}
+                        />
+                    </Tab>
+                )}
+            </Tabs>
         </div>
     );
 };
@@ -50,6 +91,7 @@ export const NetworkPanel: React.FC = () => {
     const [filterTerm, setFilterTerm] = useState<string>('');
     const [filterCypressEvent, setFilterCypressEvents] =
         useState<boolean>(true);
+    const [activeTabKey, setActiveTabKey] = useState<string | null>('headers');
     const selectedEvent = useMemo(
         () => networkEvents.find(({ id }) => id === selectedEventId),
         [networkEvents, selectedEventId]
@@ -89,9 +131,20 @@ export const NetworkPanel: React.FC = () => {
         [setFilterCypressEvents]
     );
 
+    const onSelectTab = useCallback(
+        (key: string | null) => {
+            setActiveTabKey(key);
+        },
+        [setActiveTabKey]
+    );
+
     useEffect(() => {
         setSelectedEventId(null);
     }, [filterTerm]);
+
+    useEffect(() => {
+        setActiveTabKey('headers');
+    }, [selectedEventId]);
 
     return (
         <div className={styles.network}>
@@ -159,6 +212,8 @@ export const NetworkPanel: React.FC = () => {
             {selectedEvent && (
                 <SelectedNetworkEventPanel
                     selectedEvent={selectedEvent}
+                    activeTabKey={activeTabKey}
+                    onSelectTab={onSelectTab}
                 />
             )}
         </div>

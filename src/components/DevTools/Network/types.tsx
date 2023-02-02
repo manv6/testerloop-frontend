@@ -8,6 +8,7 @@ export interface RequestType {
     url: string;
     method: string;
     queryString: { name: string; value: string }[];
+    postData?: { mimeType: string; text: string };
 }
 
 export interface ResponseType {
