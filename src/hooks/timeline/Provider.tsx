@@ -57,7 +57,7 @@ export const TimelineProvider: React.FC<Props> = (props) => {
                             return target;
                         });
                     },
-                    100,
+                    20,
                 );
 
                 return () => clearInterval(interval);

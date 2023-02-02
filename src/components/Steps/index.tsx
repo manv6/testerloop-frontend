@@ -17,9 +17,9 @@ export const Steps: React.FC<Props> = ({ className }) => {
     return (
         <div className={cx(className, styles.steps)}>
             {
-                steps.map(({ options, timestamp }) => (
+                steps.map(({ options }) => (
                     <div
-                        key={`${options.id}-${timestamp}`} // TODO: Should only need ID, but it's not currently unique
+                        key={`${options.id}-${options.wallClockStartedAt.getTime()}-${options.state}`} // TODO: Should only need ID, but it's not currently unique
                         onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
