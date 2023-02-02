@@ -6,13 +6,18 @@ import networkEvents from 'src/data/networkEvents';
 import styles from './Network.module.scss';
 import { EventType } from './types';
 
-
-const SelectedNetworkEventPanel: React.FC<{ selectedEvent: EventType }> = ({selectedEvent}) => {
+const SelectedNetworkEventPanel: React.FC<{ selectedEvent: EventType }> = ({
+    selectedEvent,
+}) => {
     return (
         <div key="details" className={styles.networkDetailPanel}>
-            <div key='1'><b>Request to:</b> {selectedEvent.request.url}</div>
-            <br/>
-            <div key='2'><b>Sent Headers:</b></div>
+            <div key="1">
+                <b>Request to:</b> {selectedEvent.request.url}
+            </div>
+            <br />
+            <div key="2">
+                <b>Sent Headers:</b>
+            </div>
             <table>
                 <thead>
                     <tr>
@@ -23,12 +28,8 @@ const SelectedNetworkEventPanel: React.FC<{ selectedEvent: EventType }> = ({sele
                 <tbody>
                     {selectedEvent.request.headers.map(({ name, value }) => (
                         <tr>
-                            <td>
-                                {name}
-                            </td>
-                            <td>
-                                {value}
-                            </td>
+                            <td>{name}</td>
+                            <td>{value}</td>
                         </tr>
                     ))}
                 </tbody>
@@ -37,23 +38,45 @@ const SelectedNetworkEventPanel: React.FC<{ selectedEvent: EventType }> = ({sele
     );
 };
 
-
 export const NetworkPanel: React.FC = () => {
     const [selectedEventId, setSelectedEventId] = useState<null | string>(null);
     const [filterTerm, setFilterTerm] = useState<string>('');
-    const selectedEvent = useMemo(() => (
-        networkEvents.find(({ id }) => id === selectedEventId)
-    ), [networkEvents, selectedEventId]);
+    const [filterCypressEvent, setFilterCypressEvents] =
+        useState<boolean>(true);
+    const selectedEvent = useMemo(
+        () => networkEvents.find(({ id }) => id === selectedEventId),
+        [networkEvents, selectedEventId]
+    );
 
-    const filteredEvents = useMemo(() => (
-        networkEvents.filter((networkEvent) => (
-            filterTerm ? networkEvent.request.url.includes(filterTerm) : true
-        ))
-    ), [networkEvents, filterTerm]);
+    const filteredEvents = useMemo(
+        () =>
+            (networkEvents as EventType[])
+                .filter((networkEvent) =>
+                    filterTerm
+                        ? networkEvent.request.url.includes(filterTerm)
+                        : true
+                )
+                .filter((networkEvent) =>
+                    filterCypressEvent
+                        ? !networkEvent.request.url.includes('/__/') &&
+                          !networkEvent.request.url.includes('/__cypress/')
+                        : true
+                ),
+        [networkEvents, filterTerm, filterCypressEvent]
+    );
 
-    const filterTermInputOnChange = useCallback((ev: React.ChangeEvent<HTMLInputElement>) => {
-        setFilterTerm(ev.target.value);
-    }, []);
+    const filterTermInputOnChange = useCallback(
+        (ev: React.ChangeEvent<HTMLInputElement>) => {
+            setFilterTerm(ev.target.value);
+        },
+        [setFilterTerm]
+    );
+    const filterCypressEventInputOnChange = useCallback(
+        (ev: React.ChangeEvent<HTMLInputElement>) => {
+            setFilterCypressEvents(ev.target.checked);
+        },
+        [setFilterCypressEvents]
+    );
 
     useEffect(() => {
         setSelectedEventId(null);
@@ -62,56 +85,50 @@ export const NetworkPanel: React.FC = () => {
     return (
         <div className={styles.network}>
             <div>
-                <span><b>Filter:</b></span>
+                <span>
+                    <b>Filter:</b>
+                </span>
                 <input value={filterTerm} onChange={filterTermInputOnChange} />
             </div>
-            <br/>
+            <div>
+                <span>
+                    <b>Filter Cypress links:</b>
+                </span>
+                <input
+                    type="checkbox"
+                    checked={filterCypressEvent}
+                    onChange={filterCypressEventInputOnChange}
+                />
+            </div>
+            <br />
             <div className={styles.networkTablePanel}>
                 <table>
                     <thead>
                         <tr>
-                            <th>
-                                Status
-                            </th>
-                            <th>
-                                Method
-                            </th>
-                            <th>
-                                Domain
-                            </th>
-                            <th>
-                                Query String Params
-                            </th>
-                            <th>
-                                Initiator
-                            </th>
-                            <th>
-                                Type
-                            </th>
-                            <th>
-                                Transferred
-                            </th>
-                            <th>
-                                Size
-                            </th>
+                            <th>Status</th>
+                            <th>Method</th>
+                            <th>Domain</th>
+                            <th>Query String Params</th>
+                            <th>Initiator</th>
+                            <th>Type</th>
+                            <th>Transferred</th>
+                            <th>Size</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {
-                            filteredEvents.map((networkEvent, i) => (
-                                <RequestSlice key={networkEvent.id}
-                                    event={networkEvent}
-                                    setSelectedEventId={setSelectedEventId}
-                                />
-                            ))
-                        }
+                        {filteredEvents.map((networkEvent, i) => (
+                            <RequestSlice
+                                key={networkEvent.id}
+                                event={networkEvent}
+                                setSelectedEventId={setSelectedEventId}
+                            />
+                        ))}
                     </tbody>
                 </table>
             </div>
-            {
-                selectedEvent &&
+            {selectedEvent && (
                 <SelectedNetworkEventPanel selectedEvent={selectedEvent} />
-            }
+            )}
         </div>
     );
 };
