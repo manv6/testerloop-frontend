@@ -9,6 +9,7 @@
     }
     tbody td:nth-child(3) {
         width: 500px;
+        max-width: 500px;
         word-wrap: break-word;
     }
 
@@ -28,6 +29,12 @@
 
 .closeButton {
     position: absolute;
-    right: 70px;
+    right: 80px;
     top: 5px;
+    z-index: 1;
+}
+
+.waterfall {
+    min-width: 550px;
+    position: relative;
 }

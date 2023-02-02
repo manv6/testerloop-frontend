@@ -14,11 +14,9 @@ import { EventType } from './types';
 
 const SelectedNetworkEventPanel: React.FC<{
     selectedEvent: EventType;
-    onDetailPenalClose: () => void;
-}> = ({ selectedEvent, onDetailPenalClose }) => {
+}> = ({ selectedEvent }) => {
     return (
         <div key="details" className={styles.networkDetailPanel}>
-            <CloseButton className={styles.closeButton} onClick={onDetailPenalClose} />
             <br />
             <div key="1">
                 <b>Request to:</b> {selectedEvent.request.url}
@@ -74,12 +72,9 @@ export const NetworkPanel: React.FC = () => {
         [networkEvents, filterTerm, filterCypressEvent]
     );
 
-    const onDetailPenalClose = useCallback(
-        () => {
-            setSelectedEventId(null);
-        },
-        [setSelectedEventId]
-    );
+    const onDetailPenalClose = useCallback(() => {
+        setSelectedEventId(null);
+    }, [setSelectedEventId]);
 
     const filterTermInputOnChange = useCallback(
         (ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,6 +95,12 @@ export const NetworkPanel: React.FC = () => {
 
     return (
         <div className={styles.network}>
+            {selectedEvent && (
+                <CloseButton
+                    className={styles.closeButton}
+                    onClick={onDetailPenalClose}
+                />
+            )}
             <div>
                 <Form.Group
                     as={Row}
@@ -141,6 +142,7 @@ export const NetworkPanel: React.FC = () => {
                             <th>Type</th>
                             <th>Transferred</th>
                             <th>Size</th>
+                            <th>Waterfall</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -157,7 +159,6 @@ export const NetworkPanel: React.FC = () => {
             {selectedEvent && (
                 <SelectedNetworkEventPanel
                     selectedEvent={selectedEvent}
-                    onDetailPenalClose={onDetailPenalClose}
                 />
             )}
         </div>
