@@ -3,54 +3,7 @@
     isolation: isolate;
 }
 
-.tablePanelBase {
-
-    table {
-        table-layout: fixed;
-        border: 1px solid grey;
-        border-collapse: collapse;
-    }
-
-    th {
-        background-color: black;
-        color: white;
-        padding-left: 5px;
-        padding-right: 5px;
-    }
-
-    tbody tr {
-        cursor: pointer;
-    }
-
-    tbody tr:nth-child(odd) {
-        background-color: white;
-    }
-
-    tbody tr:nth-child(even) {
-        background-color: lightgray;
-    }
-
-    tbody td {
-        max-width: 500px;
-        overflow: hidden;
-        padding-left: 5px;
-        padding-right: 5px;
-        border: 1px solid grey;
-    }
-
-}
-
-.networkTablePanel {
-    @extend .tablePanelBase;
-
-    tbody td:nth-child(3) {
-        width: 500px;
-        word-wrap: break-word;
-    }
-}
-
 .networkDetailPanel {
-    @extend .tablePanelBase;
     position: absolute;
     top: 0;
     right: 0;
@@ -59,7 +12,4 @@
     overflow: auto;
     background: white;
     border-left: 3px solid black;
-    tbody td:nth-child(1) {
-        width: 150px;
-    }
 }

@@ -1,10 +1,12 @@
 // TODO: Remove this check once temp data is removed!!
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import Table from 'react-bootstrap/Table';
 import { RequestSlice } from './RequestSlice';
 import networkEvents from 'src/data/networkEvents';
 import styles from './Network.module.scss';
 import { EventType } from './types';
+
 
 const SelectedNetworkEventPanel: React.FC<{ selectedEvent: EventType }> = ({
     selectedEvent,
@@ -18,7 +20,7 @@ const SelectedNetworkEventPanel: React.FC<{ selectedEvent: EventType }> = ({
             <div key="2">
                 <b>Sent Headers:</b>
             </div>
-            <table>
+            <Table striped bordered >
                 <thead>
                     <tr>
                         <th>Header Name</th>
@@ -33,7 +35,7 @@ const SelectedNetworkEventPanel: React.FC<{ selectedEvent: EventType }> = ({
                         </tr>
                     ))}
                 </tbody>
-            </table>
+            </Table>
         </div>
     );
 };
@@ -102,7 +104,7 @@ export const NetworkPanel: React.FC = () => {
             </div>
             <br />
             <div className={styles.networkTablePanel}>
-                <table>
+                <Table striped bordered hover>
                     <thead>
                         <tr>
                             <th>Status</th>
@@ -124,7 +126,7 @@ export const NetworkPanel: React.FC = () => {
                             />
                         ))}
                     </tbody>
-                </table>
+                </Table>
             </div>
             {selectedEvent && (
                 <SelectedNetworkEventPanel selectedEvent={selectedEvent} />
