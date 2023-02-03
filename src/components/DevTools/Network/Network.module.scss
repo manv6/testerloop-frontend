@@ -12,9 +12,7 @@
         max-width: 500px;
         word-wrap: break-word;
     }
-
 }
-
 
 .networkDetailPanel {
     position: absolute;
@@ -37,4 +35,8 @@
 .waterfall {
     min-width: 550px;
     position: relative;
+}
+
+.requestUrl {
+    word-wrap: break-word;
 }

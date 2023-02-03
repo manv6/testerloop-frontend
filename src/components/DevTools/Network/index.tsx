@@ -48,13 +48,13 @@ const SelectedNetworkEventHeaderTab: React.FC<{
     return (
         <>
             <br />
-            <div key="1">
+            <div key="requestURL" className={styles.requestUrl}  >
                 <b>Request to:</b> {selectedEvent.request.url}
             </div>
             <br />
             {selectedEvent.request.queryString.length ? (
                 <>
-                    <div key="responseHeader">
+                    <div key="queryParams">
                         <b>Query Params:</b>
                     </div>
                     <NameValueTable valuePairs={selectedEvent.request.queryString} />
