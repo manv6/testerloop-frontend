@@ -25,7 +25,7 @@ export const TimelineControls: React.FC = () => {
 
     const stepMarkers = useMemo(() =>
         steps.filter(({ options }) => options.groupStart).map(({ options }) => ({
-            id: `${options.id}`,
+            id: `${options.id}-${options.wallClockStartedAt.getTime()}-${options.state}`,
             type: EventType.STEP,
             start: options.wallClockStartedAt,
             startFraction: datesToFraction(startTime, endTime, options.wallClockStartedAt),
@@ -41,7 +41,7 @@ export const TimelineControls: React.FC = () => {
 
     const errorMarkers = useMemo(() =>
         steps.filter(({ options }) => options.state === 'failed').map(({ options }) => ({
-            id: `${options.id}`,
+            id: `${options.id}-${options.wallClockStartedAt.getTime()}-${options.state}`,
             type: EventType.ERROR,
             start: options.wallClockStartedAt,
             startFraction: datesToFraction(startTime, endTime, options.wallClockStartedAt),

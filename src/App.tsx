@@ -5,18 +5,15 @@ import { DomPreview } from './components/DomPreview';
 import { Steps } from './components/Steps';
 import * as Expandable from './components/Expandable';
 import styles from './App.module.scss';
-import steps from './data/steps';
+import results from './data/results';
 
 function App() {
     // TODO: We likely want to add some "lead" and "lag" time to these dates,
     // so that events that occur at or near the very beginning or end of the
     // timeline can be viewed and scrubbed to easily.
-    const startTime = steps.at(0)!.options.wallClockStartedAt; // eslint-disable-line @typescript-eslint/no-non-null-assertion
-    const endTime = steps.at(-1)!.options.wallClockStartedAt;  // eslint-disable-line @typescript-eslint/no-non-null-assertion
 
-    // TODO: Use these times instead, once the start / end dates match the data
-    // const startTime = new Date(Date.parse(run.startedTestsAt));
-    // const endTime = new Date(Date.parse(run.endedTestsAt));
+    const startTime = new Date(Date.parse(results.startedTestsAt));
+    const endTime = new Date(Date.parse(results.endedTestsAt));
 
     return (
         <div className={styles.app}>
