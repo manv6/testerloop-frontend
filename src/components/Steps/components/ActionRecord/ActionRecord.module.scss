@@ -1,0 +1,31 @@
+.actionRecord {
+	padding: 0.5rem 1rem;
+
+	// &::before {
+	// 	content: "";
+	// 	position: absolute;
+	// 	top: 0;
+	// 	left: 0;
+	// 	width: 5px;
+	// 	height: 100%;
+	// 	background-color: #1AAE9F;
+	// }
+
+	&:hover {
+		cursor: pointer;
+		background-color: rgba(0, 0, 0, 0.05);
+	}
+
+	&>.expandedActionName {
+		font-weight: 600;
+		text-transform: capitalize;
+		margin-right: 0.5rem;
+	}
+
+	&>.expandedActionMessage {
+		font-weight: 300;
+		font-style: italic;
+		color: rgb(34, 33, 33);
+		word-break: break-all;
+	}
+}

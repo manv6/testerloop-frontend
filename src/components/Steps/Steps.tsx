@@ -3,7 +3,7 @@ import React from 'react';
 import steps from 'src/data/steps';
 import { useTimeline } from 'src/hooks/timeline';
 import { StepRecord } from './components';
-import { useBuildStepsHierarchy } from './hooks';
+import { useHierarchizeStepsData } from './hooks';
 import styles from './Steps.module.scss';
 
 type Props = {
@@ -15,7 +15,7 @@ type Props = {
 export type Step = any;
 export type StepHierarchy = {
     step: Step;
-    children: StepHierarchy[];
+    actions: Step[];
 }
 
 const getMostRecentStepIdx = (hierarchy: StepHierarchy[], timestamp: number): number => {
@@ -32,10 +32,9 @@ export const Steps: React.FC<Props> = ({ className }) => {
     const {
         currentTime,
         hoverTime,
-        seek,
     } = useTimeline();
 
-    const stepsHierarchy = useBuildStepsHierarchy(steps);
+    const stepsHierarchy = useHierarchizeStepsData(steps);
 
     const selectedStepIdx = getMostRecentStepIdx(stepsHierarchy, currentTime.getTime());
     const hoveredStepIdx = hoverTime ? getMostRecentStepIdx(stepsHierarchy, hoverTime.getTime()) : null;
@@ -43,20 +42,14 @@ export const Steps: React.FC<Props> = ({ className }) => {
     return (
         <table className={cx(className, styles.stepsTable)}>
             <tbody className={styles.stepsTableBody}>
-                {stepsHierarchy.map(({ step, children }, idx) => {
+                {stepsHierarchy.map(({ step, actions }, idx) => {
                     return (
                         <StepRecord
+                            key={step.options.id}
                             step={step}
-                            childrenSteps={children}
+                            actions={actions}
                             isSelected={selectedStepIdx === idx}
                             isHovered={hoveredStepIdx === idx}
-                            onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                if (step.options.wallClockStartedAt) {
-                                    seek(step.options.wallClockStartedAt);
-                                }
-                            }}
                         />
                     );
                 })}

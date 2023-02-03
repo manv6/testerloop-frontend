@@ -1,76 +1,73 @@
-import React, { useState } from 'react';
 import cx from 'classnames';
+import React, { useState } from 'react';
+import { useTimeline } from 'src/hooks/timeline';
+import { Step } from '../../Steps';
+import ActionRecord from '../ActionRecord';
+import ChevronIcon from './ChevronIcon';
 import styles from './StepRecord.module.scss';
-import { Step, StepHierarchy } from '../../Steps';
 
 interface Props {
 	step: Step;
-	childrenSteps: StepHierarchy[];
+	actions: Step[];
 
 	isSelected: boolean;
 	isHovered: boolean;
-
-	onClick: React.MouseEventHandler<HTMLElement>;
 }
 
-const StepRecord: React.FC<Props> = ({ step, childrenSteps, isSelected, isHovered, onClick }) => {
-    const { timestamp, options } = step;
+const StepRecord: React.FC<Props> = ({ step, actions, isSelected, isHovered }) => {
+    const { options } = step;
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
-
-    const toggleExpandedState = () => setIsExpanded(!isExpanded);
-
-    const iconDrawPath = isExpanded
-        // Chevron up
-        ? 'M4.5 15.75l7.5-7.5 7.5 7.5'
-        // Chevron down
-        : 'M19.5 8.25l-7.5 7.5-7.5-7.5';
+    const { seek } = useTimeline();
 
     return (
-        <tr
-            // TODO: Should only need ID, but it's not currently unique
-            key={`${options.id}-${timestamp}`}
-            onClick={onClick}
-            className={cx(
-                styles.stepRecord,
-                { [styles.selected]: isSelected, [styles.hovered]: isHovered }
+        <>
+            <tr
+                key={`${options.id}`}
+                onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsExpanded(!isExpanded);
+                    if (step.options.wallClockStartedAt) {
+                        seek(step.options.wallClockStartedAt);
+                    }
+                }}
+                className={cx(
+                    styles.stepHeader,
+                    { [styles.selected]: isSelected, [styles.hovered]: isHovered }
+                )}
+            >
+                <td className={styles.stepName}>
+                    {options.name}
+                </td>
+
+                <td className={cx(
+                    styles.stepContent,
+                    options.state === 'passed' ? styles.success : styles.error
+                )}>
+                    {/* TODO: No need to slice, just for now to dismiss `**` in all steps */}
+                    {options.message.replaceAll('*', '')}
+                </td>
+
+                <td className={styles.stepAccordionIcon}>
+                    <ChevronIcon direction={isExpanded ? 'up' : 'down'} />
+                </td>
+            </tr>
+
+            {isExpanded && (
+                <tr className={styles.expandedPanel}>
+                    <td colSpan={4}>
+                        {actions.map(action => (
+                            <ActionRecord
+                                key={action.options.id}
+                                action={action}
+                                isSelected={false}
+                                isHovered={false}
+                            />
+                        ))}
+                    </td>
+                </tr>
             )}
-        >
-            <td className={styles.stepName}>
-                {options.name}
-            </td>
-
-            <td className={styles.stepContent}>
-                <div className={styles.stepHeader}>
-                    <div className={options.state === 'passed' ? styles.success : styles.error}>
-                        {/* TODO: No need to slice, just for now to dismiss `**` in all steps */}
-                        {options.message.slice(2, options.message.length - 2)}
-                    </div>
-
-                    <button className={styles.toggleExpandedButton} onClick={toggleExpandedState}>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth="1.5"
-                            stroke="currentColor"
-                            style={{ width: 24, height: 24}}
-                        >
-                            <path strokeLinecap="round" strokeLinejoin="round" d={iconDrawPath} />
-                        </svg>
-                    </button>
-                </div>
-
-                {isExpanded &&
-                    <div>
-                        {childrenSteps.map(child => {
-                            return <div key={`${child.step.options.id}-${child.step.timestamp}`}>
-                                {child.step.options.name}
-                            </div>;
-                        })}
-                    </div>
-                }
-            </td>
-        </tr>
+        </>
     );
 };
 

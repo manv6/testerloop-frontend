@@ -1,1 +1,1 @@
-export { default as useBuildStepsHierarchy } from './useBuildStepsHierarchy';
+export { default as useHierarchizeStepsData } from './useHierarchizeStepsData';
