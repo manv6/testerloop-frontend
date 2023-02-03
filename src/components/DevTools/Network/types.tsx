@@ -4,9 +4,6 @@ export interface NameValueType {
     value: string;
 }
 
-
-
-
 export interface RequestType {
     headers: NameValueType[];
     url: string;
