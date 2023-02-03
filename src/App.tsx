@@ -5,6 +5,7 @@ import { DomPreview } from './components/DomPreview';
 import { Steps } from './components/Steps';
 import * as Expandable from './components/Expandable';
 import styles from './App.module.scss';
+import { RelayEnvironment } from './gql/RelayEnvironment';
 import results from './data/results';
 
 function App() {
@@ -17,30 +18,32 @@ function App() {
 
     return (
         <div className={styles.app}>
-            <TimelineProvider
-                startTime={startTime}
-                endTime={endTime}
-            >
-                <div>
-                    <div>Summary Placeholder</div>
-                    <div style={{ height: '100px', width: '100%', background: 'lightgrey' }}></div>
-                </div>
-                <TimelineControls />
-                <Expandable.Parent className={styles['expandable-parent']}>
-                    <Expandable.Child className={styles['expandable-steps']} notExpandable={true}>
-                        <Steps className={styles.steps} />
-                    </Expandable.Child>
-                    <Expandable.Child className={styles['expandable-dom']}>
-                        <DomPreview />
-                    </Expandable.Child>
-                    <Expandable.Child className={styles['expandable-console']}>
-                        <div>Console</div>
-                    </Expandable.Child>
-                    <Expandable.Child className={styles['expandable-network']}>
-                        <NetworkPanel />
-                    </Expandable.Child>
-                </Expandable.Parent>
-            </TimelineProvider>
+            <RelayEnvironment>
+                <TimelineProvider
+                    startTime={startTime}
+                    endTime={endTime}
+                >
+                    <div>
+                        <div>Summary Placeholder</div>
+                        <div style={{ height: '100px', width: '100%', background: 'lightgrey' }}></div>
+                    </div>
+                    <TimelineControls />
+                    <Expandable.Parent className={styles['expandable-parent']}>
+                        <Expandable.Child className={styles['expandable-steps']} notExpandable={true}>
+                            <Steps className={styles.steps} />
+                        </Expandable.Child>
+                        <Expandable.Child className={styles['expandable-dom']}>
+                            <DomPreview />
+                        </Expandable.Child>
+                        <Expandable.Child className={styles['expandable-console']}>
+                            <div>Console</div>
+                        </Expandable.Child>
+                        <Expandable.Child className={styles['expandable-network']}>
+                            <NetworkPanel />
+                        </Expandable.Child>
+                    </Expandable.Parent>
+                </TimelineProvider>
+            </RelayEnvironment>
         </div>
     );
 }
