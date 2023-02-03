@@ -12,12 +12,34 @@ import CloseButton from 'react-bootstrap/CloseButton';
 import { RequestSlice } from './RequestSlice';
 import networkEvents from 'src/data/networkEvents';
 import styles from './Network.module.scss';
-import { EventType } from './types';
+import { EventType, NameValueType } from './types';
 
 const SelectedNetworkEventPostDataTab: React.FC<{
     selectedEvent: EventType;
 }> = ({ selectedEvent }) => {
     return <pre>{selectedEvent.request?.postData?.text}</pre>;
+};
+
+
+const NameValueTable: React.FC<{ valuePairs: NameValueType[] }> = ({
+    valuePairs
+}) => {
+    return (<Table striped bordered>
+        <thead>
+            <tr>
+                <th>Header Name</th>
+                <th>Header Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {valuePairs.map(({ name, value }) => (
+                <tr>
+                    <td>{name}</td>
+                    <td>{value}</td>
+                </tr>
+            ))}
+        </tbody>
+    </Table>);
 };
 
 const SelectedNetworkEventHeaderTab: React.FC<{
@@ -30,45 +52,25 @@ const SelectedNetworkEventHeaderTab: React.FC<{
                 <b>Request to:</b> {selectedEvent.request.url}
             </div>
             <br />
-            <div key="2">
+            {selectedEvent.request.queryString.length ? (
+                <>
+                    <div key="responseHeader">
+                        <b>Query Params:</b>
+                    </div>
+                    <NameValueTable valuePairs={selectedEvent.request.queryString} />
+                </>
+            ) : null}
+            <br />
+            <div key="requestHeader">
                 <b>Request Headers:</b>
             </div>
-            <Table striped bordered>
-                <thead>
-                    <tr>
-                        <th>Header Name</th>
-                        <th>Header Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {selectedEvent.request.headers.map(({ name, value }) => (
-                        <tr>
-                            <td>{name}</td>
-                            <td>{value}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </Table>
+            <NameValueTable valuePairs={selectedEvent.request.headers} />
             <br />
-            <div key="2">
+            <div key="responseHeader">
                 <b>Response Headers:</b>
             </div>
-            <Table striped bordered>
-                <thead>
-                    <tr>
-                        <th>Header Name</th>
-                        <th>Header Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {selectedEvent.response.headers.map(({ name, value }) => (
-                        <tr>
-                            <td>{name}</td>
-                            <td>{value}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </Table>
+            <NameValueTable valuePairs={selectedEvent.response.headers} />
+
         </>
     );
 };

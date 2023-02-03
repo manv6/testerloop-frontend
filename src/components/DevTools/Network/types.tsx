@@ -1,13 +1,17 @@
-export interface HeaderEntryType {
+
+export interface NameValueType {
     name: string;
     value: string;
 }
 
+
+
+
 export interface RequestType {
-    headers: HeaderEntryType[];
+    headers: NameValueType[];
     url: string;
     method: string;
-    queryString: { name: string; value: string }[];
+    queryString: NameValueType[];
     postData?: { mimeType: string; text: string };
 }
 
@@ -18,7 +22,7 @@ export interface ResponseType {
     };
     _transferSize?: number;
     bodySize?: number;
-    headers: HeaderEntryType[];
+    headers: NameValueType[];
 }
 
 export interface EventType {
