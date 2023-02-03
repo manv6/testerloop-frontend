@@ -109,7 +109,6 @@ export const TimelineControls: React.FC = () => {
                         (filters.network_success && marker.type === EventType.NETWORK_SUCCESS)
                     )).map((marker) => (
                         <div
-                            id={marker.id}
                             key={marker.id}
                             className={cx(
                                 styles.marker,
@@ -119,7 +118,6 @@ export const TimelineControls: React.FC = () => {
                                 left: `${100 * marker.startFraction}%`,
                                 borderColor: MARKER_COLOURS[marker.type]
                             }}
-                            onClick={(e) => console.log(e.target)}
                         >
                         </div>
                     ))
