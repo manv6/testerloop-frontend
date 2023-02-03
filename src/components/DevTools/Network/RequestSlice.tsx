@@ -15,6 +15,12 @@ export const RequestSlice: React.FC<Props> = (props) => {
     const textColorStyle =
         props.event.response.status >= 400 ? styles.networkTableRowError : '';
 
+    const truncateValue = (value: string, limit: number) => {
+        if (value.length <= limit) return value;
+
+        return `${value.slice(0, limit - 3)}...`;
+    };
+
     return (
         <tr
             onMouseMove={(ev) => {
@@ -42,15 +48,18 @@ export const RequestSlice: React.FC<Props> = (props) => {
             </td>
             <td className={styles.urlColumn}>
                 <span className={textColorStyle}>
-                    {props.event.request.url}
+                    {truncateValue(props.event.request.url, 60)}
                 </span>
             </td>
             <td>
                 <span className={textColorStyle}>
-                    {(props.event._initiator || '') +
-                        (props.event._initiator_line
-                            ? `:${props.event._initiator_line}`
-                            : '')}
+                    {truncateValue(
+                        (props.event._initiator || '') +
+                            (props.event._initiator_line
+                                ? `:${props.event._initiator_line}`
+                                : ''),
+                        40
+                    )}
                 </span>
             </td>
             <td>
