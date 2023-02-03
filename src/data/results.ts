@@ -4,38 +4,38 @@
 
 const results = {
     'status': 'finished',
-    'startedTestsAt': '2023-02-01T15:42:23.333Z',
-    'endedTestsAt': '2023-02-01T15:42:38.138Z',
-    'totalDuration': 14805,
+    'startedTestsAt': '2023-02-03T08:58:53.759Z',
+    'endedTestsAt': '2023-02-03T08:59:06.685Z',
+    'totalDuration': 12926,
     'totalSuites': 2,
     'totalTests': 1,
-    'totalPassed': 1,
+    'totalPassed': 0,
     'totalPending': 0,
-    'totalFailed': 0,
+    'totalFailed': 1,
     'totalSkipped': 0,
     'runs': [
         {
             'stats': {
                 'suites': 2,
                 'tests': 1,
-                'passes': 1,
+                'passes': 0,
                 'pending': 0,
                 'skipped': 0,
-                'failures': 0,
-                'duration': 14805,
-                'startedAt': '2023-02-01T15:42:23.333Z',
-                'endedAt': '2023-02-01T15:42:38.138Z'
+                'failures': 1,
+                'duration': 12926,
+                'startedAt': '2023-02-03T08:58:53.759Z',
+                'endedAt': '2023-02-03T08:59:06.685Z'
             },
             'reporter': 'spec',
             'reporterStats': {
                 'suites': 2,
                 'tests': 1,
-                'passes': 1,
+                'passes': 0,
                 'pending': 0,
-                'failures': 0,
-                'start': '2023-02-01T15:42:23.340Z',
-                'end': '2023-02-01T15:42:38.152Z',
-                'duration': 14812
+                'failures': 1,
+                'start': '2023-02-03T08:58:53.762Z',
+                'end': '2023-02-03T08:59:06.693Z',
+                'duration': 12931
             },
             'hooks': [
                 {
@@ -43,7 +43,7 @@ const results = {
                     'title': [
                         '\'before all\' hook'
                     ],
-                    'body': 'function () {\n        var _a;\n        if (!((_a = retrieveInternalSuiteProperties()) === null || _a === void 0 ? void 0 : _a.isEventHandlersAttached)) {\n            (0, assertions_1.fail)(\'Missing preprocessor event handlers (this usally means you\'ve not invoked `addCucumberPreprocessorPlugin()` or not returned the config object in `setupNodeEvents()`)\');\n        }\n    }'
+                    'body': 'function () {\n        var _a;\n        if (!((_a = retrieveInternalSuiteProperties()) === null || _a === void 0 ? void 0 : _a.isEventHandlersAttached)) {\n            (0, assertions_1.fail)(\'Missing preprocessor event handlers (this usally means you\'ve not invoked `addCucumberPreprocessorPlugin()` or not returned the config object in `setupNodeEvents()`) \');\n        }\n    }'
                 },
                 {
                     'hookName': 'after each',
@@ -72,20 +72,39 @@ const results = {
                     'title': [
                         'Check overloop\'s website',
                         'Verify',
-                        'Home Page'
+                        'Contact page'
                     ],
-                    'state': 'passed',
+                    'state': 'failed',
                     'body': 'function () {\n        var _a, _b, _c, _d, _e;\n        const { remainingSteps, testCaseStartedId } = retrieveInternalSpecProperties();\n        (0, registry_1.assignRegistry)(registry);\n        messages.stack.push({\n            testCaseStarted: {\n                id: testCaseStartedId,\n                testCaseId,\n                attempt: attempt++,\n                timestamp: (0, messages_helpers_1.createTimestamp)(),\n            },\n        });\n        window.testState = {\n            gherkinDocument,\n            pickles,\n            pickle,\n        };\n        for (const step of steps) {\n            if (step.hook) {\n                const hook = step.hook;\n                cy.then(() => {\n                    delete window.testState.pickleStep;\n                    const start = (0, messages_helpers_1.createTimestamp)();\n                    messages.stack.push({\n                        testStepStarted: {\n                            testStepId: hook.id,\n                            testCaseStartedId,\n                            timestamp: start,\n                        },\n                    });\n                    if (messages.enabled) {\n                        cy.task(constants_1.TASK_TEST_STEP_STARTED, hook.id, { log: false });\n                    }\n                    return cy.wrap(start, { log: false });\n                })\n                    .then((start) => {\n                    (0, cypress_1.runStepWithLogGroup)({\n                        fn: () => registry.runHook(this, hook),\n                        keyword: hook.keyword,\n                    });\n                    return cy.wrap(start, { log: false });\n                })\n                    .then((start) => {\n                    const end = (0, messages_helpers_1.createTimestamp)();\n                    messages.stack.push({\n                        testStepFinished: {\n                            testStepId: hook.id,\n                            testCaseStartedId,\n                            testStepResult: {\n                                status: Status.Passed,\n                                duration: (0, messages_helpers_1.duration)(start, end),\n                            },\n                            timestamp: end,\n                        },\n                    });\n                    remainingSteps.shift();\n                });\n            }\n            else if (step.pickleStep) {\n                const pickleStep = step.pickleStep;\n                const text = (0, assertions_1.assertAndReturn)(pickleStep.text, \'Expected pickle step to have a text\');\n                const scenarioStep = (0, assertions_1.assertAndReturn)(astIdMap.get((0, assertions_1.assertAndReturn)((_a = pickleStep.astNodeIds) === null || _a === void 0 ? void 0 : _a[0], \'Expected to find at least one astNodeId\')), `Expected to find scenario step associated with id = ${(_b = pickleStep.astNodeIds) === null || _b === void 0 ? void 0 : _b[0]}`);\n                const argument = ((_c = pickleStep.argument) === null || _c === void 0 ? void 0 : _c.dataTable)\n                    ? new data_table_1.default(pickleStep.argument.dataTable)\n                    : ((_e = (_d = pickleStep.argument) === null || _d === void 0 ? void 0 : _d.docString) === null || _e === void 0 ? void 0 : _e.content)\n                        ? pickleStep.argument.docString.content\n                        : undefined;\n                cy.then(() => {\n                    window.testState.pickleStep = step.pickleStep;\n                    internalProperties.currentStep = { pickleStep };\n                    const start = (0, messages_helpers_1.createTimestamp)();\n                    messages.stack.push({\n                        testStepStarted: {\n                            testStepId: pickleStep.id,\n                            testCaseStartedId,\n                            timestamp: start,\n                        },\n                    });\n                    if (messages.enabled) {\n                        cy.task(constants_1.TASK_TEST_STEP_STARTED, pickleStep.id, { log: false });\n                    }\n                    return cy.wrap(start, { log: false });\n                })\n                    .then((start) => {\n                    try {\n                        return (0, cypress_1.runStepWithLogGroup)({\n                            keyword: (0, assertions_1.assertAndReturn)(\'keyword\' in scenarioStep && scenarioStep.keyword, \'Expected to find a keyword in the scenario step\'),\n                            text,\n                            fn: () => registry.runStepDefininition(this, text, argument),\n                        }).then((result) => {\n                            return {\n                                start,\n                                result,\n                            };\n                        });\n                    }\n                    catch (e) {\n                        if (e instanceof registry_1.MissingDefinitionError) {\n                            throw new Error(createMissingStepDefinitionMessage(context, pickleStep, context.registry.parameterTypeRegistry));\n                        }\n                        else {\n                            throw e;\n                        }\n                    }\n                })\n                    .then(({ start, result }) => {\n                    var _a, _b, _c;\n                    const end = (0, messages_helpers_1.createTimestamp)();\n                    if (result === \'pending\') {\n                        messages.stack.push({\n                            testStepFinished: {\n                                testStepId: pickleStep.id,\n                                testCaseStartedId,\n                                testStepResult: {\n                                    status: Status.Pending,\n                                    duration: (0, messages_helpers_1.duration)(start, end),\n                                },\n                                timestamp: end,\n                            },\n                        });\n                        remainingSteps.shift();\n                        for (const skippedStep of remainingSteps) {\n                            const testStepId = (0, assertions_1.assertAndReturn)((_b = (_a = skippedStep.hook) === null || _a === void 0 ? void 0 : _a.id) !== null && _b !== void 0 ? _b : (_c = skippedStep.pickleStep) === null || _c === void 0 ? void 0 : _c.id, \'Expected a step to either be a hook or a pickleStep\');\n                            messages.stack.push({\n                                testStepStarted: {\n                                    testStepId,\n                                    testCaseStartedId,\n                                    timestamp: (0, messages_helpers_1.createTimestamp)(),\n                                },\n                            });\n                            messages.stack.push({\n                                testStepFinished: {\n                                    testStepId,\n                                    testCaseStartedId,\n                                    testStepResult: {\n                                        status: Status.Skipped,\n                                        duration: {\n                                            seconds: 0,\n                                            nanos: 0,\n                                        },\n                                    },\n                                    timestamp: (0, messages_helpers_1.createTimestamp)(),\n                                },\n                            });\n                        }\n                        for (let i = 0, count = remainingSteps.length; i < count; i++) {\n                            remainingSteps.pop();\n                        }\n                        this.skip();\n                    }\n                    else {\n                        messages.stack.push({\n                            testStepFinished: {\n                                testStepId: pickleStep.id,\n                                testCaseStartedId,\n                                testStepResult: {\n                                    status: Status.Passed,\n                                    duration: (0, messages_helpers_1.duration)(start, end),\n                                },\n                                timestamp: end,\n                            },\n                        });\n                        remainingSteps.shift();\n                    }\n                });\n            }\n        }\n    }',
-                    'displayError': null,
+                    'displayError': 'AssertionError: Timed out retrying after 4000ms: expected \' < input.button.sqs - system - button.sqs - editable - button.sqs - button - element--primary> \' to be \'disabled\'\n    at Context.eval (cypress/steps/overloop-steps.js:35:24)\n    at Registry.runStepDefininition (node_modules/@badeball/cypress-cucumber-preprocessor/lib/registry.js:119:0)\n    at Object.fn (node_modules/@badeball/cypress-cucumber-preprocessor/lib/create-tests.js:299:0)\n    at runStepWithLogGroup (node_modules/@badeball/cypress-cucumber-preprocessor/lib/cypress.js:11:0)\n    at Context.eval (node_modules/@badeball/cypress-cucumber-preprocessor/lib/create-tests.js:296:0)',
                     'attempts': [
                         {
-                            'state': 'passed',
-                            'error': null,
+                            'state': 'failed',
+                            'error': {
+                                'name': 'AssertionError',
+                                'message': 'Timed out retrying after 4000ms: expected \' < input.button.sqs - system - button.sqs - editable - button.sqs - button - element--primary> \' to be \'disabled\'',
+                                'stack': '    at Context.eval (cypress/steps/overloop-steps.js:35:24)\n    at Registry.runStepDefininition (node_modules/@badeball/cypress-cucumber-preprocessor/lib/registry.js:119:0)\n    at Object.fn (node_modules/@badeball/cypress-cucumber-preprocessor/lib/create-tests.js:299:0)\n    at runStepWithLogGroup (node_modules/@badeball/cypress-cucumber-preprocessor/lib/cypress.js:11:0)\n    at Context.eval (node_modules/@badeball/cypress-cucumber-preprocessor/lib/create-tests.js:296:0)',
+                                'codeFrame': {
+                                    'line': 35,
+                                    'column': 25,
+                                    'originalFile': 'cypress/steps/overloop-steps.js',
+                                    'relativeFile': 'cypress/steps/overloop-steps.js',
+                                    'absoluteFile': '/Users/kalli.kavasi/overloop-framework/cypress-poc/cypress/steps/overloop-steps.js',
+                                    'frame': '  33 | Then(/Validation error for missing fields occurs/, () => {\n  34 |   cy.get(\'.field-error\').should(\'be.visible\');\n> 35 |   cy.contains(\'Submit\').should(\'be.disabled\');\n     |                         ^\n  36 | });\n  37 | \n  38 | Then(/I can see the content/, () => {',
+                                    'language': 'js'
+                                }
+                            },
                             'videoTimestamp': null,
-                            'duration': 10251,
-                            'startedAt': '2023-02-01T15:42:27.881Z',
+                            'duration': 9661,
+                            'startedAt': '2023-02-03T08:58:56.992Z',
                             'screenshots': [
-
+                                {
+                                    'name': null,
+                                    'takenAt': '2023-02-03T08:59:06.462Z',
+                                    'path': '/Users/kalli.kavasi/overloop-framework/cypress-poc/cypress/screenshots/overloop.feature/Check overloop\'s website -- Verify-- Contact page(failed).png',
+                                    'height': 720,
+                                    'width': 1280
+                                }
                             ]
                         }
                     ]
@@ -102,19 +121,19 @@ const results = {
                 'specType': 'integration',
                 'name': 'cypress/e2e/overloop.feature',
                 'relative': 'cypress/e2e/overloop.feature',
-                'absolute': '/Users/mvlastos/overloop/cypress-poc/cypress/e2e/overloop.feature'
+                'absolute': '/Users/kalli.kavasi/overloop-framework/cypress-poc/cypress/e2e/overloop.feature'
             },
             'shouldUploadVideo': true
         }
     ],
     'browserPath': '/Applications/Chromium.app/Contents/MacOS/Chromium',
     'browserName': 'chromium',
-    'browserVersion': '94.0.4598.0',
+    'browserVersion': '112.0.5571.0',
     'osName': 'darwin',
-    'osVersion': '22.2.0',
+    'osVersion': '21.6.0',
     'cypressVersion': '10.10.0',
     'config': {
-        'configFile': '/Users/mvlastos/overloop/cypress-poc/cypress.config.js',
+        'configFile': '/Users/kalli.kavasi/overloop-framework/cypress-poc/cypress.config.js',
         'env': {
             '__cypress_cucumber_preprocessor_dont_use_this_suite': {
                 'isEventHandlersAttached': true
@@ -126,9 +145,9 @@ const results = {
         'specPattern': 'cypress/e2e/**/*.feature',
         'excludeSpecPattern': '*.js',
         'setupNodeEvents': '[Function setupNodeEvents]',
-        'projectRoot': '/Users/mvlastos/overloop/cypress-poc',
+        'projectRoot': '/Users/kalli.kavasi/overloop-framework/cypress-poc',
         'projectName': 'cypress-poc',
-        'repoRoot': '/Users/mvlastos/overloop/cypress-poc',
+        'repoRoot': '/Users/kalli.kavasi/overloop-framework/cypress-poc',
         'rawJson': {
             'projectId': 'u9ja7g',
             'video': false,
@@ -143,16 +162,16 @@ const results = {
             'envFile': {
 
             },
-            'projectRoot': '/Users/mvlastos/overloop/cypress-poc',
+            'projectRoot': '/Users/kalli.kavasi/overloop-framework/cypress-poc',
             'projectName': 'cypress-poc',
-            'repoRoot': '/Users/mvlastos/overloop/cypress-poc'
+            'repoRoot': '/Users/kalli.kavasi/overloop-framework/cypress-poc'
         },
         'morgan': false,
         'isTextTerminal': true,
-        'socketId': '4srupwwtnk',
+        'socketId': 'yx5lfoiybz',
         'report': true,
         'animationDistanceThreshold': 5,
-        'arch': 'arm64',
+        'arch': 'x64',
         'baseUrl': null,
         'blockHosts': null,
         'chromeWebSecurity': true,
@@ -160,7 +179,7 @@ const results = {
 
         ],
         'defaultCommandTimeout': 4000,
-        'downloadsFolder': '/Users/mvlastos/overloop/cypress-poc/cypress/downloads',
+        'downloadsFolder': '/Users/kalli.kavasi/overloop-framework/cypress-poc/cypress/downloads',
         'execTimeout': 60000,
         'experimentalFetchPolyfill': false,
         'experimentalInteractiveRunEvents': false,
@@ -170,38 +189,38 @@ const results = {
         'experimentalSingleTabRunMode': false,
         'experimentalStudio': false,
         'experimentalWebKitSupport': false,
-        'fileServerFolder': '/Users/mvlastos/overloop/cypress-poc',
-        'fixturesFolder': '/Users/mvlastos/overloop/cypress-poc/cypress/fixtures',
+        'fileServerFolder': '/Users/kalli.kavasi/overloop-framework/cypress-poc',
+        'fixturesFolder': '/Users/kalli.kavasi/overloop-framework/cypress-poc/cypress/fixtures',
         'includeShadowDom': false,
         'keystrokeDelay': 0,
         'modifyObstructiveCode': true,
         'numTestsKeptInMemory': 0,
         'platform': 'darwin',
         'pageLoadTimeout': 60000,
-        'port': 60592,
+        'port': 55192,
         'redirectionLimit': 20,
         'reporter': 'spec',
         'reporterOptions': null,
         'requestTimeout': 5000,
-        'resolvedNodePath': '/Users/mvlastos/.nvm/versions/node/v14.18.2/bin/node',
-        'resolvedNodeVersion': '14.18.2',
+        'resolvedNodePath': '/Users/kalli.kavasi/.nvm/versions/node/v16.8.0/bin/node',
+        'resolvedNodeVersion': '16.8.0',
         'responseTimeout': 30000,
         'retries': {
             'runMode': 0,
             'openMode': 0
         },
         'screenshotOnRunFailure': true,
-        'screenshotsFolder': '/Users/mvlastos/overloop/cypress-poc/cypress/screenshots',
+        'screenshotsFolder': '/Users/kalli.kavasi/overloop-framework/cypress-poc/cypress/screenshots',
         'slowTestThreshold': 10000,
         'scrollBehavior': 'top',
-        'supportFile': '/Users/mvlastos/overloop/cypress-poc/cypress/support/e2e.js',
-        'supportFolder': '/Users/mvlastos/overloop/cypress-poc/cypress/support',
+        'supportFile': '/Users/kalli.kavasi/overloop-framework/cypress-poc/cypress/support/e2e.js',
+        'supportFolder': '/Users/kalli.kavasi/overloop-framework/cypress-poc/cypress/support',
         'taskTimeout': 60000,
         'testIsolation': 'legacy',
         'trashAssetsBeforeRuns': true,
         'userAgent': null,
         'videoCompression': 32,
-        'videosFolder': '/Users/mvlastos/overloop/cypress-poc/cypress/videos',
+        'videosFolder': '/Users/kalli.kavasi/overloop-framework/cypress-poc/cypress/videos',
         'videoUploadOnPasses': true,
         'viewportHeight': 660,
         'viewportWidth': 1000,
@@ -227,10 +246,10 @@ const results = {
                 'family': 'chromium',
                 'channel': 'stable',
                 'displayName': 'Chromium',
-                'version': '94.0.4598.0',
+                'version': '112.0.5571.0',
                 'path': '/Applications/Chromium.app/Contents/MacOS/Chromium',
                 'minSupportedVersion': 64,
-                'majorVersion': '94'
+                'majorVersion': '112'
             },
             {
                 'name': 'electron',
@@ -243,7 +262,7 @@ const results = {
             }
         ],
         'clientRoute': '/__/',
-        'cypressBinaryRoot': '/Users/mvlastos/Library/Caches/Cypress/10.10.0/Cypress.app/Contents/Resources/app',
+        'cypressBinaryRoot': '/Users/kalli.kavasi/Library/Caches/Cypress/10.10.0/Cypress.app/Contents/Resources/app',
         'devServerPublicPathRoute': '/__cypress/src',
         'hosts': null,
         'isInteractive': true,
@@ -260,7 +279,7 @@ const results = {
                 'from': 'default'
             },
             'arch': {
-                'value': 'arm64',
+                'value': 'x64',
                 'from': 'default'
             },
             'baseUrl': {
@@ -508,10 +527,10 @@ const results = {
                         'family': 'chromium',
                         'channel': 'stable',
                         'displayName': 'Chromium',
-                        'version': '94.0.4598.0',
+                        'version': '112.0.5571.0',
                         'path': '/Applications/Chromium.app/Contents/MacOS/Chromium',
                         'minSupportedVersion': 64,
-                        'majorVersion': '94',
+                        'majorVersion': '112',
                         'isHeadless': true,
                         'isHeaded': false
                     },
@@ -536,7 +555,7 @@ const results = {
                 'from': 'default'
             },
             'configFile': {
-                'value': '/Users/mvlastos/overloop/cypress-poc/cypress.config.js',
+                'value': '/Users/kalli.kavasi/overloop-framework/cypress-poc/cypress.config.js',
                 'from': 'plugin'
             },
             'testingType': {
@@ -545,9 +564,9 @@ const results = {
             }
         },
         'remote': {
-            'origin': 'http://localhost:60592',
+            'origin': 'http://localhost:55192',
             'strategy': 'file',
-            'fileServer': 'http://localhost:60593',
+            'fileServer': 'http://localhost:55193',
             'domainName': 'localhost',
             'props': null
         },
@@ -555,15 +574,15 @@ const results = {
         'specs': [
 
         ],
-        'proxyUrl': 'http://localhost:60592',
-        'browserUrl': 'http://localhost:60592/__/',
-        'reporterUrl': 'http://localhost:60592/__cypress/reporter',
+        'proxyUrl': 'http://localhost:55192',
+        'browserUrl': 'http://localhost:55192/__/',
+        'reporterUrl': 'http://localhost:55192/__cypress/reporter',
         'xhrUrl': '__cypress/xhrs/',
-        'proxyServer': 'http://localhost:60592',
+        'proxyServer': 'http://localhost:55192',
         'state': {
 
         }
     }
-};
+}
 
 export default results;

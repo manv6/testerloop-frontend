@@ -32,17 +32,30 @@ export const TimelineControls: React.FC = () => {
         })
         ), [steps, startTime, endTime]);
 
-    const networkMarkers = useMemo(() => networkEvents.map((evt) => ({
-        id: evt._requestId,
-        type: EventType.NETWORK,
-        start: evt.endedDateTime,
-        startFraction: datesToFraction(startTime, endTime, evt.endedDateTime),
-    })), [networkEvents, startTime, endTime]);
+    const failedNetworkMarkers = useMemo(() => networkEvents.filter((evt) => {
+        const status = evt.response.status.toString();
+        return status.startsWith('4') || status.startsWith('5');
+    }).map((evt) =>
+        ({
+            id: evt._requestId,
+            type: EventType.NETWORK_ERROR,
+            start: evt.endedDateTime,
+            startFraction: datesToFraction(startTime, endTime, evt.endedDateTime),
+        })), [networkEvents, startTime, endTime]);
+
+    const successNetworkMarkers = useMemo(() => networkEvents.filter((evt) =>
+        evt.response.status.toString().startsWith('2')).map((evt) =>
+        ({
+            id: evt._requestId,
+            type: EventType.NETWORK_SUCCESS,
+            start: evt.endedDateTime,
+            startFraction: datesToFraction(startTime, endTime, evt.endedDateTime),
+        })), [networkEvents, startTime, endTime]);
 
     const errorMarkers = useMemo(() =>
         steps.filter(({ options }) => options.state === 'failed').map(({ options }) => ({
             id: `${options.id}-${options.wallClockStartedAt.getTime()}-${options.state}`,
-            type: EventType.ERROR,
+            type: EventType.CYPRESS_ERROR,
             start: options.wallClockStartedAt,
             startFraction: datesToFraction(startTime, endTime, options.wallClockStartedAt),
         })
@@ -50,9 +63,10 @@ export const TimelineControls: React.FC = () => {
 
     const markers = useMemo(() => [
         ...stepMarkers,
-        ...networkMarkers,
+        ...failedNetworkMarkers,
+        ...successNetworkMarkers,
         ...errorMarkers
-    ], [stepMarkers, networkMarkers, errorMarkers]);
+    ], [stepMarkers, failedNetworkMarkers, successNetworkMarkers, errorMarkers]);
 
     return (
         <div
@@ -90,8 +104,9 @@ export const TimelineControls: React.FC = () => {
                 {
                     markers.filter((marker) => (
                         (filters.step && marker.type === EventType.STEP) ||
-                        (filters.network && marker.type === EventType.NETWORK) ||
-                        (filters.error && marker.type === EventType.ERROR)
+                        (filters.cypress_error && marker.type === EventType.CYPRESS_ERROR) ||
+                        (filters.network_error && marker.type === EventType.NETWORK_ERROR) ||
+                        (filters.network_success && marker.type === EventType.NETWORK_SUCCESS)
                     )).map((marker) => (
                         <div
                             key={marker.id}
