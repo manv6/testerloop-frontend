@@ -212,7 +212,6 @@ export const NetworkPanel: React.FC = () => {
                             <th>Status</th>
                             <th>Method</th>
                             <th>Domain</th>
-                            <th>Query String Params</th>
                             <th>Initiator</th>
                             <th>Type</th>
                             <th>Transferred</th>

@@ -29,7 +29,6 @@ export const RequestSlice: React.FC<Props> = (props) => {
             <td>{props.event.response.status}</td>
             <td>{props.event.request.method}</td>
             <td>{props.event.request.url}</td>
-            <td>{JSON.stringify(props.event.request.queryString)}</td>
             <td>N/A</td>
             <td>{props.event.response.content.mimeType}</td>
             <td>{props.event.response._transferSize}</td>
