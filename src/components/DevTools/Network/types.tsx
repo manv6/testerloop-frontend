@@ -28,4 +28,6 @@ export interface EventType {
     endedDateTime: Date;
     request: RequestType;
     response: ResponseType;
+    _initiator?: string;
+    _initiator_line?: number| null;
 }

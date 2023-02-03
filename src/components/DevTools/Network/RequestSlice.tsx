@@ -46,7 +46,12 @@ export const RequestSlice: React.FC<Props> = (props) => {
                 </span>
             </td>
             <td>
-                <span className={textColorStyle}>N/A</span>
+                <span className={textColorStyle}>
+                    {(props.event._initiator || '') +
+                        (props.event._initiator_line
+                            ? `:${props.event._initiator_line}`
+                            : '')}
+                </span>
             </td>
             <td>
                 <span className={textColorStyle}>
