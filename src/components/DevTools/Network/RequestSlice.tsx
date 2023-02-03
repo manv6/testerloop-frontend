@@ -25,10 +25,11 @@ export const RequestSlice: React.FC<Props> = (props) => {
                 ev.stopPropagation();
                 props.setSelectedEventId(props.event.id);
             }}
+            className={styles.networkTableRow}
         >
             <td>{props.event.response.status}</td>
             <td>{props.event.request.method}</td>
-            <td>{props.event.request.url}</td>
+            <td className={styles.urlColumn}>{props.event.request.url}</td>
             <td>N/A</td>
             <td>{props.event.response.content.mimeType}</td>
             <td>{props.event.response._transferSize}</td>

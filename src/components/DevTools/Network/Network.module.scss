@@ -3,15 +3,14 @@
     isolation: isolate;
 }
 
-.networkTablePanel {
-    tbody tr {
-        cursor: pointer;
-    }
-    tbody td:nth-child(3) {
-        width: 500px;
-        max-width: 500px;
-        word-wrap: break-word;
-    }
+.networkTableRow {
+    cursor: pointer;
+}
+
+.urlColumn {
+    width: 500px;
+    max-width: 500px;
+    word-wrap: break-word;
 }
 
 .networkDetailPanel {
