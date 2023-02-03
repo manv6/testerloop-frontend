@@ -26,10 +26,14 @@ const ActionRecord: React.FC<Props> = ({
         <div
             key={options.id}
             onClick={navigateInTimeline}
-            className={cx(styles.actionRecord, {
-                [styles.selected]: isActionSelected,
-                [styles.hovered]: isActionHovered
-            })}
+            className={cx(
+                styles.actionRecord,
+                options.state === 'failed' ? styles.error : styles.success,
+                {
+                    [styles.selected]: isActionSelected,
+                    [styles.hovered]: isActionHovered
+                }
+            )}
         >
             <span className={styles.expandedActionName}>
                 {options.name}

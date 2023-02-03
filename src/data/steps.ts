@@ -110,6 +110,22 @@ const steps = [
   },
   {
     "options": {
+      "type": "parent",
+      "name": "page load",
+      "message": "--page loaded--",
+      "event": true,
+      "timeout": 60000,
+      "id": "log-https://www.overloop.io-12",
+      "state": "passed",
+      "instrument": "command",
+      "url": "https://www.overloop.io/",
+      "wallClockStartedAt": "2023-02-03T08:59:00.056Z",
+      "group": "log-https://www.overloop.io-8",
+      "ended": true
+    }
+  },
+  {
+    "options": {
       "name": "new url",
       "message": "https://www.overloop.io/contact-us",
       "event": true,
@@ -122,22 +138,6 @@ const steps = [
       "instrument": "command",
       "url": "https://www.overloop.io/contact-us",
       "wallClockStartedAt": "2023-02-03T08:59:00.323Z",
-      "group": "log-https://www.overloop.io-8",
-      "ended": true
-    }
-  },
-  {
-    "options": {
-      "type": "parent",
-      "name": "page load",
-      "message": "--page loaded--",
-      "event": true,
-      "timeout": 60000,
-      "id": "log-https://www.overloop.io-12",
-      "state": "passed",
-      "instrument": "command",
-      "url": "https://www.overloop.io/",
-      "wallClockStartedAt": "2023-02-03T08:59:00.056Z",
       "group": "log-https://www.overloop.io-8",
       "ended": true
     }

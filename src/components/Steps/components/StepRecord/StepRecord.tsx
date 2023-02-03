@@ -29,6 +29,9 @@ const StepRecord: React.FC<Props> = ({
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const { seek } = useTimeline();
 
+    const hasFailedActions = actions.some((action) => action.options.state === 'failed');
+    const hasFailed = options.state === 'failed' || hasFailedActions;
+
     return (
         <>
             <tr
@@ -55,7 +58,7 @@ const StepRecord: React.FC<Props> = ({
 
                 <td className={cx(
                     styles.stepContent,
-                    options.state === 'passed' ? styles.success : styles.error
+                    hasFailed ? styles.error : styles.success
                 )}>
                     {/* TODO: No need to slice, just for now to dismiss `**` in all steps */}
                     {options.message.replaceAll('*', '')}

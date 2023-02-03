@@ -42,10 +42,17 @@ export const Steps: React.FC<Props> = ({ className }) => {
     const stepsHierarchy = useHierarchizeStepsData(steps);
 
     const selectedStepIdx = getMostRecentStepIdx(stepsHierarchy, currentTimestamp);
-    const hoveredStepIdx = hoverTimestamp ? getMostRecentStepIdx(stepsHierarchy, hoverTimestamp) : null;
+    const hoveredStepIdx = hoverTimestamp
+        ? getMostRecentStepIdx(stepsHierarchy, hoverTimestamp)
+        : null;
 
-    const selectedActionIdx = getMostRecentActionIdx(stepsHierarchy[selectedStepIdx].actions, currentTimestamp);
-    const hoveredActionIdx = hoverTimestamp ? getMostRecentActionIdx(stepsHierarchy[selectedStepIdx].actions, hoverTimestamp) : null;
+    const selectedActionIdx = getMostRecentActionIdx(
+        stepsHierarchy[selectedStepIdx].actions,
+        currentTimestamp);
+
+    const hoveredActionIdx = hoverTimestamp
+        ? getMostRecentActionIdx(stepsHierarchy[selectedStepIdx].actions, hoverTimestamp)
+        : null;
 
     return (
         <table className={cx(className, styles.stepsTable)}>
@@ -62,7 +69,7 @@ export const Steps: React.FC<Props> = ({ className }) => {
                             isStepSelected={isStepSelected}
                             isStepHovered={isStepHovered}
                             selectedActionIdx={isStepSelected ? selectedActionIdx : null}
-                            hoveredActionIdx={isStepSelected ? hoveredActionIdx : null}
+                            hoveredActionIdx={isStepHovered ? hoveredActionIdx : null}
                         />
                     );
                 })}

@@ -1,16 +1,6 @@
 .actionRecord {
 	cursor: pointer;
-	padding: 0.5rem 1rem;
-
-	// &::before {
-	// 	content: "";
-	// 	position: absolute;
-	// 	top: 0;
-	// 	left: 0;
-	// 	width: 5px;
-	// 	height: 100%;
-	// 	background-color: #1AAE9F;
-	// }
+	padding: 0.5rem 1rem 0.5rem 2rem;
 
 	&.hovered,
 	&:hover {
@@ -21,16 +11,22 @@
 		background-color: #f1ebd8;
 	}
 
+	&.success {
+		color: #117924;
+	}
+
+	&.error {
+		color: #D3455B;
+	}
+
 	&>.expandedActionName {
-		font-weight: 600;
-		text-transform: capitalize;
+		font-weight: 700;
 		margin-right: 0.5rem;
 	}
 
 	&>.expandedActionMessage {
 		font-weight: 300;
 		font-style: italic;
-		color: rgb(34, 33, 33);
 		word-break: break-all;
 	}
 }
