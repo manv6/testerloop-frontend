@@ -91,7 +91,7 @@ export const TimelineProvider: React.FC<Props> = (props) => {
     );
 
     const [filters, setFilters] = useState(Object.values(EventType).reduce((obj, et) =>
-        ({ ...obj, [et]: true }), {}) as TimelineContextValue['filters']);
+        ({ ...obj, [et]: true, [EventType.NETWORK_SUCCESS]: false }), {}) as TimelineContextValue['filters']);
 
     const contextValue = {
         currentTime,

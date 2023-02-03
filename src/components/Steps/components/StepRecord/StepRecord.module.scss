@@ -1,0 +1,44 @@
+.stepHeader {
+	cursor: pointer;
+	height: 3rem;
+	
+	border-bottom: 1px solid lightgray;
+	border-top: 1px solid black;
+
+	&.hovered,
+	&:hover {
+		background-color: rgba(0, 0, 0, 0.05);
+	}
+
+	&.selected {
+		background-color: #F7E6B0;
+	}
+
+	& > .stepName,
+	& > .stepContent {
+		padding: 0.25rem;
+	}
+
+	& > .stepName {
+		text-align: right;
+		color: #2C88D9;
+		font-weight: 800;
+	}
+
+	& > .stepContent {
+		&.success {
+			color: #117924;
+		}
+
+		&.error {
+			color: #D3455B;
+		}
+	}
+
+	& > .stepAccordionIcon > svg {
+		width: 32px;
+		height: 32px;
+		margin-right: 0.5rem;
+		border: none;
+	}
+}
