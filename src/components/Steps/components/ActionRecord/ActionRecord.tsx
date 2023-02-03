@@ -1,3 +1,4 @@
+import cx from 'classnames';
 import { useTimeline } from 'src/hooks/timeline';
 import { Step } from '../../Steps';
 import styles from './ActionRecord.module.scss';
@@ -5,11 +6,15 @@ import styles from './ActionRecord.module.scss';
 interface Props {
 	action: Step;
 
-	isSelected: boolean;
-	isHovered: boolean;
+	isActionSelected: boolean;
+	isActionHovered: boolean;
 }
 
-const ActionRecord: React.FC<Props> = ({ action: { options } }) => {
+const ActionRecord: React.FC<Props> = ({
+    action: { options },
+    isActionSelected,
+    isActionHovered
+}) => {
     const { seek } = useTimeline();
 
     const navigateInTimeline = () => {
@@ -20,8 +25,11 @@ const ActionRecord: React.FC<Props> = ({ action: { options } }) => {
     return (
         <div
             key={options.id}
-            className={styles.actionRecord}
             onClick={navigateInTimeline}
+            className={cx(styles.actionRecord, {
+                [styles.selected]: isActionSelected,
+                [styles.hovered]: isActionHovered
+            })}
         >
             <span className={styles.expandedActionName}>
                 {options.name}

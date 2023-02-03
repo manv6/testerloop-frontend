@@ -10,11 +10,21 @@ interface Props {
 	step: Step;
 	actions: Step[];
 
-	isSelected: boolean;
-	isHovered: boolean;
+	isStepSelected: boolean;
+	isStepHovered: boolean;
+
+    selectedActionIdx: number | null;
+    hoveredActionIdx: number | null;
 }
 
-const StepRecord: React.FC<Props> = ({ step, actions, isSelected, isHovered }) => {
+const StepRecord: React.FC<Props> = ({
+    step,
+    actions,
+    isStepSelected,
+    isStepHovered,
+    selectedActionIdx,
+    hoveredActionIdx
+}) => {
     const { options } = step;
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const { seek } = useTimeline();
@@ -33,7 +43,10 @@ const StepRecord: React.FC<Props> = ({ step, actions, isSelected, isHovered }) =
                 }}
                 className={cx(
                     styles.stepHeader,
-                    { [styles.selected]: isSelected, [styles.hovered]: isHovered }
+                    {
+                        [styles.selected]: isStepSelected,
+                        [styles.hovered]: isStepHovered
+                    }
                 )}
             >
                 <td className={styles.stepName}>
@@ -56,12 +69,12 @@ const StepRecord: React.FC<Props> = ({ step, actions, isSelected, isHovered }) =
             {isExpanded && (
                 <tr className={styles.expandedPanel}>
                     <td colSpan={4}>
-                        {actions.map(action => (
+                        {actions.map((action, idx) => (
                             <ActionRecord
                                 key={action.options.id}
                                 action={action}
-                                isSelected={false}
-                                isHovered={false}
+                                isActionSelected={selectedActionIdx === idx}
+                                isActionHovered={hoveredActionIdx === idx}
                             />
                         ))}
                     </td>
