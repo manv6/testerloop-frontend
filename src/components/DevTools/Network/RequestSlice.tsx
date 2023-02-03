@@ -1,39 +1,19 @@
 import React from 'react';
 import { useTimeline } from 'src/hooks/timeline';
 import { datesToFraction } from 'src/utils/date';
+import { EventType } from './types';
+import styles from './Network.module.scss';
 
 type Props = {
-    event: {
-        id: string
-        startedDateTime: Date
-        endedDateTime: Date
-        request: {
-            url: string
-        }
-    }
-    setSelectedEventId: (id: string) => void
+    event: EventType;
+    setSelectedEventId: (id: string) => void;
 };
 
 export const RequestSlice: React.FC<Props> = (props) => {
-    const {
-        startTime,
-        endTime,
-        setHoverTimeFraction,
-    } = useTimeline();
+    const { startTime, endTime, setHoverTimeFraction } = useTimeline();
 
     return (
-        <div
-            style={{
-                border: '1px solid black',
-                background: 'white',
-                position: 'absolute',
-                left: `${100 * datesToFraction(startTime, endTime, props.event.startedDateTime)}%`,
-                top: 0,
-                right: `${100 - 100 * datesToFraction(startTime, endTime, props.event.endedDateTime)}%`,
-                bottom: 0,
-                overflow: 'hidden',
-                cursor: 'pointer',
-            }}
+        <tr
             onMouseMove={(ev) => {
                 ev.stopPropagation();
             }}
@@ -45,8 +25,47 @@ export const RequestSlice: React.FC<Props> = (props) => {
                 ev.stopPropagation();
                 props.setSelectedEventId(props.event.id);
             }}
+            className={styles.networkTableRow}
         >
-            {props.event.request.url}
-        </div>
+            <td>{props.event.response.status}</td>
+            <td>{props.event.request.method}</td>
+            <td className={styles.urlColumn}>{props.event.request.url}</td>
+            <td>N/A</td>
+            <td>{props.event.response.content.mimeType}</td>
+            <td>{props.event.response._transferSize}</td>
+            <td>{props.event.response.bodySize}</td>
+            <td className={styles.waterfall}>
+                <div
+                    style={{
+                        position: 'absolute',
+                        left: `${
+                            100 *
+                            datesToFraction(
+                                startTime,
+                                endTime,
+                                props.event.startedDateTime
+                            )
+                        }%`,
+                        top: '50%',
+                        height: '10px',
+                        marginRight: '-50%',
+                        width: `${100 * (
+                            datesToFraction(
+                                startTime,
+                                endTime,
+                                props.event.endedDateTime
+                            ) -
+                            datesToFraction(
+                                startTime,
+                                endTime,
+                                props.event.startedDateTime
+                            )
+                        )}%`,
+                        transform: 'translate(0, -50%)',
+                        backgroundColor: 'red',
+                    }}
+                ></div>
+            </td>
+        </tr>
     );
 };
