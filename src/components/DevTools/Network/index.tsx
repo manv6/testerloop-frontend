@@ -54,22 +54,22 @@ const SelectedNetworkEventHeaderTab: React.FC<{
             <br />
             {selectedEvent.request.queryString.length ? (
                 <>
-                    <div key="queryParams">
+                    <div key="queryParamsLabel">
                         <b>Query Params:</b>
                     </div>
-                    <NameValueTable valuePairs={selectedEvent.request.queryString} />
+                    <NameValueTable key="queryParams" valuePairs={selectedEvent.request.queryString} />
                 </>
             ) : null}
             <br />
-            <div key="requestHeader">
+            <div key="requestHeaderLabel">
                 <b>Request Headers:</b>
             </div>
-            <NameValueTable valuePairs={selectedEvent.request.headers} />
+            <NameValueTable key="requestHeader" valuePairs={selectedEvent.request.headers} />
             <br />
-            <div key="responseHeader">
+            <div key="responseHeaderLabel">
                 <b>Response Headers:</b>
             </div>
-            <NameValueTable valuePairs={selectedEvent.response.headers} />
+            <NameValueTable key="responseHeader" valuePairs={selectedEvent.response.headers} />
 
         </>
     );
