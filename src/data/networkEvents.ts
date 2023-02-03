@@ -9021,4 +9021,7 @@ export default networkEvents.log.entries.map((x) => {
     );
 
     return { ...x, id, startedDateTime, endedDateTime, timings };
-});
+}).filter((networkEvent) =>
+    !networkEvent.request.url.includes('/__/') &&
+    !networkEvent.request.url.includes('/__cypress/')
+);

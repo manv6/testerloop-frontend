@@ -111,8 +111,6 @@ const SelectedNetworkEventPanel: React.FC<{
 export const NetworkPanel: React.FC = () => {
     const [selectedEventId, setSelectedEventId] = useState<null | string>(null);
     const [filterTerm, setFilterTerm] = useState<string>('');
-    const [filterCypressEvent, setFilterCypressEvents] =
-        useState<boolean>(true);
     const [activeTabKey, setActiveTabKey] = useState<string | null>('headers');
     const selectedEvent = useMemo(
         () => networkEvents.find(({ id }) => id === selectedEventId),
@@ -127,13 +125,8 @@ export const NetworkPanel: React.FC = () => {
                         ? networkEvent.request.url.includes(filterTerm)
                         : true
                 )
-                .filter((networkEvent) =>
-                    filterCypressEvent
-                        ? !networkEvent.request.url.includes('/__/') &&
-                          !networkEvent.request.url.includes('/__cypress/')
-                        : true
-                ),
-        [networkEvents, filterTerm, filterCypressEvent]
+        ,
+        [networkEvents, filterTerm]
     );
 
     const onDetailPenalClose = useCallback(() => {
@@ -145,12 +138,6 @@ export const NetworkPanel: React.FC = () => {
             setFilterTerm(ev.target.value);
         },
         [setFilterTerm]
-    );
-    const filterCypressEventInputOnChange = useCallback(
-        (ev: React.ChangeEvent<HTMLInputElement>) => {
-            setFilterCypressEvents(ev.target.checked);
-        },
-        [setFilterCypressEvents]
     );
 
     const onSelectTab = useCallback(
@@ -194,15 +181,6 @@ export const NetworkPanel: React.FC = () => {
                         />
                     </Col>
                 </Form.Group>
-            </div>
-            <div>
-                <Form.Check
-                    type="switch"
-                    id="filterCypressEventCheckbox"
-                    label="Filter Cypress Urls"
-                    checked={filterCypressEvent}
-                    onChange={filterCypressEventInputOnChange}
-                />
             </div>
             <br />
             <div className={styles.networkTablePanel}>
