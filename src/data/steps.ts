@@ -1,7 +1,5 @@
-/**
-* Lifted from https://github.com/overloop-io/overloop-testing-framework/blob/master/test-data/cypress/out.json
-* Converts wallClockStartedAt into a date object in the map on export.
-*/
+// 20230202120120
+// https://raw.githubusercontent.com/overloop-io/overloop-testing-framework/master/test-data/cypress/out.json?token=GHSAT0AAAAAAB6GM6DARSB6Y6BUATX6ALHMY63UYHQ
 
 const steps = [
     {
@@ -634,7 +632,7 @@ const steps = [
                 }
             }
         }
-    }
+    },
 ];
 
 export default steps.map((step) => {
