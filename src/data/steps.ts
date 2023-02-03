@@ -1068,8 +1068,7 @@ const steps = [
             'url': 'https://www.overloop.io/',
             'wallClockStartedAt': '2023-02-01T15:42:38.111Z'
         }
-    }
-  }
+    },
 ];
 
 export default steps.map((step) => {
