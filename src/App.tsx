@@ -4,6 +4,7 @@ import { NetworkPanel } from './components/DevTools/Network';
 import { DomPreview } from './components/DomPreview';
 import { Steps } from './components/Steps';
 import * as Expandable from './components/Expandable';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import styles from './App.module.scss';
 import results from './data/results';
 
