@@ -24,7 +24,7 @@ const SelectedNetworkEventPostDataTab: React.FC<{
 const NameValueTable: React.FC<{ valuePairs: NameValueType[] }> = ({
     valuePairs
 }) => {
-    return (<Table striped bordered>
+    return (<Table striped bordered size="sm">
         <thead>
             <tr>
                 <th>Header Name</th>
@@ -206,7 +206,7 @@ export const NetworkPanel: React.FC = () => {
             </div>
             <br />
             <div className={styles.networkTablePanel}>
-                <Table striped bordered hover>
+                <Table striped bordered hover size="sm">
                     <thead>
                         <tr>
                             <th>Status</th>
