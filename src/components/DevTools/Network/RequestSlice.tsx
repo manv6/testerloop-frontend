@@ -12,6 +12,9 @@ type Props = {
 export const RequestSlice: React.FC<Props> = (props) => {
     const { startTime, endTime, setHoverTimeFraction } = useTimeline();
 
+    const textColorStyle =
+        props.event.response.status >= 400 ? styles.networkTableRowError : '';
+
     return (
         <tr
             onMouseMove={(ev) => {
@@ -27,13 +30,39 @@ export const RequestSlice: React.FC<Props> = (props) => {
             }}
             className={styles.networkTableRow}
         >
-            <td>{props.event.response.status}</td>
-            <td>{props.event.request.method}</td>
-            <td className={styles.urlColumn}>{props.event.request.url}</td>
-            <td>N/A</td>
-            <td>{props.event.response.content.mimeType}</td>
-            <td>{props.event.response._transferSize}</td>
-            <td>{props.event.response.bodySize}</td>
+            <td>
+                <span className={textColorStyle}>
+                    {props.event.response.status}
+                </span>
+            </td>
+            <td>
+                <span className={textColorStyle}>
+                    {props.event.request.method}
+                </span>
+            </td>
+            <td className={styles.urlColumn}>
+                <span className={textColorStyle}>
+                    {props.event.request.url}
+                </span>
+            </td>
+            <td>
+                <span className={textColorStyle}>N/A</span>
+            </td>
+            <td>
+                <span className={textColorStyle}>
+                    {props.event.response.content.mimeType}
+                </span>
+            </td>
+            <td>
+                <span className={textColorStyle}>
+                    {props.event.response._transferSize}
+                </span>
+            </td>
+            <td>
+                <span className={textColorStyle}>
+                    {props.event.response.bodySize}
+                </span>
+            </td>
             <td className={styles.waterfall}>
                 <div
                     style={{
@@ -49,18 +78,19 @@ export const RequestSlice: React.FC<Props> = (props) => {
                         top: '50%',
                         height: '10px',
                         marginRight: '-50%',
-                        width: `${100 * (
-                            datesToFraction(
+                        width: `${
+                            100 *
+                            (datesToFraction(
                                 startTime,
                                 endTime,
                                 props.event.endedDateTime
                             ) -
-                            datesToFraction(
-                                startTime,
-                                endTime,
-                                props.event.startedDateTime
-                            )
-                        )}%`,
+                                datesToFraction(
+                                    startTime,
+                                    endTime,
+                                    props.event.startedDateTime
+                                ))
+                        }%`,
                         transform: 'translate(0, -50%)',
                         backgroundColor: 'red',
                     }}
