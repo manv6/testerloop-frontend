@@ -17,8 +17,8 @@ const NameValueTable: React.FC<{
                 </tr>
             </thead>
             <tbody>
-                {valuePairs.map(({ name, value }) => (
-                    <tr>
+                {valuePairs.map(({ name, value }, idx) => (
+                    <tr key={`${name}-${idx}`}>
                         <td>{name}</td>
                         <td>{value}</td>
                     </tr>
