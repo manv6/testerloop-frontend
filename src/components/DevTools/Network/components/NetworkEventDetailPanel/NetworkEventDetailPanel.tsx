@@ -1,10 +1,10 @@
 import React from 'react';
-
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
-import { NameValueTable } from '..';
-
+import { NameValueTable } from '../../components';
 import { EventType } from '../../types';
 import styles from './NetworkEventDetailPanel.module.scss';
 
@@ -20,9 +20,9 @@ const PostDataTab: React.FC<{
     if (mimeType?.includes('application/json') && postData) {
         postData = JSON.stringify(JSON.parse(postData), null, 2);
         snippet = (
-            <pre className={styles.jsonArea}>
-                <code>{postData}</code>
-            </pre>
+            <SyntaxHighlighter language="json" style={vs} wrapLines={true}>
+                {postData}
+            </SyntaxHighlighter>
         );
     } else if (
         mimeType?.includes('application/x-www-form-urlencoded') &&

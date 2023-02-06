@@ -58,8 +58,6 @@ export const NetworkPanel: React.FC = () => {
         setActiveTabKey('headers');
     }, [selectedEventId]);
 
-    console.log(selectedEventId);
-
     return (
         <div className={styles.network}>
             {selectedEvent && (
