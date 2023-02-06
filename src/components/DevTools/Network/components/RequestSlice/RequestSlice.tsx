@@ -11,11 +11,8 @@ type Props = {
 };
 
 const RequestSlice: React.FC<Props> = (props) => {
-    const { startTime, endTime, setHoverTimeFraction } = useTimeline();
-
-    const textColorStyle = cx({
-        [styles.networkTableRowError]: props.event.response.status >= 400,
-    });
+    const { startTime, endTime, currentTime, setHoverTimeFraction } =
+        useTimeline();
 
     const truncateValue = (value: string, limit: number) => {
         if (value.length <= limit) return value;
@@ -30,6 +27,25 @@ const RequestSlice: React.FC<Props> = (props) => {
         100 *
         (datesToFraction(startTime, endTime, props.event.endedDateTime) -
             datesToFraction(startTime, endTime, props.event.startedDateTime));
+
+    const currentTimePercentage =
+        100 * datesToFraction(startTime, endTime, currentTime);
+
+    const textColorStyle = cx({
+        [styles.networkTableRowError]: props.event.response.status >= 400,
+    });
+    const progressColorStyle = cx(styles.progress, {
+        [styles.progressStarted]:
+            props.event.startedDateTime <= currentTime &&
+            currentTime < props.event.endedDateTime,
+        [styles.progressEnded]: props.event.endedDateTime <= currentTime,
+    });
+    const progressText =
+        props.event.endedDateTime <= currentTime
+            ? 'completed'
+            : props.event.startedDateTime <= currentTime
+                ? 'started'
+                : null;
 
     return (
         <tr
@@ -46,10 +62,9 @@ const RequestSlice: React.FC<Props> = (props) => {
             }}
             className={styles.networkTableRow}
         >
-            <td>
-                <span className={textColorStyle}>
-                    {props.event.response.status}
-                </span>
+            <td className={progressColorStyle}>{progressText}</td>
+            <td className={textColorStyle}>
+                <span>{props.event.response.status}</span>
             </td>
             <td>
                 <span className={textColorStyle}>
@@ -95,6 +110,10 @@ const RequestSlice: React.FC<Props> = (props) => {
                         width: `${waterfallWidthPercentage}%`,
                     }}
                 ></div>
+                <div
+                    className={styles.waterfallProgressLine}
+                    style={{ left: `${currentTimePercentage}%` }}
+                />
             </td>
         </tr>
     );

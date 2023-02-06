@@ -88,6 +88,7 @@ export const NetworkPanel: React.FC = () => {
                     <Table striped bordered hover size="sm">
                         <thead>
                             <tr>
+                                <th>Progress</th>
                                 <th>Status</th>
                                 <th>Method</th>
                                 <th>Domain</th>

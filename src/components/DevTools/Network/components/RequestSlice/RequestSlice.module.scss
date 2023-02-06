@@ -27,3 +27,20 @@
     transform: translate(0, -50%);
     background-color: red;
 }
+
+.waterfallProgressLine {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: grey;
+}
+
+td.progress {
+    &.progressStarted {
+        background-color: yellow;
+    }
+    &.progressEnded {
+        background-color: gold;
+    }
+};
