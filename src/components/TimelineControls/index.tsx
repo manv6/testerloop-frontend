@@ -3,7 +3,7 @@
 import React, { useMemo } from 'react';
 import cx from 'classnames';
 import { useTimeline } from 'src/hooks/timeline';
-import { datesToFraction } from 'src/utils/date';
+import { datesDelta, datesToFraction } from 'src/utils/date';
 import styles from './TimelineControls.module.scss';
 import steps from 'src/data/steps';
 import networkEvents from 'src/data/networkEvents';
@@ -11,6 +11,7 @@ import { EventType, FILTER_LABELS, MARKER_COLOURS } from 'src/constants/eventTyp
 
 export const TimelineControls: React.FC = () => {
     const {
+        currentTime,
         currentTimeFraction,
         hoverTimeFraction,
         isPlaying,
@@ -68,24 +69,28 @@ export const TimelineControls: React.FC = () => {
         ...errorMarkers
     ], [stepMarkers, failedNetworkMarkers, successNetworkMarkers, errorMarkers]);
 
+
     return (
         <div
             className={styles.timeline}
         >
-            <div
-                className={styles.seeker}
-                onMouseMove={(ev) => {
-                    setHoverTimeFraction((ev.clientX - ev.currentTarget.offsetLeft) / ev.currentTarget.offsetWidth);
-                }}
-                onMouseLeave={() => {
-                    setHoverTimeFraction(null);
-                }}
-                onClick={(ev) => {
-                    seekFraction((ev.clientX - ev.currentTarget.offsetLeft) / ev.currentTarget.offsetWidth);
-                }}
-            >
-                {
-                    hoverTimeFraction
+            <div className={styles.seekercontainer}>
+                <div
+                    className={styles.seeker}
+                    onMouseMove={(ev) => {
+                        const parentOffset = ev.currentTarget.parentElement?.offsetLeft || 0;
+                        setHoverTimeFraction((ev.clientX - parentOffset - ev.currentTarget.offsetLeft) / ev.currentTarget.offsetWidth);
+                    }}
+                    onMouseLeave={() => {
+                        setHoverTimeFraction(null);
+                    }}
+                    onClick={(ev) => {
+                        const parentOffset = ev.currentTarget.parentElement?.offsetLeft || 0;
+                        seekFraction((ev.clientX - parentOffset - ev.currentTarget.offsetLeft) / ev.currentTarget.offsetWidth);
+                    }}
+                >
+                    {
+                        hoverTimeFraction
                     && <div
                         className={styles.hover}
                         style={{
@@ -93,44 +98,49 @@ export const TimelineControls: React.FC = () => {
                         }}
                     >
                     </div>
-                }
-                <div
-                    className={styles.fill}
-                    style={{
-                        right: `${100 - 100 * currentTimeFraction}%`
-                    }}
-                >
-                </div>
-                {
-                    markers.filter((marker) => (
-                        (filters.step && marker.type === EventType.STEP) ||
+                    }
+                    <div
+                        className={styles.fill}
+                        style={{
+                            right: `${100 - 100 * currentTimeFraction}%`
+                        }}
+                    >
+                    </div>
+                    {
+                        markers.filter((marker) => (
+                            (filters.step && marker.type === EventType.STEP) ||
                         (filters.cypress_error && marker.type === EventType.CYPRESS_ERROR) ||
                         (filters.network_error && marker.type === EventType.NETWORK_ERROR) ||
                         (filters.network_success && marker.type === EventType.NETWORK_SUCCESS)
-                    )).map((marker) => (
-                        <div
-                            key={marker.id}
-                            className={cx(
-                                styles.marker,
-                                styles[`marker-${marker.type}`]
-                            )}
-                            style={{
-                                left: `${100 * marker.startFraction}%`,
-                                borderColor: MARKER_COLOURS[marker.type]
-                            }}
-                        >
-                        </div>
-                    ))
-                }
-                <div
-                    className={styles.play}
-                    onClick={(ev) => {
-                        ev.stopPropagation();
-                        setPlaying(!isPlaying);
-                    }}
-                >
-                    <span>{isPlaying ? 'Ⅱ' : '▶'}</span>
+                        )).map((marker) => (
+                            <div
+                                key={marker.id}
+                                className={cx(
+                                    styles.marker,
+                                    styles[`marker-${marker.type}`]
+                                )}
+                                style={{
+                                    left: `${100 * marker.startFraction}%`,
+                                    borderColor: MARKER_COLOURS[marker.type]
+                                }}
+                            >
+                            </div>
+                        ))
+                    }
+                    <div
+                        className={styles.play}
+                        onClick={(ev) => {
+                            ev.stopPropagation();
+                            setPlaying(!isPlaying);
+                        }}
+                    >
+                        <span>{isPlaying ? 'Ⅱ' : '▶'}</span>
+                    </div>
                 </div>
+                <div className={styles.cursor}  style={{
+                    right: `${100 - 100 * currentTimeFraction}%`
+                }} data-after-content={datesDelta(startTime, currentTime) || 0}
+                ></div>
             </div>
             <div className={styles.filters}>
                 { Object.values(EventType).map((et) => (
