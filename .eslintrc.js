@@ -14,6 +14,7 @@ module.exports = {
         '@typescript-eslint/no-empty-function': ['off'],
         'no-trailing-spaces': ['error'],
         'camelcase': ['error'],
-        'indent': ['error', 4]
+        'indent': ['error', 4],
+        'eol-last': ["error", "always"]
     },    
 };
