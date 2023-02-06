@@ -1,7 +1,7 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
 
-import { NameValueType } from '../../types';
+import { NameValueType } from 'src/components/DevTools/Network/types';
 
 const NameValueTable: React.FC<{
     valuePairs: NameValueType[];

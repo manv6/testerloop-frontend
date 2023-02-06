@@ -4,8 +4,8 @@ import Tabs from 'react-bootstrap/Tabs';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
-import { NameValueTable } from '../../components';
-import { EventType } from '../../types';
+import { NameValueTable } from 'src/components/DevTools/Network/components';
+import { EventType } from 'src/components/DevTools/Network/types';
 import styles from './NetworkEventDetailPanel.module.scss';
 
 

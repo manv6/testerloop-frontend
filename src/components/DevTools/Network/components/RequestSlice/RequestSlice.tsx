@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTimeline } from 'src/hooks/timeline';
 import { datesToFraction } from 'src/utils/date';
-import { EventType } from '../../types';
+import { EventType } from 'src/components/DevTools/Network/types';
 import styles from './RequestSlice.module.scss';
 
 type Props = {
