@@ -1,17 +1,17 @@
 // TODO: Remove this check once temp data is removed!!
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import Stack from 'react-bootstrap/Stack';
 import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import CloseButton from 'react-bootstrap/CloseButton';
 
-import {RequestSlice, NetworkEventDetailPanel} from './components/';
+import { RequestSlice, NetworkEventDetailPanel } from './components/';
 import networkEvents from 'src/data/networkEvents';
 import styles from './Network.module.scss';
 import { EventType } from './types';
-
 
 export const NetworkPanel: React.FC = () => {
     const [selectedEventId, setSelectedEventId] = useState<null | string>(null);
@@ -66,7 +66,7 @@ export const NetworkPanel: React.FC = () => {
                     onClick={onDetailPenalClose}
                 />
             )}
-            <div>
+            <Stack gap={3}>
                 <Form.Group
                     as={Row}
                     className="mb-1"
@@ -84,33 +84,32 @@ export const NetworkPanel: React.FC = () => {
                         />
                     </Col>
                 </Form.Group>
-            </div>
-            <br />
-            <div className={styles.networkTablePanel}>
-                <Table striped bordered hover size="sm">
-                    <thead>
-                        <tr>
-                            <th>Status</th>
-                            <th>Method</th>
-                            <th>Domain</th>
-                            <th>Initiator</th>
-                            <th>Type</th>
-                            <th>Transferred</th>
-                            <th>Size</th>
-                            <th>Waterfall</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredEvents.map((networkEvent, i) => (
-                            <RequestSlice
-                                key={networkEvent.id}
-                                event={networkEvent}
-                                setSelectedEventId={setSelectedEventId}
-                            />
-                        ))}
-                    </tbody>
-                </Table>
-            </div>
+                <div className={styles.networkTablePanel}>
+                    <Table striped bordered hover size="sm">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Method</th>
+                                <th>Domain</th>
+                                <th>Initiator</th>
+                                <th>Type</th>
+                                <th>Transferred</th>
+                                <th>Size</th>
+                                <th>Waterfall</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {filteredEvents.map((networkEvent, i) => (
+                                <RequestSlice
+                                    key={networkEvent.id}
+                                    event={networkEvent}
+                                    setSelectedEventId={setSelectedEventId}
+                                />
+                            ))}
+                        </tbody>
+                    </Table>
+                </div>
+            </Stack>
             {selectedEvent && (
                 <NetworkEventDetailPanel
                     selectedEvent={selectedEvent}

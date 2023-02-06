@@ -1,13 +1,13 @@
 import React from 'react';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import Stack from 'react-bootstrap/Stack';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 import { NameValueTable } from 'src/components/DevTools/Network/components';
 import { EventType } from 'src/components/DevTools/Network/types';
 import styles from './NetworkEventDetailPanel.module.scss';
-
 
 const PostDataTab: React.FC<{
     selectedEvent: EventType;
@@ -45,14 +45,13 @@ const PostDataTab: React.FC<{
     }
 
     return (
-        <div>
+        <Stack gap={3}>
             <div>
                 <span className={styles.boldText}>Mime Type: </span>
                 {selectedEvent.request?.postData?.mimeType}
             </div>
-            <br />
             {snippet}
-        </div>
+        </Stack>
     );
 };
 
@@ -60,12 +59,11 @@ const HeadersTab: React.FC<{
     selectedEvent: EventType;
 }> = ({ selectedEvent }) => {
     return (
-        <>
-            <br />
+        <Stack gap={4}>
             <div key="requestURL" className={styles.requestUrl}>
-                <span className={styles.boldText}>Request to:</span> {selectedEvent.request.url}
+                <span className={styles.boldText}>Request to:</span>{' '}
+                {selectedEvent.request.url}
             </div>
-            <br />
             {selectedEvent.request.queryString.length ? (
                 <>
                     <div key="queryParamsLabel">
@@ -79,27 +77,29 @@ const HeadersTab: React.FC<{
                     />
                 </>
             ) : null}
-            <br />
-            <div key="requestHeaderLabel">
-                <span className={styles.boldText}>Request Headers:</span>
+            <div>
+                <div key="requestHeaderLabel">
+                    <span className={styles.boldText}>Request Headers:</span>
+                </div>
+                <NameValueTable
+                    key="requestHeader"
+                    valuePairs={selectedEvent.request.headers}
+                    nameLabel="Header Name"
+                    valueLabel="Header Value"
+                />
             </div>
-            <NameValueTable
-                key="requestHeader"
-                valuePairs={selectedEvent.request.headers}
-                nameLabel="Header Name"
-                valueLabel="Header Value"
-            />
-            <br />
-            <div key="responseHeaderLabel">
-                <span className={styles.boldText}>Response Headers:</span>
+            <div>
+                <div key="responseHeaderLabel">
+                    <span className={styles.boldText}>Response Headers:</span>
+                </div>
+                <NameValueTable
+                    key="responseHeader"
+                    valuePairs={selectedEvent.response.headers}
+                    nameLabel="Header Name"
+                    valueLabel="Header Value"
+                />
             </div>
-            <NameValueTable
-                key="responseHeader"
-                valuePairs={selectedEvent.response.headers}
-                nameLabel="Header Name"
-                valueLabel="Header Value"
-            />
-        </>
+        </Stack>
     );
 };
 
