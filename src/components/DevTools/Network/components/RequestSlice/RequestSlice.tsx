@@ -1,15 +1,15 @@
 import React from 'react';
 import { useTimeline } from 'src/hooks/timeline';
 import { datesToFraction } from 'src/utils/date';
-import { EventType } from './types';
-import styles from './Network.module.scss';
+import { EventType } from '../../types';
+import styles from './RequestSlice.module.scss';
 
 type Props = {
     event: EventType;
     setSelectedEventId: (id: string) => void;
 };
 
-export const RequestSlice: React.FC<Props> = (props) => {
+const RequestSlice: React.FC<Props> = (props) => {
     const { startTime, endTime, setHoverTimeFraction } = useTimeline();
 
     const textColorStyle =
@@ -113,3 +113,5 @@ export const RequestSlice: React.FC<Props> = (props) => {
         </tr>
     );
 };
+
+export default RequestSlice;

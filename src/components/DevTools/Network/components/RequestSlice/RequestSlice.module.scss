@@ -1,0 +1,20 @@
+
+
+.networkTableRow {
+    cursor: pointer;
+}
+
+.networkTableRowError {
+    color: red;
+}
+
+.urlColumn {
+    width: 500px;
+    max-width: 500px;
+    word-wrap: break-word;
+}
+
+.waterfall {
+    min-width: 550px;
+    position: relative;
+}

@@ -3,48 +3,9 @@
     isolation: isolate;
 }
 
-.networkTableRow {
-    cursor: pointer;
-}
-
-.networkTableRowError {
-    color: red;
-}
-
-.urlColumn {
-    width: 500px;
-    max-width: 500px;
-    word-wrap: break-word;
-}
-
-.networkDetailPanel {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 50%;
-    overflow: auto;
-    background: white;
-    border-left: 3px solid black;
-}
-
 .closeButton {
     position: absolute;
     right: 80px;
     top: 5px;
     z-index: 1;
-}
-
-.waterfall {
-    min-width: 550px;
-    position: relative;
-}
-
-.requestUrl {
-    word-wrap: break-word;
-}
-
-.jsonArea {
-    border: 1px solid lightgray;;
-    word-wrap: break-word;
 }

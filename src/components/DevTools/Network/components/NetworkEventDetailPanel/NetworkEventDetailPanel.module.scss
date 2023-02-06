@@ -1,0 +1,28 @@
+
+
+.networkDetailPanel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 50%;
+    overflow: auto;
+    background: white;
+    border-left: 3px solid black;
+}
+
+.urlColumn {
+    width: 500px;
+    max-width: 500px;
+    word-wrap: break-word;
+}
+
+.waterfall {
+    min-width: 550px;
+    position: relative;
+}
+
+.jsonArea {
+    border: 1px solid lightgray;;
+    word-wrap: break-word;
+}
