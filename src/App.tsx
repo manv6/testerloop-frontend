@@ -1,6 +1,6 @@
 import { TimelineProvider } from './hooks/timeline';
 import { TimelineControls } from './components/TimelineControls';
-import { NetworkPanel } from './components/DevTools/Network';
+import { NetworkPanel, ConsolePanel } from './components/DevTools';
 import { DomPreview } from './components/DomPreview';
 import { Steps } from './components/Steps';
 import * as Expandable from './components/Expandable';
@@ -37,7 +37,7 @@ function App() {
                             <DomPreview />
                         </Expandable.Child>
                         <Expandable.Child className={styles['expandable-console']}>
-                            <div>Console</div>
+                            <ConsolePanel />
                         </Expandable.Child>
                         <Expandable.Child className={styles['expandable-network']}>
                             <NetworkPanel />
