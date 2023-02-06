@@ -20,7 +20,7 @@ const PostDataTab: React.FC<{
     if (mimeType?.includes('application/json') && postData) {
         postData = JSON.stringify(JSON.parse(postData), null, 2);
         snippet = (
-            <SyntaxHighlighter language="json" style={vs} wrapLines={true}>
+            <SyntaxHighlighter language="json" style={vs} wrapLongLines={true}>
                 {postData}
             </SyntaxHighlighter>
         );
