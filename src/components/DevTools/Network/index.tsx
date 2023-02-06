@@ -14,32 +14,76 @@ import networkEvents from 'src/data/networkEvents';
 import styles from './Network.module.scss';
 import { EventType, NameValueType } from './types';
 
+const NameValueTable: React.FC<{
+    valuePairs: NameValueType[];
+    nameLabel: string;
+    valueLabel: string;
+}> = ({ valuePairs, nameLabel, valueLabel }) => {
+    return (
+        <Table striped bordered size="sm">
+            <thead>
+                <tr>
+                    <th>{nameLabel}</th>
+                    <th>{valueLabel}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {valuePairs.map(({ name, value }) => (
+                    <tr>
+                        <td>{name}</td>
+                        <td>{value}</td>
+                    </tr>
+                ))}
+            </tbody>
+        </Table>
+    );
+};
+
 const SelectedNetworkEventPostDataTab: React.FC<{
     selectedEvent: EventType;
 }> = ({ selectedEvent }) => {
-    return <pre>{selectedEvent.request?.postData?.text}</pre>;
-};
+    const mimeType = selectedEvent.request?.postData?.mimeType;
 
+    let postData = selectedEvent.request?.postData?.text;
 
-const NameValueTable: React.FC<{ valuePairs: NameValueType[] }> = ({
-    valuePairs
-}) => {
-    return (<Table striped bordered size="sm">
-        <thead>
-            <tr>
-                <th>Header Name</th>
-                <th>Header Value</th>
-            </tr>
-        </thead>
-        <tbody>
-            {valuePairs.map(({ name, value }) => (
-                <tr>
-                    <td>{name}</td>
-                    <td>{value}</td>
-                </tr>
-            ))}
-        </tbody>
-    </Table>);
+    let snippet = null;
+    if (mimeType?.includes('application/json') && postData) {
+        postData = JSON.stringify(JSON.parse(postData), null, 2);
+        snippet = (
+            <pre className={styles.jsonArea} >
+                <code>{postData}</code>
+            </pre>
+        );
+    } else if (
+        mimeType?.includes('application/x-www-form-urlencoded') &&
+        postData
+    ) {
+        const valuePairs = Array.from(
+            new URLSearchParams(postData).entries()
+        ).map(([key, value]) => {
+            return { name: key, value };
+        });
+        snippet = (
+            <NameValueTable
+                valuePairs={valuePairs}
+                nameLabel="key"
+                valueLabel="value"
+            />
+        );
+    } else {
+        snippet = <div>{postData}</div>;
+    }
+
+    return (
+        <div>
+            <div>
+                <b>Mime Type: </b>
+                {selectedEvent.request?.postData?.mimeType}
+            </div>
+            <br />
+            {snippet}
+        </div>
+    );
 };
 
 const SelectedNetworkEventHeaderTab: React.FC<{
@@ -48,7 +92,7 @@ const SelectedNetworkEventHeaderTab: React.FC<{
     return (
         <>
             <br />
-            <div key="requestURL" className={styles.requestUrl}  >
+            <div key="requestURL" className={styles.requestUrl}>
                 <b>Request to:</b> {selectedEvent.request.url}
             </div>
             <br />
@@ -57,20 +101,34 @@ const SelectedNetworkEventHeaderTab: React.FC<{
                     <div key="queryParamsLabel">
                         <b>Query Params:</b>
                     </div>
-                    <NameValueTable key="queryParams" valuePairs={selectedEvent.request.queryString} />
+                    <NameValueTable
+                        key="queryParams"
+                        valuePairs={selectedEvent.request.queryString}
+                        nameLabel="Header Name"
+                        valueLabel="Header Value"
+                    />
                 </>
             ) : null}
             <br />
             <div key="requestHeaderLabel">
                 <b>Request Headers:</b>
             </div>
-            <NameValueTable key="requestHeader" valuePairs={selectedEvent.request.headers} />
+            <NameValueTable
+                key="requestHeader"
+                valuePairs={selectedEvent.request.headers}
+                nameLabel="Header Name"
+                valueLabel="Header Value"
+            />
             <br />
             <div key="responseHeaderLabel">
                 <b>Response Headers:</b>
             </div>
-            <NameValueTable key="responseHeader" valuePairs={selectedEvent.response.headers} />
-
+            <NameValueTable
+                key="responseHeader"
+                valuePairs={selectedEvent.response.headers}
+                nameLabel="Header Name"
+                valueLabel="Header Value"
+            />
         </>
     );
 };
@@ -119,13 +177,11 @@ export const NetworkPanel: React.FC = () => {
 
     const filteredEvents = useMemo(
         () =>
-            (networkEvents as EventType[])
-                .filter((networkEvent) =>
-                    filterTerm
-                        ? networkEvent.request.url.includes(filterTerm)
-                        : true
-                )
-        ,
+            (networkEvents as EventType[]).filter((networkEvent) =>
+                filterTerm
+                    ? networkEvent.request.url.includes(filterTerm)
+                    : true
+            ),
         [networkEvents, filterTerm]
     );
 
