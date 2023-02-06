@@ -47,7 +47,7 @@ const PostDataTab: React.FC<{
     return (
         <div>
             <div>
-                <b>Mime Type: </b>
+                <span className={styles.boldText}>Mime Type: </span>
                 {selectedEvent.request?.postData?.mimeType}
             </div>
             <br />
@@ -63,13 +63,13 @@ const HeadersTab: React.FC<{
         <>
             <br />
             <div key="requestURL" className={styles.requestUrl}>
-                <b>Request to:</b> {selectedEvent.request.url}
+                <span className={styles.boldText}>Request to:</span> {selectedEvent.request.url}
             </div>
             <br />
             {selectedEvent.request.queryString.length ? (
                 <>
                     <div key="queryParamsLabel">
-                        <b>Query Params:</b>
+                        <span className={styles.boldText}>Query Params:</span>
                     </div>
                     <NameValueTable
                         key="queryParams"
@@ -81,7 +81,7 @@ const HeadersTab: React.FC<{
             ) : null}
             <br />
             <div key="requestHeaderLabel">
-                <b>Request Headers:</b>
+                <span className={styles.boldText}>Request Headers:</span>
             </div>
             <NameValueTable
                 key="requestHeader"
@@ -91,7 +91,7 @@ const HeadersTab: React.FC<{
             />
             <br />
             <div key="responseHeaderLabel">
-                <b>Response Headers:</b>
+                <span className={styles.boldText}>Response Headers:</span>
             </div>
             <NameValueTable
                 key="responseHeader"
