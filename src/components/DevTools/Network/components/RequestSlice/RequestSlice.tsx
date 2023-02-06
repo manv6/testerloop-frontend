@@ -21,6 +21,14 @@ const RequestSlice: React.FC<Props> = (props) => {
         return `${value.slice(0, limit - 3)}...`;
     };
 
+    const waterfallStartPositionPercentage =
+        100 * datesToFraction(startTime, endTime, props.event.startedDateTime);
+
+    const waterfallWidthPercentage =
+        100 *
+        (datesToFraction(startTime, endTime, props.event.endedDateTime) -
+            datesToFraction(startTime, endTime, props.event.startedDateTime));
+
     return (
         <tr
             onMouseMove={(ev) => {
@@ -78,35 +86,10 @@ const RequestSlice: React.FC<Props> = (props) => {
                 </span>
             </td>
             <td className={styles.waterfall}>
-                <div
+                <div className={styles.waterfallBar}
                     style={{
-                        position: 'absolute',
-                        left: `${
-                            100 *
-                            datesToFraction(
-                                startTime,
-                                endTime,
-                                props.event.startedDateTime
-                            )
-                        }%`,
-                        top: '50%',
-                        height: '10px',
-                        marginRight: '-50%',
-                        width: `${
-                            100 *
-                            (datesToFraction(
-                                startTime,
-                                endTime,
-                                props.event.endedDateTime
-                            ) -
-                                datesToFraction(
-                                    startTime,
-                                    endTime,
-                                    props.event.startedDateTime
-                                ))
-                        }%`,
-                        transform: 'translate(0, -50%)',
-                        backgroundColor: 'red',
+                        left: `${waterfallStartPositionPercentage}%`,
+                        width: `${waterfallWidthPercentage}%`,
                     }}
                 ></div>
             </td>
