@@ -1,4 +1,5 @@
 import React from 'react';
+import cx from 'classnames';
 import { useTimeline } from 'src/hooks/timeline';
 import { datesToFraction } from 'src/utils/date';
 import { EventType } from 'src/components/DevTools/Network/types';
@@ -12,8 +13,9 @@ type Props = {
 const RequestSlice: React.FC<Props> = (props) => {
     const { startTime, endTime, setHoverTimeFraction } = useTimeline();
 
-    const textColorStyle =
-        props.event.response.status >= 400 ? styles.networkTableRowError : '';
+    const textColorStyle = cx({
+        [styles.networkTableRowError]: props.event.response.status >= 400,
+    });
 
     const truncateValue = (value: string, limit: number) => {
         if (value.length <= limit) return value;
@@ -86,7 +88,8 @@ const RequestSlice: React.FC<Props> = (props) => {
                 </span>
             </td>
             <td className={styles.waterfall}>
-                <div className={styles.waterfallBar}
+                <div
+                    className={styles.waterfallBar}
                     style={{
                         left: `${waterfallStartPositionPercentage}%`,
                         width: `${waterfallWidthPercentage}%`,
