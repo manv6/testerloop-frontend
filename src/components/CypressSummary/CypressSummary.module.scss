@@ -1,0 +1,24 @@
+:root {
+    --error-colour: #D3455B;
+}
+
+.cypressSummary {
+    padding: 5px 10px;
+    overflow: scroll;
+}
+
+.title {
+    font-weight: bold;
+    color: var(--error-colour);
+    margin-bottom: 5px;
+    background-color: rgba(50, 50, 50, 0.05);
+
+    span {
+        margin-left: 4px;
+        margin-right: 6px;
+    }
+}
+
+.errorMessage {
+    color: var(--error-colour)
+}
