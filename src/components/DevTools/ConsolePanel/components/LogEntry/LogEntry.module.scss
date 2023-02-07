@@ -5,23 +5,33 @@
 
 	border: 1px solid lightgray;
 	padding: 0.25rem 0.75rem;
+	
+	&.hovered {
+		border-width: 3px;
+		border-style: dashed;
+	}
+
+	&.selected {
+		border-width: 3px;
+		border-style: ridge;
+	}
 
 	&.warningLevel {
 		background-color: #FEFCE7;
 		border-color: #FFF5C1;
+		
+		&.selected, &.hovered {
+			background-color: #e4da6c;
+		}
 	}
 
 	&.errorLevel {
 		background-color: #FFEFF0;
 		border-color: #FFD6D5;
-	}
-
-	&.selected {
-		background-color: aqua !important;
-	}
-
-	&.hovered {
-		background-color: greenyellow !important;
+	
+		&.selected, &.hovered {
+			background-color: #d9757c;
+		}
 	}
 
 	.displayDate {

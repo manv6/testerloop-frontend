@@ -5,11 +5,7 @@ import { LogEntry, LogFilters } from './components';
 import styles from './ConsolePanel.module.scss';
 
 const getMostRecentLogIdx = (logs: LogRecord[], timestamp: number): number => {
-    const nextStepIdx = logs.findIndex((log) => {
-        console.log(log.timestamp, timestamp);
-        return log.timestamp > timestamp;
-    });
-    console.log(nextStepIdx);
+    const nextStepIdx = logs.findIndex((log) => log.timestamp > timestamp);
     return (nextStepIdx === -1 ? logs.length : nextStepIdx) - 1;
 };
 
