@@ -19,7 +19,8 @@ const LogEntry: React.FC<Props> = ({
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const messageRef = useRef<HTMLSpanElement>(null);
 
-    const displayDate = new Date(timestamp).toLocaleTimeString();
+    const date = new Date(timestamp);
+    const displayDate = `${date.toLocaleTimeString()}.${date.getMilliseconds()}`;
 
     useEffect(() => {
         if (!messageRef.current) return;
