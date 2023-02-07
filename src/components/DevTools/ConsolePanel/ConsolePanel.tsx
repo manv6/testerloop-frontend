@@ -1,12 +1,25 @@
 import React from 'react';
-import logs, { LogLevel } from 'src/data/logs';
+import logs, { LogLevel, LogRecord } from 'src/data/logs';
+import { useTimeline } from 'src/hooks/timeline';
 import { LogEntry, LogFilters } from './components';
 import styles from './ConsolePanel.module.scss';
 
+const getMostRecentLogIdx = (logs: LogRecord[], timestamp: number): number => {
+    const nextStepIdx = logs.findIndex((log) => {
+        console.log(log.timestamp, timestamp);
+        return log.timestamp > timestamp;
+    });
+    console.log(nextStepIdx);
+    return (nextStepIdx === -1 ? logs.length : nextStepIdx) - 1;
+};
 
 const ConsolePanel: React.FC = () => {
-    const [filterTerm, setFilterTerm] = React.useState<string>('');
+    const {
+        currentTime,
+        hoverTime,
+    } = useTimeline();
 
+    const [filterTerm, setFilterTerm] = React.useState<string>('');
     const [activeLogLevels, setActiveLogLevels] = React.useState<Record<LogLevel, boolean>>({
         log: true,
         warning: true,
@@ -17,13 +30,33 @@ const ConsolePanel: React.FC = () => {
         setActiveLogLevels({...activeLogLevels, [level]: !activeLogLevels[level]});
     };
 
-    const filteredLogs = logs.filter(({ message }) =>
+    const textFilteredLogs = logs.filter(({ message }) =>
         message.toLowerCase().includes(filterTerm.toLowerCase()));
+
+    // Calculate log stats from logs filtered ONLY with text.
+    // If we apply it to the full filtered logs the disabled log levels will be 0.
+    const logStats = React.useMemo(() => (
+        textFilteredLogs.reduce((acc, { level }) => {
+            ++acc[level];
+            return acc;
+        }, { log: 0, warning: 0, error: 0 } as Record<LogLevel, number>)
+    ), [textFilteredLogs]);
+
+    const filteredLogs = textFilteredLogs
+        .filter(({ level }) => activeLogLevels[level]);
+
+    const currentTimestamp = currentTime.getTime();
+    const currentLogIdx = getMostRecentLogIdx(filteredLogs, currentTimestamp);
+
+    const hoverTimestamp = hoverTime?.getTime();
+    const hoveredLogIdx = hoverTimestamp
+        ? getMostRecentLogIdx(filteredLogs, hoverTimestamp)
+        : null;
 
     return (
         <section className={styles.consolePanel}>
             <LogFilters
-                logs={filteredLogs}
+                logStats={logStats}
                 filterTerm={filterTerm}
                 setFilterTerm={setFilterTerm}
                 activeLogLevels={activeLogLevels}
@@ -31,12 +64,15 @@ const ConsolePanel: React.FC = () => {
             />
 
             <ul className={styles.logsList}>
-                {filteredLogs
-                    .filter(({ level }) => activeLogLevels[level])
-                    .map((log) => {
-                        // TODO: Timestamp is not unique, provide an id or a way to make it unique.
-                        return <LogEntry key={log.timestamp + log.message.substring(0, 50)} {...log} />;
-                    })}
+                {filteredLogs.map((log, idx) => {
+                    // TODO: Timestamp is not unique, provide an id or a way to make it unique.
+                    return <LogEntry
+                        key={log.timestamp + log.message.substring(0, 50)}
+                        isLogSelected={currentLogIdx === idx}
+                        isLogHovered={hoveredLogIdx === idx}
+                        {...log}
+                    />;
+                })}
             </ul>
         </section>
     );

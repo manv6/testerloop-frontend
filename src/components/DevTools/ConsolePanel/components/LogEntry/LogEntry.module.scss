@@ -16,6 +16,14 @@
 		border-color: #FFD6D5;
 	}
 
+	&.selected {
+		background-color: aqua !important;
+	}
+
+	&.hovered {
+		background-color: greenyellow !important;
+	}
+
 	.displayDate {
 		font-size: small;
 		line-height: 24px;

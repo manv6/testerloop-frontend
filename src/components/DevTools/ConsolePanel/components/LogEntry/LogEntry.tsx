@@ -3,7 +3,18 @@ import cx from 'classnames';
 import { LogRecord } from 'src/data/logs';
 import styles from './LogEntry.module.scss';
 
-const LogEntry: React.FC<LogRecord> = ({ level, timestamp, message }) => {
+interface Props extends LogRecord {
+    isLogSelected: boolean;
+    isLogHovered: boolean;
+}
+
+const LogEntry: React.FC<Props> = ({
+    level,
+    timestamp,
+    message,
+    isLogSelected,
+    isLogHovered
+}) => {
     const [textOverflows, setTextOverflows] = useState<boolean>(false);
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const messageRef = useRef<HTMLSpanElement>(null);
@@ -20,8 +31,14 @@ const LogEntry: React.FC<LogRecord> = ({ level, timestamp, message }) => {
         <li key={timestamp + message.substring(0, 50)}
             className={cx(
                 styles.logEntry,
-                {[styles.warningLevel]: level === 'warning'},
-                {[styles.errorLevel]: level === 'error'}
+                {
+                    [styles.warningLevel]: level === 'warning',
+                    [styles.errorLevel]: level === 'error'
+                },
+                {
+                    [styles.selected]: isLogSelected,
+                    [styles.hovered]: isLogHovered
+                }
             )}
         >
             <span className={styles.displayDate}>{displayDate}</span>
