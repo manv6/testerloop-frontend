@@ -74,7 +74,7 @@ export const TimelineControls: React.FC = () => {
         <div
             className={styles.timeline}
         >
-            <div className={styles.seekercontainer}>
+            <div className={styles.seekerContainer}>
                 <div
                     className={styles.seeker}
                     onMouseMove={(ev) => {

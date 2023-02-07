@@ -27,7 +27,12 @@ export const datesDelta = (startTime: Date, currentTime: Date) => {
     const seconds = Math.floor( ms / (1000) );
     ms = ms % 1000;
 
-    const format = (t: number, isLast?: boolean) => t ? t + (isLast? '' : ':') : '';
+    let timestamp = [
+        hours,
+        String(minutes).padStart((hours ? 2 : 1), '0'),
+        String(seconds).padStart(2, '0')
+    ].filter(Boolean).join(':');
 
-    return `${format(hours)}${format(minutes)}${format(seconds)}${format(ms, true)}`;
+    timestamp += `.${String(ms).padStart(3, '0')}`;
+    return timestamp;
 };
