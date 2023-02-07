@@ -11,7 +11,7 @@ export const fractionToDate = (startTime: Date, endTime: Date, fraction: number)
     return currentTime;
 };
 
-export const datesDelta = (startTime: Date, currentTime: Date) => {
+export const datesToElapsedTime = (startTime: Date, currentTime: Date) => {
     let ms = currentTime.getTime() - startTime.getTime();
 
     if(ms < 0){

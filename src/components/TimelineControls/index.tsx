@@ -3,7 +3,7 @@
 import React, { useMemo } from 'react';
 import cx from 'classnames';
 import { useTimeline } from 'src/hooks/timeline';
-import { datesDelta, datesToFraction } from 'src/utils/date';
+import { datesToElapsedTime, datesToFraction } from 'src/utils/date';
 import styles from './TimelineControls.module.scss';
 import steps from 'src/data/steps';
 import networkEvents from 'src/data/networkEvents';
@@ -139,7 +139,7 @@ export const TimelineControls: React.FC = () => {
                 </div>
                 <div className={styles.cursor}  style={{
                     right: `${100 - 100 * currentTimeFraction}%`
-                }} data-after-content={datesDelta(startTime, currentTime) || 0}
+                }} data-after-content={datesToElapsedTime(startTime, currentTime) || 0}
                 ></div>
             </div>
             <div className={styles.filters}>
