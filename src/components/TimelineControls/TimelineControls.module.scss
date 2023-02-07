@@ -1,5 +1,6 @@
 :root {
     --timeline-played-colour: #2C88D9;
+    --timeline-tooltip-colour: #4b5c6b;
 }
 
 .timeline {
@@ -37,7 +38,6 @@
 }
 
 .seeker {
-    margin: 5px;
     border: 3px solid lightgrey;
     position: relative;
     flex-grow: 1;
@@ -54,7 +54,16 @@
         height: 5px;
         transform: translateY(50%);
         background: lightgrey;
+        z-index: -2
     }
+}
+
+.seekerContainer {
+    flex-grow: 1;
+    position: relative;
+    height: 12vh;
+    margin-left: 5px;
+    margin-right: 10px;
 }
 
 .fill {
@@ -64,17 +73,42 @@
     height: 5px;
     transform: translateY(50%);
     background: var(--timeline-played-colour);
+}
 
-    &::after {
-        content: '';
-        position: absolute;
-        bottom: 50%;
-        right: 0;
-        transform: translate(50%, 50%);
-        height: 20px;
-        width: 20px;
-        background: var(--timeline-played-colour);
-        border-radius: 50%;
+.cursor {
+    position: absolute;
+    bottom: 50%;
+    right: 0;
+    transform: translate(50%, 50%);
+    height: 20px;
+    width: 20px;
+    background: var(--timeline-played-colour);
+    border-radius: 50%;
+
+    &:hover {
+
+        &::after {
+            content: attr(data-after-content);
+            font-size: 12px;
+            color: white;
+            position: relative;
+            bottom: 30px;
+            background-color: var(--timeline-tooltip-colour);
+            z-index: 1;
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+        &::before {
+            content: "";
+            position: absolute;
+            bottom: 80%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: var(--timeline-tooltip-colour) transparent transparent transparent;
+        }
     }
 }
 
@@ -85,7 +119,7 @@
     height: 5px;
     transform: translateY(50%);
     background: grey;
-    
+
     &::after {
         content: '';
         position: absolute;
@@ -104,6 +138,7 @@
     height: 100%;
     border-left: 1.5px solid black;
     border-right: 1.5px solid black;
+    z-index: -1;
 }
 
 .filters {
