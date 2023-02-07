@@ -10,3 +10,29 @@ export const fractionToDate = (startTime: Date, endTime: Date, fraction: number)
     const currentTime = new Date(startTime.getTime() + (endTime.getTime() - startTime.getTime()) * fraction);
     return currentTime;
 };
+
+export const datesToElapsedTime = (startTime: Date, currentTime: Date) => {
+    let ms = currentTime.getTime() - startTime.getTime();
+
+    if(ms < 0){
+        return 0;
+    }
+
+    const hours = Math.floor(ms / (3600 * 1000) );
+    ms = ms % (3600 * 1000);
+
+    const minutes = Math.floor( ms / (60 * 1000) );
+    ms = ms % (60 * 1000);
+
+    const seconds = Math.floor( ms / (1000) );
+    ms = ms % 1000;
+
+    let timestamp = [
+        hours,
+        String(minutes).padStart((hours ? 2 : 1), '0'),
+        String(seconds).padStart(2, '0')
+    ].filter(Boolean).join(':');
+
+    timestamp += `.${String(ms).padStart(3, '0')}`;
+    return timestamp;
+};
