@@ -12,11 +12,13 @@ import { RequestSlice, NetworkEventDetailPanel } from './components/';
 import networkEvents from 'src/data/networkEvents';
 import styles from './Network.module.scss';
 import { EventType } from './types';
+import { useTimeline } from 'src/hooks/timeline';
 
 export const NetworkPanel: React.FC = () => {
     const [selectedEventId, setSelectedEventId] = useState<null | string>(null);
     const [filterTerm, setFilterTerm] = useState<string>('');
     const [activeTabKey, setActiveTabKey] = useState<string | null>('headers');
+    const { currentTime } = useTimeline();
     const selectedEvent = useMemo(
         () => networkEvents.find(({ id }) => id === selectedEventId),
         [networkEvents, selectedEventId]
@@ -57,6 +59,16 @@ export const NetworkPanel: React.FC = () => {
     useEffect(() => {
         setActiveTabKey('headers');
     }, [selectedEventId]);
+
+    const lastStartedNetworkEvent = useMemo(
+        () =>
+            // Note that we assume networkEvents is already sorted by startedDateTime here
+            networkEvents
+                .filter((event) => currentTime > event.startedDateTime)
+                .at(-1),
+
+        [currentTime, networkEvents]
+    );
 
     return (
         <div className={styles.network}>
@@ -105,6 +117,10 @@ export const NetworkPanel: React.FC = () => {
                                     key={networkEvent.id}
                                     event={networkEvent}
                                     setSelectedEventId={setSelectedEventId}
+                                    isLastStartedEvent={
+                                        lastStartedNetworkEvent?.id ===
+                                        networkEvent.id
+                                    }
                                 />
                             ))}
                         </tbody>

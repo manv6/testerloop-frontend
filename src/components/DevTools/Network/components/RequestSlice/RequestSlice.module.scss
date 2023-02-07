@@ -36,11 +36,23 @@
     background-color: grey;
 }
 
-td.progress {
+// duplicating class names to increase specificity
+.progress {
     &.progressStarted {
+        min-width: 110px;
         background-color: yellow;
     }
-    &.progressEnded {
+    &.progressEnded  {
+        min-width: 110px;
         background-color: gold;
     }
-};
+}
+
+.progress{
+    &.progress {
+        &.progressLastStartEvent {
+            color: blue;
+            font-weight: bold;
+        }
+    }
+}

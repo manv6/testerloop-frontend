@@ -8,6 +8,7 @@ import styles from './RequestSlice.module.scss';
 type Props = {
     event: EventType;
     setSelectedEventId: (id: string) => void;
+    isLastStartedEvent: boolean;
 };
 
 const RequestSlice: React.FC<Props> = (props) => {
@@ -62,7 +63,13 @@ const RequestSlice: React.FC<Props> = (props) => {
             }}
             className={styles.networkTableRow}
         >
-            <td className={progressColorStyle}>{progressText}</td>
+            <td
+                className={cx(progressColorStyle, {
+                    [styles.progressLastStartEvent]: props.isLastStartedEvent,
+                })}
+            >
+                {progressText} {props.isLastStartedEvent && '*'}
+            </td>
             <td className={textColorStyle}>
                 <span>{props.event.response.status}</span>
             </td>
