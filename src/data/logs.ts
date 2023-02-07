@@ -113,7 +113,7 @@ const TIMESTAMP_START_IDX = 1;
 const TIMESTAMP_LENGTH = 13;
 const LEVEL_START_IDX = TIMESTAMP_LENGTH + 2 + ' console.'.length;
 
-type LogLevel = 'log' | 'warning' | 'error';
+export type LogLevel = 'log' | 'warning' | 'error';
 
 export type LogRecord = {
     level: LogLevel;

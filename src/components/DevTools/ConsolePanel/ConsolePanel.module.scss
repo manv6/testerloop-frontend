@@ -1,6 +1,49 @@
 .consolePanel {
-	padding: 0;
-	list-style-type: none;
-	overflow-x: hidden;
-	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+
+	.logsFilters {
+		display: flex;
+		flex-direction: row;
+
+		.toggleLogLevelButton {
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+			column-gap: 0.25rem;
+
+			margin: 5px;
+			border: 1px solid black;
+			border-radius: 5px;
+
+			&.logLevelActive {
+				background-color: rgb(169, 201, 236);
+
+				.logLevelCount {
+					font-weight: bold;
+				}
+			}
+
+			.toggleLogLevelIcon {
+				width: 20px;
+				height: 20px;
+			}
+		}
+		
+		.logLevelCount {
+			font-size: 12px;
+		}
+	}
+
+	.logsList {
+		flex-grow: 1;
+		padding: 0;
+		margin: 0;
+
+		list-style-type: none;
+		
+		overflow-x: hidden;
+		overflow-y: auto;
+	}
 }
