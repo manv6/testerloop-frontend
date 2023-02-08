@@ -141,6 +141,11 @@
     z-index: -1;
 }
 
+.controlSection {
+    display: flex;
+    flex-direction: column;
+}
+
 .filters {
     display: flex;
     flex-direction: column;

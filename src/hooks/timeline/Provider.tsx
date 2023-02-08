@@ -15,6 +15,7 @@ export const TimelineProvider: React.FC<Props> = (props) => {
     } = props;
 
     const [currentTime, seek] = useState(startTime);
+    const [speed, setSpeed] = useState(1);
     useEffect(
         () => {
             seek((currentTime) => {
@@ -49,7 +50,9 @@ export const TimelineProvider: React.FC<Props> = (props) => {
                         const deltaTime = nextTime - lastTime;
                         lastTime = nextTime;
                         seek((currentTime) => {
-                            const target = new Date(currentTime.getTime() + deltaTime);
+                            const target = new Date(
+                                currentTime.getTime() + deltaTime * speed
+                            );
                             if (target > endTime) {
                                 setPlaying(false);
                                 return endTime;
@@ -63,7 +66,7 @@ export const TimelineProvider: React.FC<Props> = (props) => {
                 return () => clearInterval(interval);
             }
         },
-        [isPlaying, setPlaying, seek, endTime],
+        [isPlaying, setPlaying, seek, endTime, speed],
     );
 
     const [hoverTime, setHoverTime] = useState<Date | null>(null);
@@ -108,6 +111,8 @@ export const TimelineProvider: React.FC<Props> = (props) => {
         setPlaying,
         filters,
         setFilters,
+        speed,
+        setSpeed,
     };
 
     return (
