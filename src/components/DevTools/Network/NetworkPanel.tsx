@@ -34,10 +34,6 @@ const filterByProgressPredicate = (
             currentTime < e.startedDateTime,
     };
 
-    if (selectedOptions.length === 0) {
-        return true;
-    }
-
     return selectedOptions.reduce(
         (result, progressFilter) =>
             result || filterLookup[progressFilter](event),
