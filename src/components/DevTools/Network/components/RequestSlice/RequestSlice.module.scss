@@ -51,7 +51,8 @@
 .progress{
     &.progress {
         &.progressLastStartEvent {
-            color: blue;
+            border: 2px solid dodgerblue;
+            color: dodgerblue;
             font-weight: bold;
         }
     }
