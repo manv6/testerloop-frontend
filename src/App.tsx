@@ -19,6 +19,9 @@ function App() {
     // so that events that occur at or near the very beginning or end of the
     // timeline can be viewed and scrubbed to easily.
 
+    steps.sort((step1, step2) =>
+        step1.options.wallClockStartedAt.getTime() - step2.options.wallClockStartedAt.getTime());
+
     const startTime = steps.at(0)!.options.wallClockStartedAt; // eslint-disable-line @typescript-eslint/no-non-null-assertion
     const endTime = new Date(Date.parse(results.endedTestsAt));
 
