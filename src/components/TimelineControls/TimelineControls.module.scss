@@ -1,6 +1,9 @@
 :root {
     --timeline-played-colour: #2C88D9;
     --timeline-tooltip-colour: #4b5c6b;
+    --timeline-seeker-horizontal-line-layer: -2;
+    --timeline-tooltip-layer: 1;
+    --timeline-marker-layer: -1;
 }
 
 .timeline {
@@ -54,7 +57,7 @@
         height: 5px;
         transform: translateY(50%);
         background: lightgrey;
-        z-index: -2
+        z-index: var(--timeline-seeker-horizontal-line-layer)
     }
 }
 
@@ -94,7 +97,7 @@
             position: relative;
             bottom: 30px;
             background-color: var(--timeline-tooltip-colour);
-            z-index: 1;
+            z-index: var(--timeline-tooltip-layer);
             border-radius: 5px;
             padding: 5px;
         }
@@ -138,7 +141,7 @@
     height: 100%;
     border-left: 1.5px solid black;
     border-right: 1.5px solid black;
-    z-index: -1;
+    z-index: var(--timeline-marker-layer);
 }
 
 .controlSection {

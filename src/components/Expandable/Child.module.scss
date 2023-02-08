@@ -1,3 +1,8 @@
+:root {
+    --expandable-child-expended-content-layer: 10;
+    --expandable-child-button-layer: 1;
+}
+
 .child {
     position: relative;
     border: 3px solid lightgrey;
@@ -15,7 +20,7 @@
         bottom: 0;
         left: 0;
         right: 0;
-        z-index: 10;
+        z-index: var(--expandable-child-expended-content-layer);
     }
 
     & > * {
@@ -27,5 +32,5 @@
     position: absolute;
     right: 0;
     top: 0;
-    z-index: 1;
+    z-index: var(--expandable-child-button-layer);
 }
