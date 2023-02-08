@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import cx from 'classnames';
+import { CaretRightFill, CaretDownFill } from 'react-bootstrap-icons';
 import { LogRecord } from 'src/data/logs';
 import styles from './LogEntry.module.scss';
 
@@ -55,7 +56,7 @@ const LogEntry: React.FC<Props> = ({
                         onClick={() => setIsExpanded(!isExpanded)}
                         className={styles.expandButton}
                     >
-                        {isExpanded ? '▼' : '▶'}
+                        {isExpanded ? <CaretDownFill/> : <CaretRightFill/>}
                     </button>
                 )}
                 {message}
