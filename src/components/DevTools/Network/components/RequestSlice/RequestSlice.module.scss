@@ -27,3 +27,33 @@
     transform: translate(0, -50%);
     background-color: red;
 }
+
+.waterfallProgressLine {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: grey;
+}
+
+// duplicating class names to increase specificity
+.progress {
+    &.progressStarted {
+        min-width: 110px;
+        background-color: yellow;
+    }
+    &.progressEnded  {
+        min-width: 110px;
+        background-color: gold;
+    }
+}
+
+.progress{
+    &.progress {
+        &.progressLastStartEvent {
+            border: 2px solid dodgerblue;
+            color: dodgerblue;
+            font-weight: bold;
+        }
+    }
+}

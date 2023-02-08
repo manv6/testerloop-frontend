@@ -16072,4 +16072,4 @@ export default networkEvents.log.entries
         (networkEvent) =>
             !networkEvent.request.url.includes('/__/') &&
             !networkEvent.request.url.includes('/__cypress/')
-    );
+    ).sort((a, b) => a.startedDateTime.getTime() - b.startedDateTime.getTime());

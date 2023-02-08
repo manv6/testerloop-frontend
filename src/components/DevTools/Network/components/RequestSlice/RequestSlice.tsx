@@ -8,14 +8,12 @@ import styles from './RequestSlice.module.scss';
 type Props = {
     event: EventType;
     setSelectedEventId: (id: string) => void;
+    isLastStartedEvent: boolean;
 };
 
 const RequestSlice: React.FC<Props> = (props) => {
-    const { startTime, endTime, setHoverTimeFraction } = useTimeline();
-
-    const textColorStyle = cx({
-        [styles.networkTableRowError]: props.event.response.status >= 400,
-    });
+    const { startTime, endTime, currentTime, setHoverTimeFraction } =
+        useTimeline();
 
     const truncateValue = (value: string, limit: number) => {
         if (value.length <= limit) return value;
@@ -30,6 +28,25 @@ const RequestSlice: React.FC<Props> = (props) => {
         100 *
         (datesToFraction(startTime, endTime, props.event.endedDateTime) -
             datesToFraction(startTime, endTime, props.event.startedDateTime));
+
+    const currentTimePercentage =
+        100 * datesToFraction(startTime, endTime, currentTime);
+
+    const textColorStyle = cx({
+        [styles.networkTableRowError]: props.event.response.status >= 400,
+    });
+    const progressColorStyle = cx(styles.progress, {
+        [styles.progressStarted]:
+            props.event.startedDateTime <= currentTime &&
+            currentTime < props.event.endedDateTime,
+        [styles.progressEnded]: props.event.endedDateTime <= currentTime,
+    });
+    let progressText = null;
+    if (props.event.endedDateTime <= currentTime) {
+        progressText = 'completed';
+    } else if (props.event.startedDateTime <= currentTime) {
+        progressText = 'started';
+    }
 
     return (
         <tr
@@ -46,10 +63,15 @@ const RequestSlice: React.FC<Props> = (props) => {
             }}
             className={styles.networkTableRow}
         >
-            <td>
-                <span className={textColorStyle}>
-                    {props.event.response.status}
-                </span>
+            <td
+                className={cx(progressColorStyle, {
+                    [styles.progressLastStartEvent]: props.isLastStartedEvent,
+                })}
+            >
+                {progressText} {props.isLastStartedEvent && '*'}
+            </td>
+            <td className={textColorStyle}>
+                <span>{props.event.response.status}</span>
             </td>
             <td>
                 <span className={textColorStyle}>
@@ -95,6 +117,10 @@ const RequestSlice: React.FC<Props> = (props) => {
                         width: `${waterfallWidthPercentage}%`,
                     }}
                 ></div>
+                <div
+                    className={styles.waterfallProgressLine}
+                    style={{ left: `${currentTimePercentage}%` }}
+                />
             </td>
         </tr>
     );
