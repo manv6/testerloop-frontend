@@ -14,23 +14,23 @@ import styles from './Network.module.scss';
 import { EventType } from './types';
 import { useTimeline } from 'src/hooks/timeline';
 
-enum progressFilterType {
-    completed = 'completed',
-    started = 'started',
-    notStarted = 'not started',
+enum ProgressFilterType {
+    COMPLETED = 'completed',
+    STARTED = 'started',
+    NOT_STARTED = 'not started',
 }
 
 const filterByProgressPredicate = (
     event: EventType,
-    selectedOptions: progressFilterType[],
+    selectedOptions: ProgressFilterType[],
     currentTime: Date
 ) => {
     const filterLookup = {
-        [progressFilterType.completed]: (e: EventType) =>
+        [ProgressFilterType.COMPLETED]: (e: EventType) =>
             e.endedDateTime <= currentTime,
-        [progressFilterType.started]: (e: EventType) =>
+        [ProgressFilterType.STARTED]: (e: EventType) =>
             e.startedDateTime <= currentTime && currentTime < e.endedDateTime,
-        [progressFilterType.notStarted]: (e: EventType) =>
+        [ProgressFilterType.NOT_STARTED]: (e: EventType) =>
             currentTime < e.startedDateTime,
     };
 
@@ -46,8 +46,8 @@ export const NetworkPanel: React.FC = () => {
     const [filterTerm, setFilterTerm] = useState<string>('');
     const [activeTabKey, setActiveTabKey] = useState<string | null>('headers');
     const [selectedProgressFilters, setSelectedProgressFilters] = useState<
-        progressFilterType[]
-    >(Object.values(progressFilterType));
+        ProgressFilterType[]
+    >(Object.values(ProgressFilterType));
     const { currentTime } = useTimeline();
     const selectedEvent = useMemo(
         () => networkEvents.find(({ id }) => id === selectedEventId),
@@ -72,7 +72,7 @@ export const NetworkPanel: React.FC = () => {
         [networkEvents, filterTerm, currentTime, selectedProgressFilters]
     );
 
-    const onDetailPenalClose = useCallback(() => {
+    const onDetailPanelClose = useCallback(() => {
         setSelectedEventId(null);
     }, [setSelectedEventId]);
 
@@ -95,7 +95,7 @@ export const NetworkPanel: React.FC = () => {
             const newValues = ev.target.checked
                 ? [
                     ...selectedProgressFilters,
-                    ev.target.name as progressFilterType,
+                    ev.target.name as ProgressFilterType,
                 ]
                 : selectedProgressFilters.filter((x) => x !== ev.target.name);
 
@@ -127,7 +127,7 @@ export const NetworkPanel: React.FC = () => {
             {selectedEvent && (
                 <CloseButton
                     className={styles.closeButton}
-                    onClick={onDetailPenalClose}
+                    onClick={onDetailPanelClose}
                 />
             )}
             <Stack gap={3}>
@@ -149,7 +149,7 @@ export const NetworkPanel: React.FC = () => {
                     </Col>
                 </Form.Group>
                 <div>
-                    {Object.values(progressFilterType).map((value) => (
+                    {Object.values(ProgressFilterType).map((value) => (
                         <Form.Check
                             inline
                             onChange={onChangeProgressFilter}
