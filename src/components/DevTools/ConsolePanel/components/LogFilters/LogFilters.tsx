@@ -23,7 +23,7 @@ const LogFilters: React.FC<Props> = ({
     <aside className={styles.logsFilters}>
         <div className={styles.toggleButtons}>
             <button
-                onClick={() => toggleActiveLogLevel('log')}
+                onClick={() => toggleActiveLogLevel(LogLevel.LOG)}
                 className={cx(styles.toggleLogLevelButton, { [styles.logLevelActive]: activeLogLevels.log })}
             >
                 <TextLeft stroke="blue" strokeWidth={0.5} />
@@ -31,7 +31,7 @@ const LogFilters: React.FC<Props> = ({
             </button>
 
             <button
-                onClick={() => toggleActiveLogLevel('warning')}
+                onClick={() => toggleActiveLogLevel(LogLevel.WARNING)}
                 className={cx(styles.toggleLogLevelButton, { [styles.logLevelActive]: activeLogLevels.warning })}
             >
                 <ExclamationTriangleFill fill="yellow" stroke="black" strokeWidth={0.5} />
@@ -39,7 +39,7 @@ const LogFilters: React.FC<Props> = ({
             </button>
 
             <button
-                onClick={() => toggleActiveLogLevel('error')}
+                onClick={() => toggleActiveLogLevel(LogLevel.ERROR)}
                 className={cx(styles.toggleLogLevelButton, { [styles.logLevelActive]: activeLogLevels.error })}
             >
                 <ExclamationOctagonFill fill='red' stroke="black" strokeWidth={0.5} />

@@ -24,7 +24,11 @@ const TIMESTAMP_START_IDX = 1;
 const TIMESTAMP_LENGTH = 13;
 const LEVEL_START_IDX = TIMESTAMP_LENGTH + 2 + ' console.'.length;
 
-export type LogLevel = 'log' | 'warning' | 'error';
+export enum LogLevel {
+    LOG = 'log',
+    WARNING = 'warning',
+    ERROR = 'error',
+}
 
 export type LogRecord = {
     level: LogLevel;

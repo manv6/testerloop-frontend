@@ -16,11 +16,11 @@ const ConsolePanel: React.FC = () => {
     } = useTimeline();
 
     const [filterTerm, setFilterTerm] = React.useState<string>('');
-    const [activeLogLevels, setActiveLogLevels] = React.useState<Record<LogLevel, boolean>>({
-        log: true,
-        warning: true,
-        error: true
-    });
+    const [activeLogLevels, setActiveLogLevels] = React.useState<Record<LogLevel, boolean>>(
+        Object.values(LogLevel).reduce((obj, lvl) => ({
+            ...obj, [lvl]: true
+        }), {} as Record<LogLevel, boolean>)
+    );
 
     const toggleActiveLogLevel = (level: LogLevel) => {
         setActiveLogLevels({...activeLogLevels, [level]: !activeLogLevels[level]});
