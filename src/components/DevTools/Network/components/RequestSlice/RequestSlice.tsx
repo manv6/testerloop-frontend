@@ -41,12 +41,12 @@ const RequestSlice: React.FC<Props> = (props) => {
             currentTime < props.event.endedDateTime,
         [styles.progressEnded]: props.event.endedDateTime <= currentTime,
     });
-    const progressText =
-        props.event.endedDateTime <= currentTime
-            ? 'completed'
-            : props.event.startedDateTime <= currentTime
-                ? 'started'
-                : null;
+    let progressText = null;
+    if (props.event.endedDateTime <= currentTime) {
+        progressText = 'completed';
+    } else if (props.event.startedDateTime <= currentTime) {
+        progressText = 'started';
+    }
 
     return (
         <tr
