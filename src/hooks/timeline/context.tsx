@@ -25,6 +25,8 @@ export type TimelineContextValue = {
     // `filters` dictate which event types should be shown in each view
     filters: { [k in EventType]: boolean }
     setFilters: (filters: { [k in EventType]: boolean }) => void,
+    speed: number;
+    setSpeed: (speed: number) => void;
 };
 
 export const TimelineContext = createContext<TimelineContextValue>({
@@ -42,4 +44,6 @@ export const TimelineContext = createContext<TimelineContextValue>({
     seekFraction: () => {},
     filters: {} as TimelineContextValue['filters'],
     setFilters: () => {},
+    speed: 1,
+    setSpeed: () => {},
 });

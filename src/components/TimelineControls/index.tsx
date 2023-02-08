@@ -1,6 +1,6 @@
 // TODO: Remove this check once temp data is removed!!
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import cx from 'classnames';
 import { useTimeline } from 'src/hooks/timeline';
 import { datesToElapsedTime, datesToFraction } from 'src/utils/date';
@@ -8,6 +8,8 @@ import styles from './TimelineControls.module.scss';
 import steps from 'src/data/steps';
 import networkEvents from 'src/data/networkEvents';
 import { EventType, FILTER_LABELS, MARKER_COLOURS } from 'src/constants/eventType';
+
+const AVAILABLE_SPEEDS = [0.25, 0.5, 1, 1.5, 2];
 
 export const TimelineControls: React.FC = () => {
     const {
@@ -21,7 +23,9 @@ export const TimelineControls: React.FC = () => {
         startTime,
         endTime,
         filters,
-        setFilters
+        setFilters,
+        speed,
+        setSpeed
     } = useTimeline();
 
     const stepMarkers = useMemo(() =>
@@ -69,6 +73,9 @@ export const TimelineControls: React.FC = () => {
         ...errorMarkers
     ], [stepMarkers, failedNetworkMarkers, successNetworkMarkers, errorMarkers]);
 
+    const onSpeedChange = useCallback((ev: React.ChangeEvent<HTMLSelectElement>) => {
+        setSpeed(parseFloat(ev.target.value));
+    }, [setSpeed]);
 
     return (
         <div
@@ -142,18 +149,29 @@ export const TimelineControls: React.FC = () => {
                 }} data-after-content={datesToElapsedTime(startTime, currentTime) || 0}
                 ></div>
             </div>
-            <div className={styles.filters}>
-                { Object.values(EventType).map((et) => (
-                    <label key={`filter-${et}`} className={styles.filter}>
-                        <div className={styles.legend} style={{ background: MARKER_COLOURS[et] }}></div>
-                        <input
-                            type="checkbox"
-                            defaultChecked={filters[et]}
-                            onInput={() => setFilters({ ...filters, [et]: !filters[et] })}
-                        />
-                        <span>{FILTER_LABELS[et]}</span>
+            <div className={styles.controlSection}>
+                <div className={styles.filters}>
+                    { Object.values(EventType).map((et) => (
+                        <label key={`filter-${et}`} className={styles.filter}>
+                            <div className={styles.legend} style={{ background: MARKER_COLOURS[et] }}></div>
+                            <input
+                                type="checkbox"
+                                defaultChecked={filters[et]}
+                                onInput={() => setFilters({ ...filters, [et]: !filters[et] })}
+                            />
+                            <span>{FILTER_LABELS[et]}</span>
+                        </label>
+                    )) }
+                </div>
+                <div>
+                    <label> Speed:
+                        <select value={speed} onChange={onSpeedChange}>
+                            {AVAILABLE_SPEEDS.map((s) =>
+                                <option value={s}>× {s}</option>
+                            )}
+                        </select>
                     </label>
-                )) }
+                </div>
             </div>
         </div>
     );
