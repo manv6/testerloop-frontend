@@ -1,20 +1,28 @@
 import { TimelineProvider } from './hooks/timeline';
 import { TimelineControls } from './components/TimelineControls';
-import { NetworkPanel } from './components/DevTools/Network';
+import { NetworkPanel, ConsolePanel } from './components/DevTools';
 import { DomPreview } from './components/DomPreview';
 import { Steps } from './components/Steps';
 import * as Expandable from './components/Expandable';
+import { RelayEnvironment } from './gql/RelayEnvironment';
+import CypressSummary from './components/CypressSummary';
+
+import steps from './data/steps';
+import results from './data/results';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styles from './App.module.scss';
-import { RelayEnvironment } from './gql/RelayEnvironment';
-import results from './data/results';
+
 
 function App() {
     // TODO: We likely want to add some "lead" and "lag" time to these dates,
     // so that events that occur at or near the very beginning or end of the
     // timeline can be viewed and scrubbed to easily.
 
-    const startTime = new Date(Date.parse(results.startedTestsAt));
+    steps.sort((step1, step2) =>
+        step1.options.wallClockStartedAt.getTime() - step2.options.wallClockStartedAt.getTime());
+
+    const startTime = steps.at(0)!.options.wallClockStartedAt; // eslint-disable-line @typescript-eslint/no-non-null-assertion
     const endTime = new Date(Date.parse(results.endedTestsAt));
 
     return (
@@ -33,11 +41,14 @@ function App() {
                         <Expandable.Child className={styles['expandable-steps']} notExpandable={true}>
                             <Steps className={styles.steps} />
                         </Expandable.Child>
+                        <Expandable.Child className={styles['expandable-cypress-summary']} notExpandable={true}>
+                            <CypressSummary />
+                        </Expandable.Child>
                         <Expandable.Child className={styles['expandable-dom']}>
                             <DomPreview />
                         </Expandable.Child>
                         <Expandable.Child className={styles['expandable-console']}>
-                            <div>Console</div>
+                            <ConsolePanel />
                         </Expandable.Child>
                         <Expandable.Child className={styles['expandable-network']}>
                             <NetworkPanel />

@@ -15,6 +15,6 @@ module.exports = {
         'no-trailing-spaces': ['error'],
         'camelcase': ['error'],
         'indent': ['error', 4],
-        'eol-last': ["error", "always"]
-    },    
+        'eol-last': ['error', 'always']
+    },
 };
