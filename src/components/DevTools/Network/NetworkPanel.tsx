@@ -6,7 +6,6 @@ import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import CloseButton from 'react-bootstrap/CloseButton';
 
 import { RequestSlice, NetworkEventDetailPanel } from './components/';
 import networkEvents from 'src/data/networkEvents';
