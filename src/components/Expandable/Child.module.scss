@@ -1,4 +1,4 @@
-@import '/src/constants/layers.scss';
+@use '/src/constants/layers.scss';
 
 .child {
     position: relative;
@@ -17,7 +17,7 @@
         bottom: 0;
         left: 0;
         right: 0;
-        z-index: var(--expandable-child-expended-content-layer);
+        z-index: var(--expandable-child-expanded-content-layer);
     }
 
     & > * {
