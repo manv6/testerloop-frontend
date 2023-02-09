@@ -56,6 +56,36 @@ const PostDataTab: React.FC<{
     );
 };
 
+
+const ResponseDataTab: React.FC<{
+    selectedEvent: EventType;
+}> = ({ selectedEvent }) => {
+    const mimeType = selectedEvent.response?.content?.mimeType;
+
+    let responsePayload = selectedEvent.response?.content?.text;
+
+    let snippet = null;
+    if (mimeType?.includes('application/json') && responsePayload) {
+        responsePayload = JSON.stringify(JSON.parse(responsePayload), null, 2);
+        snippet = (
+            <SyntaxHighlighter language="json" style={vs} wrapLongLines={true}>
+                {responsePayload}
+            </SyntaxHighlighter>
+        );
+    }
+
+    return (
+        <Stack gap={3}>
+            <div>
+                <span className={styles.boldText}>Mime Type: </span>
+                {selectedEvent.response?.content?.mimeType}
+            </div>
+            {snippet}
+        </Stack>
+    );
+};
+
+
 const HeadersTab: React.FC<{
     selectedEvent: EventType;
 }> = ({ selectedEvent }) => {
@@ -112,6 +142,10 @@ const NetworkEventDetailPanel: React.FC<{
     onSelectTab: (x: string | null) => void;
     onDetailPanelClose: () => void;
 }> = ({ selectedEvent, activeTabKey, onSelectTab, onDetailPanelClose }) => {
+    const showResponse = (selectedEvent.response?.content?.text &&
+        ['application/json'].includes(selectedEvent.response?.content?.mimeType)
+    );
+
     return (
         <div key="details" className={styles.networkDetailPanel}>
             {(
@@ -135,6 +169,11 @@ const NetworkEventDetailPanel: React.FC<{
                 {selectedEvent.request?.postData && (
                     <Tab eventKey="postData" title="Post">
                         <PostDataTab selectedEvent={selectedEvent} />
+                    </Tab>
+                )}
+                {showResponse && (
+                    <Tab eventKey="responseData" title="Response">
+                        <ResponseDataTab selectedEvent={selectedEvent} />
                     </Tab>
                 )}
             </Tabs>
