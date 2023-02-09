@@ -5,7 +5,8 @@ import { DomPreview } from './components/DomPreview';
 import { Steps } from './components/Steps';
 import * as Expandable from './components/Expandable';
 import { RelayEnvironment } from './gql/RelayEnvironment';
-import CypressSummary from './components/CypressSummary';
+import CypressError from './components/CypressError';
+import Summary from './components/Summary';
 
 import steps from './data/steps';
 import results from './data/results';
@@ -32,17 +33,14 @@ function App() {
                     startTime={startTime}
                     endTime={endTime}
                 >
-                    <div>
-                        <div>Summary Placeholder</div>
-                        <div style={{ height: '100px', width: '100%', background: 'lightgrey' }}></div>
-                    </div>
+                    <Summary />
                     <TimelineControls />
                     <Expandable.Parent className={styles['expandable-parent']}>
                         <Expandable.Child className={styles['expandable-steps']} notExpandable={true}>
                             <Steps className={styles.steps} />
                         </Expandable.Child>
-                        <Expandable.Child className={styles['expandable-cypress-summary']} notExpandable={true}>
-                            <CypressSummary />
+                        <Expandable.Child className={styles['expandable-cypress-error']} notExpandable={true}>
+                            <CypressError />
                         </Expandable.Child>
                         <Expandable.Child className={styles['expandable-dom']}>
                             <DomPreview />

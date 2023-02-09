@@ -1,9 +1,9 @@
 import cicd from 'src/data/cicd';
 import results from 'src/data/results';
 
-import styles from './CypressSummary.module.scss';
+import styles from './CypressError.module.scss';
 
-const CypressSummary = () => {
+const CypressError = () => {
     const githubUrl = cicd.GITHUB_SERVER_URL;
     const repository = cicd.GITHUB_REPOSITORY;
     const ref = cicd.GITHUB_REF_NAME;
@@ -19,7 +19,7 @@ const CypressSummary = () => {
 
     const hrefText = [relativePath, line, column].join(':');
 
-    return <div className={styles.cypressSummary}>
+    return <div className={styles.cypressError}>
         {error ?
             <div>
                 <div className={styles.title}>
@@ -34,4 +34,4 @@ const CypressSummary = () => {
 
 };
 
-export default CypressSummary;
+export default CypressError;

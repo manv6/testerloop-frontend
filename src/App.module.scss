@@ -13,15 +13,15 @@
     grid-template-columns: 1fr 2fr 2fr;
     grid-template-areas:
         "steps dom console"
-        "cypress-summary dom network";
+        "cypress-error dom network";
 }
 
 .expandable-steps {
     grid-area: steps;
 }
 
-.expandable-cypress-summary {
-    grid-area: cypress-summary;
+.expandable-cypress-error {
+    grid-area: cypress-error;
 }
 
 .expandable-dom {
