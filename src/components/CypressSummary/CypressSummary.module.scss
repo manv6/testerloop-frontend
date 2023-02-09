@@ -1,5 +1,5 @@
 :root {
-    --error-colour: #D3455B;
+    --error-colour: #d3455b;
 }
 
 .cypressSummary {
@@ -11,7 +11,7 @@
     font-weight: bold;
     color: var(--error-colour);
     margin-bottom: 5px;
-    background-color: rgba(50, 50, 50, 0.05);
+    background-color: rgb(50 50 50 / 5%);
 
     span {
         margin-left: 4px;
@@ -20,5 +20,5 @@
 }
 
 .errorMessage {
-    color: var(--error-colour)
+    color: var(--error-colour);
 }

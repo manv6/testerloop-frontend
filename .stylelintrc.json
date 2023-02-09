@@ -1,3 +1,14 @@
 {
-    "extends": "stylelint-config-standard-scss"
+    "extends": "stylelint-config-standard-scss",
+    "rules": {
+        "declaration-block-no-redundant-longhand-properties": null,
+        "max-line-length": null,
+        "selector-class-pattern": "^[a-z][a-zA-Z0-9]+$",
+        "indentation": 4,
+        "value-list-comma-space-after": "always",
+        "value-list-comma-newline-after": "always-multi-line",
+        "selector-list-comma-space-after": "always",
+        "selector-list-comma-newline-after": "never-multi-line",
+        "font-family-name-quotes": "always-unless-keyword"
+    }
 }

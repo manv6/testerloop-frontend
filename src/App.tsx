@@ -1,3 +1,4 @@
+import React from 'react';
 import { TimelineProvider } from './hooks/timeline';
 import { TimelineControls } from './components/TimelineControls';
 import { NetworkPanel, ConsolePanel } from './components/DevTools';
@@ -6,15 +7,12 @@ import { Steps } from './components/Steps';
 import * as Expandable from './components/Expandable';
 import { RelayEnvironment } from './gql/RelayEnvironment';
 import CypressSummary from './components/CypressSummary';
-
+import styles from './App.module.scss';
 import steps from './data/steps';
 import results from './data/results';
-
 import 'bootstrap/dist/css/bootstrap.min.css';
-import styles from './App.module.scss';
 
-
-function App() {
+const App: React.FC = () => {
     // TODO: We likely want to add some "lead" and "lag" time to these dates,
     // so that events that occur at or near the very beginning or end of the
     // timeline can be viewed and scrubbed to easily.
@@ -37,20 +35,20 @@ function App() {
                         <div style={{ height: '100px', width: '100%', background: 'lightgrey' }}></div>
                     </div>
                     <TimelineControls />
-                    <Expandable.Parent className={styles['expandable-parent']}>
-                        <Expandable.Child className={styles['expandable-steps']} notExpandable={true}>
+                    <Expandable.Parent className={styles.expandableParent}>
+                        <Expandable.Child className={styles.expandableSteps} notExpandable={true}>
                             <Steps className={styles.steps} />
                         </Expandable.Child>
-                        <Expandable.Child className={styles['expandable-cypress-summary']} notExpandable={true}>
+                        <Expandable.Child className={styles.expandableCypressSummary} notExpandable={true}>
                             <CypressSummary />
                         </Expandable.Child>
-                        <Expandable.Child className={styles['expandable-dom']}>
+                        <Expandable.Child className={styles.expandableDom}>
                             <DomPreview />
                         </Expandable.Child>
-                        <Expandable.Child className={styles['expandable-console']}>
+                        <Expandable.Child className={styles.expandableConsole}>
                             <ConsolePanel />
                         </Expandable.Child>
-                        <Expandable.Child className={styles['expandable-network']}>
+                        <Expandable.Child className={styles.expandableNetwork}>
                             <NetworkPanel />
                         </Expandable.Child>
                     </Expandable.Parent>
@@ -58,6 +56,6 @@ function App() {
             </RelayEnvironment>
         </div>
     );
-}
+};
 
 export default App;

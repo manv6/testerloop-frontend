@@ -62,12 +62,14 @@ const ConsolePanel: React.FC = () => {
             <ul className={styles.logsList}>
                 {filteredLogs.map((log, idx) => {
                     // TODO: Timestamp is not unique, provide an id or a way to make it unique.
-                    return <LogEntry
-                        key={log.timestamp + log.message.substring(0, 50)}
-                        isLogSelected={currentLogIdx === idx}
-                        isLogHovered={hoveredLogIdx === idx}
-                        {...log}
-                    />;
+                    return (
+                        <LogEntry
+                            key={log.timestamp + log.message.substring(0, 50)}
+                            isLogSelected={currentLogIdx === idx}
+                            isLogHovered={hoveredLogIdx === idx}
+                            {...log}
+                        />
+                    );
                 })}
             </ul>
         </section>

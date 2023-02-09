@@ -1,15 +1,13 @@
 .consolePanel {
-	display: flex;
-	flex-direction: column;
+    display: flex;
+    flex-direction: column;
+}
 
-	.logsList {
-		flex-grow: 1;
-		padding: 0;
-		margin: 0;
-
-		list-style-type: none;
-		
-		overflow-x: hidden;
-		overflow-y: auto;
-	}
+.logsList {
+    flex-grow: 1;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    overflow-x: hidden;
+    overflow-y: auto;
 }

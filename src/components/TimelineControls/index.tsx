@@ -97,14 +97,15 @@ export const TimelineControls: React.FC = () => {
                     }}
                 >
                     {
-                        hoverTimeFraction
-                    && <div
-                        className={styles.hover}
-                        style={{
-                            right: `${100 - 100 * hoverTimeFraction}%`
-                        }}
-                    >
-                    </div>
+                        hoverTimeFraction && (
+                            <div
+                                className={styles.hover}
+                                style={{
+                                    right: `${100 - 100 * hoverTimeFraction}%`
+                                }}
+                            >
+                            </div>
+                        )
                     }
                     <div
                         className={styles.fill}
@@ -166,8 +167,9 @@ export const TimelineControls: React.FC = () => {
                 <div>
                     <label> Speed:
                         <select value={speed} onChange={onSpeedChange}>
-                            {AVAILABLE_SPEEDS.map((s) =>
-                                <option value={s}>× {s}</option>
+                            {AVAILABLE_SPEEDS.map((s, idx) =>
+                                // TODO: Better key?
+                                <option key={`speed-${s}-${idx}`} value={s}>× {s}</option>
                             )}
                         </select>
                     </label>

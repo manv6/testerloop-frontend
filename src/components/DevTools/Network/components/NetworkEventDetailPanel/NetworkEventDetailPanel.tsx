@@ -65,19 +65,21 @@ const HeadersTab: React.FC<{
                 <span className={styles.boldText}>Request to:</span>{' '}
                 {selectedEvent.request.url}
             </div>
-            {selectedEvent.request.queryString.length ? (
-                <>
-                    <div key="queryParamsLabel">
-                        <span className={styles.boldText}>Query Params:</span>
-                    </div>
-                    <NameValueTable
-                        key="queryParams"
-                        valuePairs={selectedEvent.request.queryString}
-                        nameLabel="Header Name"
-                        valueLabel="Header Value"
-                    />
-                </>
-            ) : null}
+            {selectedEvent.request.queryString.length
+                ? (
+                    <>
+                        <div key="queryParamsLabel">
+                            <span className={styles.boldText}>Query Params:</span>
+                        </div>
+                        <NameValueTable
+                            key="queryParams"
+                            valuePairs={selectedEvent.request.queryString}
+                            nameLabel="Header Name"
+                            valueLabel="Header Value"
+                        />
+                    </>
+                )
+                : null}
             <div>
                 <div key="requestHeaderLabel">
                     <span className={styles.boldText}>Request Headers:</span>

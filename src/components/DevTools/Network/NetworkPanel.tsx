@@ -57,9 +57,9 @@ export const NetworkPanel: React.FC = () => {
         () =>
             (networkEvents as EventType[])
                 .filter((networkEvent) =>
-                    filterTerm
+                    (filterTerm
                         ? networkEvent.request.url.includes(filterTerm)
-                        : true
+                        : true)
                 )
                 .filter((event) =>
                     filterByProgressPredicate(
@@ -142,8 +142,9 @@ export const NetworkPanel: React.FC = () => {
                     </Col>
                 </Form.Group>
                 <div>
-                    {Object.values(ProgressFilterType).map((value) => (
+                    {Object.values(ProgressFilterType).map((value, idx) => (
                         <Form.Check
+                            key={`${value}-${idx}`} // TODO: Better key?
                             inline
                             onChange={onChangeProgressFilter}
                             name={value}

@@ -1,32 +1,31 @@
 .actionRecord {
-	cursor: pointer;
-	padding: 0.5rem 1rem 0.5rem 2rem;
+    cursor: pointer;
+    padding: 0.5rem 1rem 0.5rem 2rem;
 
-	&.hovered,
-	&:hover {
-		background-color: rgba(50, 50, 50, 0.05);
-	}
+    &.hovered, &:hover {
+        background-color: rgb(50 50 50 / 5%);
+    }
 
-	&.selected {
-		background-color: #f1ebd8;
-	}
+    &.selected {
+        background-color: #f1ebd8;
+    }
 
-	&.success {
-		color: #117924;
-	}
+    &.success {
+        color: #117924;
+    }
 
-	&.error {
-		color: #D3455B;
-	}
+    &.error {
+        color: #d3455b;
+    }
 
-	&>.expandedActionName {
-		font-weight: 700;
-		margin-right: 0.5rem;
-	}
+    & > .expandedActionName {
+        font-weight: 700;
+        margin-right: 0.5rem;
+    }
 
-	&>.expandedActionMessage {
-		font-weight: 300;
-		font-style: italic;
-		word-break: break-all;
-	}
+    & > .expandedActionMessage {
+        font-weight: 300;
+        font-style: italic;
+        word-break: break-all;
+    }
 }

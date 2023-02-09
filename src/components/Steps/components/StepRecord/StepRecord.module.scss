@@ -1,44 +1,41 @@
 .stepHeader {
-	cursor: pointer;
-	height: 3rem;
-	
-	border-bottom: 1px solid lightgray;
-	border-top: 1px solid black;
+    cursor: pointer;
+    height: 3rem;
+    border-bottom: 1px solid lightgray;
+    border-top: 1px solid black;
 
-	&.hovered,
-	&:hover {
-		background-color: rgba(0, 0, 0, 0.05);
-	}
+    &.hovered, &:hover {
+        background-color: rgb(0 0 0 / 5%);
+    }
 
-	&.selected {
-		background-color: #F7E6B0;
-	}
+    &.selected {
+        background-color: #f7e6b0;
+    }
 
-	& > .stepName,
-	& > .stepContent {
-		padding: 0.25rem;
-	}
+    & > .stepName, & > .stepContent {
+        padding: 0.25rem;
+    }
 
-	& > .stepName {
-		text-align: right;
-		color: #2C88D9;
-		font-weight: 800;
-	}
+    & > .stepName {
+        text-align: right;
+        color: #2c88d9;
+        font-weight: 800;
+    }
 
-	& > .stepContent {
-		&.success {
-			color: #117924;
-		}
+    & > .stepContent {
+        &.success {
+            color: #117924;
+        }
 
-		&.error {
-			color: #D3455B;
-		}
-	}
+        &.error {
+            color: #d3455b;
+        }
+    }
 
-	& > .stepAccordionIcon > svg {
-		width: 32px;
-		height: 32px;
-		margin-right: 0.5rem;
-		border: none;
-	}
+    & > .stepAccordionIcon > svg {
+        width: 32px;
+        height: 32px;
+        margin-right: 0.5rem;
+        border: none;
+    }
 }

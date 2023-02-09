@@ -5,10 +5,9 @@
     height: 100%;
 }
 
-.expandable-parent {
+.expandableParent {
     flex-grow: 1;
     gap: 10px;
-
     grid-template-rows: 1fr 1fr;
     grid-template-columns: 1fr 2fr 2fr;
     grid-template-areas:
@@ -16,22 +15,22 @@
         "cypress-summary dom network";
 }
 
-.expandable-steps {
+.expandableSteps {
     grid-area: steps;
 }
 
-.expandable-cypress-summary {
+.expandableCypressSummary {
     grid-area: cypress-summary;
 }
 
-.expandable-dom {
+.expandableDom {
     grid-area: dom;
 }
 
-.expandable-console {
+.expandableConsole {
     grid-area: console;
 }
 
-.expandable-network {
+.expandableNetwork {
     grid-area: network;
 }

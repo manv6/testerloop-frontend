@@ -15,14 +15,16 @@ const Child: React.FC<Props> = ({ className, notExpandable, children }) => {
             [styles.expanded]: isExpanded
         })}>
             {
-                notExpandable ? null : (
-                    <button
-                        className={styles.expand}
-                        onClick={() => setIsExpanded(!isExpanded)}
-                    >
-                        { isExpanded ? 'Collapse' : 'Expand' }
-                    </button>
-                )
+                notExpandable
+                    ? null
+                    : (
+                        <button
+                            className={styles.expand}
+                            onClick={() => setIsExpanded(!isExpanded)}
+                        >
+                            { isExpanded ? 'Collapse' : 'Expand' }
+                        </button>
+                    )
             }
             {children}
         </div>
