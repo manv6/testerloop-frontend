@@ -6,7 +6,6 @@ import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import CloseButton from 'react-bootstrap/CloseButton';
 
 import { RequestSlice, NetworkEventDetailPanel } from './components/';
 import networkEvents from 'src/data/networkEvents';
@@ -124,12 +123,6 @@ export const NetworkPanel: React.FC = () => {
 
     return (
         <div className={styles.network}>
-            {selectedEvent && (
-                <CloseButton
-                    className={styles.closeButton}
-                    onClick={onDetailPanelClose}
-                />
-            )}
             <Stack gap={3}>
                 <Form.Group
                     as={Row}
@@ -195,6 +188,7 @@ export const NetworkPanel: React.FC = () => {
                     selectedEvent={selectedEvent}
                     activeTabKey={activeTabKey}
                     onSelectTab={onSelectTab}
+                    onDetailPanelClose={onDetailPanelClose}
                 />
             )}
         </div>

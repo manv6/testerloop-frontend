@@ -8,6 +8,7 @@ import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { NameValueTable } from 'src/components/DevTools/Network/components';
 import { EventType } from 'src/components/DevTools/Network/types';
 import styles from './NetworkEventDetailPanel.module.scss';
+import CloseButton from 'react-bootstrap/esm/CloseButton';
 
 const PostDataTab: React.FC<{
     selectedEvent: EventType;
@@ -107,9 +108,16 @@ const NetworkEventDetailPanel: React.FC<{
     selectedEvent: EventType;
     activeTabKey?: string | null;
     onSelectTab: (x: string | null) => void;
-}> = ({ selectedEvent, activeTabKey, onSelectTab }) => {
+    onDetailPanelClose: () => void;
+}> = ({ selectedEvent, activeTabKey, onSelectTab, onDetailPanelClose }) => {
     return (
         <div key="details" className={styles.networkDetailPanel}>
+            {(
+                <CloseButton
+                    className={styles.closeButton}
+                    onClick={onDetailPanelClose}
+                />
+            )}
             <Tabs
                 transition={false}
                 onSelect={onSelectTab}
