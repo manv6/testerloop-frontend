@@ -1,7 +1,4 @@
-:root {
-    --expandable-child-expended-content-layer: 10;
-    --expandable-child-button-layer: 1;
-}
+@import '/src/constants/layers.scss';
 
 .child {
     position: relative;

@@ -1,9 +1,8 @@
+@import '/src/constants/layers.scss';
+
 :root {
     --timeline-played-colour: #2C88D9;
     --timeline-tooltip-colour: #4b5c6b;
-    --timeline-seeker-horizontal-line-layer: -2;
-    --timeline-tooltip-layer: 1;
-    --timeline-marker-layer: -1;
 }
 
 .timeline {
