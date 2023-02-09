@@ -1,9 +1,9 @@
 import React from 'react';
 import cx from 'classnames';
-import Form from 'react-bootstrap/Form';
 import { ExclamationTriangleFill, ExclamationOctagonFill, TextLeft } from 'react-bootstrap-icons';
 import { LogLevel } from 'src/data/logs';
 import styles from './LogFilters.module.scss';
+import { TextInput } from 'src/components/common/TextInput';
 
 interface Props {
     logStats: Record<LogLevel, number>;
@@ -47,12 +47,13 @@ const LogFilters: React.FC<Props> = ({
             </button>
         </div>
 
-        <Form.Control
+        <TextInput
             type="text"
-            size="sm"
             value={filterTerm}
             placeholder="Filter"
-            onChange={(e) => setFilterTerm(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setFilterTerm(e.target.value);
+            }}
         />
     </aside>
 );

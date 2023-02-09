@@ -3,15 +3,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Stack from 'react-bootstrap/Stack';
 import Table from 'react-bootstrap/Table';
-import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 
 import { RequestSlice, NetworkEventDetailPanel } from './components/';
 import networkEvents from 'src/data/networkEvents';
 import styles from './Network.module.scss';
 import { EventType } from './types';
 import { useTimeline } from 'src/hooks/timeline';
+import { TextInput } from 'src/components/common/TextInput';
 
 enum ProgressFilterType {
     COMPLETED = 'completed',
@@ -124,33 +122,27 @@ export const NetworkPanel: React.FC = () => {
     return (
         <div className={styles.network}>
             <Stack gap={3}>
-                <Form.Group
-                    as={Row}
-                    className="mb-1"
-                    controlId="filterTermInput"
-                >
-                    <Form.Label column sm="2">
-                        Filter
-                    </Form.Label>
-                    <Col sm="5">
-                        <Form.Control
-                            type="text"
-                            size="sm"
+                <div>
+                    <label className={styles.labelWrapper}>
+                        <span>Filter:</span>
+                        <TextInput
                             value={filterTerm}
                             onChange={filterTermInputOnChange}
-                        />
-                    </Col>
-                </Form.Group>
-                <div>
+                            placeholder="Filter"
+                        ></TextInput>
+                    </label>
+                </div>
+                <div className={styles.inlineWrapper}>
                     {Object.values(ProgressFilterType).map((value, idx) => (
-                        <Form.Check
-                            key={`${value}-${idx}`} // TODO: Better key?
-                            inline
-                            onChange={onChangeProgressFilter}
-                            name={value}
-                            label={value}
-                            checked={selectedProgressFilters.includes(value)}
-                        ></Form.Check>
+                        <div key={`${value}-${idx}`} className={styles.labelWrapper}>
+                            <input
+                                type="checkbox"
+                                onChange={onChangeProgressFilter}
+                                name={value}
+                                checked={selectedProgressFilters.includes(value)}
+                            ></input>
+                            <span>{value}</span>
+                        </div>
                     ))}
                 </div>
                 <div className={styles.networkTablePanel}>

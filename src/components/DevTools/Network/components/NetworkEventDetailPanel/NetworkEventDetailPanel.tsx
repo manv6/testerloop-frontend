@@ -118,20 +118,19 @@ const HeadersTab: React.FC<{
                 {selectedEvent.request.url}
             </div>
             {selectedEvent.request.queryString.length
-                ? (
-                    <>
-                        <div key="queryParamsLabel">
-                            <span className={styles.boldText}>Query Params:</span>
-                        </div>
-                        <NameValueTable
-                            key="queryParams"
-                            valuePairs={selectedEvent.request.queryString}
-                            nameLabel="Header Name"
-                            valueLabel="Header Value"
-                        />
-                    </>
-                )
-                : null}
+                ? (<>
+                    <div key="queryParamsLabel">
+                        <span className={styles.boldText}>Query Params:</span>
+                    </div>
+                    <NameValueTable
+                        key="queryParams"
+                        valuePairs={selectedEvent.request.queryString}
+                        nameLabel="Header Name"
+                        valueLabel="Header Value"
+                    />
+                </>)
+                : null
+            }
             <div>
                 <div key="requestHeaderLabel">
                     <span className={styles.boldText}>Request Headers:</span>
@@ -167,12 +166,12 @@ const NetworkEventDetailPanel: React.FC<{
 
     return (
         <div key="details" className={styles.networkDetailPanel}>
-            {(
+            {
                 <CloseButton
                     className={styles.closeButton}
                     onClick={onDetailPanelClose}
                 />
-            )}
+            }
             <Tabs
                 transition={false}
                 onSelect={onSelectTab}
