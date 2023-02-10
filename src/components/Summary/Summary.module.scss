@@ -1,8 +1,7 @@
 :root {
-    --blue: #2C88D9;
-    --error: #D3455B;
+    --blue: #2c88d9;
+    --error: #d3455b;
 }
-
 
 .summary {
     width: 100%;
@@ -14,8 +13,6 @@
 }
 
 .summaryMessage {
-    display: flex;
-    align-items: center;
     height: fit-content;
     vertical-align: middle;
     display: inline-block;
@@ -25,7 +22,6 @@
         vertical-align: middle;
         display: inline-block;
     }
-
 }
 
 .avatar {
@@ -56,12 +52,11 @@
 }
 
 .errorsLabel {
-    color: var(--error)
+    color: var(--error);
 }
 
 .errorsContainer {
     font-weight: bold;
-
     display: flex;
 
     ul {
@@ -74,7 +69,7 @@
 }
 
 .networkError {
-    color: var(--blue)
+    color: var(--blue);
 }
 
 .consoleError {

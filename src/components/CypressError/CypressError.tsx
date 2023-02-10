@@ -1,9 +1,10 @@
+import React from 'react';
 import cicd from 'src/data/cicd';
 import results from 'src/data/results';
 
 import styles from './CypressError.module.scss';
 
-const CypressError = () => {
+const CypressError: React.FC = () => {
     const githubUrl = cicd.GITHUB_SERVER_URL;
     const repository = cicd.GITHUB_REPOSITORY;
     const ref = cicd.GITHUB_REF_NAME;
@@ -19,18 +20,18 @@ const CypressError = () => {
 
     const hrefText = [relativePath, line, column].join(':');
 
-    return <div className={styles.cypressError}>
-        {error ?
-            <div>
+    return (<div className={styles.cypressError}>
+        {error
+            ? (<div>
                 <div className={styles.title}>
                     <span>!</span> {error.name}
                 </div>
                 <div className={styles.errorMessage}>{error.message}</div>
                 <a href={url} target="_blank" rel="noreferrer" >{hrefText}</a>
-            </div>
+            </div>)
             : <div>No errors</div>
         }
-    </div>;
+    </div>);
 
 };
 

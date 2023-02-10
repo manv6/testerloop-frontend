@@ -1,3 +1,4 @@
+import React from 'react';
 import cx from 'classnames';
 import { useTimeline } from 'src/hooks/timeline';
 import { Step } from '../../Steps';
@@ -5,7 +6,6 @@ import styles from './ActionRecord.module.scss';
 
 interface Props {
 	action: Step;
-
 	isActionSelected: boolean;
 	isActionHovered: boolean;
 }

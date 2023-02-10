@@ -46,9 +46,11 @@ export const Steps: React.FC<Props> = ({ className }) => {
         ? getMostRecentStepIdx(stepsHierarchy, hoverTimestamp)
         : null;
 
-    const selectedActionIdx = selectedStepIdx !== -1 ? getMostRecentActionIdx(
-        stepsHierarchy[selectedStepIdx].actions,
-        currentTimestamp) : null;
+    const selectedActionIdx = selectedStepIdx !== -1
+        ? getMostRecentActionIdx(
+            stepsHierarchy[selectedStepIdx].actions,
+            currentTimestamp)
+        : null;
 
     const hoveredActionIdx = hoverTimestamp && selectedStepIdx !== -1
         ? getMostRecentActionIdx(stepsHierarchy[selectedStepIdx].actions, hoverTimestamp)

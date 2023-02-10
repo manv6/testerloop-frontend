@@ -1,5 +1,3 @@
-
-
 .networkTableRow {
     cursor: pointer;
 }
@@ -42,13 +40,15 @@
         min-width: 110px;
         background-color: yellow;
     }
-    &.progressEnded  {
+
+    &.progressEnded {
         min-width: 110px;
         background-color: gold;
     }
 }
 
-.progress{
+// TODO: Remove this specificity hack!!
+.progress { /* stylelint-disable-line no-duplicate-selectors */
     &.progress {
         &.progressLastStartEvent {
             border: 2px solid dodgerblue;

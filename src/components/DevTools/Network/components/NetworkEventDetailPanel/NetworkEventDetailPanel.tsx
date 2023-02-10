@@ -8,6 +8,7 @@ import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { NameValueTable } from 'src/components/DevTools/Network/components';
 import { EventType } from 'src/components/DevTools/Network/types';
 import styles from './NetworkEventDetailPanel.module.scss';
+import CloseButton from 'react-bootstrap/esm/CloseButton';
 
 const PostDataTab: React.FC<{
     selectedEvent: EventType;
@@ -64,19 +65,21 @@ const HeadersTab: React.FC<{
                 <span className={styles.boldText}>Request to:</span>{' '}
                 {selectedEvent.request.url}
             </div>
-            {selectedEvent.request.queryString.length ? (
-                <>
-                    <div key="queryParamsLabel">
-                        <span className={styles.boldText}>Query Params:</span>
-                    </div>
-                    <NameValueTable
-                        key="queryParams"
-                        valuePairs={selectedEvent.request.queryString}
-                        nameLabel="Header Name"
-                        valueLabel="Header Value"
-                    />
-                </>
-            ) : null}
+            {selectedEvent.request.queryString.length
+                ? (
+                    <>
+                        <div key="queryParamsLabel">
+                            <span className={styles.boldText}>Query Params:</span>
+                        </div>
+                        <NameValueTable
+                            key="queryParams"
+                            valuePairs={selectedEvent.request.queryString}
+                            nameLabel="Header Name"
+                            valueLabel="Header Value"
+                        />
+                    </>
+                )
+                : null}
             <div>
                 <div key="requestHeaderLabel">
                     <span className={styles.boldText}>Request Headers:</span>
@@ -107,9 +110,16 @@ const NetworkEventDetailPanel: React.FC<{
     selectedEvent: EventType;
     activeTabKey?: string | null;
     onSelectTab: (x: string | null) => void;
-}> = ({ selectedEvent, activeTabKey, onSelectTab }) => {
+    onDetailPanelClose: () => void;
+}> = ({ selectedEvent, activeTabKey, onSelectTab, onDetailPanelClose }) => {
     return (
         <div key="details" className={styles.networkDetailPanel}>
+            {(
+                <CloseButton
+                    className={styles.closeButton}
+                    onClick={onDetailPanelClose}
+                />
+            )}
             <Tabs
                 transition={false}
                 onSelect={onSelectTab}

@@ -10,17 +10,17 @@ import ChromeIcon from './components/ChromeIcon';
 import CommitIcon from './components/CommitIcon';
 import ErrorIcon from './components/ErrorIcon';
 
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { formatDate } from 'src/utils/date';
 
-const Summary = () => {
+const Summary: React.FC = () => {
     const branch = cicd.GITHUB_REF_NAME;
     const engineer = cicd.GITHUB_TRIGGERING_ACTOR;
     const engineerUrl = [cicd.GITHUB_SERVER_URL, engineer].join('/');
     const endTime = results.endedTestsAt;
 
     const logErrorCount = useMemo(() => (
-        logs.reduce((acc, curr) => curr.level === LogLevel.ERROR ? ++acc: acc , 0)
+        logs.reduce((acc, curr) => (curr.level === LogLevel.ERROR ? ++acc: acc) , 0)
     ), []);
 
     const networkErrorCount = useMemo(() =>
