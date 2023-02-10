@@ -3,7 +3,11 @@ import { Step, StepHierarchy } from '../../Steps';
 
 const useHierarchizeStepsData = (data: Step[]): StepHierarchy[] => {
     return useMemo(() => {
-        const filteredData = data.filter((e) => e.options.state !== 'pending');
+        const filteredData = data.filter(
+            (e) => e.options.state !== 'pending'
+        ).filter(
+            (e) => !['log', 'task'].includes(e.options.name)
+        );
 
         const steps = filteredData.filter(({ options }) => options.groupStart);
         const actions = filteredData.filter(({ options }) => !options.groupStart);
