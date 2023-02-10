@@ -60,18 +60,29 @@ const PostDataTab: React.FC<{
 const ResponseDataTab: React.FC<{
     selectedEvent: EventType;
 }> = ({ selectedEvent }) => {
-    const mimeType = selectedEvent.response?.content?.mimeType;
+    const excludedMimeType = ['application/font-woff2', 'application/octet-stream'];
 
+    const mimeType = selectedEvent.response?.content?.mimeType;
     let responsePayload = selectedEvent.response?.content?.text;
 
     let snippet = null;
-    if (mimeType?.includes('application/json') && responsePayload) {
-        responsePayload = JSON.stringify(JSON.parse(responsePayload), null, 2);
-        snippet = (
-            <SyntaxHighlighter language="json" style={vs} wrapLongLines={true}>
-                {responsePayload}
-            </SyntaxHighlighter>
-        );
+    if (responsePayload) {
+        if (mimeType === 'application/json') {
+            responsePayload = JSON.stringify(JSON.parse(responsePayload), null, 2);
+            snippet = (
+                <SyntaxHighlighter language="json" style={vs} wrapLongLines={true}>
+                    {responsePayload}
+                </SyntaxHighlighter>
+            );
+        } else if (excludedMimeType.includes(mimeType)) {
+            // if it is excluded mimetype, we don't want to show anything
+        } else {
+            snippet = (
+                <div className={styles.responseContentTextOther}>
+                    { responsePayload }
+                </div>
+            );
+        }
     }
 
     return (
@@ -80,7 +91,11 @@ const ResponseDataTab: React.FC<{
                 <span className={styles.boldText}>Mime Type: </span>
                 {selectedEvent.response?.content?.mimeType}
             </div>
-            {snippet}
+            {snippet && (
+                <div className={styles.responseContentTextWrapper}>
+                    {snippet}
+                </div>
+            )}
         </Stack>
     );
 };
@@ -142,9 +157,6 @@ const NetworkEventDetailPanel: React.FC<{
     onSelectTab: (x: string | null) => void;
     onDetailPanelClose: () => void;
 }> = ({ selectedEvent, activeTabKey, onSelectTab, onDetailPanelClose }) => {
-    const showResponse = (selectedEvent.response?.content?.text &&
-        ['application/json'].includes(selectedEvent.response?.content?.mimeType)
-    );
 
     return (
         <div key="details" className={styles.networkDetailPanel}>
@@ -171,11 +183,9 @@ const NetworkEventDetailPanel: React.FC<{
                         <PostDataTab selectedEvent={selectedEvent} />
                     </Tab>
                 )}
-                {showResponse && (
-                    <Tab eventKey="responseData" title="Response">
-                        <ResponseDataTab selectedEvent={selectedEvent} />
-                    </Tab>
-                )}
+                <Tab eventKey="responseData" title="Response">
+                    <ResponseDataTab selectedEvent={selectedEvent} />
+                </Tab>
             </Tabs>
         </div>
     );
