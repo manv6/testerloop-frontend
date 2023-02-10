@@ -2,9 +2,9 @@ import React from 'react';
 import cicd from 'src/data/cicd';
 import results from 'src/data/results';
 
-import styles from './CypressSummary.module.scss';
+import styles from './CypressError.module.scss';
 
-const CypressSummary: React.FC = () => {
+const CypressError: React.FC = () => {
     const githubUrl = cicd.GITHUB_SERVER_URL;
     const repository = cicd.GITHUB_REPOSITORY;
     const ref = cicd.GITHUB_REF_NAME;
@@ -20,7 +20,7 @@ const CypressSummary: React.FC = () => {
 
     const hrefText = [relativePath, line, column].join(':');
 
-    return (<div className={styles.cypressSummary}>
+    return (<div className={styles.cypressError}>
         {error
             ? (<div>
                 <div className={styles.title}>
@@ -35,4 +35,4 @@ const CypressSummary: React.FC = () => {
 
 };
 
-export default CypressSummary;
+export default CypressError;

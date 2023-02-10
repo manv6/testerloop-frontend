@@ -6,7 +6,9 @@ import { DomPreview } from './components/DomPreview';
 import { Steps } from './components/Steps';
 import * as Expandable from './components/Expandable';
 import { RelayEnvironment } from './gql/RelayEnvironment';
-import CypressSummary from './components/CypressSummary';
+import CypressError from './components/CypressError';
+import Summary from './components/Summary';
+
 import styles from './App.module.scss';
 import steps from './data/steps';
 import results from './data/results';
@@ -30,17 +32,14 @@ const App: React.FC = () => {
                     startTime={startTime}
                     endTime={endTime}
                 >
-                    <div>
-                        <div>Summary Placeholder</div>
-                        <div style={{ height: '100px', width: '100%', background: 'lightgrey' }}></div>
-                    </div>
+                    <Summary />
                     <TimelineControls />
                     <Expandable.Parent className={styles.expandableParent}>
                         <Expandable.Child className={styles.expandableSteps} notExpandable={true}>
                             <Steps className={styles.steps} />
                         </Expandable.Child>
-                        <Expandable.Child className={styles.expandableCypressSummary} notExpandable={true}>
-                            <CypressSummary />
+                        <Expandable.Child className={styles.expandableCypressError} notExpandable={true}>
+                            <CypressError />
                         </Expandable.Child>
                         <Expandable.Child className={styles.expandableDom}>
                             <DomPreview />
