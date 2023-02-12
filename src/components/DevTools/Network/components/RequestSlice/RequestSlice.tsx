@@ -35,7 +35,7 @@ const RequestSlice: React.FC<Props> = (props) => {
     const textColorStyle = cx({
         [styles.networkTableRowError]: props.event.response.status >= 400,
     });
-    const progressColorStyle = cx(styles.progress, {
+    const progressColorStyle = cx({
         [styles.progressStarted]:
             props.event.startedDateTime <= currentTime &&
             currentTime < props.event.endedDateTime,
@@ -61,29 +61,29 @@ const RequestSlice: React.FC<Props> = (props) => {
                 ev.stopPropagation();
                 props.setSelectedEventId(props.event.id);
             }}
-            className={styles.networkTableRow}
+            className={styles.trBody}
         >
             <td
-                className={cx(progressColorStyle, {
+                className={cx(styles.td, progressColorStyle, {
                     [styles.progressLastStartEvent]: props.isLastStartedEvent,
                 })}
             >
                 {progressText} {props.isLastStartedEvent && '*'}
             </td>
-            <td className={textColorStyle}>
+            <td className={cx(styles.td, textColorStyle)}>
                 <span>{props.event.response.status}</span>
             </td>
-            <td>
+            <td className={styles.td}>
                 <span className={textColorStyle}>
                     {props.event.request.method}
                 </span>
             </td>
-            <td className={styles.urlColumn}>
+            <td className={cx(styles.td, styles.urlColumn)}>
                 <span className={textColorStyle}>
                     {truncateValue(props.event.request.url, 60)}
                 </span>
             </td>
-            <td>
+            <td className={styles.td}>
                 <span className={textColorStyle}>
                     {truncateValue(
                         (props.event._initiator || '') +
@@ -94,22 +94,22 @@ const RequestSlice: React.FC<Props> = (props) => {
                     )}
                 </span>
             </td>
-            <td>
+            <td className={styles.td}>
                 <span className={textColorStyle}>
                     {props.event.response.content.mimeType}
                 </span>
             </td>
-            <td>
+            <td className={styles.td}>
                 <span className={textColorStyle}>
                     {props.event.response._transferSize}
                 </span>
             </td>
-            <td>
+            <td className={styles.td}>
                 <span className={textColorStyle}>
                     {props.event.response.bodySize}
                 </span>
             </td>
-            <td className={styles.waterfall}>
+            <td className={cx(styles.td, styles.waterfall)}>
                 <div
                     className={styles.waterfallBar}
                     style={{

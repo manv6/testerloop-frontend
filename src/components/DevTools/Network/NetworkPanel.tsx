@@ -1,7 +1,6 @@
 // TODO: Remove this check once temp data is removed!!
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import Table from 'react-bootstrap/Table';
 
 import { RequestSlice, NetworkEventDetailPanel } from './components/';
 import networkEvents from 'src/data/networkEvents';
@@ -145,18 +144,18 @@ export const NetworkPanel: React.FC = () => {
                     ))}
                 </div>
                 <div className={styles.networkTablePanel}>
-                    <Table striped bordered hover size="sm">
+                    <table className={styles.table}>
                         <thead>
                             <tr>
-                                <th>Progress</th>
-                                <th>Status</th>
-                                <th>Method</th>
-                                <th>Domain</th>
-                                <th>Initiator</th>
-                                <th>Type</th>
-                                <th>Transferred</th>
-                                <th>Size</th>
-                                <th>Waterfall</th>
+                                <th className={styles.th}>Progress</th>
+                                <th className={styles.th}>Status</th>
+                                <th className={styles.th}>Method</th>
+                                <th className={styles.th}>Domain</th>
+                                <th className={styles.th}>Initiator</th>
+                                <th className={styles.th}>Type</th>
+                                <th className={styles.th}>Transferred</th>
+                                <th className={styles.th}>Size</th>
+                                <th className={styles.th}>Waterfall</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -172,7 +171,7 @@ export const NetworkPanel: React.FC = () => {
                                 />
                             ))}
                         </tbody>
-                    </Table>
+                    </table>
                 </div>
             </div>
             {selectedEvent && (
