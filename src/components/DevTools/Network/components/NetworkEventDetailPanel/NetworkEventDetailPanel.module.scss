@@ -23,6 +23,12 @@
     top: 5px;
 }
 
+.verticalStack {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
 .responseContentTextWrapper {
     overflow: auto;
     width: 100%;

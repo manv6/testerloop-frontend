@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import Stack from 'react-bootstrap/Stack';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
@@ -50,13 +49,13 @@ const PostDataTab: React.FC<{
     }, [selectedEvent]);
 
     return (
-        <Stack gap={3}>
+        <div className={styles.verticalStack}>
             <div>
                 <span className={styles.boldText}>Mime Type: </span>
                 {selectedEvent.request?.postData?.mimeType}
             </div>
             {snippet}
-        </Stack>
+        </div>
     );
 };
 
@@ -93,7 +92,7 @@ const ResponseDataTab: React.FC<{
     }, [selectedEvent]);
 
     return (
-        <Stack gap={3}>
+        <div className={styles.verticalStack}>
             <div>
                 <span className={styles.boldText}>Mime Type: </span>
                 {selectedEvent.response?.content?.mimeType}
@@ -103,7 +102,7 @@ const ResponseDataTab: React.FC<{
                     {snippet}
                 </div>
             )}
-        </Stack>
+        </div>
     );
 };
 
@@ -112,7 +111,7 @@ const HeadersTab: React.FC<{
     selectedEvent: EventType;
 }> = ({ selectedEvent }) => {
     return (
-        <Stack gap={4}>
+        <div className={styles.verticalStack}>
             <div key="requestURL" className={styles.requestUrl}>
                 <span className={styles.boldText}>Request to:</span>{' '}
                 {selectedEvent.request.url}
@@ -153,7 +152,7 @@ const HeadersTab: React.FC<{
                     valueLabel="Header Value"
                 />
             </div>
-        </Stack>
+        </div>
     );
 };
 

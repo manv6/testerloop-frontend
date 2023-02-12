@@ -1,7 +1,6 @@
 // TODO: Remove this check once temp data is removed!!
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import Stack from 'react-bootstrap/Stack';
 import Table from 'react-bootstrap/Table';
 
 import { RequestSlice, NetworkEventDetailPanel } from './components/';
@@ -121,7 +120,7 @@ export const NetworkPanel: React.FC = () => {
 
     return (
         <div className={styles.network}>
-            <Stack gap={3}>
+            <div className={styles.verticalStack}>
                 <div>
                     <label className={styles.labelWrapper}>
                         <span>Filter:</span>
@@ -175,7 +174,7 @@ export const NetworkPanel: React.FC = () => {
                         </tbody>
                     </Table>
                 </div>
-            </Stack>
+            </div>
             {selectedEvent && (
                 <NetworkEventDetailPanel
                     selectedEvent={selectedEvent}

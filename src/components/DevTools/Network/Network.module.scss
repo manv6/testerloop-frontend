@@ -13,3 +13,9 @@
     display: flex;
     gap: 15px;
 }
+
+.verticalStack {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
