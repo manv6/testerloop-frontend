@@ -24,14 +24,14 @@
 
 .closeButton {
     position: absolute;
-    right: 80px;
-    top: 0;
+    right: 70px;
+    top: 5px;
 }
 
 .verticalStack {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 25px;
 }
 
 .responseContentTextWrapper {
