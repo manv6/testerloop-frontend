@@ -7,7 +7,7 @@ import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { NameValueTable } from 'src/components/DevTools/Network/components';
 import { EventType } from 'src/components/DevTools/Network/types';
 import styles from './NetworkEventDetailPanel.module.scss';
-import CloseButton from 'react-bootstrap/esm/CloseButton';
+import { CloseButton } from 'src/components/common/CloseButton';
 
 const PostDataTab: React.FC<{
     selectedEvent: EventType;
@@ -171,27 +171,29 @@ const NetworkEventDetailPanel: React.FC<{
                     onClick={onDetailPanelClose}
                 />
             }
-            <Tabs
-                transition={false}
-                onSelect={onSelectTab}
-                className="mb-3"
-                {...Object.assign(
-                    {},
-                    activeTabKey ? { activeKey: activeTabKey } : null
-                )}
-            >
-                <Tab eventKey="headers" title="Headers">
-                    <HeadersTab selectedEvent={selectedEvent} />
-                </Tab>
-                {selectedEvent.request?.postData && (
-                    <Tab eventKey="postData" title="Post">
-                        <PostDataTab selectedEvent={selectedEvent} />
+            <div className={styles.networkDetailPanelContent} >
+                <Tabs
+                    transition={false}
+                    onSelect={onSelectTab}
+                    className="mb-3"
+                    {...Object.assign(
+                        {},
+                        activeTabKey ? { activeKey: activeTabKey } : null
+                    )}
+                >
+                    <Tab eventKey="headers" title="Headers">
+                        <HeadersTab selectedEvent={selectedEvent} />
                     </Tab>
-                )}
-                <Tab eventKey="responseData" title="Response">
-                    <ResponseDataTab selectedEvent={selectedEvent} />
-                </Tab>
-            </Tabs>
+                    {selectedEvent.request?.postData && (
+                        <Tab eventKey="postData" title="Post">
+                            <PostDataTab selectedEvent={selectedEvent} />
+                        </Tab>
+                    )}
+                    <Tab eventKey="responseData" title="Response">
+                        <ResponseDataTab selectedEvent={selectedEvent} />
+                    </Tab>
+                </Tabs>
+            </div>
         </div>
     );
 };
