@@ -9,17 +9,6 @@
     border-left: 3px solid black;
 }
 
-.urlColumn {
-    width: 500px;
-    max-width: 500px;
-    word-wrap: break-word;
-}
-
-.waterfall {
-    min-width: 550px;
-    position: relative;
-}
-
 .requestUrl {
     word-wrap: break-word;
 }
@@ -32,4 +21,14 @@
     position: absolute;
     right: 70px;
     top: 5px;
+}
+
+.responseContentTextWrapper {
+    overflow: auto;
+    width: 100%;
+}
+
+.responseContentTextOther {
+    border: 1px solid lightgray;
+    padding: 10px;
 }

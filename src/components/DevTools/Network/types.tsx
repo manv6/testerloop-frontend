@@ -1,4 +1,3 @@
-
 export interface NameValueType {
     name: string;
     value: string;
@@ -14,9 +13,7 @@ export interface RequestType {
 
 export interface ResponseType {
     status: number;
-    content: {
-        mimeType: string;
-    };
+    content: { mimeType: string; text?: string };
     _transferSize?: number;
     bodySize?: number;
     headers: NameValueType[];
@@ -29,5 +26,5 @@ export interface EventType {
     request: RequestType;
     response: ResponseType;
     _initiator?: string;
-    _initiator_line?: number| null;
+    _initiator_line?: number | null;
 }

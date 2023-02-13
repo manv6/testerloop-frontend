@@ -32,7 +32,7 @@ const Summary: React.FC = () => {
     , []);
 
     const errorObj = results.runs[0].tests[0].attempts[0];
-    const cypressErrorName = errorObj.error.name;
+    const cypressErrorName = errorObj.error?.name;
 
     return(
         <div className={styles.summary}>
@@ -45,7 +45,7 @@ const Summary: React.FC = () => {
                 <div className={styles.errorsContainer}>
                     <div className={styles.errorsLabel}>Errors:</div>
                     <ul>
-                        <li className={styles.cypressError}>1 {cypressErrorName}</li>
+                        {cypressErrorName && <li className={styles.cypressError}>1 {cypressErrorName}</li>}
                         <li className={styles.networkError}>{networkErrorCount} Network errors</li>
                         <li className={styles.consoleError}>{logErrorCount} Console errors</li>
                     </ul>
