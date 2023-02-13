@@ -58,13 +58,18 @@ export const TimelineControls: React.FC = () => {
         })), [networkEvents, startTime, endTime]);
 
     const errorMarkers = useMemo(() =>
-        steps.filter(({ options }) => options.state === 'failed').map(({ options }) => ({
-            id: `${options.id}-${options.wallClockStartedAt.getTime()}-${options.state}`,
-            type: EventType.CYPRESS_ERROR,
-            start: options.wallClockStartedAt,
-            startFraction: datesToFraction(startTime, endTime, options.wallClockStartedAt),
-        })
-        ), [steps, startTime, endTime]);
+        steps
+            .filter(({ options }) => (
+                options.state === 'failed' &&
+                options._error?.hasFailed
+            ))
+            .map(({ options }) => ({
+                id: `${options.id}-${options.wallClockStartedAt.getTime()}-${options.state}`,
+                type: EventType.CYPRESS_ERROR,
+                start: options.wallClockStartedAt,
+                startFraction: datesToFraction(startTime, endTime, options.wallClockStartedAt),
+            }))
+    , [steps, startTime, endTime]);
 
     const markers = useMemo(() => [
         ...stepMarkers,
