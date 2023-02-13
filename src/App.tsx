@@ -12,7 +12,7 @@ import Summary from './components/Summary';
 import styles from './App.module.scss';
 import steps from './data/steps';
 import results from './data/results';
-import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 const App: React.FC = () => {
     // TODO: We likely want to add some "lead" and "lag" time to these dates,
