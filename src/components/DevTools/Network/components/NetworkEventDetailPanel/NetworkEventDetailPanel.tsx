@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import Stack from 'react-bootstrap/Stack';
@@ -13,37 +13,41 @@ import CloseButton from 'react-bootstrap/esm/CloseButton';
 const PostDataTab: React.FC<{
     selectedEvent: EventType;
 }> = ({ selectedEvent }) => {
-    const mimeType = selectedEvent.request?.postData?.mimeType;
 
-    let postData = selectedEvent.request?.postData?.text;
+    const snippet = useMemo(() => {
+        const mimeType = selectedEvent.request?.postData?.mimeType;
+        const postData = selectedEvent.request?.postData?.text;
 
-    let snippet = null;
-    if (mimeType?.includes('application/json') && postData) {
-        postData = JSON.stringify(JSON.parse(postData), null, 2);
-        snippet = (
-            <SyntaxHighlighter language="json" style={vs} wrapLongLines={true}>
-                {postData}
-            </SyntaxHighlighter>
-        );
-    } else if (
-        mimeType?.includes('application/x-www-form-urlencoded') &&
-        postData
-    ) {
-        const valuePairs = Array.from(
-            new URLSearchParams(postData).entries()
-        ).map(([key, value]) => {
-            return { name: key, value };
-        });
-        snippet = (
-            <NameValueTable
-                valuePairs={valuePairs}
-                nameLabel="key"
-                valueLabel="value"
-            />
-        );
-    } else {
-        snippet = <div>{postData}</div>;
-    }
+        if (!postData) {
+            return;
+        }
+        if (mimeType?.includes('application/json')) {
+            return (
+                <SyntaxHighlighter
+                    language="json"
+                    style={vs}
+                    wrapLongLines={true}
+                >
+                    {JSON.stringify(JSON.parse(postData), null, 2)}
+                </SyntaxHighlighter>
+            );
+        }
+        if (mimeType?.includes('application/x-www-form-urlencoded')) {
+            const valuePairs = Array.from(
+                new URLSearchParams(postData).entries()
+            ).map(([key, value]) => {
+                return { name: key, value };
+            });
+            return (
+                <NameValueTable
+                    valuePairs={valuePairs}
+                    nameLabel="key"
+                    valueLabel="value"
+                />
+            );
+        }
+        return <div>{postData}</div>;
+    }, [selectedEvent]);
 
     return (
         <Stack gap={3}>
@@ -56,34 +60,37 @@ const PostDataTab: React.FC<{
     );
 };
 
+const responseDataExcludedMimeTypes = ['application/font-woff2', 'application/octet-stream'];
 
 const ResponseDataTab: React.FC<{
     selectedEvent: EventType;
 }> = ({ selectedEvent }) => {
-    const excludedMimeType = ['application/font-woff2', 'application/octet-stream'];
 
-    const mimeType = selectedEvent.response?.content?.mimeType;
-    let responsePayload = selectedEvent.response?.content?.text;
+    const snippet = useMemo(() => {
+        const mimeType = selectedEvent.response?.content?.mimeType;
+        const responsePayload = selectedEvent.response?.content?.text;
 
-    let snippet = null;
-    if (responsePayload) {
+        if (!responsePayload || responseDataExcludedMimeTypes.includes(mimeType)) {
+            return null;
+        }
+
         if (mimeType === 'application/json') {
-            responsePayload = JSON.stringify(JSON.parse(responsePayload), null, 2);
-            snippet = (
-                <SyntaxHighlighter language="json" style={vs} wrapLongLines={true}>
-                    {responsePayload}
+            return (
+                <SyntaxHighlighter
+                    language="json"
+                    style={vs}
+                    wrapLongLines={true}
+                >
+                    {JSON.stringify(JSON.parse(responsePayload), null, 2)}
                 </SyntaxHighlighter>
             );
-        } else if (excludedMimeType.includes(mimeType)) {
-            // if it is excluded mimetype, we don't want to show anything
-        } else {
-            snippet = (
-                <div className={styles.responseContentTextOther}>
-                    { responsePayload }
-                </div>
-            );
         }
-    }
+        return (
+            <div className={styles.responseContentTextOther}>
+                {responsePayload}
+            </div>
+        );
+    }, [selectedEvent]);
 
     return (
         <Stack gap={3}>
