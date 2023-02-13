@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
+import { Tabs } from 'src/components/common/Tabs';
+
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
@@ -158,10 +158,28 @@ const HeadersTab: React.FC<{
 
 const NetworkEventDetailPanel: React.FC<{
     selectedEvent: EventType;
-    activeTabKey?: string | null;
+    activeTabKey: string | null;
     onSelectTab: (x: string | null) => void;
     onDetailPanelClose: () => void;
 }> = ({ selectedEvent, activeTabKey, onSelectTab, onDetailPanelClose }) => {
+
+    const tabChildren = [
+        {
+            tabKey: 'headers',
+            title: 'Headers',
+            children: <HeadersTab selectedEvent={selectedEvent} />,
+        },
+        {
+            tabKey: 'postData',
+            title: 'Post',
+            children: <PostDataTab selectedEvent={selectedEvent} />,
+        },
+        {
+            tabKey: 'responseData',
+            title: 'Response',
+            children: <ResponseDataTab selectedEvent={selectedEvent} />,
+        },
+    ].filter((tabChild) => tabChild?.tabKey!=='postData' || selectedEvent.request?.postData) ;
 
     return (
         <div key="details" className={styles.networkDetailPanel}>
@@ -171,28 +189,12 @@ const NetworkEventDetailPanel: React.FC<{
                     onClick={onDetailPanelClose}
                 />
             }
-            <div className={styles.networkDetailPanelContent} >
+            <div className={styles.networkDetailPanelContent}>
                 <Tabs
-                    transition={false}
                     onSelect={onSelectTab}
-                    className="mb-3"
-                    {...Object.assign(
-                        {},
-                        activeTabKey ? { activeKey: activeTabKey } : null
-                    )}
-                >
-                    <Tab eventKey="headers" title="Headers">
-                        <HeadersTab selectedEvent={selectedEvent} />
-                    </Tab>
-                    {selectedEvent.request?.postData && (
-                        <Tab eventKey="postData" title="Post">
-                            <PostDataTab selectedEvent={selectedEvent} />
-                        </Tab>
-                    )}
-                    <Tab eventKey="responseData" title="Response">
-                        <ResponseDataTab selectedEvent={selectedEvent} />
-                    </Tab>
-                </Tabs>
+                    activeTabKey={activeTabKey}
+                    tabChildren={tabChildren}
+                />
             </div>
         </div>
     );
