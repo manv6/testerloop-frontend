@@ -1,18 +1,19 @@
 import cx from 'classnames';
-import React from 'react';
-import steps from 'src/data/steps';
+import React, { useMemo } from 'react';
 import { useTimeline } from 'src/hooks/timeline';
 import { StepRecord } from './components';
 import { useHierarchizeStepsData } from './hooks';
 import styles from './Steps.module.scss';
+import * as formatter from 'src/utils/formatters';
+import stepsData from 'src/data/steps';
 
 type Props = {
     className?: string;
+    // TODO: Update with fragment key type
+    fragmentKey: any; // eslint-disable-line
 };
 
-// TODO: Define `Step` type
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type Step = any;
+export type Step = formatter.FormattedSteps[0];
 export type StepHierarchy = {
     step: Step;
     actions: Step[];
@@ -31,6 +32,10 @@ const getMostRecentActionIdx = (actions: Step[], timestamp: number): number => {
 };
 
 export const Steps: React.FC<Props> = ({ className }) => {
+    const data = { steps: stepsData } as any; // eslint-disable-line
+    const steps = useMemo(() =>
+        formatter.formatSteps(data.steps), [data.steps]);
+
     const {
         currentTime,
         hoverTime,

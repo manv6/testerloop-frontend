@@ -2,11 +2,11 @@ import React from 'react';
 import cx from 'classnames';
 import { useTimeline } from 'src/hooks/timeline';
 import { datesToFraction } from 'src/utils/date';
-import { EventType } from 'src/components/DevTools/Network/types';
 import styles from './RequestSlice.module.scss';
+import { FormattedNetworkEvents } from 'src/utils/formatters';
 
 type Props = {
-    event: EventType;
+    event: FormattedNetworkEvents[0];
     setSelectedEventId: (id: string) => void;
     isLastStartedEvent: boolean;
 };
