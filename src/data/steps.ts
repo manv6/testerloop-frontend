@@ -1975,16 +1975,4 @@ const steps = [
     }
 ];
 
-export default steps
-    .map((step) => {
-        const wallClockStartedAt = new Date(Date.parse(step.options.wallClockStartedAt));
-        return {
-            ...step,
-            options: {
-                ...step.options,
-                wallClockStartedAt
-            }
-        };
-    })
-    .sort((step1, step2) =>
-        step1.options.wallClockStartedAt.getTime() - step2.options.wallClockStartedAt.getTime());
+export default steps;

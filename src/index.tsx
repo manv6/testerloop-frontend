@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { RelayEnvironment } from './gql/RelayEnvironment';
 import './index.scss';
 
 const root = ReactDOM.createRoot(
@@ -9,7 +10,11 @@ const root = ReactDOM.createRoot(
 );
 root.render(
     <React.StrictMode>
-        <App />
+        <RelayEnvironment>
+            <React.Suspense fallback={<div>App loading...</div>}>
+                <App />
+            </React.Suspense>
+        </RelayEnvironment>
     </React.StrictMode>
 );
 

@@ -1,19 +1,28 @@
+// TODO: Remove this check once temp data is removed!!
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useMemo } from 'react';
 import styles from './Summary.module.scss';
-
-import networkEvents from 'src/data/networkEvents';
 import logs, { LogLevel } from 'src/data/logs';
 import cicd from 'src/data/cicd';
 import results from 'src/data/results';
-
 import BlankAvatar from './components/BlankAvatar';
 import ChromeIcon from './components/ChromeIcon';
 import CommitIcon from './components/CommitIcon';
 import ErrorIcon from './components/ErrorIcon';
-
-import React, { useMemo } from 'react';
 import { formatDate } from 'src/utils/date';
+import * as formatter from 'src/utils/formatters';
+import networkEventData from 'src/data/networkEvents';
 
-const Summary: React.FC = () => {
+type Props = {
+    // TODO: Update fragment key type
+    fragmentKey: any; // eslint-disable-line
+};
+
+const Summary: React.FC<Props> = () => {
+    const data = { networkEvents: networkEventData.log.entries } as any; // eslint-disable-line
+    const networkEvents = useMemo(() =>
+        formatter.formatNetworkEvents(data.networkEvents), [data.networkEvents]);
+
     const branch = cicd.GITHUB_REF_NAME;
     const engineer = cicd.GITHUB_TRIGGERING_ACTOR;
     const engineerUrl = [cicd.GITHUB_SERVER_URL, engineer].join('/');

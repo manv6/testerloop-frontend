@@ -18,7 +18,7 @@ const useHierarchizeStepsData = (data: Step[]): StepHierarchy[] => {
         }), {});
 
         actions.forEach((action) => {
-            const stepId: string | undefined = action.options.group;
+            const stepId = action.options.group;
 
             if (!stepId) {
                 console.error('The following action does not have a linked step: ', action);
