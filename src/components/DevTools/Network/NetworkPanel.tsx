@@ -6,12 +6,11 @@ import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-
 import { RequestSlice, NetworkEventDetailPanel } from './components/';
-import networkEvents from 'src/data/networkEvents';
 import styles from './Network.module.scss';
-import { EventType } from './types';
 import { useTimeline } from 'src/hooks/timeline';
+import * as formatter from 'src/utils/formatters';
+import networkEventData from 'src/data/networkEvents';
 
 enum ProgressFilterType {
     COMPLETED = 'completed',
@@ -20,16 +19,16 @@ enum ProgressFilterType {
 }
 
 const filterByProgressPredicate = (
-    event: EventType,
+    event: formatter.FormattedNetworkEvents[0],
     selectedOptions: ProgressFilterType[],
     currentTime: Date
 ) => {
     const filterLookup = {
-        [ProgressFilterType.COMPLETED]: (e: EventType) =>
+        [ProgressFilterType.COMPLETED]: (e: typeof event) =>
             e.endedDateTime <= currentTime,
-        [ProgressFilterType.STARTED]: (e: EventType) =>
+        [ProgressFilterType.STARTED]: (e: typeof event) =>
             e.startedDateTime <= currentTime && currentTime < e.endedDateTime,
-        [ProgressFilterType.NOT_STARTED]: (e: EventType) =>
+        [ProgressFilterType.NOT_STARTED]: (e: typeof event) =>
             currentTime < e.startedDateTime,
     };
 
@@ -40,35 +39,42 @@ const filterByProgressPredicate = (
     );
 };
 
-export const NetworkPanel: React.FC = () => {
+type Props = {
+    // TODO: Update this with fragment key type
+    fragmentKey: any // eslint-disable-line
+};
+
+export const NetworkPanel: React.FC<Props> = () => {
+    const data = { networkEvents: networkEventData.log.entries } as any; // eslint-disable-line
+    const networkEvents = useMemo(() =>
+        formatter.formatNetworkEvents(data.networkEvents), [data.networkEvents]);
+
     const [selectedEventId, setSelectedEventId] = useState<null | string>(null);
     const [filterTerm, setFilterTerm] = useState<string>('');
     const [activeTabKey, setActiveTabKey] = useState<string | null>('headers');
-    const [selectedProgressFilters, setSelectedProgressFilters] = useState<
-        ProgressFilterType[]
-    >(Object.values(ProgressFilterType));
+    const [selectedProgressFilters, setSelectedProgressFilters] =
+        useState<ProgressFilterType[]>(Object.values(ProgressFilterType));
     const { currentTime } = useTimeline();
+
     const selectedEvent = useMemo(
         () => networkEvents.find(({ id }) => id === selectedEventId),
         [networkEvents, selectedEventId]
     );
 
-    const filteredEvents = useMemo(
-        () =>
-            (networkEvents as EventType[])
-                .filter((networkEvent) =>
-                    (filterTerm
-                        ? networkEvent.request.url.includes(filterTerm)
-                        : true)
-                )
-                .filter((event) =>
-                    filterByProgressPredicate(
-                        event,
-                        selectedProgressFilters,
-                        currentTime
-                    )
-                ),
-        [networkEvents, filterTerm, currentTime, selectedProgressFilters]
+    const filteredEvents = useMemo(() => networkEvents
+        .filter((networkEvent) =>
+            (filterTerm
+                ? networkEvent.request.url.includes(filterTerm)
+                : true)
+        )
+        .filter((event) =>
+            filterByProgressPredicate(
+                event,
+                selectedProgressFilters,
+                currentTime
+            )
+        ),
+    [networkEvents, filterTerm, currentTime, selectedProgressFilters]
     );
 
     const onDetailPanelClose = useCallback(() => {
@@ -82,12 +88,9 @@ export const NetworkPanel: React.FC = () => {
         [setFilterTerm]
     );
 
-    const onSelectTab = useCallback(
-        (key: string | null) => {
-            setActiveTabKey(key);
-        },
-        [setActiveTabKey]
-    );
+    const onSelectTab = useCallback((key: string | null) => {
+        setActiveTabKey(key);
+    }, [setActiveTabKey]);
 
     const onChangeProgressFilter = useCallback(
         (ev: React.ChangeEvent<HTMLInputElement>) => {

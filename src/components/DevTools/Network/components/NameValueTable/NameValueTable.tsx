@@ -1,13 +1,14 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
+import { FormattedNetworkEvents } from 'src/utils/formatters';
 
-import { NameValueType } from 'src/components/DevTools/Network/types';
-
-const NameValueTable: React.FC<{
-    valuePairs: NameValueType[];
+type Props = {
+    valuePairs: FormattedNetworkEvents[0]['request']['queryString'];
     nameLabel: string;
     valueLabel: string;
-}> = ({ valuePairs, nameLabel, valueLabel }) => {
+};
+
+const NameValueTable: React.FC<Props> = ({ valuePairs, nameLabel, valueLabel }) => {
     return (
         <Table striped bordered size="sm">
             <thead>

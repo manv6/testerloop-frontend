@@ -1,7 +1,7 @@
 module.exports = {
     root: true,
     env: { browser: true },
-    ignorePatterns: ['src/data/*'],
+    ignorePatterns: ['src/data/*', '*/__generated__/*'],
     extends: [
         'react-app',
         'react-app/jest',

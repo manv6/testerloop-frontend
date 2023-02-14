@@ -6,14 +6,15 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 import { NameValueTable } from 'src/components/DevTools/Network/components';
-import { EventType } from 'src/components/DevTools/Network/types';
 import styles from './NetworkEventDetailPanel.module.scss';
 import CloseButton from 'react-bootstrap/esm/CloseButton';
+import { FormattedNetworkEvents } from 'src/utils/formatters';
 
-const PostDataTab: React.FC<{
-    selectedEvent: EventType;
-}> = ({ selectedEvent }) => {
+type PostDataTabProps = {
+    selectedEvent: FormattedNetworkEvents[0];
+};
 
+const PostDataTab: React.FC<PostDataTabProps> = ({ selectedEvent }) => {
     const snippet = useMemo(() => {
         const mimeType = selectedEvent.request?.postData?.mimeType;
         const postData = selectedEvent.request?.postData?.text;
@@ -60,13 +61,13 @@ const PostDataTab: React.FC<{
     );
 };
 
-const responseDataExcludedMimeTypes = ['application/font-woff2', 'application/octet-stream'];
+type ResponseDataTabProps = {
+    selectedEvent: FormattedNetworkEvents[0];
+};
 
-const ResponseDataTab: React.FC<{
-    selectedEvent: EventType;
-}> = ({ selectedEvent }) => {
-
+const ResponseDataTab: React.FC<ResponseDataTabProps> = ({ selectedEvent }) => {
     const snippet = useMemo(() => {
+        const responseDataExcludedMimeTypes = ['application/font-woff2', 'application/octet-stream'];
         const mimeType = selectedEvent.response?.content?.mimeType;
         const responsePayload = selectedEvent.response?.content?.text;
 
@@ -107,10 +108,11 @@ const ResponseDataTab: React.FC<{
     );
 };
 
+type HeadersTabProps = {
+    selectedEvent: FormattedNetworkEvents[0];
+};
 
-const HeadersTab: React.FC<{
-    selectedEvent: EventType;
-}> = ({ selectedEvent }) => {
+const HeadersTab: React.FC<HeadersTabProps> = ({ selectedEvent }) => {
     return (
         <Stack gap={4}>
             <div key="requestURL" className={styles.requestUrl}>
@@ -158,13 +160,19 @@ const HeadersTab: React.FC<{
     );
 };
 
-const NetworkEventDetailPanel: React.FC<{
-    selectedEvent: EventType;
+type NetworkEventDetailPanelProps = {
+    selectedEvent: FormattedNetworkEvents[0];
     activeTabKey?: string | null;
     onSelectTab: (x: string | null) => void;
     onDetailPanelClose: () => void;
-}> = ({ selectedEvent, activeTabKey, onSelectTab, onDetailPanelClose }) => {
+};
 
+const NetworkEventDetailPanel: React.FC<NetworkEventDetailPanelProps> = ({
+    selectedEvent,
+    activeTabKey,
+    onSelectTab,
+    onDetailPanelClose
+}) => {
     return (
         <div key="details" className={styles.networkDetailPanel}>
             {(
