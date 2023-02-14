@@ -2,19 +2,10 @@ import React from 'react';
 import styles from './Tabs.module.scss';
 import cx from 'classnames';
 
-type TabProps = {
+type TabProps = React.PropsWithChildren<{
     tabKey: string;
     title: string;
-    children: JSX.Element;
-};
-
-type TabContentProps = {
-    children: JSX.Element;
-};
-
-const TabContent = (props: TabContentProps) => {
-    return <>{props.children}</>;
-};
+}>;
 
 type TabButtonProps = {
     onSelect: (tabKey: string | null) => void;
@@ -47,24 +38,25 @@ export const Tabs = (props: TabsProps) => {
     return (
         <div>
             <div className={styles.tabButtonContainer}>
-                {props.tabChildren.map((tabProps) => {
-                    const { children, tabKey, ...buttonProps } = tabProps;
-                    return (
-                        <TabButton
-                            key={tabKey}
-                            tabKey={tabKey}
-                            onSelect={props.onSelect}
-                            active={props.activeTabKey === tabKey}
-                            {...buttonProps}
-                        ></TabButton>
-                    );
-                })}
+                {props.tabChildren.map(
+                    ({ children, tabKey, ...buttonProps }) => {
+                        return (
+                            <TabButton
+                                key={tabKey}
+                                tabKey={tabKey}
+                                onSelect={props.onSelect}
+                                active={props.activeTabKey === tabKey}
+                                {...buttonProps}
+                            ></TabButton>
+                        );
+                    }
+                )}
             </div>
             <div>
                 {props.tabChildren.map((tabProps) => {
                     const { children, tabKey } = tabProps;
                     if (props.activeTabKey !== tabKey) return null;
-                    return <TabContent key={tabKey}>{children}</TabContent>;
+                    return <div key={tabKey}>{children}</div>;
                 })}
             </div>
         </div>
