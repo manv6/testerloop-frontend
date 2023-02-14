@@ -20,7 +20,6 @@ const TabButton = (props: TabButtonProps) => {
             onClick={() => props.onSelect(props.tabKey)}
             className={cx(styles.tabButton, {
                 [styles.tabButtonActive]: props.active,
-                [styles.tabButtonNotActive]: !props.active,
             })}
         >
             {props.title}

@@ -14,10 +14,8 @@
     margin-bottom: -1px;
     color: dodgerblue;
     font-size: 16px;
-}
 
-.tabButtonNotActive {
-    &:hover {
+    &:not(.tabButtonActive):hover {
         border-top-left-radius: 7px;
         border-top-right-radius: 7px;
         border-color: var(--tab-border-color-hover) var(--tab-border-color-hover) var(--tab-border-color-hover);
