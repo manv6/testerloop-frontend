@@ -1,5 +1,5 @@
 :root {
-    --table-strip-color: rgba(0, 0, 0, 0.05);
+    --table-strip-color: rgba(0  0  0 / 5%);
 }
 
 .table {
@@ -14,9 +14,8 @@
     vertical-align: bottom;
 }
 
-._cell {
-    padding: .5rem 0.5rem;
-    border-width: 1px;
+%cell {
+    padding: 0.5rem;
     vertical-align: top;
     border-color: lightgray;
     border-style: solid;
@@ -24,7 +23,8 @@
 }
 
 .th {
-    @extend ._cell;
+    @extend %cell;
+
     text-align: left;
 }
 
@@ -35,6 +35,7 @@
 }
 
 .td {
-    @extend ._cell;
+    @extend %cell;
+
     box-shadow: inherit;
 }

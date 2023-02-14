@@ -5,14 +5,14 @@
     line-height: 0.4;
     padding: 0;
 
-    &:after{
+    &::after {
         display: inline-block;
         padding-bottom: 3px;
         content: "×";
         color: gray;
     }
 
-    &:hover:after{
+    &:hover::after {
         color: black;
     }
 }

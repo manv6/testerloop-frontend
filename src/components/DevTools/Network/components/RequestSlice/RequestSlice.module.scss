@@ -1,9 +1,9 @@
-@use 'src/components/DevTools/Network/components/utils/tableStyle.scss';
+@use "src/components/DevTools/Network/components/utils/tableStyle.scss";
 
 :root {
-    --table-row-hover-background: rgb(0, 0, 0, 0.10);
-    --progress-started-background: rgb(255, 255, 0, 0.8);
-    --progress-ended-background:  rgb(255, 215, 0, 0.8);
+    --table-row-hover-background: rgb(0  0  0 / 10%);
+    --progress-started-background: rgb(255 255 0 / 80%);
+    --progress-ended-background: rgb(255 215 0 / 80%);
 }
 
 .trBody {
