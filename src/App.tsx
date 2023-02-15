@@ -8,7 +8,6 @@ import * as Expandable from './components/Expandable';
 import CypressError from './components/CypressError';
 import Summary from './components/Summary';
 import styles from './App.module.scss';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import results from './data/results';
 import * as formatters from './utils/formatters';
 import stepsData from 'src/data/steps';
