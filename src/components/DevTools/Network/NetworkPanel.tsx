@@ -2,14 +2,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import cx from 'classnames';
-import Stack from 'react-bootstrap/Stack';
-import Table from 'react-bootstrap/Table';
-import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+
 import { RequestSlice, NetworkEventDetailPanel } from './components/';
 import styles from './Network.module.scss';
 import { useTimeline } from 'src/hooks/timeline';
+import { TextInput } from 'src/components/common/TextInput';
 import * as formatter from 'src/utils/formatters';
 import networkEventData from 'src/data/networkEvents';
 
@@ -226,36 +223,32 @@ export const NetworkPanel: React.FC<Props> = () => {
 
     return (
         <div className={styles.network}>
-            <Stack gap={3}>
-                <Form.Group
-                    as={Row}
-                    className="mb-1"
-                    controlId="filterTermInput"
-                >
-                    <Form.Label column sm="2">
-                        Filter
-                    </Form.Label>
-                    <Col sm="5">
-                        <Form.Control
-                            type="text"
-                            size="sm"
+            <div className={styles.verticalStack}>
+                <div>
+                    <label className={styles.labelWrapper}>
+                        <span>Filter:</span>
+                        <TextInput
                             value={filterTerm}
                             onChange={filterTermInputOnChange}
-                        />
-                    </Col>
-                </Form.Group>
+                            placeholder="Filter"
+                        ></TextInput>
+                    </label>
+                </div>
                 <div>
                     <div className={styles.filterBlock}>
-                        {Object.values(ProgressFilterType).map((value) => (
-                            <Form.Check
-                                key={`${value}`}
-                                inline
-                                onChange={onChangeProgressFilter}
-                                name={value}
-                                label={value}
-                                checked={selectedProgressFilters.includes(value)}
-                            ></Form.Check>
-                        ))}
+                        <div className={styles.inlineWrapper}>
+                            {Object.values(ProgressFilterType).map((value, idx) => (
+                                <div key={`${value}-${idx}`} className={styles.labelWrapper}>
+                                    <input
+                                        type="checkbox"
+                                        onChange={onChangeProgressFilter}
+                                        name={value}
+                                        checked={selectedProgressFilters.includes(value)}
+                                    ></input>
+                                    <span>{value}</span>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                     <div className={styles.filterBlock}>
                         <button
@@ -280,18 +273,18 @@ export const NetworkPanel: React.FC<Props> = () => {
                     </div>
                 </div>
                 <div className={styles.networkTablePanel}>
-                    <Table striped bordered hover size="sm">
+                    <table className={styles.table}>
                         <thead>
                             <tr>
-                                <th>Progress</th>
-                                <th>Status</th>
-                                <th>Method</th>
-                                <th>Domain</th>
-                                <th>Initiator</th>
-                                <th>Type</th>
-                                <th>Transferred</th>
-                                <th>Size</th>
-                                <th>Waterfall</th>
+                                <th className={styles.th}>Progress</th>
+                                <th className={styles.th}>Status</th>
+                                <th className={styles.th}>Method</th>
+                                <th className={styles.th}>Domain</th>
+                                <th className={styles.th}>Initiator</th>
+                                <th className={styles.th}>Type</th>
+                                <th className={styles.th}>Transferred</th>
+                                <th className={styles.th}>Size</th>
+                                <th className={styles.th}>Waterfall</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -307,9 +300,9 @@ export const NetworkPanel: React.FC<Props> = () => {
                                 />
                             ))}
                         </tbody>
-                    </Table>
+                    </table>
                 </div>
-            </Stack>
+            </div>
             {selectedEvent && (
                 <NetworkEventDetailPanel
                     selectedEvent={selectedEvent}

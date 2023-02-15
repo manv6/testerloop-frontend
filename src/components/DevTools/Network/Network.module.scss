@@ -1,3 +1,5 @@
+@use "src/components/common/styles/table.scss";
+
 .network {
     overflow: auto;
     isolation: isolate;
@@ -9,4 +11,25 @@
 
 .filterBlock {
     display: inline-block;
+}
+
+.filterBlock ~ .filterBlock {
+    margin-left: 50px;
+}
+
+.labelWrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.inlineWrapper {
+    display: flex;
+    gap: 15px;
+}
+
+.verticalStack {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
