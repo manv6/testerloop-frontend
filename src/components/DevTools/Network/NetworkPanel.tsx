@@ -31,9 +31,9 @@ const filterByResponseTypePredicate = (
         [ResponseTypeFilterType.HTML]: (mimeType: string) =>
             ['text/html'].includes(mimeType),
         [ResponseTypeFilterType.XHR]: (mimeType: string) =>
-            ['application/json', 'application/javascript'].includes(mimeType),
+            ['application/json'].includes(mimeType),
         [ResponseTypeFilterType.JS]: (mimeType: string) =>
-            ['text/javascript'].includes(mimeType),
+            ['text/javascript', 'application/javascript'].includes(mimeType),
         [ResponseTypeFilterType.CSS]: (mimeType: string) =>
             ['text/css'].includes(mimeType),
         [ResponseTypeFilterType.IMAGE]: (mimeType: string) =>
