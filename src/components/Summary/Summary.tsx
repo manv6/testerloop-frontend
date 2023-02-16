@@ -2,7 +2,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useMemo } from 'react';
 import styles from './Summary.module.scss';
-import logs, { LogLevel } from 'src/data/logs';
 import cicd from 'src/data/cicd';
 import results from 'src/data/results';
 import BlankAvatar from './components/BlankAvatar';
@@ -12,13 +11,39 @@ import ErrorIcon from './components/ErrorIcon';
 import { formatDate } from 'src/utils/date';
 import * as formatter from 'src/utils/formatters';
 import networkEventData from 'src/data/networkEvents';
+import { LogLevel, LogRecord } from '../DevTools/ConsolePanel/ConsolePanel';
+import { useFragment } from 'react-relay';
+import { SummaryFragment$data } from './__generated__/SummaryFragment.graphql';
+import graphql from 'babel-plugin-relay/macro';
 
 type Props = {
     // TODO: Update fragment key type
     fragmentKey: any; // eslint-disable-line
 };
 
-const Summary: React.FC<Props> = () => {
+const Summary: React.FC<Props> = ({fragmentKey}) => {
+    const consoleData: SummaryFragment$data = useFragment(
+        graphql`
+            fragment SummaryFragment on TestExecution {
+                id
+                events(type: CONSOLE) {
+                    edges {
+                        __typename
+                        node {
+                            at
+                            ... on ConsoleLogEvent {
+                                at
+                                message
+                                logLevel
+                                }
+                            }
+                    }
+                }
+            }
+        `,
+        fragmentKey
+    );
+
     const data = { networkEvents: networkEventData.log.entries } as any; // eslint-disable-line
     const networkEvents = useMemo(() =>
         formatter.formatNetworkEvents(data.networkEvents), [data.networkEvents]);
@@ -28,8 +53,17 @@ const Summary: React.FC<Props> = () => {
     const engineerUrl = [cicd.GITHUB_SERVER_URL, engineer].join('/');
     const endTime = results.endedTestsAt;
 
+    const logs = useMemo(() => consoleData?.events?.edges.map((e) => {
+        if(!e.node.logLevel){
+            return e.node;
+        }
+        const index = Object.keys(LogLevel).indexOf(e.node.logLevel);
+        const value = Object.values(LogLevel)[index];
+        return {...e.node, timestamp: new Date(e.node.at).getTime(), level: value };
+    }), [data?.events?.edges]);
+
     const logErrorCount = useMemo(() => (
-        logs.reduce((acc, curr) => (curr.level === LogLevel.ERROR ? ++acc: acc) , 0)
+        logs.reduce((acc: number, curr: LogRecord) => (curr.level === LogLevel.ERROR ? ++acc: acc) , 0)
     ), []);
 
     const networkErrorCount = useMemo(() =>

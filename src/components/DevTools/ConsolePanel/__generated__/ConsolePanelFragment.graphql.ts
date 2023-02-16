@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a7192acfe722b6108cb7c0d3ad73b0c3>>
+ * @generated SignedSource<<22e2efe7886f11f5fcae3c8ba00afafd>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,19 +12,17 @@ import { Fragment, ReaderFragment } from 'relay-runtime';
 export type ConsoleLogLevel = "ERROR" | "INFO" | "LOG" | "WARN" | "%future added value";
 import { FragmentRefs } from "relay-runtime";
 export type ConsolePanelFragment$data = {
-  readonly testExecution: {
-    readonly events: {
-      readonly edges: ReadonlyArray<{
-        readonly __typename: "TestExecutionEventEdge";
-        readonly node: {
-          readonly at: any;
-          readonly logLevel?: ConsoleLogLevel;
-          readonly message?: string;
-        };
-      }>;
-    };
-    readonly id: string;
-  } | null;
+  readonly events: {
+    readonly edges: ReadonlyArray<{
+      readonly __typename: "TestExecutionEventEdge";
+      readonly node: {
+        readonly at: any;
+        readonly logLevel?: ConsoleLogLevel;
+        readonly message?: string;
+      };
+    }>;
+  };
+  readonly id: string;
   readonly " $fragmentType": "ConsolePanelFragment";
 };
 export type ConsolePanelFragment$key = {
@@ -33,119 +31,97 @@ export type ConsolePanelFragment$key = {
 };
 
 const node: ReaderFragment = {
-  "argumentDefinitions": [
-    {
-      "kind": "RootArgument",
-      "name": "testExecutionId"
-    }
-  ],
+  "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
   "name": "ConsolePanelFragment",
   "selections": [
     {
       "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "id",
+      "storageKey": null
+    },
+    {
+      "alias": null,
       "args": [
         {
-          "kind": "Variable",
-          "name": "id",
-          "variableName": "testExecutionId"
+          "kind": "Literal",
+          "name": "type",
+          "value": "CONSOLE"
         }
       ],
-      "concreteType": "TestExecution",
+      "concreteType": "TestExecutionEventConnection",
       "kind": "LinkedField",
-      "name": "testExecution",
+      "name": "events",
       "plural": false,
       "selections": [
         {
           "alias": null,
           "args": null,
-          "kind": "ScalarField",
-          "name": "id",
-          "storageKey": null
-        },
-        {
-          "alias": null,
-          "args": [
-            {
-              "kind": "Literal",
-              "name": "type",
-              "value": "CONSOLE"
-            }
-          ],
-          "concreteType": "TestExecutionEventConnection",
+          "concreteType": "TestExecutionEventEdge",
           "kind": "LinkedField",
-          "name": "events",
-          "plural": false,
+          "name": "edges",
+          "plural": true,
           "selections": [
             {
               "alias": null,
               "args": null,
-              "concreteType": "TestExecutionEventEdge",
+              "kind": "ScalarField",
+              "name": "__typename",
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": null,
               "kind": "LinkedField",
-              "name": "edges",
-              "plural": true,
+              "name": "node",
+              "plural": false,
               "selections": [
                 {
                   "alias": null,
                   "args": null,
                   "kind": "ScalarField",
-                  "name": "__typename",
+                  "name": "at",
                   "storageKey": null
                 },
                 {
-                  "alias": null,
-                  "args": null,
-                  "concreteType": null,
-                  "kind": "LinkedField",
-                  "name": "node",
-                  "plural": false,
+                  "kind": "InlineFragment",
                   "selections": [
                     {
                       "alias": null,
                       "args": null,
                       "kind": "ScalarField",
-                      "name": "at",
+                      "name": "message",
                       "storageKey": null
                     },
                     {
-                      "kind": "InlineFragment",
-                      "selections": [
-                        {
-                          "alias": null,
-                          "args": null,
-                          "kind": "ScalarField",
-                          "name": "message",
-                          "storageKey": null
-                        },
-                        {
-                          "alias": null,
-                          "args": null,
-                          "kind": "ScalarField",
-                          "name": "logLevel",
-                          "storageKey": null
-                        }
-                      ],
-                      "type": "ConsoleLogEvent",
-                      "abstractKey": null
+                      "alias": null,
+                      "args": null,
+                      "kind": "ScalarField",
+                      "name": "logLevel",
+                      "storageKey": null
                     }
                   ],
-                  "storageKey": null
+                  "type": "ConsoleLogEvent",
+                  "abstractKey": null
                 }
               ],
               "storageKey": null
             }
           ],
-          "storageKey": "events(type:\"CONSOLE\")"
+          "storageKey": null
         }
       ],
-      "storageKey": null
+      "storageKey": "events(type:\"CONSOLE\")"
     }
   ],
-  "type": "Query",
+  "type": "TestExecution",
   "abstractKey": null
 };
 
-(node as any).hash = "bcef0bdb91cdbe9018550d82a60e4a1d";
+(node as any).hash = "134a3cd89fb0ac57b51fa55cef3a1b0c";
 
 export default node;

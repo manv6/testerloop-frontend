@@ -2,8 +2,8 @@ import React from 'react';
 import cx from 'classnames';
 import Form from 'react-bootstrap/Form';
 import { ExclamationTriangleFill, ExclamationOctagonFill, TextLeft } from 'react-bootstrap-icons';
-import { LogLevel } from 'src/data/logs';
 import styles from './LogFilters.module.scss';
+import { LogLevel } from '../../ConsolePanel';
 
 interface Props {
     logStats: Record<LogLevel, number>;
@@ -31,7 +31,7 @@ const LogFilters: React.FC<Props> = ({
             </button>
 
             <button
-                onClick={() => toggleActiveLogLevel(LogLevel.WARNING)}
+                onClick={() => toggleActiveLogLevel(LogLevel.WARN)}
                 className={cx(styles.toggleLogLevelButton, { [styles.logLevelActive]: activeLogLevels.warning })}
             >
                 <ExclamationTriangleFill fill="yellow" stroke="black" strokeWidth={0.5} />

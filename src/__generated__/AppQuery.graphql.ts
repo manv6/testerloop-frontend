@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<16e39639c1ff6d89d500c9b90e92a1df>>
+ * @generated SignedSource<<1aba8880705b1357081a9727090f7441>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,7 +14,9 @@ export type AppQuery$variables = {
   testExecutionId: string;
 };
 export type AppQuery$data = {
-  readonly " $fragmentSpreads": FragmentRefs<"ConsolePanelFragment" | "NetworkPanelFragment" | "StepsFragment" | "SummaryFragment" | "TimelineControlsFragment">;
+  readonly testExecution: {
+    readonly " $fragmentSpreads": FragmentRefs<"ConsolePanelFragment" | "NetworkPanelFragment" | "StepsFragment" | "SummaryFragment" | "TimelineControlsFragment">;
+  } | null;
 };
 export type AppQuery = {
   response: AppQuery$data;
@@ -29,7 +31,14 @@ var v0 = [
     "name": "testExecutionId"
   }
 ],
-v1 = {
+v1 = [
+  {
+    "kind": "Variable",
+    "name": "id",
+    "variableName": "testExecutionId"
+  }
+],
+v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -44,29 +53,40 @@ return {
     "name": "AppQuery",
     "selections": [
       {
-        "args": null,
-        "kind": "FragmentSpread",
-        "name": "ConsolePanelFragment"
-      },
-      {
-        "args": null,
-        "kind": "FragmentSpread",
-        "name": "TimelineControlsFragment"
-      },
-      {
-        "args": null,
-        "kind": "FragmentSpread",
-        "name": "NetworkPanelFragment"
-      },
-      {
-        "args": null,
-        "kind": "FragmentSpread",
-        "name": "SummaryFragment"
-      },
-      {
-        "args": null,
-        "kind": "FragmentSpread",
-        "name": "StepsFragment"
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "TestExecution",
+        "kind": "LinkedField",
+        "name": "testExecution",
+        "plural": false,
+        "selections": [
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "ConsolePanelFragment"
+          },
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "TimelineControlsFragment"
+          },
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "NetworkPanelFragment"
+          },
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "SummaryFragment"
+          },
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "StepsFragment"
+          }
+        ],
+        "storageKey": null
       }
     ],
     "type": "Query",
@@ -80,13 +100,7 @@ return {
     "selections": [
       {
         "alias": null,
-        "args": [
-          {
-            "kind": "Variable",
-            "name": "id",
-            "variableName": "testExecutionId"
-          }
-        ],
+        "args": (v1/*: any*/),
         "concreteType": "TestExecution",
         "kind": "LinkedField",
         "name": "testExecution",
@@ -121,7 +135,7 @@ return {
                 "name": "edges",
                 "plural": true,
                 "selections": [
-                  (v1/*: any*/),
+                  (v2/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -130,7 +144,7 @@ return {
                     "name": "node",
                     "plural": false,
                     "selections": [
-                      (v1/*: any*/),
+                      (v2/*: any*/),
                       {
                         "alias": null,
                         "args": null,
@@ -170,27 +184,20 @@ return {
           }
         ],
         "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "test",
-        "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "557f60dbf3a36a99eee8693e9facf852",
+    "cacheID": "fe6c4843d3814931efb2eadea2593057",
     "id": null,
     "metadata": {},
     "name": "AppQuery",
     "operationKind": "query",
-    "text": "query AppQuery(\n  $testExecutionId: ID!\n) {\n  ...ConsolePanelFragment\n  ...TimelineControlsFragment\n  ...NetworkPanelFragment\n  ...SummaryFragment\n  ...StepsFragment\n}\n\nfragment ConsolePanelFragment on Query {\n  testExecution(id: $testExecutionId) {\n    id\n    events(type: CONSOLE) {\n      edges {\n        __typename\n        node {\n          __typename\n          at\n          ... on ConsoleLogEvent {\n            at\n            message\n            logLevel\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment NetworkPanelFragment on Query {\n  test\n}\n\nfragment StepsFragment on Query {\n  test\n}\n\nfragment SummaryFragment on Query {\n  test\n}\n\nfragment TimelineControlsFragment on Query {\n  test\n}\n"
+    "text": "query AppQuery(\n  $testExecutionId: ID!\n) {\n  testExecution(id: $testExecutionId) {\n    ...ConsolePanelFragment\n    ...TimelineControlsFragment\n    ...NetworkPanelFragment\n    ...SummaryFragment\n    ...StepsFragment\n    id\n  }\n}\n\nfragment ConsolePanelFragment on TestExecution {\n  id\n  events(type: CONSOLE) {\n    edges {\n      __typename\n      node {\n        __typename\n        at\n        ... on ConsoleLogEvent {\n          at\n          message\n          logLevel\n        }\n      }\n    }\n  }\n}\n\nfragment NetworkPanelFragment on TestExecution {\n  id\n}\n\nfragment StepsFragment on TestExecution {\n  id\n}\n\nfragment SummaryFragment on TestExecution {\n  id\n  events(type: CONSOLE) {\n    edges {\n      __typename\n      node {\n        __typename\n        at\n        ... on ConsoleLogEvent {\n          at\n          message\n          logLevel\n        }\n      }\n    }\n  }\n}\n\nfragment TimelineControlsFragment on TestExecution {\n  id\n}\n"
   }
 };
 })();
 
-(node as any).hash = "0c665d3bd1bf2cc8fe03241fe938c120";
+(node as any).hash = "779e4173599ca7d1a15c7e35dff6015a";
 
 export default node;

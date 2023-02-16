@@ -14,6 +14,7 @@ import * as formatters from './utils/formatters';
 import stepsData from 'src/data/steps';
 import { useLazyLoadQuery } from 'react-relay';
 import AppQuery from './AppQuery';
+import { AppQuery$data } from './__generated__/AppQuery.graphql';
 
 const SuspensePanel: React.FC<React.PropsWithChildren> = ({ children }) => (
     <React.Suspense fallback={<div>Loading</div>}>
@@ -44,7 +45,7 @@ const App: React.FC = () => {
                 endTime={endTime}
             >
                 <SuspensePanel>
-                    <Summary fragmentKey={data} />
+                    <Summary fragmentKey={(queryData as AppQuery$data)?.testExecution} />
                 </SuspensePanel>
                 <SuspensePanel>
                     <TimelineControls fragmentKey={data} />
@@ -67,7 +68,7 @@ const App: React.FC = () => {
                     </SuspensePanel>
                     <SuspensePanel>
                         <Expandable.Child className={styles.expandableConsole}>
-                            <ConsolePanel consoleLogs={(queryData as any)?.testExecution} />
+                            <ConsolePanel fragmentKey={(queryData as AppQuery$data)?.testExecution} />
                         </Expandable.Child>
                     </SuspensePanel>
                     <SuspensePanel>

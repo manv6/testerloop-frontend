@@ -1,29 +1,65 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useFragment } from 'react-relay';
-import logs, { LogLevel, LogRecord } from 'src/data/logs';
 import { useTimeline } from 'src/hooks/timeline';
 import { LogEntry, LogFilters } from './components';
 import styles from './ConsolePanel.module.scss';
-import ConsolePanelFragment from './ConsolePanelFragment';
+import graphql from 'babel-plugin-relay/macro';
 
 import type {ConsolePanelFragment$key} from './__generated__/ConsolePanelFragment.graphql';
 
+export enum LogLevel {
+    LOG = 'log',
+    WARN = 'warning',
+    ERROR = 'error',
+}
+
+export type LogRecord = {
+    timestamp?: number;
+    level?: LogLevel;
+    message?: string | undefined;
+}
+
 const getMostRecentLogIdx = (logs: LogRecord[], timestamp: number): number => {
-    const nextStepIdx = logs.findIndex((log) => log.timestamp > timestamp);
+    const nextStepIdx = logs.findIndex((log) => (log?.timestamp ? log.timestamp > timestamp : false));
     return (nextStepIdx === -1 ? logs.length : nextStepIdx) - 1;
 };
 
 type Props = {
-    consoleLogs: ConsolePanelFragment$key
+    fragmentKey: ConsolePanelFragment$key | null
 }
 
-const ConsolePanel: React.FC<Props> = ({consoleLogs}) => {
+const ConsolePanel: React.FC<Props> = ({fragmentKey}) => {
     const data = useFragment(
-        ConsolePanelFragment,
-        consoleLogs
+        graphql`
+            fragment ConsolePanelFragment on TestExecution {
+                    id
+                    events(type: CONSOLE) {
+                        edges {
+                            __typename
+                            node {
+                                at
+                                ... on ConsoleLogEvent {
+                                    at
+                                    message
+                                    logLevel
+                                    }
+                                }
+                        }
+                    }
+            }
+            `,
+        fragmentKey
     );
 
-    console.log(data);
+    const logs = useMemo(() => data?.events.edges.map((e) => {
+        if(!e.node.logLevel){
+            return e.node;
+        }
+        const index = Object.keys(LogLevel).indexOf(e.node.logLevel);
+        const value = Object.values(LogLevel)[index];
+        return {...e.node, timestamp: new Date(e.node.at).getTime(), level: value };
+    }), [data?.events.edges]);
+
 
     const {
         currentTime,
@@ -41,27 +77,31 @@ const ConsolePanel: React.FC<Props> = ({consoleLogs}) => {
         setActiveLogLevels({...activeLogLevels, [level]: !activeLogLevels[level]});
     };
 
-    const textFilteredLogs = logs.filter(({ message }) =>
-        message.toLowerCase().includes(filterTerm.toLowerCase()));
+    const textFilteredLogs = logs?.filter(({ message }) =>
+        message?.toLowerCase().includes(filterTerm.toLowerCase()));
 
     // Calculate log stats from logs filtered ONLY with text.
     // If we apply it to the full filtered logs the disabled log levels will be 0.
     const logStats = React.useMemo(() => (
-        textFilteredLogs.reduce((acc, { level }) => {
-            ++acc[level];
+        (textFilteredLogs || []).reduce((acc, curr: LogRecord) => {
+            if(!curr?.level){
+                return acc;
+            }
+
+            ++acc[curr.level];
             return acc;
         }, { log: 0, warning: 0, error: 0 } as Record<LogLevel, number>)
     ), [textFilteredLogs]);
 
     const filteredLogs = textFilteredLogs
-        .filter(({ level }) => activeLogLevels[level]);
+        ?.filter((log: LogRecord) => log?.timestamp && (log?.level ? activeLogLevels[log.level] : undefined));
 
     const currentTimestamp = currentTime.getTime();
-    const currentLogIdx = getMostRecentLogIdx(filteredLogs, currentTimestamp);
+    const currentLogIdx = getMostRecentLogIdx((filteredLogs || []) as LogRecord[], currentTimestamp);
 
     const hoverTimestamp = hoverTime?.getTime();
     const hoveredLogIdx = hoverTimestamp
-        ? getMostRecentLogIdx(filteredLogs, hoverTimestamp)
+        ? getMostRecentLogIdx((filteredLogs || []) as LogRecord[], hoverTimestamp)
         : null;
 
     return (
@@ -75,14 +115,16 @@ const ConsolePanel: React.FC<Props> = ({consoleLogs}) => {
             />
 
             <ul className={styles.logsList}>
-                {filteredLogs.map((log, idx) => {
+                {filteredLogs?.map((log: LogRecord, idx) => {
                     // TODO: Timestamp is not unique, provide an id or a way to make it unique.
                     return (
                         <LogEntry
-                            key={log.timestamp + log.message.substring(0, 50)}
+                            key={log?.timestamp + (log?.message || '')}
                             isLogSelected={currentLogIdx === idx}
                             isLogHovered={hoveredLogIdx === idx}
-                            {...log}
+                            level={log?.level}
+                            timestamp={log.timestamp as number}
+                            message={log.message as string}
                         />
                     );
                 })}

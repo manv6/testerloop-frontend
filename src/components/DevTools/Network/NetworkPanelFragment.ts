@@ -1,8 +1,8 @@
 import graphql from 'babel-plugin-relay/macro';
 
 const NetworkPanelFragment = graphql`
-    fragment NetworkPanelFragment on Query {
-        test
+    fragment NetworkPanelFragment on TestExecution {
+        id
     }
 `;
 

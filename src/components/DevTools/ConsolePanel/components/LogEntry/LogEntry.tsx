@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import cx from 'classnames';
 import { CaretRightFill, CaretDownFill } from 'react-bootstrap-icons';
-import { LogRecord } from 'src/data/logs';
 import styles from './LogEntry.module.scss';
+import { LogRecord } from '../../ConsolePanel';
 
 interface Props extends LogRecord {
     isLogSelected: boolean;
@@ -20,8 +20,8 @@ const LogEntry: React.FC<Props> = ({
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const messageRef = useRef<HTMLSpanElement>(null);
 
-    const date = new Date(timestamp);
-    const displayDate = `${date.toLocaleTimeString()}.${date.getMilliseconds()}`;
+    const date = timestamp ? new Date(timestamp) : undefined;
+    const displayDate =  date? `${date.toLocaleTimeString()}.${date.getMilliseconds()}` : undefined;
 
     useEffect(() => {
         if (!messageRef.current) return;
@@ -30,7 +30,7 @@ const LogEntry: React.FC<Props> = ({
     }, [messageRef, textOverflows]);
 
     return (
-        <li key={timestamp + message.substring(0, 50)}
+        <li key={timestamp + (message || '')}
             className={cx(
                 styles.logEntry,
                 {
