@@ -1,0 +1,18 @@
+.button {
+    border: 0;
+    background: none;
+    font-size: 200%;
+    line-height: 0.4;
+    padding: 0;
+
+    &::after {
+        display: inline-block;
+        padding-bottom: 3px;
+        content: "×";
+        color: gray;
+    }
+
+    &:hover::after {
+        color: black;
+    }
+}

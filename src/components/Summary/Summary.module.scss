@@ -22,6 +22,12 @@
         vertical-align: middle;
         display: inline-block;
     }
+
+    svg {
+        vertical-align: middle;
+    }
+
+    margin-top: 0;
 }
 
 .avatar {
@@ -61,6 +67,7 @@
 
     ul {
         list-style-type: none;
+        margin: 0;
     }
 }
 

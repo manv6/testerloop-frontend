@@ -1,13 +1,12 @@
 import React, { useMemo } from 'react';
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
-import Stack from 'react-bootstrap/Stack';
+import { Tabs } from 'src/components/common/Tabs';
+
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 import { NameValueTable } from 'src/components/DevTools/Network/components';
 import styles from './NetworkEventDetailPanel.module.scss';
-import CloseButton from 'react-bootstrap/esm/CloseButton';
+import { CloseButton } from 'src/components/common/CloseButton';
 import { FormattedNetworkEvents } from 'src/utils/formatters';
 
 type PostDataTabProps = {
@@ -51,13 +50,13 @@ const PostDataTab: React.FC<PostDataTabProps> = ({ selectedEvent }) => {
     }, [selectedEvent]);
 
     return (
-        <Stack gap={3}>
+        <div className={styles.verticalStack}>
             <div>
                 <span className={styles.boldText}>Mime Type: </span>
                 {selectedEvent.request?.postData?.mimeType}
             </div>
             {snippet}
-        </Stack>
+        </div>
     );
 };
 
@@ -94,7 +93,7 @@ const ResponseDataTab: React.FC<ResponseDataTabProps> = ({ selectedEvent }) => {
     }, [selectedEvent]);
 
     return (
-        <Stack gap={3}>
+        <div className={styles.verticalStack}>
             <div>
                 <span className={styles.boldText}>Mime Type: </span>
                 {selectedEvent.response?.content?.mimeType}
@@ -104,7 +103,7 @@ const ResponseDataTab: React.FC<ResponseDataTabProps> = ({ selectedEvent }) => {
                     {snippet}
                 </div>
             )}
-        </Stack>
+        </div>
     );
 };
 
@@ -114,26 +113,25 @@ type HeadersTabProps = {
 
 const HeadersTab: React.FC<HeadersTabProps> = ({ selectedEvent }) => {
     return (
-        <Stack gap={4}>
+        <div className={styles.verticalStack}>
             <div key="requestURL" className={styles.requestUrl}>
                 <span className={styles.boldText}>Request to:</span>{' '}
                 {selectedEvent.request.url}
             </div>
             {selectedEvent.request.queryString.length
-                ? (
-                    <>
-                        <div key="queryParamsLabel">
-                            <span className={styles.boldText}>Query Params:</span>
-                        </div>
-                        <NameValueTable
-                            key="queryParams"
-                            valuePairs={selectedEvent.request.queryString}
-                            nameLabel="Header Name"
-                            valueLabel="Header Value"
-                        />
-                    </>
-                )
-                : null}
+                ? (<>
+                    <div key="queryParamsLabel">
+                        <span className={styles.boldText}>Query Params:</span>
+                    </div>
+                    <NameValueTable
+                        key="queryParams"
+                        valuePairs={selectedEvent.request.queryString}
+                        nameLabel="Header Name"
+                        valueLabel="Header Value"
+                    />
+                </>)
+                : null
+            }
             <div>
                 <div key="requestHeaderLabel">
                     <span className={styles.boldText}>Request Headers:</span>
@@ -156,13 +154,13 @@ const HeadersTab: React.FC<HeadersTabProps> = ({ selectedEvent }) => {
                     valueLabel="Header Value"
                 />
             </div>
-        </Stack>
+        </div>
     );
 };
 
 type NetworkEventDetailPanelProps = {
     selectedEvent: FormattedNetworkEvents[0];
-    activeTabKey?: string | null;
+    activeTabKey: string | null;
     onSelectTab: (x: string | null) => void;
     onDetailPanelClose: () => void;
 };
@@ -173,35 +171,39 @@ const NetworkEventDetailPanel: React.FC<NetworkEventDetailPanelProps> = ({
     onSelectTab,
     onDetailPanelClose
 }) => {
+    const tabChildren = [
+        {
+            tabKey: 'headers',
+            title: 'Headers',
+            children: <HeadersTab selectedEvent={selectedEvent} />,
+        },
+        {
+            tabKey: 'postData',
+            title: 'Post',
+            children: <PostDataTab selectedEvent={selectedEvent} />,
+        },
+        {
+            tabKey: 'responseData',
+            title: 'Response',
+            children: <ResponseDataTab selectedEvent={selectedEvent} />,
+        },
+    ].filter((tabChild) => tabChild?.tabKey!=='postData' || selectedEvent.request?.postData) ;
+
     return (
         <div key="details" className={styles.networkDetailPanel}>
-            {(
+            {
                 <CloseButton
                     className={styles.closeButton}
                     onClick={onDetailPanelClose}
                 />
-            )}
-            <Tabs
-                transition={false}
-                onSelect={onSelectTab}
-                className="mb-3"
-                {...Object.assign(
-                    {},
-                    activeTabKey ? { activeKey: activeTabKey } : null
-                )}
-            >
-                <Tab eventKey="headers" title="Headers">
-                    <HeadersTab selectedEvent={selectedEvent} />
-                </Tab>
-                {selectedEvent.request?.postData && (
-                    <Tab eventKey="postData" title="Post">
-                        <PostDataTab selectedEvent={selectedEvent} />
-                    </Tab>
-                )}
-                <Tab eventKey="responseData" title="Response">
-                    <ResponseDataTab selectedEvent={selectedEvent} />
-                </Tab>
-            </Tabs>
+            }
+            <div className={styles.networkDetailPanelContent}>
+                <Tabs
+                    onSelect={onSelectTab}
+                    activeTabKey={activeTabKey}
+                    tabChildren={tabChildren}
+                />
+            </div>
         </div>
     );
 };
