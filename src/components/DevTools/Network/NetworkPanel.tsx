@@ -11,7 +11,7 @@ import * as formatter from 'src/utils/formatters';
 import networkEventData from 'src/data/networkEvents';
 
 
-enum ResponseTypeFilterType {
+enum ResourceTypeFilterType {
     HTML = 'html',
     XHR = 'xhr',
     JS = 'js',
@@ -21,51 +21,29 @@ enum ResponseTypeFilterType {
     OTHER = 'other',
 }
 
-const filterByResponseTypePredicate = (
+const filterByResourceTypePredicate = (
     event: formatter.FormattedNetworkEvents[0],
-    selectedOptions: ResponseTypeFilterType[]
+    selectedOptions: Set<ResourceTypeFilterType>
 ) => {
-    const mimeType = event.response.content.mimeType;
+    const resourceType = event._resourceType;
 
-    const responseTypeLookup = {
-        [ResponseTypeFilterType.HTML]: (mimeType: string) =>
-            ['text/html'].includes(mimeType),
-        [ResponseTypeFilterType.XHR]: (mimeType: string) =>
-            ['application/json'].includes(mimeType),
-        [ResponseTypeFilterType.JS]: (mimeType: string) =>
-            ['text/javascript', 'application/javascript'].includes(mimeType),
-        [ResponseTypeFilterType.CSS]: (mimeType: string) =>
-            ['text/css'].includes(mimeType),
-        [ResponseTypeFilterType.IMAGE]: (mimeType: string) =>
-            mimeType.startsWith('image/'),
-        [ResponseTypeFilterType.FONT]: (mimeType: string) =>
-            ['application/font-woff2'].includes(mimeType),
-        [ResponseTypeFilterType.OTHER]: (mimeType: string) => false  // dummy result
+    const resourceTypeLookup = {
+        [ResourceTypeFilterType.HTML]: 'document',
+        [ResourceTypeFilterType.XHR]: 'xhr',
+        [ResourceTypeFilterType.JS]: 'script',
+        [ResourceTypeFilterType.CSS]: 'stylesheet',
+        [ResourceTypeFilterType.IMAGE]: 'image',
+        [ResourceTypeFilterType.FONT]: 'font',
+        [ResourceTypeFilterType.OTHER]: 'other',
     };
 
-    if (!selectedOptions.length) {
+    if (!selectedOptions.size) {
         return true;
     }
 
-    let isOthers = false;
-    if (selectedOptions.includes(ResponseTypeFilterType.OTHER)) {
-        isOthers = Object.values(ResponseTypeFilterType)
-            .filter(
-                (responseTypeFilter) =>
-                    responseTypeFilter !== ResponseTypeFilterType.OTHER
-            )
-            .reduce(
-                (result, responseTypeFilter) => {
-                    return result && !responseTypeLookup[responseTypeFilter](mimeType);
-                },
-                true
-            );
-    }
-
-    return selectedOptions.reduce(
-        (result, responseTypeFilter) =>
-            result || responseTypeLookup[responseTypeFilter](mimeType),
-        isOthers
+    return Array.from(selectedOptions).some(
+        (resourceTypeFilter) =>
+            resourceTypeLookup[resourceTypeFilter] === resourceType
     );
 };
 
@@ -78,23 +56,25 @@ enum ProgressFilterType {
 
 const filterByProgressPredicate = (
     event: formatter.FormattedNetworkEvents[0],
-    selectedOptions: ProgressFilterType[],
+    selectedOptions: Set<ProgressFilterType>,
     currentTime: Date
 ) => {
-    const filterLookup = {
-        [ProgressFilterType.COMPLETED]: (e: typeof event) =>
-            e.endedDateTime <= currentTime,
-        [ProgressFilterType.STARTED]: (e: typeof event) =>
-            e.startedDateTime <= currentTime && currentTime < e.endedDateTime,
-        [ProgressFilterType.NOT_STARTED]: (e: typeof event) =>
-            currentTime < e.startedDateTime,
-    };
 
-    return selectedOptions.reduce(
-        (result, progressFilter) =>
-            result || filterLookup[progressFilter](event),
-        false
-    );
+    return Array.from(selectedOptions).some((filter) => {
+        switch (filter) {
+        case ProgressFilterType.COMPLETED:
+            return event.endedDateTime <= currentTime;
+        case ProgressFilterType.STARTED:
+            return (
+                event.startedDateTime <= currentTime &&
+                currentTime < event.endedDateTime
+            );
+        case ProgressFilterType.NOT_STARTED:
+            return currentTime < event.startedDateTime;
+        default:
+            return false;
+        }
+    });
 };
 
 type Props = {
@@ -110,10 +90,11 @@ export const NetworkPanel: React.FC<Props> = () => {
     const [selectedEventId, setSelectedEventId] = useState<null | string>(null);
     const [filterTerm, setFilterTerm] = useState<string>('');
     const [activeTabKey, setActiveTabKey] = useState<string | null>('headers');
-    const [selectedProgressFilters, setSelectedProgressFilters] =
-        useState<ProgressFilterType[]>(Object.values(ProgressFilterType));
-    const [selectedResponseTypeFilters, setSelectedResponseTypeFilters] =
-        useState<ResponseTypeFilterType[]>([]);
+    const [selectedProgressFilters, setSelectedProgressFilters] = useState<
+        Set<ProgressFilterType>
+    >(new Set(Object.values(ProgressFilterType)));
+    const [selectedResourceTypeFilters, setSelectedResourceTypeFilters] =
+        useState<Set<ResourceTypeFilterType>>(new Set());
     const { currentTime } = useTimeline();
 
     const selectedEvent = useMemo(
@@ -135,11 +116,11 @@ export const NetworkPanel: React.FC<Props> = () => {
                     currentTime
                 )
             )
-            .filter((event) => filterByResponseTypePredicate(
+            .filter((event) => filterByResourceTypePredicate(
                 event,
-                selectedResponseTypeFilters,
+                selectedResourceTypeFilters,
             )),
-        [networkEvents, filterTerm, currentTime, selectedProgressFilters, selectedResponseTypeFilters]
+        [networkEvents, filterTerm, currentTime, selectedProgressFilters, selectedResourceTypeFilters]
     );
 
     const onDetailPanelClose = useCallback(() => {
@@ -159,49 +140,33 @@ export const NetworkPanel: React.FC<Props> = () => {
 
     const onChangeProgressFilter = useCallback(
         (ev: React.ChangeEvent<HTMLInputElement>) => {
-            const newValues = ev.target.checked
-                ? [
-                    ...selectedProgressFilters,
-                    ev.target.name as ProgressFilterType,
-                ]
-                : selectedProgressFilters.filter((x) => x !== ev.target.name);
+            const newFilters = new Set(selectedProgressFilters);
+            const newValue = ev.target.name as ProgressFilterType;
+            if (ev.target.checked) {
+                newFilters.add(newValue);
+            } else {
+                newFilters.delete(newValue);
+            }
 
-            setSelectedProgressFilters(newValues);
+            setSelectedProgressFilters(newFilters);
         },
         [selectedProgressFilters, setSelectedProgressFilters]
     );
 
-    const onChangeResponseTypeFilters = useMemo(
-        () =>
-            Object.fromEntries(Object.values(ResponseTypeFilterType).map(
-                (responseTypeFilter) => {
-                    const handler = () => {
+    const onChangeResourceTypeFilters =
+        (filter: ResourceTypeFilterType) => () => {
+            const newFilters = new Set(selectedResourceTypeFilters);
+            if (newFilters.has(filter)) {
+                newFilters.delete(filter);
+            } else {
+                newFilters.add(filter);
+            }
+            setSelectedResourceTypeFilters(newFilters);
+        };
 
-                        let newValues = [];
-                        if (
-                            selectedResponseTypeFilters.includes(responseTypeFilter)
-                        ) {
-                            newValues = selectedResponseTypeFilters.filter(
-                                (x) => x !== responseTypeFilter
-                            );
-                        } else {
-                            newValues = [
-                                ...selectedResponseTypeFilters,
-                                responseTypeFilter as ResponseTypeFilterType,
-                            ];
-                        }
-                        setSelectedResponseTypeFilters(newValues);
-                    };
-
-                    return [responseTypeFilter, handler];
-                }
-            )),
-        [selectedResponseTypeFilters, setSelectedResponseTypeFilters]
-    );
-
-    const onChangeResponseTypeAllFilter = useCallback(() => {
-        setSelectedResponseTypeFilters([]);
-    }, [selectedResponseTypeFilters, setSelectedResponseTypeFilters]);
+    const onChangeResourceTypeAllFilter = useCallback(() => {
+        setSelectedResourceTypeFilters(new Set());
+    }, [selectedResourceTypeFilters, setSelectedResourceTypeFilters]);
 
     useEffect(() => {
         setSelectedEventId(null);
@@ -243,7 +208,7 @@ export const NetworkPanel: React.FC<Props> = () => {
                                         type="checkbox"
                                         onChange={onChangeProgressFilter}
                                         name={value}
-                                        checked={selectedProgressFilters.includes(value)}
+                                        checked={selectedProgressFilters.has(value)}
                                     ></input>
                                     <span>{value}</span>
                                 </div>
@@ -252,21 +217,21 @@ export const NetworkPanel: React.FC<Props> = () => {
                     </div>
                     <div className={styles.filterBlock}>
                         <button
-                            onClick={onChangeResponseTypeAllFilter}
+                            onClick={onChangeResourceTypeAllFilter}
                             className={cx({
-                                [styles.responseTypeFilterActive]:
-                                    !selectedResponseTypeFilters.length}
+                                [styles.resourceTypeFilterActive]:
+                                    !selectedResourceTypeFilters.size}
                             )}
                         >
                             all
                         </button>
-                        {Object.values(ResponseTypeFilterType).map((value) => (
+                        {Object.values(ResourceTypeFilterType).map((value) => (
                             <button
                                 key={`${value}`}
-                                onClick={onChangeResponseTypeFilters[value]}
+                                onClick={onChangeResourceTypeFilters(value)}
                                 className={cx({
-                                    [styles.responseTypeFilterActive]:
-                                        selectedResponseTypeFilters.includes(value)}
+                                    [styles.resourceTypeFilterActive]:
+                                        selectedResourceTypeFilters.has(value)}
                                 )}
                             >{value}</button>
                         ))}
