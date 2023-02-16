@@ -1,7 +1,8 @@
 import graphql from 'babel-plugin-relay/macro';
 
 const AppQuery = graphql`
-    query AppQuery {
+    query AppQuery($testExecutionId: ID!) {
+        ...ConsolePanelFragment
         ...TimelineControlsFragment
         ...NetworkPanelFragment
         ...SummaryFragment

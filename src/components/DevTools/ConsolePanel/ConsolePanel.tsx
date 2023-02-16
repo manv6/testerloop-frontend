@@ -1,15 +1,30 @@
 import React from 'react';
+import { useFragment } from 'react-relay';
 import logs, { LogLevel, LogRecord } from 'src/data/logs';
 import { useTimeline } from 'src/hooks/timeline';
 import { LogEntry, LogFilters } from './components';
 import styles from './ConsolePanel.module.scss';
+import ConsolePanelFragment from './ConsolePanelFragment';
+
+import type {ConsolePanelFragment$key} from './__generated__/ConsolePanelFragment.graphql';
 
 const getMostRecentLogIdx = (logs: LogRecord[], timestamp: number): number => {
     const nextStepIdx = logs.findIndex((log) => log.timestamp > timestamp);
     return (nextStepIdx === -1 ? logs.length : nextStepIdx) - 1;
 };
 
-const ConsolePanel: React.FC = () => {
+type Props = {
+    consoleLogs: ConsolePanelFragment$key
+}
+
+const ConsolePanel: React.FC<Props> = ({consoleLogs}) => {
+    const data = useFragment(
+        ConsolePanelFragment,
+        consoleLogs
+    );
+
+    console.log(data);
+
     const {
         currentTime,
         hoverTime,

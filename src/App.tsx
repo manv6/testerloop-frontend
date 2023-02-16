@@ -12,6 +12,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import results from './data/results';
 import * as formatters from './utils/formatters';
 import stepsData from 'src/data/steps';
+import { useLazyLoadQuery } from 'react-relay';
+import AppQuery from './AppQuery';
 
 const SuspensePanel: React.FC<React.PropsWithChildren> = ({ children }) => (
     <React.Suspense fallback={<div>Loading</div>}>
@@ -23,6 +25,11 @@ const App: React.FC = () => {
     const data = { steps: stepsData } as any; // eslint-disable-line
     const steps = useMemo(() =>
         formatters.formatSteps(data.steps), [data.steps]);
+
+    const queryData = useLazyLoadQuery(
+        AppQuery,
+        {testExecutionId: 'VGVzdEV4ZWN1dGlvbi8xMjM0'}, //base-64 string for 'TestExecution/1234'
+    );
 
     // TODO: We likely want to add some "lead" and "lag" time to these dates,
     // so that events that occur at or near the very beginning or end of the
@@ -60,7 +67,7 @@ const App: React.FC = () => {
                     </SuspensePanel>
                     <SuspensePanel>
                         <Expandable.Child className={styles.expandableConsole}>
-                            <ConsolePanel />
+                            <ConsolePanel consoleLogs={(queryData as any)?.testExecution} />
                         </Expandable.Child>
                     </SuspensePanel>
                     <SuspensePanel>

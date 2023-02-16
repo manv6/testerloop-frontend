@@ -20,7 +20,7 @@ const ftch: FetchFunction = (params, variables) => {
     return Observable.from(
         response.then(async (data) => {
             const json = await data.json();
-            console.log(json); // TODO: remove
+            // console.log(json); // TODO: remove
             return json;
         })
     );

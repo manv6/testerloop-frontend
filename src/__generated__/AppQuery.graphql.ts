@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e5bcc834a7ba635b04753e9b29030cc0>>
+ * @generated SignedSource<<16e39639c1ff6d89d500c9b90e92a1df>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,22 +10,44 @@
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type AppQuery$variables = {};
+export type AppQuery$variables = {
+  testExecutionId: string;
+};
 export type AppQuery$data = {
-  readonly " $fragmentSpreads": FragmentRefs<"NetworkPanelFragment" | "StepsFragment" | "SummaryFragment" | "TimelineControlsFragment">;
+  readonly " $fragmentSpreads": FragmentRefs<"ConsolePanelFragment" | "NetworkPanelFragment" | "StepsFragment" | "SummaryFragment" | "TimelineControlsFragment">;
 };
 export type AppQuery = {
   response: AppQuery$data;
   variables: AppQuery$variables;
 };
 
-const node: ConcreteRequest = {
+const node: ConcreteRequest = (function(){
+var v0 = [
+  {
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "testExecutionId"
+  }
+],
+v1 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "__typename",
+  "storageKey": null
+};
+return {
   "fragment": {
-    "argumentDefinitions": [],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
     "name": "AppQuery",
     "selections": [
+      {
+        "args": null,
+        "kind": "FragmentSpread",
+        "name": "ConsolePanelFragment"
+      },
       {
         "args": null,
         "kind": "FragmentSpread",
@@ -52,10 +74,103 @@ const node: ConcreteRequest = {
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": [],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "AppQuery",
     "selections": [
+      {
+        "alias": null,
+        "args": [
+          {
+            "kind": "Variable",
+            "name": "id",
+            "variableName": "testExecutionId"
+          }
+        ],
+        "concreteType": "TestExecution",
+        "kind": "LinkedField",
+        "name": "testExecution",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "id",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": [
+              {
+                "kind": "Literal",
+                "name": "type",
+                "value": "CONSOLE"
+              }
+            ],
+            "concreteType": "TestExecutionEventConnection",
+            "kind": "LinkedField",
+            "name": "events",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "TestExecutionEventEdge",
+                "kind": "LinkedField",
+                "name": "edges",
+                "plural": true,
+                "selections": [
+                  (v1/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": null,
+                    "kind": "LinkedField",
+                    "name": "node",
+                    "plural": false,
+                    "selections": [
+                      (v1/*: any*/),
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "at",
+                        "storageKey": null
+                      },
+                      {
+                        "kind": "InlineFragment",
+                        "selections": [
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "message",
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "logLevel",
+                            "storageKey": null
+                          }
+                        ],
+                        "type": "ConsoleLogEvent",
+                        "abstractKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              }
+            ],
+            "storageKey": "events(type:\"CONSOLE\")"
+          }
+        ],
+        "storageKey": null
+      },
       {
         "alias": null,
         "args": null,
@@ -66,15 +181,16 @@ const node: ConcreteRequest = {
     ]
   },
   "params": {
-    "cacheID": "81d0c1bf8e6a201956efe553827eac99",
+    "cacheID": "557f60dbf3a36a99eee8693e9facf852",
     "id": null,
     "metadata": {},
     "name": "AppQuery",
     "operationKind": "query",
-    "text": "query AppQuery {\n  ...TimelineControlsFragment\n  ...NetworkPanelFragment\n  ...SummaryFragment\n  ...StepsFragment\n}\n\nfragment NetworkPanelFragment on Query {\n  test\n}\n\nfragment StepsFragment on Query {\n  test\n}\n\nfragment SummaryFragment on Query {\n  test\n}\n\nfragment TimelineControlsFragment on Query {\n  test\n}\n"
+    "text": "query AppQuery(\n  $testExecutionId: ID!\n) {\n  ...ConsolePanelFragment\n  ...TimelineControlsFragment\n  ...NetworkPanelFragment\n  ...SummaryFragment\n  ...StepsFragment\n}\n\nfragment ConsolePanelFragment on Query {\n  testExecution(id: $testExecutionId) {\n    id\n    events(type: CONSOLE) {\n      edges {\n        __typename\n        node {\n          __typename\n          at\n          ... on ConsoleLogEvent {\n            at\n            message\n            logLevel\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment NetworkPanelFragment on Query {\n  test\n}\n\nfragment StepsFragment on Query {\n  test\n}\n\nfragment SummaryFragment on Query {\n  test\n}\n\nfragment TimelineControlsFragment on Query {\n  test\n}\n"
   }
 };
+})();
 
-(node as any).hash = "f1706d191eeee2006849d5ff16ff3b6d";
+(node as any).hash = "0c665d3bd1bf2cc8fe03241fe938c120";
 
 export default node;
