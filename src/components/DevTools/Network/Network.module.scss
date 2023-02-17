@@ -5,6 +5,18 @@
     isolation: isolate;
 }
 
+.resourceTypeFilterActive {
+    background-color: lightgray;
+}
+
+.filterBlock {
+    display: inline-block;
+}
+
+.filterBlock ~ .filterBlock {
+    margin-left: 50px;
+}
+
 .labelWrapper {
     display: flex;
     align-items: center;
