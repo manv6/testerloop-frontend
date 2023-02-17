@@ -13,7 +13,7 @@ import * as formatters from './utils/formatters';
 import stepsData from 'src/data/steps';
 import { useLazyLoadQuery } from 'react-relay';
 import AppQuery from './AppQuery';
-import { AppQuery$data } from './__generated__/AppQuery.graphql';
+import { AppQuery as AppQueryType } from './__generated__/AppQuery.graphql';
 
 const SuspensePanel: React.FC<React.PropsWithChildren> = ({ children }) => (
     <React.Suspense fallback={<div>Loading</div>}>
@@ -26,7 +26,7 @@ const App: React.FC = () => {
     const steps = useMemo(() =>
         formatters.formatSteps(data.steps), [data.steps]);
 
-    const queryData = useLazyLoadQuery(
+    const queryData = useLazyLoadQuery<AppQueryType>(
         AppQuery,
         {testExecutionId: 'VGVzdEV4ZWN1dGlvbi8xMjM0'}, //base-64 string for 'TestExecution/1234'
     );
@@ -44,7 +44,7 @@ const App: React.FC = () => {
                 endTime={endTime}
             >
                 <SuspensePanel>
-                    <Summary fragmentKey={(queryData as AppQuery$data)?.testExecution} />
+                    <Summary fragmentKey={queryData.testExecution} />
                 </SuspensePanel>
                 <SuspensePanel>
                     <TimelineControls fragmentKey={data} />
@@ -67,7 +67,7 @@ const App: React.FC = () => {
                     </SuspensePanel>
                     <SuspensePanel>
                         <Expandable.Child className={styles.expandableConsole}>
-                            <ConsolePanel fragmentKey={(queryData as AppQuery$data)?.testExecution} />
+                            <ConsolePanel fragmentKey={queryData.testExecution} />
                         </Expandable.Child>
                     </SuspensePanel>
                     <SuspensePanel>
