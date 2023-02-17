@@ -32,20 +32,20 @@ const ConsolePanel: React.FC<Props> = ({fragmentKey}) => {
     const data = useFragment(
         graphql`
             fragment ConsolePanelFragment on TestExecution {
-                    id
-                    events(type: CONSOLE) {
-                        edges {
-                            __typename
-                            node {
+                id
+                events(type: CONSOLE) {
+                    edges {
+                        __typename
+                        node {
+                            at
+                            ... on ConsoleLogEvent {
                                 at
-                                ... on ConsoleLogEvent {
-                                    at
-                                    message
-                                    logLevel
-                                    }
-                                }
+                                message
+                                logLevel
+                            }
                         }
                     }
+                }
             }
             `,
         fragmentKey
