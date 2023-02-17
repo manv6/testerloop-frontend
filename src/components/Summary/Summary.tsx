@@ -35,8 +35,8 @@ const Summary: React.FC<Props> = ({fragmentKey}) => {
                                 at
                                 message
                                 logLevel
-                                }
                             }
+                        }
                     }
                 }
             }
