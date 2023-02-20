@@ -64,7 +64,7 @@ const ConsolePanel: React.FC = () => {
                     // TODO: Timestamp is not unique, provide an id or a way to make it unique.
                     return (
                         <LogEntry
-                            key={log.timestamp + log.message.substring(0, 50)}
+                            key={log.timestamp + log.message.substring(0, 50) + idx}
                             isLogSelected={currentLogIdx === idx}
                             isLogHovered={hoveredLogIdx === idx}
                             {...log}
