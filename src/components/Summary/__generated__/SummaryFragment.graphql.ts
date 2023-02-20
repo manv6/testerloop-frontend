@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<8ddbb672033c0024b07f942f1b9557f4>>
+ * @generated SignedSource<<4469b51adce799ef9bf0cc61a91a8e27>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -49,7 +49,9 @@ const node: ReaderFragment = {
         {
           "kind": "Literal",
           "name": "type",
-          "value": "CONSOLE"
+          "value": [
+            "CONSOLE"
+          ]
         }
       ],
       "concreteType": "TestExecutionEventConnection",
@@ -115,13 +117,13 @@ const node: ReaderFragment = {
           "storageKey": null
         }
       ],
-      "storageKey": "events(type:\"CONSOLE\")"
+      "storageKey": "events(type:[\"CONSOLE\"])"
     }
   ],
   "type": "TestExecution",
   "abstractKey": null
 };
 
-(node as any).hash = "3ec3da46b369c9e417cff82707aa3e6c";
+(node as any).hash = "e1f2d5e88a8e8a18ab5996990d3fd2f4";
 
 export default node;

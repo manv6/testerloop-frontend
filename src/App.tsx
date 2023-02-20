@@ -28,7 +28,9 @@ const App: React.FC = () => {
 
     const queryData = useLazyLoadQuery<AppQueryType>(
         AppQuery,
-        {testExecutionId: 'VGVzdEV4ZWN1dGlvbi8xMjM0'}, //base-64 string for 'TestExecution/1234'
+        {
+            testExecutionId: 'VGVzdEV4ZWN1dGlvbi8xMjM0', //base-64 string for 'TestExecution/1234'
+        },
     );
 
     // TODO: We likely want to add some "lead" and "lag" time to these dates,

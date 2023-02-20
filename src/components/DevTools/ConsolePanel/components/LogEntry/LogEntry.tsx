@@ -2,20 +2,27 @@ import React, { useEffect, useRef, useState } from 'react';
 import cx from 'classnames';
 import { CaretRightFill, CaretDownFill } from 'react-bootstrap-icons';
 import styles from './LogEntry.module.scss';
-import { LogRecord } from '../../ConsolePanel';
+import LogEntryFragment from './LogEntryFragment';
+import { useFragment } from 'react-relay';
 
-interface Props extends LogRecord {
+import type {LogEntryFragment$key} from './__generated__/LogEntryFragment.graphql';
+
+interface Props {
     isLogSelected: boolean;
     isLogHovered: boolean;
+    logEntry: LogEntryFragment$key | null
 }
 
 const LogEntry: React.FC<Props> = ({
-    level,
-    timestamp,
-    message,
     isLogSelected,
-    isLogHovered
+    isLogHovered,
+    logEntry
 }) => {
+    const data = useFragment(LogEntryFragment, logEntry);
+
+    const level= data?.logLevel;
+    const timestamp = data?.at;
+    const message = data?.message;
     const [textOverflows, setTextOverflows] = useState<boolean>(false);
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const messageRef = useRef<HTMLSpanElement>(null);
@@ -34,8 +41,8 @@ const LogEntry: React.FC<Props> = ({
             className={cx(
                 styles.logEntry,
                 {
-                    [styles.warningLevel]: level === 'warning',
-                    [styles.errorLevel]: level === 'error'
+                    [styles.warningLevel]: level === 'WARN',
+                    [styles.errorLevel]: level === 'ERROR'
                 },
                 {
                     [styles.selected]: isLogSelected,
