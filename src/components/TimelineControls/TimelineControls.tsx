@@ -79,7 +79,7 @@ export const TimelineControls: React.FC<Props> = () => {
     const cypressErrorMarkers = useMemo(() =>
         steps.filter(({ options }) => (
             options.state === 'failed' &&
-            options._error?.hasFailed
+            options.err
         ))
             .map(({ options }) => ({
                 id: `${options.id}-${options.wallClockStartedAt.getTime()}-${options.state}`,
