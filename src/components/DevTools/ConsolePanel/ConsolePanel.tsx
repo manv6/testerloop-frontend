@@ -33,9 +33,15 @@ const ConsolePanel: React.FC<Props> = ({fragmentKey}) => {
                         }
                     }
                 }
-                warnings: events(type: [CONSOLE]) {
+                warnings: events(type: [CONSOLE], logLevel: [WARN]) {
                     totalCount
                     }
+                errors: events(type: [CONSOLE], logLevel: [ERROR]) {
+                totalCount
+                }
+                logs: events(type: [CONSOLE], logLevel: [LOG]) {
+                totalCount
+                }
             }
             `,
         fragmentKey
@@ -71,8 +77,12 @@ const ConsolePanel: React.FC<Props> = ({fragmentKey}) => {
     //     message?.toLowerCase().includes(filterTerm.toLowerCase()));
 
     const logStats = React.useMemo(() => (
-        { LOG: 0, WARN: data?.warnings.totalCount || 0, ERROR: 0 }
-    ), [data?.warnings.totalCount]);
+        {
+            LOG: data?.logs.totalCount || 0,
+            WARN: data?.warnings.totalCount || 0,
+            ERROR: data?.errors.totalCount || 0
+        }
+    ), [data?.errors.totalCount, data?.logs.totalCount, data?.warnings.totalCount]);
 
     const currentTimestamp = currentTime.getTime();
     const currentLogIdx = getMostRecentLogIdx(currentTimestamp);
@@ -81,6 +91,8 @@ const ConsolePanel: React.FC<Props> = ({fragmentKey}) => {
     const hoveredLogIdx = hoverTimestamp
         ? getMostRecentLogIdx(hoverTimestamp)
         : null;
+
+    console.log(data);
 
     return (
         <section className={styles.consolePanel}>

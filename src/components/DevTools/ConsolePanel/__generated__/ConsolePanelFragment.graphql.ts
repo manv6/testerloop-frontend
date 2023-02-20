@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<fa9a549c859887b7aa98eb9c9c27d5d3>>
+ * @generated SignedSource<<eaecdd254024cfd9bcd843f0c9b3720d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,6 +11,9 @@
 import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type ConsolePanelFragment$data = {
+  readonly errors: {
+    readonly totalCount: number;
+  };
   readonly events: {
     readonly edges: ReadonlyArray<{
       readonly __typename: "TestExecutionEventEdge";
@@ -22,6 +25,9 @@ export type ConsolePanelFragment$data = {
     }>;
   };
   readonly id: string;
+  readonly logs: {
+    readonly totalCount: number;
+  };
   readonly warnings: {
     readonly totalCount: number;
   };
@@ -33,22 +39,29 @@ export type ConsolePanelFragment$key = {
 };
 
 const node: ReaderFragment = (function(){
-var v0 = [
-  {
-    "kind": "Literal",
-    "name": "type",
-    "value": [
-      "CONSOLE"
-    ]
-  }
-],
+var v0 = {
+  "kind": "Literal",
+  "name": "type",
+  "value": [
+    "CONSOLE"
+  ]
+},
 v1 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "__typename",
   "storageKey": null
-};
+},
+v2 = [
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "totalCount",
+    "storageKey": null
+  }
+];
 return {
   "argumentDefinitions": [],
   "kind": "Fragment",
@@ -64,7 +77,9 @@ return {
     },
     {
       "alias": null,
-      "args": (v0/*: any*/),
+      "args": [
+        (v0/*: any*/)
+      ],
       "concreteType": "TestExecutionEventConnection",
       "kind": "LinkedField",
       "name": "events",
@@ -111,21 +126,60 @@ return {
     },
     {
       "alias": "warnings",
-      "args": (v0/*: any*/),
+      "args": [
+        {
+          "kind": "Literal",
+          "name": "logLevel",
+          "value": [
+            "WARN"
+          ]
+        },
+        (v0/*: any*/)
+      ],
       "concreteType": "TestExecutionEventConnection",
       "kind": "LinkedField",
       "name": "events",
       "plural": false,
-      "selections": [
+      "selections": (v2/*: any*/),
+      "storageKey": "events(logLevel:[\"WARN\"],type:[\"CONSOLE\"])"
+    },
+    {
+      "alias": "errors",
+      "args": [
         {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "totalCount",
-          "storageKey": null
-        }
+          "kind": "Literal",
+          "name": "logLevel",
+          "value": [
+            "ERROR"
+          ]
+        },
+        (v0/*: any*/)
       ],
-      "storageKey": "events(type:[\"CONSOLE\"])"
+      "concreteType": "TestExecutionEventConnection",
+      "kind": "LinkedField",
+      "name": "events",
+      "plural": false,
+      "selections": (v2/*: any*/),
+      "storageKey": "events(logLevel:[\"ERROR\"],type:[\"CONSOLE\"])"
+    },
+    {
+      "alias": "logs",
+      "args": [
+        {
+          "kind": "Literal",
+          "name": "logLevel",
+          "value": [
+            "LOG"
+          ]
+        },
+        (v0/*: any*/)
+      ],
+      "concreteType": "TestExecutionEventConnection",
+      "kind": "LinkedField",
+      "name": "events",
+      "plural": false,
+      "selections": (v2/*: any*/),
+      "storageKey": "events(logLevel:[\"LOG\"],type:[\"CONSOLE\"])"
     }
   ],
   "type": "TestExecution",
@@ -133,6 +187,6 @@ return {
 };
 })();
 
-(node as any).hash = "e960f8be0a4eb9f263782a8bcda2290a";
+(node as any).hash = "ec4c9a24539a79188a23aa80607a2579";
 
 export default node;

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<554b00c086a7ecce38cdbdbd21ec2245>>
+ * @generated SignedSource<<7ef4ed143459aa8ef8f84ed1159e5308>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -38,22 +38,29 @@ v1 = [
     "variableName": "testExecutionId"
   }
 ],
-v2 = [
-  {
-    "kind": "Literal",
-    "name": "type",
-    "value": [
-      "CONSOLE"
-    ]
-  }
-],
+v2 = {
+  "kind": "Literal",
+  "name": "type",
+  "value": [
+    "CONSOLE"
+  ]
+},
 v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "__typename",
   "storageKey": null
-};
+},
+v4 = [
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "totalCount",
+    "storageKey": null
+  }
+];
 return {
   "fragment": {
     "argumentDefinitions": (v0/*: any*/),
@@ -124,7 +131,9 @@ return {
           },
           {
             "alias": null,
-            "args": (v2/*: any*/),
+            "args": [
+              (v2/*: any*/)
+            ],
             "concreteType": "TestExecutionEventConnection",
             "kind": "LinkedField",
             "name": "events",
@@ -187,21 +196,60 @@ return {
           },
           {
             "alias": "warnings",
-            "args": (v2/*: any*/),
+            "args": [
+              {
+                "kind": "Literal",
+                "name": "logLevel",
+                "value": [
+                  "WARN"
+                ]
+              },
+              (v2/*: any*/)
+            ],
             "concreteType": "TestExecutionEventConnection",
             "kind": "LinkedField",
             "name": "events",
             "plural": false,
-            "selections": [
+            "selections": (v4/*: any*/),
+            "storageKey": "events(logLevel:[\"WARN\"],type:[\"CONSOLE\"])"
+          },
+          {
+            "alias": "errors",
+            "args": [
               {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "totalCount",
-                "storageKey": null
-              }
+                "kind": "Literal",
+                "name": "logLevel",
+                "value": [
+                  "ERROR"
+                ]
+              },
+              (v2/*: any*/)
             ],
-            "storageKey": "events(type:[\"CONSOLE\"])"
+            "concreteType": "TestExecutionEventConnection",
+            "kind": "LinkedField",
+            "name": "events",
+            "plural": false,
+            "selections": (v4/*: any*/),
+            "storageKey": "events(logLevel:[\"ERROR\"],type:[\"CONSOLE\"])"
+          },
+          {
+            "alias": "logs",
+            "args": [
+              {
+                "kind": "Literal",
+                "name": "logLevel",
+                "value": [
+                  "LOG"
+                ]
+              },
+              (v2/*: any*/)
+            ],
+            "concreteType": "TestExecutionEventConnection",
+            "kind": "LinkedField",
+            "name": "events",
+            "plural": false,
+            "selections": (v4/*: any*/),
+            "storageKey": "events(logLevel:[\"LOG\"],type:[\"CONSOLE\"])"
           }
         ],
         "storageKey": null
@@ -209,12 +257,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "3c19994826c388a03a066749fc1c70c7",
+    "cacheID": "5650d686a59b20329015ca661f9dd6dc",
     "id": null,
     "metadata": {},
     "name": "AppQuery",
     "operationKind": "query",
-    "text": "query AppQuery(\n  $testExecutionId: ID!\n) {\n  testExecution(id: $testExecutionId) {\n    ...ConsolePanelFragment\n    ...TimelineControlsFragment\n    ...NetworkPanelFragment\n    ...SummaryFragment\n    ...StepsFragment\n    id\n  }\n}\n\nfragment ConsolePanelFragment on TestExecution {\n  id\n  events(type: [CONSOLE]) {\n    edges {\n      __typename\n      node {\n        __typename\n        at\n        ...LogEntryFragment\n      }\n    }\n  }\n  warnings: events(type: [CONSOLE]) {\n    totalCount\n  }\n}\n\nfragment LogEntryFragment on ConsoleLogEvent {\n  at\n  message\n  logLevel\n}\n\nfragment NetworkPanelFragment on TestExecution {\n  id\n}\n\nfragment StepsFragment on TestExecution {\n  id\n}\n\nfragment SummaryFragment on TestExecution {\n  id\n  events(type: [CONSOLE]) {\n    edges {\n      __typename\n      node {\n        __typename\n        at\n        ... on ConsoleLogEvent {\n          at\n          message\n          logLevel\n        }\n      }\n    }\n  }\n}\n\nfragment TimelineControlsFragment on TestExecution {\n  id\n}\n"
+    "text": "query AppQuery(\n  $testExecutionId: ID!\n) {\n  testExecution(id: $testExecutionId) {\n    ...ConsolePanelFragment\n    ...TimelineControlsFragment\n    ...NetworkPanelFragment\n    ...SummaryFragment\n    ...StepsFragment\n    id\n  }\n}\n\nfragment ConsolePanelFragment on TestExecution {\n  id\n  events(type: [CONSOLE]) {\n    edges {\n      __typename\n      node {\n        __typename\n        at\n        ...LogEntryFragment\n      }\n    }\n  }\n  warnings: events(type: [CONSOLE], logLevel: [WARN]) {\n    totalCount\n  }\n  errors: events(type: [CONSOLE], logLevel: [ERROR]) {\n    totalCount\n  }\n  logs: events(type: [CONSOLE], logLevel: [LOG]) {\n    totalCount\n  }\n}\n\nfragment LogEntryFragment on ConsoleLogEvent {\n  at\n  message\n  logLevel\n}\n\nfragment NetworkPanelFragment on TestExecution {\n  id\n}\n\nfragment StepsFragment on TestExecution {\n  id\n}\n\nfragment SummaryFragment on TestExecution {\n  id\n  events(type: [CONSOLE]) {\n    edges {\n      __typename\n      node {\n        __typename\n        at\n        ... on ConsoleLogEvent {\n          at\n          message\n          logLevel\n        }\n      }\n    }\n  }\n}\n\nfragment TimelineControlsFragment on TestExecution {\n  id\n}\n"
   }
 };
 })();
