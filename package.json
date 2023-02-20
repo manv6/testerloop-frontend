@@ -58,6 +58,7 @@
         "eslint": "^8.33.0",
         "eslint-plugin-react": "^7.32.2",
         "graphql": "^16.6.0",
+        "jsdom": "^21.1.0",
         "relay-compiler": "^14.1.0",
         "stylelint": "^14.16.1",
         "stylelint-config-standard-scss": "^6.1.0"
