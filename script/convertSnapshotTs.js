@@ -3,13 +3,13 @@ const fs = require('node:fs');
 const path = require('node:path');
 const jsdom = require('jsdom');
 
-const escapeNonAsciiForXml = (textContent) => {
+const escapeNonAsciiForHtml = (textContent) => {
     // This encode unicode characters for xml/html
     // TODO: this implementation is possibly questionable
 
     return textContent.replace(
         // eslint-disable-next-line no-control-regex
-        /[^\x00-\x7F]/gu,
+        /[^\u0000-\u007F]/gu,
         (value) => `&#${value.codePointAt()};`
     );
 };
@@ -43,7 +43,7 @@ const processFiles = (dirname) => {
             return {
                 timestamp,
                 snapshotId,
-                body: escapeNonAsciiForXml(
+                body: escapeNonAsciiForHtml(
                     dom.window.document.documentElement.outerHTML
                 ),
             };
