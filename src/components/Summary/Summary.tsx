@@ -20,13 +20,11 @@ type Props = {
 };
 
 const Summary: React.FC<Props> = ({fragmentKey}) => {
-    //TODO: query error count
-    // eslint-disable-next-line
     const consoleData = useFragment(
         graphql`
             fragment SummaryFragment on TestExecution {
                 id
-                events(type: [CONSOLE]) 
+                events(filter: {type: CONSOLE} ) 
                 {
                     edges {
                         __typename
@@ -39,6 +37,9 @@ const Summary: React.FC<Props> = ({fragmentKey}) => {
                             }
                         }
                     }
+                }
+                summaryConsoleErrors: events(filter: {type: CONSOLE, consoleFilter: { logLevel: ERROR } }) {
+                    totalCount
                 }
             }
         `,
@@ -54,7 +55,7 @@ const Summary: React.FC<Props> = ({fragmentKey}) => {
     const engineerUrl = [cicd.GITHUB_SERVER_URL, engineer].join('/');
     const endTime = results.endedTestsAt;
 
-    const logErrorCount = 0; //TODO: add filter for console events
+    const logErrorCount = consoleData?.summaryConsoleErrors?.totalCount;
 
     const networkErrorCount = useMemo(() =>
         networkEvents.reduce((acc, curr) => {

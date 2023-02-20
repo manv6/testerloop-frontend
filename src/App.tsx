@@ -69,7 +69,7 @@ const App: React.FC = () => {
                     </SuspensePanel>
                     <SuspensePanel>
                         <Expandable.Child className={styles.expandableConsole}>
-                            <ConsolePanel fragmentKey={queryData.testExecution} />
+                            <ConsolePanel fragmentKey={queryData.testExecution}/>
                         </Expandable.Child>
                     </SuspensePanel>
                     <SuspensePanel>

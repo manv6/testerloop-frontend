@@ -8,7 +8,7 @@ import { TextInput } from 'src/components/common/TextInput';
 interface Props {
     logStats: Record<LogLevel, number>;
     filterTerm: string;
-    setFilterTerm: React.Dispatch<React.SetStateAction<string>>;
+    setFilterTerm: (logSearch: string) => void;
     activeLogLevels: Record<LogLevel, boolean>;
     toggleActiveLogLevel: (level: LogLevel) => void;
 }

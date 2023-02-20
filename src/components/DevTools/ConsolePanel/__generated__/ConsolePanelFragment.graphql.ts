@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<eaecdd254024cfd9bcd843f0c9b3720d>>
+ * @generated SignedSource<<7513cab619aa3dbb7ce4a54a35fc3253>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -8,25 +8,24 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { Fragment, ReaderFragment } from 'relay-runtime';
+import { ReaderFragment, RefetchableFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type ConsolePanelFragment$data = {
   readonly errors: {
     readonly totalCount: number;
   };
-  readonly events: {
-    readonly edges: ReadonlyArray<{
-      readonly __typename: "TestExecutionEventEdge";
-      readonly node: {
-        readonly __typename: string;
-        readonly at: any;
-        readonly " $fragmentSpreads": FragmentRefs<"LogEntryFragment">;
-      };
-    }>;
-  };
   readonly id: string;
   readonly logs: {
     readonly totalCount: number;
+  };
+  readonly searchedEvents: {
+    readonly edges: ReadonlyArray<{
+      readonly __typename: "TestExecutionEventEdge";
+      readonly node: {
+        readonly at?: any;
+        readonly " $fragmentSpreads": FragmentRefs<"LogEntryFragment">;
+      };
+    }>;
   };
   readonly warnings: {
     readonly totalCount: number;
@@ -40,18 +39,14 @@ export type ConsolePanelFragment$key = {
 
 const node: ReaderFragment = (function(){
 var v0 = {
-  "kind": "Literal",
-  "name": "type",
-  "value": [
-    "CONSOLE"
-  ]
+  "kind": "Variable",
+  "name": "logSearch",
+  "variableName": "logSearch"
 },
 v1 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "__typename",
-  "storageKey": null
+  "kind": "Literal",
+  "name": "type",
+  "value": "CONSOLE"
 },
 v2 = [
   {
@@ -63,9 +58,24 @@ v2 = [
   }
 ];
 return {
-  "argumentDefinitions": [],
+  "argumentDefinitions": [
+    {
+      "defaultValue": "",
+      "kind": "LocalArgument",
+      "name": "logSearch"
+    }
+  ],
   "kind": "Fragment",
-  "metadata": null,
+  "metadata": {
+    "refetch": {
+      "connection": null,
+      "fragmentPathInResult": [
+        "node"
+      ],
+      "operation": require('./ConsolePanelFragmentRefetchQuery.graphql'),
+      "identifierField": "id"
+    }
+  },
   "name": "ConsolePanelFragment",
   "selections": [
     {
@@ -76,9 +86,22 @@ return {
       "storageKey": null
     },
     {
-      "alias": null,
+      "alias": "searchedEvents",
       "args": [
-        (v0/*: any*/)
+        {
+          "fields": [
+            {
+              "fields": [
+                (v0/*: any*/)
+              ],
+              "kind": "ObjectValue",
+              "name": "consoleFilter"
+            },
+            (v1/*: any*/)
+          ],
+          "kind": "ObjectValue",
+          "name": "filter"
+        }
       ],
       "concreteType": "TestExecutionEventConnection",
       "kind": "LinkedField",
@@ -93,7 +116,13 @@ return {
           "name": "edges",
           "plural": true,
           "selections": [
-            (v1/*: any*/),
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "__typename",
+              "storageKey": null
+            },
             {
               "alias": null,
               "args": null,
@@ -102,18 +131,24 @@ return {
               "name": "node",
               "plural": false,
               "selections": [
-                (v1/*: any*/),
                 {
-                  "alias": null,
-                  "args": null,
-                  "kind": "ScalarField",
-                  "name": "at",
-                  "storageKey": null
-                },
-                {
-                  "args": null,
-                  "kind": "FragmentSpread",
-                  "name": "LogEntryFragment"
+                  "kind": "InlineFragment",
+                  "selections": [
+                    {
+                      "alias": null,
+                      "args": null,
+                      "kind": "ScalarField",
+                      "name": "at",
+                      "storageKey": null
+                    },
+                    {
+                      "args": null,
+                      "kind": "FragmentSpread",
+                      "name": "LogEntryFragment"
+                    }
+                  ],
+                  "type": "ConsoleLogEvent",
+                  "abstractKey": null
                 }
               ],
               "storageKey": null
@@ -122,64 +157,97 @@ return {
           "storageKey": null
         }
       ],
-      "storageKey": "events(type:[\"CONSOLE\"])"
+      "storageKey": null
     },
     {
       "alias": "warnings",
       "args": [
         {
-          "kind": "Literal",
-          "name": "logLevel",
-          "value": [
-            "WARN"
-          ]
-        },
-        (v0/*: any*/)
+          "fields": [
+            {
+              "fields": [
+                {
+                  "kind": "Literal",
+                  "name": "logLevel",
+                  "value": "WARN"
+                },
+                (v0/*: any*/)
+              ],
+              "kind": "ObjectValue",
+              "name": "consoleFilter"
+            },
+            (v1/*: any*/)
+          ],
+          "kind": "ObjectValue",
+          "name": "filter"
+        }
       ],
       "concreteType": "TestExecutionEventConnection",
       "kind": "LinkedField",
       "name": "events",
       "plural": false,
       "selections": (v2/*: any*/),
-      "storageKey": "events(logLevel:[\"WARN\"],type:[\"CONSOLE\"])"
+      "storageKey": null
     },
     {
       "alias": "errors",
       "args": [
         {
-          "kind": "Literal",
-          "name": "logLevel",
-          "value": [
-            "ERROR"
-          ]
-        },
-        (v0/*: any*/)
+          "fields": [
+            {
+              "fields": [
+                {
+                  "kind": "Literal",
+                  "name": "logLevel",
+                  "value": "ERROR"
+                },
+                (v0/*: any*/)
+              ],
+              "kind": "ObjectValue",
+              "name": "consoleFilter"
+            },
+            (v1/*: any*/)
+          ],
+          "kind": "ObjectValue",
+          "name": "filter"
+        }
       ],
       "concreteType": "TestExecutionEventConnection",
       "kind": "LinkedField",
       "name": "events",
       "plural": false,
       "selections": (v2/*: any*/),
-      "storageKey": "events(logLevel:[\"ERROR\"],type:[\"CONSOLE\"])"
+      "storageKey": null
     },
     {
       "alias": "logs",
       "args": [
         {
-          "kind": "Literal",
-          "name": "logLevel",
-          "value": [
-            "LOG"
-          ]
-        },
-        (v0/*: any*/)
+          "fields": [
+            {
+              "fields": [
+                {
+                  "kind": "Literal",
+                  "name": "logLevel",
+                  "value": "LOG"
+                },
+                (v0/*: any*/)
+              ],
+              "kind": "ObjectValue",
+              "name": "consoleFilter"
+            },
+            (v1/*: any*/)
+          ],
+          "kind": "ObjectValue",
+          "name": "filter"
+        }
       ],
       "concreteType": "TestExecutionEventConnection",
       "kind": "LinkedField",
       "name": "events",
       "plural": false,
       "selections": (v2/*: any*/),
-      "storageKey": "events(logLevel:[\"LOG\"],type:[\"CONSOLE\"])"
+      "storageKey": null
     }
   ],
   "type": "TestExecution",
@@ -187,6 +255,6 @@ return {
 };
 })();
 
-(node as any).hash = "ec4c9a24539a79188a23aa80607a2579";
+(node as any).hash = "3ec2a240c172060495b5e71c268c44c8";
 
 export default node;

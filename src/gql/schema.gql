@@ -3,6 +3,11 @@ interface ConsoleEvent implements Event & TestExecutionEvent {
   testExecution: TestExecution!
 }
 
+input ConsoleEventFilterInput {
+  logLevel: [ConsoleLogLevel!]
+  logSearch: String
+}
+
 type ConsoleLogEvent implements ConsoleEvent & Event & InstantaneousEvent & TestExecutionEvent {
   at: DateTime!
   logLevel: ConsoleLogLevel!
@@ -74,7 +79,7 @@ type Query {
 
 type TestExecution implements Event & IntervalEvent & Node {
   at: DateTime!
-  events(after: Cursor, first: Int, logLevel: [ConsoleLogLevel!], type: [TestExecutionEventType!]): TestExecutionEventConnection!
+  events(after: Cursor, filter: TestExecutionEventFilterInput, first: Int): TestExecutionEventConnection!
   id: ID!
   until: DateTime!
 }
@@ -105,6 +110,11 @@ See:
 type TestExecutionEventEdge {
   cursor: Cursor!
   node: TestExecutionEvent!
+}
+
+input TestExecutionEventFilterInput {
+  consoleFilter: ConsoleEventFilterInput
+  type: [TestExecutionEventType!]
 }
 
 enum TestExecutionEventType {

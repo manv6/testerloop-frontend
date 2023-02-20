@@ -1,9 +1,10 @@
-import React, { useCallback } from 'react';
-import { useFragment } from 'react-relay';
+import React, { useCallback, useEffect } from 'react';
+import { useRefetchableFragment } from 'react-relay';
 import { useTimeline } from 'src/hooks/timeline';
 import { LogEntry, LogFilters } from './components';
 import styles from './ConsolePanel.module.scss';
 import graphql from 'babel-plugin-relay/macro';
+import { useDebounce } from 'use-debounce';
 
 import type {ConsolePanelFragment$key} from './__generated__/ConsolePanelFragment.graphql';
 
@@ -18,33 +19,47 @@ type Props = {
 }
 
 const ConsolePanel: React.FC<Props> = ({fragmentKey}) => {
-    const data = useFragment(
+    const [data, refetch] = useRefetchableFragment(
         graphql`
-            fragment ConsolePanelFragment on TestExecution {
+            fragment ConsolePanelFragment on TestExecution
+            @argumentDefinitions(
+                logSearch: {type: "String", defaultValue: ""}
+            )
+            @refetchable(queryName: "ConsolePanelFragmentRefetchQuery")
+            {
                 id
-                events(type: [CONSOLE]) 
+                searchedEvents: events(filter: {type: CONSOLE, consoleFilter: {
+                    logSearch: $logSearch}
+                    }) 
                 {
                     edges {
-                        __typename
-                        node {
                             __typename
-                            at
-                            ...LogEntryFragment
+                            node {
+                                ... on ConsoleLogEvent {
+                                at
+                                ... LogEntryFragment
+                            }
                         }
                     }
                 }
-                warnings: events(type: [CONSOLE], logLevel: [WARN]) {
+                warnings: events(filter: {type: CONSOLE, consoleFilter: {
+                    logSearch: $logSearch, logLevel: WARN} 
+                    }) {
                     totalCount
                     }
-                errors: events(type: [CONSOLE], logLevel: [ERROR]) {
-                totalCount
+                errors: events(filter: {type: CONSOLE, consoleFilter: {
+                    logSearch: $logSearch, logLevel: ERROR }
+                    }) {
+                    totalCount
                 }
-                logs: events(type: [CONSOLE], logLevel: [LOG]) {
-                totalCount
+                logs: events(filter: {type: CONSOLE, consoleFilter: {
+                    logSearch: $logSearch, logLevel: LOG}
+                    }) {
+                    totalCount
                 }
             }
             `,
-        fragmentKey
+        fragmentKey,
     );
 
 
@@ -53,7 +68,14 @@ const ConsolePanel: React.FC<Props> = ({fragmentKey}) => {
         hoverTime,
     } = useTimeline();
 
-    const [filterTerm, setFilterTerm] = React.useState<string>('');
+    const [logSearch, setLogSearch] = React.useState<string>('');
+    const debouncedResult = useDebounce(logSearch, 200);
+    const debouncedTerm = debouncedResult[0];
+
+    useEffect(() => {
+        refetch({logSearch: debouncedTerm});
+    }, [debouncedTerm, refetch]);
+
     const [activeLogLevels, setActiveLogLevels] = React.useState<Record<LogLevel, boolean>>(
         Object.values(LogLevel).reduce((obj, lvl) => ({
             ...obj, [lvl]: true
@@ -65,16 +87,13 @@ const ConsolePanel: React.FC<Props> = ({fragmentKey}) => {
     };
 
     const getMostRecentLogIdx = useCallback((timestamp: number): number => {
-        const logs = data?.events?.edges;
+        const logs = data?.searchedEvents?.edges;
         if(!logs) {
             return -1;
         }
         const nextStepIdx = logs.findIndex(({node}) =>  new Date(node.at).getTime() > timestamp );
         return (nextStepIdx === -1 ? logs.length : nextStepIdx) - 1;
-    }, [data?.events?.edges]);
-
-    // const textFilteredLogs = logs?.filter(({ message }) =>
-    //     message?.toLowerCase().includes(filterTerm.toLowerCase()));
+    }, [data?.searchedEvents?.edges]);
 
     const logStats = React.useMemo(() => (
         {
@@ -92,20 +111,18 @@ const ConsolePanel: React.FC<Props> = ({fragmentKey}) => {
         ? getMostRecentLogIdx(hoverTimestamp)
         : null;
 
-    console.log(data);
-
     return (
         <section className={styles.consolePanel}>
             <LogFilters
-                logStats={logStats} //TODO: add consoleEvent filter to BE
-                filterTerm={filterTerm}
-                setFilterTerm={setFilterTerm}
+                logStats={logStats}
+                filterTerm={logSearch}
+                setFilterTerm={setLogSearch}
                 activeLogLevels={activeLogLevels}
                 toggleActiveLogLevel={toggleActiveLogLevel}
             />
 
             <ul className={styles.logsList}>
-                {(data?.events?.edges || [])?.map((log, idx) => {
+                {(data?.searchedEvents?.edges || [])?.map((log, idx) => {
                     // TODO: Timestamp is not unique, provide an id or a way to make it unique.
                     return (
                         <LogEntry

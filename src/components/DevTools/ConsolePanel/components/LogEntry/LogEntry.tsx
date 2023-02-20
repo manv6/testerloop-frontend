@@ -28,7 +28,14 @@ const LogEntry: React.FC<Props> = ({
     const messageRef = useRef<HTMLSpanElement>(null);
 
     const date = timestamp ? new Date(timestamp) : undefined;
-    const displayDate =  date? `${date.toLocaleTimeString()}.${date.getMilliseconds()}` : undefined;
+    const displayDate =  date
+        ? new Intl.DateTimeFormat(navigator.language, {
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            fractionalSecondDigits: 3,
+        }).format(date)
+        : undefined;
 
     useEffect(() => {
         if (!messageRef.current) return;
