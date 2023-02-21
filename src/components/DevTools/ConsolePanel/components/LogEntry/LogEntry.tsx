@@ -5,22 +5,22 @@ import styles from './LogEntry.module.scss';
 import LogEntryFragment from './LogEntryFragment';
 import { useFragment } from 'react-relay';
 
-import type {LogEntryFragment$key} from './__generated__/LogEntryFragment.graphql';
+import type { LogEntryFragment$key } from './__generated__/LogEntryFragment.graphql';
 
 interface Props {
     isLogSelected: boolean;
     isLogHovered: boolean;
-    logEntry: LogEntryFragment$key | null
+    logEntry: LogEntryFragment$key;
 }
 
 const LogEntry: React.FC<Props> = ({
     isLogSelected,
     isLogHovered,
-    logEntry
+    logEntry,
 }) => {
     const data = useFragment(LogEntryFragment, logEntry);
 
-    const level= data?.logLevel;
+    const level = data?.logLevel;
     const timestamp = data?.at;
     const message = data?.message;
     const [textOverflows, setTextOverflows] = useState<boolean>(false);
@@ -28,7 +28,7 @@ const LogEntry: React.FC<Props> = ({
     const messageRef = useRef<HTMLSpanElement>(null);
 
     const date = timestamp ? new Date(timestamp) : undefined;
-    const displayDate =  date
+    const displayDate = date
         ? new Intl.DateTimeFormat(navigator.language, {
             hour: 'numeric',
             minute: 'numeric',
@@ -44,33 +44,33 @@ const LogEntry: React.FC<Props> = ({
     }, [messageRef, textOverflows]);
 
     return (
-        <li key={timestamp + (message || '')}
+        <li
+            key={timestamp + (message || '')}
             className={cx(
                 styles.logEntry,
                 {
                     [styles.warningLevel]: level === 'WARN',
-                    [styles.errorLevel]: level === 'ERROR'
+                    [styles.errorLevel]: level === 'ERROR',
                 },
                 {
                     [styles.selected]: isLogSelected,
-                    [styles.hovered]: isLogHovered
+                    [styles.hovered]: isLogHovered,
                 }
             )}
         >
             <span className={styles.displayDate}>{displayDate}</span>
             <span
                 ref={messageRef}
-                className={cx(
-                    styles.message,
-                    { [styles.expanded]: isExpanded}
-                )}
+                className={cx(styles.message, {
+                    [styles.expanded]: isExpanded,
+                })}
             >
                 {textOverflows && (
                     <button
                         onClick={() => setIsExpanded(!isExpanded)}
                         className={styles.expandButton}
                     >
-                        {isExpanded ? <CaretDownFill/> : <CaretRightFill/>}
+                        {isExpanded ? <CaretDownFill /> : <CaretRightFill />}
                     </button>
                 )}
                 {message}

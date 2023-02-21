@@ -6,7 +6,7 @@ import styles from './ConsolePanel.module.scss';
 import graphql from 'babel-plugin-relay/macro';
 import { useDebounce } from 'use-debounce';
 
-import type {ConsolePanelFragment$key} from './__generated__/ConsolePanelFragment.graphql';
+import type { ConsolePanelFragment$key } from './__generated__/ConsolePanelFragment.graphql';
 
 export enum LogLevel {
     LOG = 'LOG',
@@ -15,93 +15,87 @@ export enum LogLevel {
 }
 
 type Props = {
-    fragmentKey: ConsolePanelFragment$key | null
-}
+    fragmentKey: ConsolePanelFragment$key | null;
+};
 
-const ConsolePanel: React.FC<Props> = ({fragmentKey}) => {
+const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
     const [data, refetch] = useRefetchableFragment(
         graphql`
             fragment ConsolePanelFragment on TestExecution
             @argumentDefinitions(
-                logSearch: {type: "String", defaultValue: ""}
+                logSearch: { type: "String", defaultValue: null }
+                logLevels: { type: "[ConsoleLogLevel!]", defaultValue: null}
             )
-            @refetchable(queryName: "ConsolePanelFragmentRefetchQuery")
-            {
+            @refetchable(queryName: "ConsolePanelFragmentRefetchQuery") {
                 id
-                searchedEvents: events(filter: {type: CONSOLE, consoleFilter: {
-                    logSearch: $logSearch}
-                    }) 
-                {
+                searchedEvents: events(
+                    filter: {
+                        type: CONSOLE
+                        consoleFilter: { logSearch: $logSearch, logLevel: $logLevels }
+                    }
+                ) {
                     edges {
-                            __typename
-                            node {
-                                ... on ConsoleLogEvent {
+                        __typename
+                        node {
+                            ... on ConsoleLogEvent {
                                 at
-                                ... LogEntryFragment
+                                ...LogEntryFragment
                             }
                         }
                     }
                 }
-                warnings: events(filter: {type: CONSOLE, consoleFilter: {
-                    logSearch: $logSearch, logLevel: WARN} 
-                    }) {
-                    totalCount
-                    }
-                errors: events(filter: {type: CONSOLE, consoleFilter: {
-                    logSearch: $logSearch, logLevel: ERROR }
-                    }) {
-                    totalCount
-                }
-                logs: events(filter: {type: CONSOLE, consoleFilter: {
-                    logSearch: $logSearch, logLevel: LOG}
-                    }) {
-                    totalCount
-                }
+                ...LogFiltersFragment
             }
-            `,
-        fragmentKey,
+        `,
+        fragmentKey
     );
 
-
-    const {
-        currentTime,
-        hoverTime,
-    } = useTimeline();
+    const { currentTime, hoverTime } = useTimeline();
 
     const [logSearch, setLogSearch] = React.useState<string>('');
     const debouncedResult = useDebounce(logSearch, 200);
     const debouncedTerm = debouncedResult[0];
 
     useEffect(() => {
-        refetch({logSearch: debouncedTerm});
+        refetch({ logSearch: debouncedTerm });
     }, [debouncedTerm, refetch]);
 
-    const [activeLogLevels, setActiveLogLevels] = React.useState<Record<LogLevel, boolean>>(
-        Object.values(LogLevel).reduce((obj, lvl) => ({
-            ...obj, [lvl]: true
-        }), {} as Record<LogLevel, boolean>)
+    const [activeLogLevels, setActiveLogLevels] = React.useState<
+        Record<LogLevel, boolean>
+    >(
+        Object.values(LogLevel).reduce(
+            (obj, lvl) => ({
+                ...obj,
+                [lvl]: true,
+            }),
+            {} as Record<LogLevel, boolean>
+        )
     );
 
     const toggleActiveLogLevel = (level: LogLevel) => {
-        setActiveLogLevels({...activeLogLevels, [level]: !activeLogLevels[level]});
+        const newActiveLogs = {
+            ...activeLogLevels,
+            [level]: !activeLogLevels[level],
+        };
+        setActiveLogLevels(newActiveLogs);
+        const logLevels = Object.keys(newActiveLogs).filter(
+            (key: string) => newActiveLogs[key as LogLevel]);
+        refetch({ logSearch: debouncedTerm, logLevels });
     };
 
-    const getMostRecentLogIdx = useCallback((timestamp: number): number => {
-        const logs = data?.searchedEvents?.edges;
-        if(!logs) {
-            return -1;
-        }
-        const nextStepIdx = logs.findIndex(({node}) =>  new Date(node.at).getTime() > timestamp );
-        return (nextStepIdx === -1 ? logs.length : nextStepIdx) - 1;
-    }, [data?.searchedEvents?.edges]);
-
-    const logStats = React.useMemo(() => (
-        {
-            LOG: data?.logs.totalCount || 0,
-            WARN: data?.warnings.totalCount || 0,
-            ERROR: data?.errors.totalCount || 0
-        }
-    ), [data?.errors.totalCount, data?.logs.totalCount, data?.warnings.totalCount]);
+    const getMostRecentLogIdx = useCallback(
+        (timestamp: number): number => {
+            const logs = data?.searchedEvents?.edges;
+            if (!logs) {
+                return -1;
+            }
+            const nextStepIdx = logs.findIndex(
+                ({ node }) => new Date(node.at).getTime() > timestamp
+            );
+            return (nextStepIdx === -1 ? logs.length : nextStepIdx) - 1;
+        },
+        [data?.searchedEvents?.edges]
+    );
 
     const currentTimestamp = currentTime.getTime();
     const currentLogIdx = getMostRecentLogIdx(currentTimestamp);
@@ -114,11 +108,12 @@ const ConsolePanel: React.FC<Props> = ({fragmentKey}) => {
     return (
         <section className={styles.consolePanel}>
             <LogFilters
-                logStats={logStats}
+                logFilters={data}
                 filterTerm={logSearch}
                 setFilterTerm={setLogSearch}
                 activeLogLevels={activeLogLevels}
                 toggleActiveLogLevel={toggleActiveLogLevel}
+                debouncedTerm={debouncedTerm}
             />
 
             <ul className={styles.logsList}>

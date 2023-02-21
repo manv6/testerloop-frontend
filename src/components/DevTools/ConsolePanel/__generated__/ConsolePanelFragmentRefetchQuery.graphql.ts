@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5956589ba222aab845a07ff2db97bc35>>
+ * @generated SignedSource<<a72c5fedb56a03eb0aa73b8e335704c1>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,8 +10,10 @@
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
+export type ConsoleLogLevel = "ERROR" | "INFO" | "LOG" | "WARN" | "%future added value";
 export type ConsolePanelFragmentRefetchQuery$variables = {
   id: string;
+  logLevels?: ReadonlyArray<ConsoleLogLevel> | null;
   logSearch?: string | null;
 };
 export type ConsolePanelFragmentRefetchQuery$data = {
@@ -31,25 +33,27 @@ var v0 = {
   "name": "id"
 },
 v1 = {
-  "defaultValue": "",
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "logLevels"
+},
+v2 = {
+  "defaultValue": null,
   "kind": "LocalArgument",
   "name": "logSearch"
 },
-v2 = [
+v3 = [
   {
     "kind": "Variable",
     "name": "id",
     "variableName": "id"
   }
 ],
-v3 = {
+v4 = {
   "kind": "Variable",
   "name": "logSearch",
   "variableName": "logSearch"
 },
-v4 = [
-  (v3/*: any*/)
-],
 v5 = {
   "alias": null,
   "args": null,
@@ -62,7 +66,12 @@ v6 = {
   "name": "type",
   "value": "CONSOLE"
 },
-v7 = [
+v7 = {
+  "kind": "Literal",
+  "name": "logSearch",
+  "value": null
+},
+v8 = [
   {
     "alias": null,
     "args": null,
@@ -75,7 +84,8 @@ return {
   "fragment": {
     "argumentDefinitions": [
       (v0/*: any*/),
-      (v1/*: any*/)
+      (v1/*: any*/),
+      (v2/*: any*/)
     ],
     "kind": "Fragment",
     "metadata": null,
@@ -83,14 +93,21 @@ return {
     "selections": [
       {
         "alias": null,
-        "args": (v2/*: any*/),
+        "args": (v3/*: any*/),
         "concreteType": null,
         "kind": "LinkedField",
         "name": "node",
         "plural": false,
         "selections": [
           {
-            "args": (v4/*: any*/),
+            "args": [
+              {
+                "kind": "Variable",
+                "name": "logLevels",
+                "variableName": "logLevels"
+              },
+              (v4/*: any*/)
+            ],
             "kind": "FragmentSpread",
             "name": "ConsolePanelFragment"
           }
@@ -105,6 +122,7 @@ return {
   "operation": {
     "argumentDefinitions": [
       (v1/*: any*/),
+      (v2/*: any*/),
       (v0/*: any*/)
     ],
     "kind": "Operation",
@@ -112,7 +130,7 @@ return {
     "selections": [
       {
         "alias": null,
-        "args": (v2/*: any*/),
+        "args": (v3/*: any*/),
         "concreteType": null,
         "kind": "LinkedField",
         "name": "node",
@@ -135,7 +153,14 @@ return {
                   {
                     "fields": [
                       {
-                        "fields": (v4/*: any*/),
+                        "fields": [
+                          {
+                            "kind": "Variable",
+                            "name": "logLevel",
+                            "variableName": "logLevels"
+                          },
+                          (v4/*: any*/)
+                        ],
                         "kind": "ObjectValue",
                         "name": "consoleFilter"
                       },
@@ -217,7 +242,7 @@ return {
                             "name": "logLevel",
                             "value": "WARN"
                           },
-                          (v3/*: any*/)
+                          (v7/*: any*/)
                         ],
                         "kind": "ObjectValue",
                         "name": "consoleFilter"
@@ -232,8 +257,8 @@ return {
                 "kind": "LinkedField",
                 "name": "events",
                 "plural": false,
-                "selections": (v7/*: any*/),
-                "storageKey": null
+                "selections": (v8/*: any*/),
+                "storageKey": "events(filter:{\"consoleFilter\":{\"logLevel\":\"WARN\",\"logSearch\":null},\"type\":\"CONSOLE\"})"
               },
               {
                 "alias": "errors",
@@ -247,7 +272,7 @@ return {
                             "name": "logLevel",
                             "value": "ERROR"
                           },
-                          (v3/*: any*/)
+                          (v7/*: any*/)
                         ],
                         "kind": "ObjectValue",
                         "name": "consoleFilter"
@@ -262,8 +287,8 @@ return {
                 "kind": "LinkedField",
                 "name": "events",
                 "plural": false,
-                "selections": (v7/*: any*/),
-                "storageKey": null
+                "selections": (v8/*: any*/),
+                "storageKey": "events(filter:{\"consoleFilter\":{\"logLevel\":\"ERROR\",\"logSearch\":null},\"type\":\"CONSOLE\"})"
               },
               {
                 "alias": "logs",
@@ -277,7 +302,7 @@ return {
                             "name": "logLevel",
                             "value": "LOG"
                           },
-                          (v3/*: any*/)
+                          (v7/*: any*/)
                         ],
                         "kind": "ObjectValue",
                         "name": "consoleFilter"
@@ -292,8 +317,8 @@ return {
                 "kind": "LinkedField",
                 "name": "events",
                 "plural": false,
-                "selections": (v7/*: any*/),
-                "storageKey": null
+                "selections": (v8/*: any*/),
+                "storageKey": "events(filter:{\"consoleFilter\":{\"logLevel\":\"LOG\",\"logSearch\":null},\"type\":\"CONSOLE\"})"
               }
             ],
             "type": "TestExecution",
@@ -305,16 +330,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "d3308a0eaf21cf4fc78cc0fdafdc3ea6",
+    "cacheID": "9f69d5b08ce898904584722fb53c60b4",
     "id": null,
     "metadata": {},
     "name": "ConsolePanelFragmentRefetchQuery",
     "operationKind": "query",
-    "text": "query ConsolePanelFragmentRefetchQuery(\n  $logSearch: String = \"\"\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...ConsolePanelFragment_1imbBq\n    id\n  }\n}\n\nfragment ConsolePanelFragment_1imbBq on TestExecution {\n  id\n  searchedEvents: events(filter: {type: CONSOLE, consoleFilter: {logSearch: $logSearch}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on ConsoleLogEvent {\n          at\n          ...LogEntryFragment\n        }\n      }\n    }\n  }\n  warnings: events(filter: {type: CONSOLE, consoleFilter: {logSearch: $logSearch, logLevel: WARN}}) {\n    totalCount\n  }\n  errors: events(filter: {type: CONSOLE, consoleFilter: {logSearch: $logSearch, logLevel: ERROR}}) {\n    totalCount\n  }\n  logs: events(filter: {type: CONSOLE, consoleFilter: {logSearch: $logSearch, logLevel: LOG}}) {\n    totalCount\n  }\n}\n\nfragment LogEntryFragment on ConsoleLogEvent {\n  at\n  message\n  logLevel\n}\n"
+    "text": "query ConsolePanelFragmentRefetchQuery(\n  $logLevels: [ConsoleLogLevel!] = null\n  $logSearch: String = null\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...ConsolePanelFragment_22FwjD\n    id\n  }\n}\n\nfragment ConsolePanelFragment_22FwjD on TestExecution {\n  id\n  searchedEvents: events(filter: {type: CONSOLE, consoleFilter: {logSearch: $logSearch, logLevel: $logLevels}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on ConsoleLogEvent {\n          at\n          ...LogEntryFragment\n        }\n      }\n    }\n  }\n  ...LogFiltersFragment\n}\n\nfragment LogEntryFragment on ConsoleLogEvent {\n  at\n  message\n  logLevel\n}\n\nfragment LogFiltersFragment on TestExecution {\n  warnings: events(filter: {type: CONSOLE, consoleFilter: {logLevel: WARN}}) {\n    totalCount\n  }\n  errors: events(filter: {type: CONSOLE, consoleFilter: {logLevel: ERROR}}) {\n    totalCount\n  }\n  logs: events(filter: {type: CONSOLE, consoleFilter: {logLevel: LOG}}) {\n    totalCount\n  }\n  id\n}\n"
   }
 };
 })();
 
-(node as any).hash = "3ec2a240c172060495b5e71c268c44c8";
+(node as any).hash = "97f30c7ef610bfd41850425f6c42f2df";
 
 export default node;

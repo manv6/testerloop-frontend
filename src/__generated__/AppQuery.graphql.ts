@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<960a56ff719ed43f5f78848253fdb10a>>
+ * @generated SignedSource<<71aaf2577be9f9666591ed9991087765>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -41,7 +41,7 @@ v1 = [
 v2 = {
   "kind": "Literal",
   "name": "logSearch",
-  "value": ""
+  "value": null
 },
 v3 = {
   "kind": "Literal",
@@ -160,6 +160,11 @@ return {
                 "fields": [
                   {
                     "fields": [
+                      {
+                        "kind": "Literal",
+                        "name": "logLevel",
+                        "value": null
+                      },
                       (v2/*: any*/)
                     ],
                     "kind": "ObjectValue",
@@ -211,7 +216,7 @@ return {
                 "storageKey": null
               }
             ],
-            "storageKey": "events(filter:{\"consoleFilter\":{\"logSearch\":\"\"},\"type\":\"CONSOLE\"})"
+            "storageKey": "events(filter:{\"consoleFilter\":{\"logLevel\":null,\"logSearch\":null},\"type\":\"CONSOLE\"})"
           },
           {
             "alias": "warnings",
@@ -241,7 +246,7 @@ return {
             "name": "events",
             "plural": false,
             "selections": (v8/*: any*/),
-            "storageKey": "events(filter:{\"consoleFilter\":{\"logLevel\":\"WARN\",\"logSearch\":\"\"},\"type\":\"CONSOLE\"})"
+            "storageKey": "events(filter:{\"consoleFilter\":{\"logLevel\":\"WARN\",\"logSearch\":null},\"type\":\"CONSOLE\"})"
           },
           {
             "alias": "errors",
@@ -271,7 +276,7 @@ return {
             "name": "events",
             "plural": false,
             "selections": (v8/*: any*/),
-            "storageKey": "events(filter:{\"consoleFilter\":{\"logLevel\":\"ERROR\",\"logSearch\":\"\"},\"type\":\"CONSOLE\"})"
+            "storageKey": "events(filter:{\"consoleFilter\":{\"logLevel\":\"ERROR\",\"logSearch\":null},\"type\":\"CONSOLE\"})"
           },
           {
             "alias": "logs",
@@ -301,7 +306,7 @@ return {
             "name": "events",
             "plural": false,
             "selections": (v8/*: any*/),
-            "storageKey": "events(filter:{\"consoleFilter\":{\"logLevel\":\"LOG\",\"logSearch\":\"\"},\"type\":\"CONSOLE\"})"
+            "storageKey": "events(filter:{\"consoleFilter\":{\"logLevel\":\"LOG\",\"logSearch\":null},\"type\":\"CONSOLE\"})"
           },
           {
             "alias": null,
@@ -383,12 +388,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "a861a06f440bbaf059b4be86e24b60b7",
+    "cacheID": "eec46ccdd661b9b480c9832c6ba35eb6",
     "id": null,
     "metadata": {},
     "name": "AppQuery",
     "operationKind": "query",
-    "text": "query AppQuery(\n  $testExecutionId: ID!\n) {\n  testExecution(id: $testExecutionId) {\n    ...ConsolePanelFragment\n    ...TimelineControlsFragment\n    ...NetworkPanelFragment\n    ...SummaryFragment\n    ...StepsFragment\n    id\n  }\n}\n\nfragment ConsolePanelFragment on TestExecution {\n  id\n  searchedEvents: events(filter: {type: CONSOLE, consoleFilter: {logSearch: \"\"}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on ConsoleLogEvent {\n          at\n          ...LogEntryFragment\n        }\n      }\n    }\n  }\n  warnings: events(filter: {type: CONSOLE, consoleFilter: {logSearch: \"\", logLevel: WARN}}) {\n    totalCount\n  }\n  errors: events(filter: {type: CONSOLE, consoleFilter: {logSearch: \"\", logLevel: ERROR}}) {\n    totalCount\n  }\n  logs: events(filter: {type: CONSOLE, consoleFilter: {logSearch: \"\", logLevel: LOG}}) {\n    totalCount\n  }\n}\n\nfragment LogEntryFragment on ConsoleLogEvent {\n  at\n  message\n  logLevel\n}\n\nfragment NetworkPanelFragment on TestExecution {\n  id\n}\n\nfragment StepsFragment on TestExecution {\n  id\n}\n\nfragment SummaryFragment on TestExecution {\n  id\n  events(filter: {type: CONSOLE}) {\n    edges {\n      __typename\n      node {\n        __typename\n        at\n        ... on ConsoleLogEvent {\n          at\n          message\n          logLevel\n        }\n      }\n    }\n  }\n  summaryConsoleErrors: events(filter: {type: CONSOLE, consoleFilter: {logLevel: ERROR}}) {\n    totalCount\n  }\n}\n\nfragment TimelineControlsFragment on TestExecution {\n  id\n}\n"
+    "text": "query AppQuery(\n  $testExecutionId: ID!\n) {\n  testExecution(id: $testExecutionId) {\n    ...ConsolePanelFragment\n    ...TimelineControlsFragment\n    ...NetworkPanelFragment\n    ...SummaryFragment\n    ...StepsFragment\n    id\n  }\n}\n\nfragment ConsolePanelFragment on TestExecution {\n  id\n  searchedEvents: events(filter: {type: CONSOLE, consoleFilter: {}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on ConsoleLogEvent {\n          at\n          ...LogEntryFragment\n        }\n      }\n    }\n  }\n  ...LogFiltersFragment\n}\n\nfragment LogEntryFragment on ConsoleLogEvent {\n  at\n  message\n  logLevel\n}\n\nfragment LogFiltersFragment on TestExecution {\n  warnings: events(filter: {type: CONSOLE, consoleFilter: {logLevel: WARN}}) {\n    totalCount\n  }\n  errors: events(filter: {type: CONSOLE, consoleFilter: {logLevel: ERROR}}) {\n    totalCount\n  }\n  logs: events(filter: {type: CONSOLE, consoleFilter: {logLevel: LOG}}) {\n    totalCount\n  }\n  id\n}\n\nfragment NetworkPanelFragment on TestExecution {\n  id\n}\n\nfragment StepsFragment on TestExecution {\n  id\n}\n\nfragment SummaryFragment on TestExecution {\n  id\n  events(filter: {type: CONSOLE}) {\n    edges {\n      __typename\n      node {\n        __typename\n        at\n        ... on ConsoleLogEvent {\n          at\n          message\n          logLevel\n        }\n      }\n    }\n  }\n  summaryConsoleErrors: events(filter: {type: CONSOLE, consoleFilter: {logLevel: ERROR}}) {\n    totalCount\n  }\n}\n\nfragment TimelineControlsFragment on TestExecution {\n  id\n}\n"
   }
 };
 })();
