@@ -69,7 +69,8 @@ const App: React.FC = () => {
                     </SuspensePanel>
                     <SuspensePanel>
                         <Expandable.Child className={styles.expandableConsole}>
-                            <ConsolePanel fragmentKey={queryData.testExecution}/>
+                            {/* eslint-disable @typescript-eslint/no-non-null-assertion */}
+                            <ConsolePanel fragmentKey={queryData.testExecution!}/>
                         </Expandable.Child>
                     </SuspensePanel>
                     <SuspensePanel>

@@ -16,7 +16,7 @@ export enum LogLevel {
 }
 
 type Props = {
-    fragmentKey: ConsolePanelFragment$key | null;
+    fragmentKey: ConsolePanelFragment$key;
 };
 
 const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
@@ -90,7 +90,11 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
             ?.searchedEvents
             .edges
             .map(({ node }) => node)
-            .filter(isOfType('ConsoleLogEvent')),
+            .filter(isOfType('ConsoleLogEvent'))
+            .map(({ at, ...event }) => ({
+                at: new Date(at),
+                ...event,
+            })),
         [data?.searchedEvents.edges]
     );
 
@@ -101,7 +105,7 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
                 return -1;
             }
             const nextStepIdx = logs.findIndex(
-                (node) => new Date(node.at).getTime() > timestamp
+                (node) => node.at.getTime() > timestamp
             );
             return (nextStepIdx === -1 ? logs.length : nextStepIdx) - 1;
         },
