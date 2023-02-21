@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import cx from 'classnames';
 import { ExclamationTriangleFill, ExclamationOctagonFill, TextLeft } from 'react-bootstrap-icons';
 import styles from './LogFilters.module.scss';
 import { LogLevel } from '../../ConsolePanel';
 import { TextInput } from 'src/components/common/TextInput';
 import LogFiltersFragment from './LogFiltersFragment';
-import { useRefetchableFragment } from 'react-relay';
+import { useFragment } from 'react-relay';
 import { LogFiltersFragment$key } from './__generated__/LogFiltersFragment.graphql';
 
 interface Props {
@@ -14,7 +14,6 @@ interface Props {
     setFilterTerm: (logSearch: string) => void;
     activeLogLevels: Record<LogLevel, boolean>;
     toggleActiveLogLevel: (level: LogLevel) => void;
-    debouncedTerm: string;
 }
 
 const LogFilters: React.FC<Props> = ({
@@ -22,30 +21,11 @@ const LogFilters: React.FC<Props> = ({
     filterTerm,
     setFilterTerm,
     activeLogLevels,
-    debouncedTerm,
     toggleActiveLogLevel
 }) => {
-    const [data, refetch] = useRefetchableFragment(
+    const data = useFragment(
         LogFiltersFragment,
         logFilters
-    );
-
-    useEffect(() => {
-        refetch({ logSearch: debouncedTerm });
-    }, [debouncedTerm, refetch]);
-
-
-    const logStats = React.useMemo(
-        () => ({
-            LOG: data?.logs.totalCount || 0,
-            WARN: data?.warnings.totalCount || 0,
-            ERROR: data?.errors.totalCount || 0,
-        }),
-        [
-            data?.errors.totalCount,
-            data?.logs.totalCount,
-            data?.warnings.totalCount,
-        ]
     );
 
     return (
@@ -56,7 +36,7 @@ const LogFilters: React.FC<Props> = ({
                     className={cx(styles.toggleLogLevelButton, { [styles.logLevelActive]: activeLogLevels.LOG })}
                 >
                     <TextLeft stroke="blue" strokeWidth={0.5} />
-                    <small className={styles.logLevelCount}>{logStats.LOG}</small>
+                    <small className={styles.logLevelCount}>{data?.logs.totalCount || 0}</small>
                 </button>
 
                 <button
@@ -64,7 +44,7 @@ const LogFilters: React.FC<Props> = ({
                     className={cx(styles.toggleLogLevelButton, { [styles.logLevelActive]: activeLogLevels.WARN })}
                 >
                     <ExclamationTriangleFill fill="yellow" stroke="black" strokeWidth={0.5} />
-                    <small className={styles.logLevelCount}>{logStats.WARN}</small>
+                    <small className={styles.logLevelCount}>{data?.warnings.totalCount || 0}</small>
                 </button>
 
                 <button
@@ -72,7 +52,7 @@ const LogFilters: React.FC<Props> = ({
                     className={cx(styles.toggleLogLevelButton, { [styles.logLevelActive]: activeLogLevels.ERROR })}
                 >
                     <ExclamationOctagonFill fill='red' stroke="black" strokeWidth={0.5} />
-                    <small className={styles.logLevelCount}>{logStats.ERROR}</small>
+                    <small className={styles.logLevelCount}>{data?.errors.totalCount || 0}</small>
                 </button>
             </div>
 

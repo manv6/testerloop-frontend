@@ -20,9 +20,9 @@ const LogEntry: React.FC<Props> = ({
 }) => {
     const data = useFragment(LogEntryFragment, logEntry);
 
-    const level = data?.logLevel;
-    const timestamp = data?.at;
-    const message = data?.message;
+    const level = data.logLevel;
+    const timestamp = data.at;
+    const message = data.message;
     const [textOverflows, setTextOverflows] = useState<boolean>(false);
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const messageRef = useRef<HTMLSpanElement>(null);

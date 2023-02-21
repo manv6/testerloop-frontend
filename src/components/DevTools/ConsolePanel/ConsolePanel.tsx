@@ -44,7 +44,7 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
                         }
                     }
                 }
-                ...LogFiltersFragment
+                ...LogFiltersFragment @arguments(logSearch: $logSearch)
             }
         `,
         fragmentKey
@@ -113,7 +113,6 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
                 setFilterTerm={setLogSearch}
                 activeLogLevels={activeLogLevels}
                 toggleActiveLogLevel={toggleActiveLogLevel}
-                debouncedTerm={debouncedTerm}
             />
 
             <ul className={styles.logsList}>

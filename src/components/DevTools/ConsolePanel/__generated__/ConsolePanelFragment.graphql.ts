@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e6f207e1abf980053422116900407c9a>>
+ * @generated SignedSource<<8f81fb7188b44cdc1d9f858393812260>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -29,7 +29,13 @@ export type ConsolePanelFragment$key = {
   readonly " $fragmentSpreads": FragmentRefs<"ConsolePanelFragment">;
 };
 
-const node: ReaderFragment = {
+const node: ReaderFragment = (function(){
+var v0 = {
+  "kind": "Variable",
+  "name": "logSearch",
+  "variableName": "logSearch"
+};
+return {
   "argumentDefinitions": [
     {
       "defaultValue": null,
@@ -74,11 +80,7 @@ const node: ReaderFragment = {
                   "name": "logLevel",
                   "variableName": "logLevels"
                 },
-                {
-                  "kind": "Variable",
-                  "name": "logSearch",
-                  "variableName": "logSearch"
-                }
+                (v0/*: any*/)
               ],
               "kind": "ObjectValue",
               "name": "consoleFilter"
@@ -150,7 +152,9 @@ const node: ReaderFragment = {
       "storageKey": null
     },
     {
-      "args": null,
+      "args": [
+        (v0/*: any*/)
+      ],
       "kind": "FragmentSpread",
       "name": "LogFiltersFragment"
     }
@@ -158,7 +162,8 @@ const node: ReaderFragment = {
   "type": "TestExecution",
   "abstractKey": null
 };
+})();
 
-(node as any).hash = "97f30c7ef610bfd41850425f6c42f2df";
+(node as any).hash = "7c612f74cb333272ed6e36b416a85f39";
 
 export default node;
