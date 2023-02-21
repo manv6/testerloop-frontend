@@ -1,6 +1,6 @@
 // TODO: Remove this check once temp data is removed!!
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useEffect } from 'react';
 import { useTimeline } from 'src/hooks/timeline';
 import { datesToElapsedTime, datesToFraction } from 'src/utils/date';
 import styles from './TimelineControls.module.scss';
@@ -98,6 +98,16 @@ export const TimelineControls: React.FC<Props> = () => {
     const onSpeedChange = useCallback((ev: React.ChangeEvent<HTMLSelectElement>) => {
         setSpeed(parseFloat(ev.target.value));
     }, [setSpeed]);
+
+    useEffect(() => {
+        // goto first cypress error
+        const firstErrorStartFraction = [...cypressErrorMarkers].sort(
+            (a, b) => a.startFraction - b.startFraction
+        )[0]?.startFraction;
+        if (firstErrorStartFraction) {
+            seekFraction(firstErrorStartFraction);
+        }
+    }, [cypressErrorMarkers, seekFraction]);
 
     return (
         <div
