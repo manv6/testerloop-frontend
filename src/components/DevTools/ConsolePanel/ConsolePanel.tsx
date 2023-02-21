@@ -87,7 +87,7 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
 
     const logs = useMemo(
         () => data
-            ?.searchedEvents
+            .searchedEvents
             .edges
             .map(({ node }) => node)
             .filter(isOfType('ConsoleLogEvent'))
@@ -95,7 +95,7 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
                 at: new Date(at),
                 ...event,
             })),
-        [data?.searchedEvents.edges]
+        [data.searchedEvents.edges]
     );
 
 
