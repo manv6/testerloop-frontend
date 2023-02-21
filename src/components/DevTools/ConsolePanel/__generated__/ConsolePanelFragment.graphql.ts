@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<8f81fb7188b44cdc1d9f858393812260>>
+ * @generated SignedSource<<869be4a88d804c6afaa4a0b28da60bbe>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,8 +16,13 @@ export type ConsolePanelFragment$data = {
     readonly edges: ReadonlyArray<{
       readonly __typename: "TestExecutionEventEdge";
       readonly node: {
-        readonly at?: any;
+        readonly __typename: "ConsoleLogEvent";
+        readonly at: any;
         readonly " $fragmentSpreads": FragmentRefs<"LogEntryFragment">;
+      } | {
+        // This will never be '%other', but we need some
+        // value in case none of the concrete values match.
+        readonly __typename: "%other";
       };
     }>;
   };
@@ -34,6 +39,13 @@ var v0 = {
   "kind": "Variable",
   "name": "logSearch",
   "variableName": "logSearch"
+},
+v1 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "__typename",
+  "storageKey": null
 };
 return {
   "argumentDefinitions": [
@@ -108,13 +120,7 @@ return {
           "name": "edges",
           "plural": true,
           "selections": [
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "__typename",
-              "storageKey": null
-            },
+            (v1/*: any*/),
             {
               "alias": null,
               "args": null,
@@ -123,6 +129,7 @@ return {
               "name": "node",
               "plural": false,
               "selections": [
+                (v1/*: any*/),
                 {
                   "kind": "InlineFragment",
                   "selections": [
@@ -164,6 +171,6 @@ return {
 };
 })();
 
-(node as any).hash = "7c612f74cb333272ed6e36b416a85f39";
+(node as any).hash = "80d49805182dc77101a9cfd21781a0e7";
 
 export default node;

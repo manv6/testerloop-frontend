@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useRefetchableFragment } from 'react-relay';
 import { useTimeline } from 'src/hooks/timeline';
 import { LogEntry, LogFilters } from './components';
@@ -7,6 +7,7 @@ import graphql from 'babel-plugin-relay/macro';
 import { useDebounce } from 'use-debounce';
 
 import type { ConsolePanelFragment$key } from './__generated__/ConsolePanelFragment.graphql';
+import { isOfType } from 'src/utils/isOfType';
 
 export enum LogLevel {
     LOG = 'LOG',
@@ -37,6 +38,7 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
                     edges {
                         __typename
                         node {
+                            __typename
                             ... on ConsoleLogEvent {
                                 at
                                 ...LogEntryFragment
@@ -83,18 +85,27 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
         refetch({ logSearch: debouncedTerm, logLevels });
     };
 
+    const logs = useMemo(
+        () => data
+            ?.searchedEvents
+            .edges
+            .map(({ node }) => node)
+            .filter(isOfType('ConsoleLogEvent')),
+        [data?.searchedEvents.edges]
+    );
+
+
     const getMostRecentLogIdx = useCallback(
         (timestamp: number): number => {
-            const logs = data?.searchedEvents?.edges;
             if (!logs) {
                 return -1;
             }
             const nextStepIdx = logs.findIndex(
-                ({ node }) => new Date(node.at).getTime() > timestamp
+                (node) => new Date(node.at).getTime() > timestamp
             );
             return (nextStepIdx === -1 ? logs.length : nextStepIdx) - 1;
         },
-        [data?.searchedEvents?.edges]
+        [logs]
     );
 
     const currentTimestamp = currentTime.getTime();
@@ -116,14 +127,14 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
             />
 
             <ul className={styles.logsList}>
-                {(data?.searchedEvents?.edges || [])?.map((log, idx) => {
+                {(logs || [])?.map((node, idx) => {
                     // TODO: Timestamp is not unique, provide an id or a way to make it unique.
                     return (
                         <LogEntry
                             key={idx}
                             isLogSelected={currentLogIdx === idx}
                             isLogHovered={hoveredLogIdx === idx}
-                            logEntry={log.node}
+                            logEntry={node}
                         />
                     );
                 })}
