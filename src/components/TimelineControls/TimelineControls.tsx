@@ -101,9 +101,7 @@ export const TimelineControls: React.FC<Props> = () => {
 
     useEffect(() => {
         // goto first cypress error
-        const firstErrorStartFraction = [...cypressErrorMarkers].sort(
-            (a, b) => a.startFraction - b.startFraction
-        )[0]?.startFraction;
+        const firstErrorStartFraction = cypressErrorMarkers[0]?.startFraction;
         if (firstErrorStartFraction) {
             seekFraction(firstErrorStartFraction);
         }
