@@ -1,11 +1,14 @@
 import graphql from 'babel-plugin-relay/macro';
 
 const AppQuery = graphql`
-    query AppQuery {
-        ...TimelineControlsFragment
-        ...NetworkPanelFragment
-        ...SummaryFragment
-        ...StepsFragment
+     query AppQuery($testExecutionId: ID!) {
+        testExecution(id: $testExecutionId) {
+            ...ConsolePanelFragment
+            ...TimelineControlsFragment
+            ...NetworkPanelFragment
+            ...SummaryFragment
+            ...StepsFragment
+        }
     }
 `;
 

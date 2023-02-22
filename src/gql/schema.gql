@@ -1,3 +1,123 @@
+interface ConsoleEvent implements Event & TestExecutionEvent {
+  at: DateTime!
+  testExecution: TestExecution!
+}
+
+input ConsoleEventFilterInput {
+  logLevel: [ConsoleLogLevel!]
+  logSearch: String
+}
+
+type ConsoleLogEvent implements ConsoleEvent & Event & InstantaneousEvent & TestExecutionEvent {
+  at: DateTime!
+  logLevel: ConsoleLogLevel!
+  message: String!
+  testExecution: TestExecution!
+}
+
+"""
+Represents the severity of the log, as according to the specification:
+
+See:
+- https://console.spec.whatwg.org/#loglevel-severity
+"""
+enum ConsoleLogLevel {
+  ERROR
+  INFO
+  LOG
+  WARN
+}
+
+scalar Cursor
+
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar DateTime
+
+interface Event {
+  at: DateTime!
+}
+
+interface InstantaneousEvent implements Event {
+  at: DateTime!
+}
+
+interface IntervalEvent implements Event {
+  at: DateTime!
+  until: DateTime!
+}
+
+"""
+Represents a Node according to the Global Object Identification spec.
+
+See https://graphql.org/learn/global-object-identification/
+"""
+interface Node {
+  id: ID!
+}
+
+"""
+The PageInfo type as specified in The Relay Connection Spec.
+
+See:
+- https://graphql.org/learn/pagination/
+- https://relay.dev/graphql/connections.htm#sec-undefined.PageInfo
+"""
+type PageInfo {
+  endCursor: Cursor
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: Cursor
+}
+
 type Query {
+  node(id: ID!): Node
   test: Boolean!
+  testExecution(id: ID!): TestExecution
+}
+
+type TestExecution implements Event & IntervalEvent & Node {
+  at: DateTime!
+  events(after: Cursor, filter: TestExecutionEventFilterInput, first: Int): TestExecutionEventConnection!
+  id: ID!
+  until: DateTime!
+}
+
+interface TestExecutionEvent implements Event {
+  at: DateTime!
+  testExecution: TestExecution!
+}
+
+"""
+Represents the connection to TestExecutionEvents
+
+See:
+- https://relay.dev/graphql/connections.htm#sec-Connection-Types
+"""
+type TestExecutionEventConnection {
+  edges: [TestExecutionEventEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+"""
+Represents and Edge to the TestExecution Node.
+
+See:
+- https://relay.dev/graphql/connections.htm#sec-Edge-Types
+"""
+type TestExecutionEventEdge {
+  cursor: Cursor!
+  node: TestExecutionEvent!
+}
+
+input TestExecutionEventFilterInput {
+  consoleFilter: ConsoleEventFilterInput
+  type: [TestExecutionEventType!]
+}
+
+enum TestExecutionEventType {
+  CONSOLE
+  NETWORK
 }
