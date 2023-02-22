@@ -8,6 +8,7 @@ import { useDebounce } from 'use-debounce';
 
 import type { ConsolePanelFragment$key } from './__generated__/ConsolePanelFragment.graphql';
 import { isOfType } from 'src/utils/isOfType';
+import { fillObjFromType } from 'src/utils/fillObjFromType';
 
 export enum LogLevel {
     LOG = 'LOG',
@@ -65,13 +66,7 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
     const [activeLogLevels, setActiveLogLevels] = React.useState<
         Record<LogLevel, boolean>
     >(
-        Object.values(LogLevel).reduce(
-            (obj, lvl) => ({
-                ...obj,
-                [lvl]: true,
-            }),
-            {} as Record<LogLevel, boolean>
-        )
+        fillObjFromType(LogLevel, true)
     );
 
     const toggleActiveLogLevel = (level: LogLevel) => {
@@ -101,9 +96,6 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
 
     const getMostRecentLogIdx = useCallback(
         (timestamp: number): number => {
-            if (!logs) {
-                return -1;
-            }
             const nextStepIdx = logs.findIndex(
                 (node) => node.at.getTime() > timestamp
             );
