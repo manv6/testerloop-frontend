@@ -5,21 +5,20 @@ import { Step } from '../../Steps';
 import styles from './ActionRecord.module.scss';
 
 interface Props {
-	action: Step;
-	isActionSelected: boolean;
-	isActionHovered: boolean;
+    action: Step;
+    isActionSelected: boolean;
+    isActionHovered: boolean;
 }
 
 const ActionRecord: React.FC<Props> = ({
     action: { options },
     isActionSelected,
-    isActionHovered
+    isActionHovered,
 }) => {
     const { seek } = useTimeline();
 
     const navigateInTimeline = () => {
-        if (options.wallClockStartedAt)
-            seek(options.wallClockStartedAt);
+        if (options.wallClockStartedAt) seek(options.wallClockStartedAt);
     };
 
     return (
@@ -31,13 +30,11 @@ const ActionRecord: React.FC<Props> = ({
                 options.state === 'failed' ? styles.error : styles.success,
                 {
                     [styles.selected]: isActionSelected,
-                    [styles.hovered]: isActionHovered
+                    [styles.hovered]: isActionHovered,
                 }
             )}
         >
-            <span className={styles.expandedActionName}>
-                {options.name}
-            </span>
+            <span className={styles.expandedActionName}>{options.name}</span>
             <span className={styles.expandedActionMessage}>
                 {options.message}
             </span>

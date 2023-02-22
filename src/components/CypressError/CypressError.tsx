@@ -16,23 +16,34 @@ const CypressError: React.FC = () => {
     const line = error?.codeFrame.line;
     const column = error?.codeFrame.column;
 
-    const url = [githubUrl,repository, 'blob', ref, relativePath, `?#L${line}`].join('/');
+    const url = [
+        githubUrl,
+        repository,
+        'blob',
+        ref,
+        relativePath,
+        `?#L${line}`,
+    ].join('/');
 
     const hrefText = [relativePath, line, column].join(':');
 
-    return (<div className={styles.cypressError}>
-        {error
-            ? (<div>
-                <div className={styles.title}>
-                    <span>!</span> {error.name}
+    return (
+        <div className={styles.cypressError}>
+            {error ? (
+                <div>
+                    <div className={styles.title}>
+                        <span>!</span> {error.name}
+                    </div>
+                    <div className={styles.errorMessage}>{error.message}</div>
+                    <a href={url} target="_blank" rel="noreferrer">
+                        {hrefText}
+                    </a>
                 </div>
-                <div className={styles.errorMessage}>{error.message}</div>
-                <a href={url} target="_blank" rel="noreferrer" >{hrefText}</a>
-            </div>)
-            : <div>No errors</div>
-        }
-    </div>);
-
+            ) : (
+                <div>No errors</div>
+            )}
+        </div>
+    );
 };
 
 export default CypressError;

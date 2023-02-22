@@ -66,11 +66,17 @@ type ResponseDataTabProps = {
 
 const ResponseDataTab: React.FC<ResponseDataTabProps> = ({ selectedEvent }) => {
     const snippet = useMemo(() => {
-        const responseDataExcludedMimeTypes = ['application/font-woff2', 'application/octet-stream'];
+        const responseDataExcludedMimeTypes = [
+            'application/font-woff2',
+            'application/octet-stream',
+        ];
         const mimeType = selectedEvent.response?.content?.mimeType;
         const responsePayload = selectedEvent.response?.content?.text;
 
-        if (!responsePayload || responseDataExcludedMimeTypes.includes(mimeType)) {
+        if (
+            !responsePayload ||
+            responseDataExcludedMimeTypes.includes(mimeType)
+        ) {
             return null;
         }
 
@@ -118,8 +124,8 @@ const HeadersTab: React.FC<HeadersTabProps> = ({ selectedEvent }) => {
                 <span className={styles.boldText}>Request to:</span>{' '}
                 {selectedEvent.request.url}
             </div>
-            {selectedEvent.request.queryString.length
-                ? (<>
+            {selectedEvent.request.queryString.length ? (
+                <>
                     <div key="queryParamsLabel">
                         <span className={styles.boldText}>Query Params:</span>
                     </div>
@@ -129,9 +135,8 @@ const HeadersTab: React.FC<HeadersTabProps> = ({ selectedEvent }) => {
                         nameLabel="Header Name"
                         valueLabel="Header Value"
                     />
-                </>)
-                : null
-            }
+                </>
+            ) : null}
             <div>
                 <div key="requestHeaderLabel">
                     <span className={styles.boldText}>Request Headers:</span>
@@ -169,7 +174,7 @@ const NetworkEventDetailPanel: React.FC<NetworkEventDetailPanelProps> = ({
     selectedEvent,
     activeTabKey,
     onSelectTab,
-    onDetailPanelClose
+    onDetailPanelClose,
 }) => {
     const tabChildren = [
         {
@@ -187,7 +192,10 @@ const NetworkEventDetailPanel: React.FC<NetworkEventDetailPanelProps> = ({
             title: 'Response',
             children: <ResponseDataTab selectedEvent={selectedEvent} />,
         },
-    ].filter((tabChild) => tabChild?.tabKey!=='postData' || selectedEvent.request?.postData) ;
+    ].filter(
+        (tabChild) =>
+            tabChild?.tabKey !== 'postData' || selectedEvent.request?.postData
+    );
 
     return (
         <div key="details" className={styles.networkDetailPanel}>

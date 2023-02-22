@@ -1,6 +1,10 @@
 import React from 'react';
 import cx from 'classnames';
-import { ExclamationTriangleFill, ExclamationOctagonFill, TextLeft } from 'react-bootstrap-icons';
+import {
+    ExclamationTriangleFill,
+    ExclamationOctagonFill,
+    TextLeft,
+} from 'react-bootstrap-icons';
 import styles from './LogFilters.module.scss';
 import { LogLevel } from '../../ConsolePanel';
 import { TextInput } from 'src/components/common/TextInput';
@@ -21,38 +25,55 @@ const LogFilters: React.FC<Props> = ({
     filterTerm,
     setFilterTerm,
     activeLogLevels,
-    toggleActiveLogLevel
+    toggleActiveLogLevel,
 }) => {
-    const data = useFragment(
-        LogFiltersFragment,
-        logFilters
-    );
+    const data = useFragment(LogFiltersFragment, logFilters);
 
     return (
         <aside className={styles.logsFilters}>
             <div className={styles.toggleButtons}>
                 <button
                     onClick={() => toggleActiveLogLevel(LogLevel.LOG)}
-                    className={cx(styles.toggleLogLevelButton, { [styles.logLevelActive]: activeLogLevels.LOG })}
+                    className={cx(styles.toggleLogLevelButton, {
+                        [styles.logLevelActive]: activeLogLevels.LOG,
+                    })}
                 >
                     <TextLeft stroke="blue" strokeWidth={0.5} />
-                    <small className={styles.logLevelCount}>{data?.logs.totalCount || 0}</small>
+                    <small className={styles.logLevelCount}>
+                        {data?.logs.totalCount || 0}
+                    </small>
                 </button>
 
                 <button
                     onClick={() => toggleActiveLogLevel(LogLevel.WARN)}
-                    className={cx(styles.toggleLogLevelButton, { [styles.logLevelActive]: activeLogLevels.WARN })}
+                    className={cx(styles.toggleLogLevelButton, {
+                        [styles.logLevelActive]: activeLogLevels.WARN,
+                    })}
                 >
-                    <ExclamationTriangleFill fill="yellow" stroke="black" strokeWidth={0.5} />
-                    <small className={styles.logLevelCount}>{data?.warnings.totalCount || 0}</small>
+                    <ExclamationTriangleFill
+                        fill="yellow"
+                        stroke="black"
+                        strokeWidth={0.5}
+                    />
+                    <small className={styles.logLevelCount}>
+                        {data?.warnings.totalCount || 0}
+                    </small>
                 </button>
 
                 <button
                     onClick={() => toggleActiveLogLevel(LogLevel.ERROR)}
-                    className={cx(styles.toggleLogLevelButton, { [styles.logLevelActive]: activeLogLevels.ERROR })}
+                    className={cx(styles.toggleLogLevelButton, {
+                        [styles.logLevelActive]: activeLogLevels.ERROR,
+                    })}
                 >
-                    <ExclamationOctagonFill fill='red' stroke="black" strokeWidth={0.5} />
-                    <small className={styles.logLevelCount}>{data?.errors.totalCount || 0}</small>
+                    <ExclamationOctagonFill
+                        fill="red"
+                        stroke="black"
+                        strokeWidth={0.5}
+                    />
+                    <small className={styles.logLevelCount}>
+                        {data?.errors.totalCount || 0}
+                    </small>
                 </button>
             </div>
 
@@ -65,6 +86,7 @@ const LogFilters: React.FC<Props> = ({
                 }}
             />
         </aside>
-    );};
+    );
+};
 
 export default LogFilters;

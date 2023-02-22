@@ -11,21 +11,19 @@ const Child: React.FC<Props> = ({ className, notExpandable, children }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     return (
-        <div className={cx(className, styles.child, {
-            [styles.expanded]: isExpanded
-        })}>
-            {
-                notExpandable
-                    ? null
-                    : (
-                        <button
-                            className={styles.expand}
-                            onClick={() => setIsExpanded(!isExpanded)}
-                        >
-                            { isExpanded ? 'Collapse' : 'Expand' }
-                        </button>
-                    )
-            }
+        <div
+            className={cx(className, styles.child, {
+                [styles.expanded]: isExpanded,
+            })}
+        >
+            {notExpandable ? null : (
+                <button
+                    className={styles.expand}
+                    onClick={() => setIsExpanded(!isExpanded)}
+                >
+                    {isExpanded ? 'Collapse' : 'Expand'}
+                </button>
+            )}
             {children}
         </div>
     );

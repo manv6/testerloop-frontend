@@ -30,11 +30,11 @@ const LogEntry: React.FC<Props> = ({
     const date = timestamp ? new Date(timestamp) : undefined;
     const displayDate = date
         ? new Intl.DateTimeFormat(navigator.language, {
-            hour: 'numeric',
-            minute: 'numeric',
-            second: 'numeric',
-            fractionalSecondDigits: 3,
-        }).format(date)
+              hour: 'numeric',
+              minute: 'numeric',
+              second: 'numeric',
+              fractionalSecondDigits: 3,
+          }).format(date)
         : undefined;
 
     useEffect(() => {

@@ -7,11 +7,11 @@ import ChevronIcon from './ChevronIcon';
 import styles from './StepRecord.module.scss';
 
 interface Props {
-	step: Step;
-	actions: Step[];
+    step: Step;
+    actions: Step[];
 
-	isStepSelected: boolean;
-	isStepHovered: boolean;
+    isStepSelected: boolean;
+    isStepHovered: boolean;
 
     selectedActionIdx: number | null;
     hoveredActionIdx: number | null;
@@ -23,13 +23,15 @@ const StepRecord: React.FC<Props> = ({
     isStepSelected,
     isStepHovered,
     selectedActionIdx,
-    hoveredActionIdx
+    hoveredActionIdx,
 }) => {
     const { options } = step;
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const { seek } = useTimeline();
 
-    const hasFailedActions = actions.some((action) => action.options.state === 'failed');
+    const hasFailedActions = actions.some(
+        (action) => action.options.state === 'failed'
+    );
     const hasFailed = options.state === 'failed' || hasFailedActions;
 
     return (
@@ -44,22 +46,19 @@ const StepRecord: React.FC<Props> = ({
                         seek(step.options.wallClockStartedAt);
                     }
                 }}
-                className={cx(
-                    styles.stepHeader,
-                    {
-                        [styles.selected]: isStepSelected,
-                        [styles.hovered]: isStepHovered
-                    }
-                )}
+                className={cx(styles.stepHeader, {
+                    [styles.selected]: isStepSelected,
+                    [styles.hovered]: isStepHovered,
+                })}
             >
-                <td className={styles.stepName}>
-                    {options.name}
-                </td>
+                <td className={styles.stepName}>{options.name}</td>
 
-                <td className={cx(
-                    styles.stepContent,
-                    hasFailed ? styles.error : styles.success
-                )}>
+                <td
+                    className={cx(
+                        styles.stepContent,
+                        hasFailed ? styles.error : styles.success
+                    )}
+                >
                     {/* TODO: No need to slice, just for now to dismiss `**` in all steps */}
                     {options.message.replaceAll('*', '')}
                 </td>

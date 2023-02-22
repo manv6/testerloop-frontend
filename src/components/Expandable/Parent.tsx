@@ -7,11 +7,7 @@ type Props = React.PropsWithChildren<{
 }>;
 
 const Parent: React.FC<Props> = ({ className, children }) => {
-    return (
-        <div className={cx(className, styles.parent)}>
-            {children}
-        </div>
-    );
+    return <div className={cx(className, styles.parent)}>{children}</div>;
 };
 
 export default Parent;

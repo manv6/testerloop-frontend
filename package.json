@@ -35,7 +35,9 @@
         "lint": "npm run lint:js && npm run lint:css",
         "lint:fix": "npm run lint:js -- --fix && npm run lint:css -- --fix",
         "gql:schema": "graphql-codegen --config ./gql.codegen.ts",
-        "gql:build": "npm run gql:schema && relay-compiler"
+        "gql:build": "npm run gql:schema && relay-compiler",
+        "prettier": "npx prettier src --check",
+        "prettier:fix": "npm run prettier -- --write"
     },
     "browserslist": {
         "production": [
@@ -56,9 +58,12 @@
         "@types/react-syntax-highlighter": "^15.5.6",
         "@types/relay-runtime": "^14.1.6",
         "eslint": "^8.33.0",
+        "eslint-config-prettier": "^8.6.0",
+        "eslint-plugin-prettier": "^4.2.1",
         "eslint-plugin-react": "^7.32.2",
         "graphql": "^16.6.0",
         "jsdom": "^21.1.0",
+        "prettier": "^2.8.4",
         "relay-compiler": "^14.1.0",
         "stylelint": "^14.16.1",
         "stylelint-config-standard-scss": "^6.1.0"

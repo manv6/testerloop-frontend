@@ -1,18 +1,18 @@
 interface ConsoleEvent implements Event & TestExecutionEvent {
-  at: DateTime!
-  testExecution: TestExecution!
+    at: DateTime!
+    testExecution: TestExecution!
 }
 
 input ConsoleEventFilterInput {
-  logLevel: [ConsoleLogLevel!]
-  logSearch: String
+    logLevel: [ConsoleLogLevel!]
+    logSearch: String
 }
 
 type ConsoleLogEvent implements ConsoleEvent & Event & InstantaneousEvent & TestExecutionEvent {
-  at: DateTime!
-  logLevel: ConsoleLogLevel!
-  message: String!
-  testExecution: TestExecution!
+    at: DateTime!
+    logLevel: ConsoleLogLevel!
+    message: String!
+    testExecution: TestExecution!
 }
 
 """
@@ -22,10 +22,10 @@ See:
 - https://console.spec.whatwg.org/#loglevel-severity
 """
 enum ConsoleLogLevel {
-  ERROR
-  INFO
-  LOG
-  WARN
+    ERROR
+    INFO
+    LOG
+    WARN
 }
 
 scalar Cursor
@@ -36,16 +36,16 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 scalar DateTime
 
 interface Event {
-  at: DateTime!
+    at: DateTime!
 }
 
 interface InstantaneousEvent implements Event {
-  at: DateTime!
+    at: DateTime!
 }
 
 interface IntervalEvent implements Event {
-  at: DateTime!
-  until: DateTime!
+    at: DateTime!
+    until: DateTime!
 }
 
 """
@@ -54,7 +54,7 @@ Represents a Node according to the Global Object Identification spec.
 See https://graphql.org/learn/global-object-identification/
 """
 interface Node {
-  id: ID!
+    id: ID!
 }
 
 """
@@ -65,28 +65,32 @@ See:
 - https://relay.dev/graphql/connections.htm#sec-undefined.PageInfo
 """
 type PageInfo {
-  endCursor: Cursor
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-  startCursor: Cursor
+    endCursor: Cursor
+    hasNextPage: Boolean!
+    hasPreviousPage: Boolean!
+    startCursor: Cursor
 }
 
 type Query {
-  node(id: ID!): Node
-  test: Boolean!
-  testExecution(id: ID!): TestExecution
+    node(id: ID!): Node
+    test: Boolean!
+    testExecution(id: ID!): TestExecution
 }
 
 type TestExecution implements Event & IntervalEvent & Node {
-  at: DateTime!
-  events(after: Cursor, filter: TestExecutionEventFilterInput, first: Int): TestExecutionEventConnection!
-  id: ID!
-  until: DateTime!
+    at: DateTime!
+    events(
+        after: Cursor
+        filter: TestExecutionEventFilterInput
+        first: Int
+    ): TestExecutionEventConnection!
+    id: ID!
+    until: DateTime!
 }
 
 interface TestExecutionEvent implements Event {
-  at: DateTime!
-  testExecution: TestExecution!
+    at: DateTime!
+    testExecution: TestExecution!
 }
 
 """
@@ -96,9 +100,9 @@ See:
 - https://relay.dev/graphql/connections.htm#sec-Connection-Types
 """
 type TestExecutionEventConnection {
-  edges: [TestExecutionEventEdge!]!
-  pageInfo: PageInfo!
-  totalCount: Int!
+    edges: [TestExecutionEventEdge!]!
+    pageInfo: PageInfo!
+    totalCount: Int!
 }
 
 """
@@ -108,16 +112,16 @@ See:
 - https://relay.dev/graphql/connections.htm#sec-Edge-Types
 """
 type TestExecutionEventEdge {
-  cursor: Cursor!
-  node: TestExecutionEvent!
+    cursor: Cursor!
+    node: TestExecutionEvent!
 }
 
 input TestExecutionEventFilterInput {
-  consoleFilter: ConsoleEventFilterInput
-  type: [TestExecutionEventType!]
+    consoleFilter: ConsoleEventFilterInput
+    type: [TestExecutionEventType!]
 }
 
 enum TestExecutionEventType {
-  CONSOLE
-  NETWORK
+    CONSOLE
+    NETWORK
 }

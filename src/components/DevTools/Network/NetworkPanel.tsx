@@ -10,7 +10,6 @@ import { TextInput } from 'src/components/common/TextInput';
 import * as formatter from 'src/utils/formatters';
 import networkEventData from 'src/data/networkEvents';
 
-
 enum ResourceTypeFilterType {
     HTML = 'html',
     XHR = 'xhr',
@@ -47,7 +46,6 @@ const filterByResourceTypePredicate = (
     );
 };
 
-
 enum ProgressFilterType {
     COMPLETED = 'completed',
     STARTED = 'started',
@@ -59,33 +57,34 @@ const filterByProgressPredicate = (
     selectedOptions: Set<ProgressFilterType>,
     currentTime: Date
 ) => {
-
     return Array.from(selectedOptions).some((filter) => {
         switch (filter) {
-        case ProgressFilterType.COMPLETED:
-            return event.endedDateTime <= currentTime;
-        case ProgressFilterType.STARTED:
-            return (
-                event.startedDateTime <= currentTime &&
-                currentTime < event.endedDateTime
-            );
-        case ProgressFilterType.NOT_STARTED:
-            return currentTime < event.startedDateTime;
-        default:
-            return false;
+            case ProgressFilterType.COMPLETED:
+                return event.endedDateTime <= currentTime;
+            case ProgressFilterType.STARTED:
+                return (
+                    event.startedDateTime <= currentTime &&
+                    currentTime < event.endedDateTime
+                );
+            case ProgressFilterType.NOT_STARTED:
+                return currentTime < event.startedDateTime;
+            default:
+                return false;
         }
     });
 };
 
 type Props = {
     // TODO: Update this with fragment key type
-    fragmentKey: any // eslint-disable-line
+    fragmentKey: any; // eslint-disable-line
 };
 
 export const NetworkPanel: React.FC<Props> = () => {
     const data = { networkEvents: networkEventData.log.entries } as any; // eslint-disable-line
-    const networkEvents = useMemo(() =>
-        formatter.formatNetworkEvents(data.networkEvents), [data.networkEvents]);
+    const networkEvents = useMemo(
+        () => formatter.formatNetworkEvents(data.networkEvents),
+        [data.networkEvents]
+    );
 
     const [selectedEventId, setSelectedEventId] = useState<null | string>(null);
     const [filterTerm, setFilterTerm] = useState<string>('');
@@ -103,24 +102,33 @@ export const NetworkPanel: React.FC<Props> = () => {
     );
 
     const filteredEvents = useMemo(
-        () => networkEvents
-            .filter((networkEvent) =>
-                (filterTerm
-                    ? networkEvent.request.url.includes(filterTerm)
-                    : true)
-            )
-            .filter((event) =>
-                filterByProgressPredicate(
-                    event,
-                    selectedProgressFilters,
-                    currentTime
+        () =>
+            networkEvents
+                .filter((networkEvent) =>
+                    filterTerm
+                        ? networkEvent.request.url.includes(filterTerm)
+                        : true
                 )
-            )
-            .filter((event) => filterByResourceTypePredicate(
-                event,
-                selectedResourceTypeFilters,
-            )),
-        [networkEvents, filterTerm, currentTime, selectedProgressFilters, selectedResourceTypeFilters]
+                .filter((event) =>
+                    filterByProgressPredicate(
+                        event,
+                        selectedProgressFilters,
+                        currentTime
+                    )
+                )
+                .filter((event) =>
+                    filterByResourceTypePredicate(
+                        event,
+                        selectedResourceTypeFilters
+                    )
+                ),
+        [
+            networkEvents,
+            filterTerm,
+            currentTime,
+            selectedProgressFilters,
+            selectedResourceTypeFilters,
+        ]
     );
 
     const onDetailPanelClose = useCallback(() => {
@@ -134,9 +142,12 @@ export const NetworkPanel: React.FC<Props> = () => {
         [setFilterTerm]
     );
 
-    const onSelectTab = useCallback((key: string | null) => {
-        setActiveTabKey(key);
-    }, [setActiveTabKey]);
+    const onSelectTab = useCallback(
+        (key: string | null) => {
+            setActiveTabKey(key);
+        },
+        [setActiveTabKey]
+    );
 
     const onChangeProgressFilter = useCallback(
         (ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -202,17 +213,24 @@ export const NetworkPanel: React.FC<Props> = () => {
                 <div>
                     <div className={styles.filterBlock}>
                         <div className={styles.inlineWrapper}>
-                            {Object.values(ProgressFilterType).map((value, idx) => (
-                                <div key={`${value}-${idx}`} className={styles.labelWrapper}>
-                                    <input
-                                        type="checkbox"
-                                        onChange={onChangeProgressFilter}
-                                        name={value}
-                                        checked={selectedProgressFilters.has(value)}
-                                    ></input>
-                                    <span>{value}</span>
-                                </div>
-                            ))}
+                            {Object.values(ProgressFilterType).map(
+                                (value, idx) => (
+                                    <div
+                                        key={`${value}-${idx}`}
+                                        className={styles.labelWrapper}
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            onChange={onChangeProgressFilter}
+                                            name={value}
+                                            checked={selectedProgressFilters.has(
+                                                value
+                                            )}
+                                        ></input>
+                                        <span>{value}</span>
+                                    </div>
+                                )
+                            )}
                         </div>
                     </div>
                     <div className={styles.filterBlock}>
@@ -220,8 +238,8 @@ export const NetworkPanel: React.FC<Props> = () => {
                             onClick={onChangeResourceTypeAllFilter}
                             className={cx({
                                 [styles.resourceTypeFilterActive]:
-                                    !selectedResourceTypeFilters.size}
-                            )}
+                                    !selectedResourceTypeFilters.size,
+                            })}
                         >
                             all
                         </button>
@@ -231,9 +249,11 @@ export const NetworkPanel: React.FC<Props> = () => {
                                 onClick={onChangeResourceTypeFilters(value)}
                                 className={cx({
                                     [styles.resourceTypeFilterActive]:
-                                        selectedResourceTypeFilters.has(value)}
-                                )}
-                            >{value}</button>
+                                        selectedResourceTypeFilters.has(value),
+                                })}
+                            >
+                                {value}
+                            </button>
                         ))}
                     </div>
                 </div>
