@@ -19,9 +19,7 @@ module.exports = {
         camelcase: ['error'],
         'eol-last': ['error', 'always'],
         'no-unneeded-ternary': ['error'],
-        'multiline-ternary': ['error', 'always-multiline'],
         'no-nested-ternary': ['error'],
-        'no-confusing-arrow': ['error'],
         'react/prop-types': ['off'],
         'react/jsx-wrap-multilines': [
             'error',
