@@ -1,4 +1,4 @@
-@use "/src/constants/layers.scss";
+@use '/src/constants/layers.scss';
 
 :root {
     --timeline-played-colour: #2c88d9;
@@ -47,7 +47,7 @@
     height: 12vh;
 
     &::before {
-        content: "";
+        content: '';
         position: absolute;
         left: 0;
         width: 100%;
@@ -100,14 +100,15 @@
         }
 
         &::before {
-            content: "";
+            content: '';
             position: absolute;
             bottom: 80%;
             left: 50%;
             margin-left: -5px;
             border-width: 5px;
             border-style: solid;
-            border-color: var(--timeline-tooltip-colour) transparent transparent transparent;
+            border-color: var(--timeline-tooltip-colour) transparent transparent
+                transparent;
         }
     }
 }
@@ -121,7 +122,7 @@
     background: grey;
 
     &::after {
-        content: "";
+        content: '';
         position: absolute;
         bottom: 50%;
         right: 0;

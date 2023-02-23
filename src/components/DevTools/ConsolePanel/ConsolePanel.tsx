@@ -26,14 +26,17 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
             fragment ConsolePanelFragment on TestExecution
             @argumentDefinitions(
                 logSearch: { type: "String", defaultValue: null }
-                logLevels: { type: "[ConsoleLogLevel!]", defaultValue: null}
+                logLevels: { type: "[ConsoleLogLevel!]", defaultValue: null }
             )
             @refetchable(queryName: "ConsolePanelFragmentRefetchQuery") {
                 id
                 searchedEvents: events(
                     filter: {
                         type: CONSOLE
-                        consoleFilter: { logSearch: $logSearch, logLevel: $logLevels }
+                        consoleFilter: {
+                            logSearch: $logSearch
+                            logLevel: $logLevels
+                        }
                     }
                 ) {
                     edges {
@@ -65,9 +68,7 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
 
     const [activeLogLevels, setActiveLogLevels] = React.useState<
         Record<LogLevel, boolean>
-    >(
-        fillObjFromType(LogLevel, true)
-    );
+    >(fillObjFromType(LogLevel, true));
 
     const toggleActiveLogLevel = (level: LogLevel) => {
         const newActiveLogs = {
@@ -76,23 +77,22 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
         };
         setActiveLogLevels(newActiveLogs);
         const logLevels = Object.keys(newActiveLogs).filter(
-            (key: string) => newActiveLogs[key as LogLevel]);
+            (key: string) => newActiveLogs[key as LogLevel]
+        );
         refetch({ logSearch: debouncedTerm, logLevels });
     };
 
     const logs = useMemo(
-        () => data
-            .searchedEvents
-            .edges
-            .map(({ node }) => node)
-            .filter(isOfType('ConsoleLogEvent'))
-            .map(({ at, ...event }) => ({
-                at: new Date(at),
-                ...event,
-            })),
+        () =>
+            data.searchedEvents.edges
+                .map(({ node }) => node)
+                .filter(isOfType('ConsoleLogEvent'))
+                .map(({ at, ...event }) => ({
+                    at: new Date(at),
+                    ...event,
+                })),
         [data.searchedEvents.edges]
     );
-
 
     const getMostRecentLogIdx = useCallback(
         (timestamp: number): number => {
@@ -123,7 +123,7 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
             />
 
             <ul className={styles.logsList}>
-                {(logs || [])?.map((node, idx) => {
+                {logs.map((node, idx) => {
                     // TODO: Timestamp is not unique, provide an id or a way to make it unique.
                     return (
                         <LogEntry

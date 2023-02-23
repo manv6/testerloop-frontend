@@ -5,7 +5,8 @@ import styles from './TextInput.module.scss';
 
 // This is just wrapper to prettify the input
 export const TextInput: React.FC<React.HTMLProps<HTMLInputElement>> = ({
-    className, ...props
+    className,
+    ...props
 }) => {
     return <input className={cx(className, styles.input)} {...props} />;
 };

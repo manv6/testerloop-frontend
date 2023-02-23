@@ -19,7 +19,8 @@
         background-color: #fefce7;
         border-color: #fff5c1;
 
-        &.selected, &.hovered {
+        &.selected,
+        &.hovered {
             background-color: #e4da6c;
         }
     }
@@ -28,7 +29,8 @@
         background-color: #ffeff0;
         border-color: #ffd6d5;
 
-        &.selected, &.hovered {
+        &.selected,
+        &.hovered {
             background-color: #d9757c;
         }
     }

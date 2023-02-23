@@ -9,7 +9,11 @@ type Props = {
     valueLabel: string;
 };
 
-const NameValueTable: React.FC<Props> = ({ valuePairs, nameLabel, valueLabel }) => {
+const NameValueTable: React.FC<Props> = ({
+    valuePairs,
+    nameLabel,
+    valueLabel,
+}) => {
     return (
         <table className={styles.table}>
             <thead>
