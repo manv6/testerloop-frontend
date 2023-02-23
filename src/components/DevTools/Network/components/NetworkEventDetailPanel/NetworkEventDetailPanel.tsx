@@ -15,8 +15,8 @@ type PostDataTabProps = {
 
 const PostDataTab: React.FC<PostDataTabProps> = ({ selectedEvent }) => {
     const snippet = useMemo(() => {
-        const mimeType = selectedEvent.request?.postData?.mimeType;
-        const postData = selectedEvent.request?.postData?.text;
+        const mimeType = selectedEvent.request.postData?.mimeType;
+        const postData = selectedEvent.request.postData?.text;
 
         if (!postData) {
             return;
@@ -53,7 +53,7 @@ const PostDataTab: React.FC<PostDataTabProps> = ({ selectedEvent }) => {
         <div className={styles.verticalStack}>
             <div>
                 <span className={styles.boldText}>Mime Type: </span>
-                {selectedEvent.request?.postData?.mimeType}
+                {selectedEvent.request.postData?.mimeType}
             </div>
             {snippet}
         </div>
@@ -70,8 +70,8 @@ const ResponseDataTab: React.FC<ResponseDataTabProps> = ({ selectedEvent }) => {
             'application/font-woff2',
             'application/octet-stream',
         ];
-        const mimeType = selectedEvent.response?.content?.mimeType;
-        const responsePayload = selectedEvent.response?.content?.text;
+        const mimeType = selectedEvent.response.content.mimeType;
+        const responsePayload = selectedEvent.response.content.text;
 
         if (
             !responsePayload ||
@@ -102,7 +102,7 @@ const ResponseDataTab: React.FC<ResponseDataTabProps> = ({ selectedEvent }) => {
         <div className={styles.verticalStack}>
             <div>
                 <span className={styles.boldText}>Mime Type: </span>
-                {selectedEvent.response?.content?.mimeType}
+                {selectedEvent.response.content.mimeType}
             </div>
             {snippet && (
                 <div className={styles.responseContentTextWrapper}>
@@ -194,7 +194,7 @@ const NetworkEventDetailPanel: React.FC<NetworkEventDetailPanelProps> = ({
         },
     ].filter(
         (tabChild) =>
-            tabChild?.tabKey !== 'postData' || selectedEvent.request?.postData
+            tabChild.tabKey !== 'postData' || selectedEvent.request.postData
     );
 
     return (

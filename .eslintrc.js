@@ -1,7 +1,7 @@
 module.exports = {
     root: true,
     env: { browser: true },
-    ignorePatterns: ['src/data/*', '*/__generated__/*'],
+    ignorePatterns: ['src/data/*', '*/__generated__/*', '/.eslintrc.js'],
     extends: [
         'react-app',
         'react-app/jest',
@@ -10,10 +10,15 @@ module.exports = {
         'plugin:@typescript-eslint/recommended',
         'plugin:prettier/recommended',
     ],
-    plugins: ['prettier'],
+    parser: '@typescript-eslint/parser',
+    parserOptions: {
+        project: ['tsconfig.json'],
+      },
+    plugins: ['prettier', '@typescript-eslint'],
     rules: {
         semi: ['error', 'always'],
         quotes: ['error', 'single'],
+        '@typescript-eslint/no-unnecessary-condition': ['error'],
         '@typescript-eslint/no-empty-function': ['off'],
         'no-trailing-spaces': ['error'],
         camelcase: ['error'],

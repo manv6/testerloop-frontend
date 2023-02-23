@@ -18,7 +18,7 @@ const ActionRecord: React.FC<Props> = ({
     const { seek } = useTimeline();
 
     const navigateInTimeline = () => {
-        if (options.wallClockStartedAt) seek(options.wallClockStartedAt);
+        seek(options.wallClockStartedAt);
     };
 
     return (

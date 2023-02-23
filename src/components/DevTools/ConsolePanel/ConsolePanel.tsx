@@ -123,7 +123,7 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
             />
 
             <ul className={styles.logsList}>
-                {(logs || [])?.map((node, idx) => {
+                {logs.map((node, idx) => {
                     // TODO: Timestamp is not unique, provide an id or a way to make it unique.
                     return (
                         <LogEntry

@@ -42,9 +42,7 @@ const StepRecord: React.FC<Props> = ({
                     e.preventDefault();
                     e.stopPropagation();
                     setIsExpanded(!isExpanded);
-                    if (step.options.wallClockStartedAt) {
-                        seek(step.options.wallClockStartedAt);
-                    }
+                    seek(step.options.wallClockStartedAt);
                 }}
                 className={cx(styles.stepHeader, {
                     [styles.selected]: isStepSelected,
