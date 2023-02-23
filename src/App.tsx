@@ -49,7 +49,7 @@ const App: React.FC = () => {
                     <Summary fragmentKey={queryData.testExecution} />
                 </SuspensePanel>
                 <SuspensePanel>
-                    <TimelineControls fragmentKey={data} />
+                    <TimelineControls fragmentKey={queryData.testExecution} />
                 </SuspensePanel>
                 <Expandable.Parent className={styles.expandableParent}>
                     <SuspensePanel>
@@ -75,7 +75,7 @@ const App: React.FC = () => {
                     </SuspensePanel>
                     <SuspensePanel>
                         <Expandable.Child className={styles.expandableNetwork}>
-                            <NetworkPanel fragmentKey={data} />
+                            <NetworkPanel fragmentKey={queryData.testExecution!} />
                         </Expandable.Child>
                     </SuspensePanel>
                 </Expandable.Parent>

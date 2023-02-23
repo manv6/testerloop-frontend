@@ -3,15 +3,25 @@ import cx from 'classnames';
 import { useTimeline } from 'src/hooks/timeline';
 import { datesToFraction } from 'src/utils/date';
 import styles from './RequestSlice.module.scss';
-import { FormattedNetworkEvents } from 'src/utils/formatters';
+import RequestSliceFragment from './RequestSliceFragment';
+import { RequestSliceFragment$key } from './__generated__/RequestSliceFragment.graphql';
+import { useFragment } from 'react-relay';
 
 type Props = {
-    event: FormattedNetworkEvents[0];
+    event: RequestSliceFragment$key;
     setSelectedEventId: (id: string) => void;
     isLastStartedEvent: boolean;
 };
 
 const RequestSlice: React.FC<Props> = (props) => {
+    const eventData = useFragment(
+        RequestSliceFragment,
+        props.event
+    );
+
+    const eventTimeAt = new Date(eventData.time.at);
+    const eventTimeUntil = new Date(eventData.time.until);
+
     const { startTime, endTime, currentTime, setHoverTimeFraction } =
         useTimeline();
 
@@ -22,29 +32,29 @@ const RequestSlice: React.FC<Props> = (props) => {
     };
 
     const waterfallStartPositionPercentage =
-        100 * datesToFraction(startTime, endTime, props.event.startedDateTime);
+        100 * datesToFraction(startTime, endTime, eventTimeAt);
 
     const waterfallWidthPercentage =
         100 *
-        (datesToFraction(startTime, endTime, props.event.endedDateTime) -
-            datesToFraction(startTime, endTime, props.event.startedDateTime));
+        (datesToFraction(startTime, endTime, eventTimeUntil) -
+            datesToFraction(startTime, endTime, eventTimeAt));
 
     const currentTimePercentage =
         100 * datesToFraction(startTime, endTime, currentTime);
 
     const textColorStyle = cx({
-        [styles.networkTableRowError]: props.event.response.status >= 400,
+        [styles.networkTableRowError]: eventData.response.status >= 400,
     });
     const progressColorStyle = cx({
         [styles.progressStarted]:
-            props.event.startedDateTime <= currentTime &&
-            currentTime < props.event.endedDateTime,
-        [styles.progressEnded]: props.event.endedDateTime <= currentTime,
+        eventTimeAt <= currentTime &&
+            currentTime < eventTimeUntil,
+        [styles.progressEnded]: eventTimeUntil <= currentTime,
     });
     let progressText = null;
-    if (props.event.endedDateTime <= currentTime) {
+    if (eventTimeUntil <= currentTime) {
         progressText = 'completed';
-    } else if (props.event.startedDateTime <= currentTime) {
+    } else if (eventTimeAt <= currentTime) {
         progressText = 'started';
     }
 
@@ -59,7 +69,7 @@ const RequestSlice: React.FC<Props> = (props) => {
             }}
             onClick={(ev) => {
                 ev.stopPropagation();
-                props.setSelectedEventId(props.event.id);
+                props.setSelectedEventId(eventData.id);
             }}
             className={styles.trBody}
         >
@@ -71,24 +81,24 @@ const RequestSlice: React.FC<Props> = (props) => {
                 {progressText} {props.isLastStartedEvent && '*'}
             </td>
             <td className={cx(styles.td, textColorStyle)}>
-                <span>{props.event.response.status}</span>
+                <span>{eventData.response.status}</span>
             </td>
             <td className={styles.td}>
                 <span className={textColorStyle}>
-                    {props.event.request.method}
+                    {eventData.request.method}
                 </span>
             </td>
             <td className={cx(styles.td, styles.urlColumn)}>
                 <span className={textColorStyle}>
-                    {truncateValue(props.event.request.url, 60)}
+                    {truncateValue(eventData.request.url.url, 60)}
                 </span>
             </td>
             <td className={styles.td}>
                 <span className={textColorStyle}>
                     {truncateValue(
-                        (props.event._initiator || '') +
-                            (props.event._initiator_line
-                                ? `:${props.event._initiator_line}`
+                        (eventData.initiator.origin || '') +
+                            (eventData.initiator.lineNo
+                                ? `:${eventData.initiator.lineNo}`
                                 : ''),
                         40
                     )}
@@ -96,17 +106,17 @@ const RequestSlice: React.FC<Props> = (props) => {
             </td>
             <td className={styles.td}>
                 <span className={textColorStyle}>
-                    {props.event.response.content.mimeType}
+                    {eventData.response.body.mimeType}
                 </span>
             </td>
             <td className={styles.td}>
                 <span className={textColorStyle}>
-                    {props.event.response._transferSize}
+                    {eventData.response.transferSize}
                 </span>
             </td>
             <td className={styles.td}>
                 <span className={textColorStyle}>
-                    {props.event.response.bodySize}
+                    {eventData.response.body.size}
                 </span>
             </td>
             <td className={cx(styles.td, styles.waterfall)}>

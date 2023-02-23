@@ -9,18 +9,17 @@ import ChromeIcon from './components/ChromeIcon';
 import CommitIcon from './components/CommitIcon';
 import ErrorIcon from './components/ErrorIcon';
 import { formatDate } from 'src/utils/date';
-import * as formatter from 'src/utils/formatters';
-import networkEventData from 'src/data/networkEvents';
 import { useFragment } from 'react-relay';
 import { SummaryFragment$key } from './__generated__/SummaryFragment.graphql';
 import graphql from 'babel-plugin-relay/macro';
+import { isOfType } from 'src/utils/isOfType';
 
 type Props = {
     fragmentKey: SummaryFragment$key | null;
 };
 
 const Summary: React.FC<Props> = ({ fragmentKey }) => {
-    const consoleData = useFragment(
+    const summaryData = useFragment(
         graphql`
             fragment SummaryFragment on TestExecution {
                 id
@@ -45,15 +44,25 @@ const Summary: React.FC<Props> = ({ fragmentKey }) => {
                 ) {
                     totalCount
                 }
+                summaryNetworkEvents: events(
+                    filter: {
+                        type: NETWORK
+                    }
+                ) {
+                    edges {
+                        node {
+                            __typename
+                            ... on HttpNetworkEvent {
+                                response {
+                                    status
+                                }
+                            }
+                        }
+                    }
+                }
             }
         `,
         fragmentKey
-    );
-
-    const data = { networkEvents: networkEventData.log.entries } as any; // eslint-disable-line
-    const networkEvents = useMemo(
-        () => formatter.formatNetworkEvents(data.networkEvents),
-        [data.networkEvents]
     );
 
     const branch = cicd.GITHUB_REF_NAME;
@@ -61,17 +70,17 @@ const Summary: React.FC<Props> = ({ fragmentKey }) => {
     const engineerUrl = [cicd.GITHUB_SERVER_URL, engineer].join('/');
     const endTime = results.endedTestsAt;
 
-    const logErrorCount = consoleData?.summaryConsoleErrors?.totalCount;
+    const logErrorCount = summaryData?.summaryConsoleErrors?.totalCount;
 
     const networkErrorCount = useMemo(
         () =>
-            networkEvents.reduce((acc, curr) => {
-                const status = curr.response.status.toString();
-                const isError =
-                    status.startsWith('4') || status.startsWith('5');
-                return isError ? ++acc : acc;
-            }, 0),
-        []
+            summaryData?.summaryNetworkEvents.edges
+                .map(({ node }) => node)
+                .filter(isOfType('HttpNetworkEvent'))
+                .filter(
+                    (evt) => evt.response?.status && evt.response?.status >= 400
+                ).length,
+        [summaryData]
     );
 
     const errorObj = results.runs[0].tests[0].attempts[0];

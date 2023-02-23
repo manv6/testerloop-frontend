@@ -28,6 +28,16 @@ enum ConsoleLogLevel {
   WARN
 }
 
+type Cookie {
+  domain: String
+  expires: String
+  httpOnly: Boolean!
+  name: String!
+  path: String
+  secure: Boolean!
+  value: String!
+}
+
 scalar Cursor
 
 """
@@ -39,11 +49,118 @@ interface Event {
   at: DateTime!
 }
 
+interface HttpBody {
+  data: String!
+  encoding: String
+  mimeType: String!
+  size: Int!
+}
+
+type HttpHeaders {
+  size: Int!
+  values: [KeyValuePair!]!
+}
+
+type HttpNetworkEvent implements Event & NetworkEvent & TestExecutionEvent {
+  at: DateTime!
+  id: ID!
+  initiator: HttpNetworkEventInitiator!
+  request: HttpNetworkRequest!
+  resourceType: String
+  response: HttpNetworkResponse!
+  startedDateTime: String!
+  testExecution: TestExecution!
+  time: NetworkEventTime!
+  timings: HttpNetworkTimings!
+}
+
+type HttpNetworkEventInitiator {
+  lineNo: Int
+  origin: String
+}
+
+type HttpNetworkRequest {
+  body: HttpRequestBody
+  cookies: [Cookie]!
+  headers: HttpHeaders!
+  httpVersion: String!
+  method: String!
+  queryString: [KeyValuePair!]!
+  url: HttpNetworkRequestUrl!
+}
+
+type HttpNetworkRequestUrl {
+  nonKeyValueQueryString: String
+  url: String!
+}
+
+type HttpNetworkResponse {
+  body: HttpResponseBody!
+  cookies: [Cookie!]!
+  headers: HttpHeaders!
+  redirectURL: String!
+  status: Int!
+  statusText: String!
+  transferSize: Int!
+}
+
+type HttpNetworkTimings {
+  blocked: NetworkEventTiming!
+  connect: NetworkEventTiming!
+  queued: NetworkEventTiming!
+  receive: NetworkEventTiming!
+  send: NetworkEventTiming!
+  ssl: NetworkEventTiming!
+  wait: NetworkEventTiming!
+}
+
+type HttpRequestBody implements HttpBody {
+  data: String!
+  encoding: String
+  mimeType: String!
+  size: Int!
+}
+
+type HttpResponseBody implements HttpBody {
+  chunks: [HttpResponseBodyChunk!]!
+  data: String!
+  encoding: String
+  mimeType: String!
+  size: Int!
+}
+
+type HttpResponseBodyChunk implements Event & InstantaneousEvent {
+  at: DateTime!
+  data: String!
+  size: Int!
+}
+
 interface InstantaneousEvent implements Event {
   at: DateTime!
 }
 
 interface IntervalEvent implements Event {
+  at: DateTime!
+  until: DateTime!
+}
+
+type KeyValuePair {
+  key: String!
+  value: String!
+}
+
+interface NetworkEvent {
+  id: ID!
+  startedDateTime: String!
+  time: NetworkEventTime!
+}
+
+type NetworkEventTime implements Event & IntervalEvent {
+  at: DateTime!
+  until: DateTime!
+}
+
+type NetworkEventTiming implements Event & IntervalEvent {
   at: DateTime!
   until: DateTime!
 }

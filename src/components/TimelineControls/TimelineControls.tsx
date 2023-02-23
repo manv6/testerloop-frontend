@@ -1,6 +1,7 @@
 // TODO: Remove this check once temp data is removed!!
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useMemo, useEffect } from 'react';
+import { useFragment } from 'react-relay';
 import { useTimeline } from 'src/hooks/timeline';
 import { datesToElapsedTime, datesToFraction } from 'src/utils/date';
 import styles from './TimelineControls.module.scss';
@@ -8,15 +9,48 @@ import { EventType, FILTER_LABELS, MARKER_COLOURS } from 'src/constants/eventTyp
 import * as formatter from 'src/utils/formatters';
 import networkEventData from 'src/data/networkEvents';
 import stepsData from 'src/data/steps';
+import { TimelineControlsFragment$key } from './__generated__/TimelineControlsFragment.graphql';
+import { isOfType } from 'src/utils/isOfType';
+import graphql from 'babel-plugin-relay/macro';
 
 const AVAILABLE_SPEEDS = [0.25, 0.5, 1, 1.5, 2];
 
 type Props = {
-    // TODO: Update fragment key type
-    fragmentKey: any; // eslint-disable-line
+    fragmentKey: TimelineControlsFragment$key | null;
 };
 
-export const TimelineControls: React.FC<Props> = () => {
+export const TimelineControls: React.FC<Props> = ({ fragmentKey }) => {
+
+    const timelineData = useFragment(
+        graphql`
+            fragment TimelineControlsFragment on TestExecution {
+                id
+                timelineControlNetworkEvents: events(
+                    filter: {
+                        type: NETWORK
+                    }
+                ) {
+                    edges {
+                        node {
+                            __typename
+                            ... on HttpNetworkEvent {
+                                id
+                                response {
+                                    status
+                                }
+                                time {
+                                    at
+                                    until
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        `,
+        fragmentKey
+    );
+
     const data = {
         networkEvents: networkEventData.log.entries,
         steps: stepsData
@@ -42,8 +76,19 @@ export const TimelineControls: React.FC<Props> = () => {
 
     const steps = useMemo(() =>
         formatter.formatSteps(data.steps), [data.steps]);
-    const networkEvents = useMemo(() =>
-        formatter.formatNetworkEvents(data.networkEvents), [data.networkEvents]);
+    const networkEvents = useMemo(
+        () =>
+            timelineData?.timelineControlNetworkEvents.edges
+                .map(({ node }) => node)
+                .filter(isOfType('HttpNetworkEvent'))
+                .map(({ time: { at, until }, ...rest }) => {
+                    return {
+                        ...rest,
+                        time: { at: new Date(at), until: new Date(until) },
+                    };
+                }) || [],
+        [timelineData]
+    );
 
     // Define step markers
 
@@ -61,19 +106,19 @@ export const TimelineControls: React.FC<Props> = () => {
         return status.startsWith('4') || status.startsWith('5');
     }).map((evt) =>
         ({
-            id: evt._requestId,
+            id: evt.id,
             type: EventType.NETWORK_ERROR,
-            start: evt.endedDateTime,
-            startFraction: datesToFraction(startTime, endTime, evt.endedDateTime),
+            start: evt.time.until,
+            startFraction: datesToFraction(startTime, endTime, evt.time.until),
         })), [networkEvents, startTime, endTime]);
 
     const successNetworkMarkers = useMemo(() => networkEvents.filter((evt) =>
         evt.response.status.toString().startsWith('2')).map((evt) =>
         ({
-            id: evt._requestId,
+            id: evt.id,
             type: EventType.NETWORK_SUCCESS,
-            start: evt.endedDateTime,
-            startFraction: datesToFraction(startTime, endTime, evt.endedDateTime),
+            start: evt.time.until,
+            startFraction: datesToFraction(startTime, endTime, evt.time.until),
         })), [networkEvents, startTime, endTime]);
 
     const cypressErrorMarkers = useMemo(() =>

@@ -1,15 +1,16 @@
 // TODO: Remove this check once temp data is removed!!
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useFragment } from 'react-relay';
+import graphql from 'babel-plugin-relay/macro';
 import cx from 'classnames';
 
+import type { NetworkPanelFragment$key } from './__generated__/NetworkPanelFragment.graphql';
 import { RequestSlice, NetworkEventDetailPanel } from './components/';
 import styles from './Network.module.scss';
 import { useTimeline } from 'src/hooks/timeline';
 import { TextInput } from 'src/components/common/TextInput';
 import * as formatter from 'src/utils/formatters';
-import networkEventData from 'src/data/networkEvents';
-
 
 enum ResourceTypeFilterType {
     HTML = 'html',
@@ -25,7 +26,7 @@ const filterByResourceTypePredicate = (
     event: formatter.FormattedNetworkEvents[0],
     selectedOptions: Set<ResourceTypeFilterType>
 ) => {
-    const resourceType = event._resourceType;
+    const resourceType = event.resourceType;
 
     const resourceTypeLookup = {
         [ResourceTypeFilterType.HTML]: 'document',
@@ -63,14 +64,14 @@ const filterByProgressPredicate = (
     return Array.from(selectedOptions).some((filter) => {
         switch (filter) {
         case ProgressFilterType.COMPLETED:
-            return event.endedDateTime <= currentTime;
+            return event.time.until <= currentTime;
         case ProgressFilterType.STARTED:
             return (
-                event.startedDateTime <= currentTime &&
-                currentTime < event.endedDateTime
+                event.time.at <= currentTime &&
+                currentTime < event.time.until
             );
         case ProgressFilterType.NOT_STARTED:
-            return currentTime < event.startedDateTime;
+            return currentTime < event.time.at;
         default:
             return false;
         }
@@ -78,14 +79,54 @@ const filterByProgressPredicate = (
 };
 
 type Props = {
-    // TODO: Update this with fragment key type
-    fragmentKey: any // eslint-disable-line
+    fragmentKey: NetworkPanelFragment$key
 };
 
-export const NetworkPanel: React.FC<Props> = () => {
-    const data = { networkEvents: networkEventData.log.entries } as any; // eslint-disable-line
+
+const NetworkPanelFragment = graphql`
+    fragment NetworkPanelFragment on TestExecution {
+        id
+        searchedNetworkEvents: events(filter: { type: NETWORK }) {
+            edges {
+                __typename
+                node {
+                    ... on HttpNetworkEvent {
+                        __typename
+                        # at
+                        id
+                        # initiator
+                        resourceType
+                        time {
+                            at
+                            until
+                        }
+                        request {
+                            method
+                            url {
+                                url
+                            }
+                        }
+                        response {
+                            status
+                        }
+                        ...RequestSliceFragment
+                        ...NetworkEventDetailFragment
+                    }
+                }
+            }
+        }
+    }
+`;
+
+export const NetworkPanel: React.FC<Props> = ({fragmentKey}) => {
+
+    const data = useFragment(
+        NetworkPanelFragment,
+        fragmentKey
+    );
+
     const networkEvents = useMemo(() =>
-        formatter.formatNetworkEvents(data.networkEvents), [data.networkEvents]);
+        formatter.formatNetworkEvents(data), [data]);
 
     const [selectedEventId, setSelectedEventId] = useState<null | string>(null);
     const [filterTerm, setFilterTerm] = useState<string>('');
@@ -106,7 +147,7 @@ export const NetworkPanel: React.FC<Props> = () => {
         () => networkEvents
             .filter((networkEvent) =>
                 (filterTerm
-                    ? networkEvent.request.url.includes(filterTerm)
+                    ? networkEvent.request.url.url.includes(filterTerm)
                     : true)
             )
             .filter((event) =>
@@ -180,7 +221,7 @@ export const NetworkPanel: React.FC<Props> = () => {
         () =>
             // Note that we assume networkEvents is already sorted by startedDateTime here
             networkEvents
-                .filter((event) => currentTime > event.startedDateTime)
+                .filter((event) => currentTime > event.time.at)
                 .at(-1),
 
         [currentTime, networkEvents]

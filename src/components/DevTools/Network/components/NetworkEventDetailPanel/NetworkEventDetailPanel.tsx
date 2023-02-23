@@ -1,24 +1,29 @@
 import React, { useMemo } from 'react';
 import { Tabs } from 'src/components/common/Tabs';
-
+import { useFragment } from 'react-relay';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
-import { NameValueTable } from 'src/components/DevTools/Network/components';
-import styles from './NetworkEventDetailPanel.module.scss';
+import { KeyValueTable } from 'src/components/DevTools/Network/components';
 import { CloseButton } from 'src/components/common/CloseButton';
-import { FormattedNetworkEvents } from 'src/utils/formatters';
+import {
+    NetworkEventDetailFragment$key,
+    NetworkEventDetailFragment$data,
+} from './__generated__/NetworkEventDetailFragment.graphql';
+import NetworkEventDetailFragment from './NetworkEventDetailFragment';
+import styles from './NetworkEventDetailPanel.module.scss';
+
 
 type PostDataTabProps = {
-    selectedEvent: FormattedNetworkEvents[0];
+    selectedEvent: NetworkEventDetailFragment$data;
 };
 
 const PostDataTab: React.FC<PostDataTabProps> = ({ selectedEvent }) => {
     const snippet = useMemo(() => {
-        const mimeType = selectedEvent.request?.postData?.mimeType;
-        const postData = selectedEvent.request?.postData?.text;
+        const mimeType = selectedEvent.request.body?.mimeType;
+        const data = selectedEvent.request.body?.data;
 
-        if (!postData) {
+        if (!data) {
             return;
         }
         if (mimeType?.includes('application/json')) {
@@ -28,32 +33,32 @@ const PostDataTab: React.FC<PostDataTabProps> = ({ selectedEvent }) => {
                     style={vs}
                     wrapLongLines={true}
                 >
-                    {JSON.stringify(JSON.parse(postData), null, 2)}
+                    {JSON.stringify(JSON.parse(data), null, 2)}
                 </SyntaxHighlighter>
             );
         }
         if (mimeType?.includes('application/x-www-form-urlencoded')) {
             const valuePairs = Array.from(
-                new URLSearchParams(postData).entries()
+                new URLSearchParams(data).entries()
             ).map(([key, value]) => {
-                return { name: key, value };
+                return { key, value };
             });
             return (
-                <NameValueTable
+                <KeyValueTable
                     valuePairs={valuePairs}
-                    nameLabel="key"
+                    keyLabel="key"
                     valueLabel="value"
                 />
             );
         }
-        return <div>{postData}</div>;
+        return <div>{data}</div>;
     }, [selectedEvent]);
 
     return (
         <div className={styles.verticalStack}>
             <div>
                 <span className={styles.boldText}>Mime Type: </span>
-                {selectedEvent.request?.postData?.mimeType}
+                {selectedEvent.request.body?.mimeType}
             </div>
             {snippet}
         </div>
@@ -61,16 +66,22 @@ const PostDataTab: React.FC<PostDataTabProps> = ({ selectedEvent }) => {
 };
 
 type ResponseDataTabProps = {
-    selectedEvent: FormattedNetworkEvents[0];
+    selectedEvent: NetworkEventDetailFragment$data;
 };
 
 const ResponseDataTab: React.FC<ResponseDataTabProps> = ({ selectedEvent }) => {
     const snippet = useMemo(() => {
-        const responseDataExcludedMimeTypes = ['application/font-woff2', 'application/octet-stream'];
-        const mimeType = selectedEvent.response?.content?.mimeType;
-        const responsePayload = selectedEvent.response?.content?.text;
+        const responseDataExcludedMimeTypes = [
+            'application/font-woff2',
+            'application/octet-stream',
+        ];
+        const mimeType = selectedEvent.response.body.mimeType;
+        const responsePayload = selectedEvent.response.body.data;
 
-        if (!responsePayload || responseDataExcludedMimeTypes.includes(mimeType)) {
+        if (
+            !responsePayload ||
+            responseDataExcludedMimeTypes.includes(mimeType)
+        ) {
             return null;
         }
 
@@ -96,7 +107,7 @@ const ResponseDataTab: React.FC<ResponseDataTabProps> = ({ selectedEvent }) => {
         <div className={styles.verticalStack}>
             <div>
                 <span className={styles.boldText}>Mime Type: </span>
-                {selectedEvent.response?.content?.mimeType}
+                {selectedEvent.response.body.mimeType}
             </div>
             {snippet && (
                 <div className={styles.responseContentTextWrapper}>
@@ -108,7 +119,7 @@ const ResponseDataTab: React.FC<ResponseDataTabProps> = ({ selectedEvent }) => {
 };
 
 type HeadersTabProps = {
-    selectedEvent: FormattedNetworkEvents[0];
+    selectedEvent: NetworkEventDetailFragment$data;
 };
 
 const HeadersTab: React.FC<HeadersTabProps> = ({ selectedEvent }) => {
@@ -116,30 +127,31 @@ const HeadersTab: React.FC<HeadersTabProps> = ({ selectedEvent }) => {
         <div className={styles.verticalStack}>
             <div key="requestURL" className={styles.requestUrl}>
                 <span className={styles.boldText}>Request to:</span>{' '}
-                {selectedEvent.request.url}
+                {selectedEvent.request.url.url}
             </div>
             {selectedEvent.request.queryString.length
-                ? (<>
-                    <div key="queryParamsLabel">
-                        <span className={styles.boldText}>Query Params:</span>
-                    </div>
-                    <NameValueTable
-                        key="queryParams"
-                        valuePairs={selectedEvent.request.queryString}
-                        nameLabel="Header Name"
-                        valueLabel="Header Value"
-                    />
-                </>)
-                : null
-            }
+                ? (
+                    <>
+                        <div key="queryParamsLabel">
+                            <span className={styles.boldText}>Query Params:</span>
+                        </div>
+                        <KeyValueTable
+                            key="queryParams"
+                            valuePairs={selectedEvent.request.queryString}
+                            keyLabel="Header Name"
+                            valueLabel="Header Value"
+                        />
+                    </>
+                )
+                : null}
             <div>
                 <div key="requestHeaderLabel">
                     <span className={styles.boldText}>Request Headers:</span>
                 </div>
-                <NameValueTable
+                <KeyValueTable
                     key="requestHeader"
-                    valuePairs={selectedEvent.request.headers}
-                    nameLabel="Header Name"
+                    valuePairs={selectedEvent.request.headers.values}
+                    keyLabel="Header Name"
                     valueLabel="Header Value"
                 />
             </div>
@@ -147,10 +159,10 @@ const HeadersTab: React.FC<HeadersTabProps> = ({ selectedEvent }) => {
                 <div key="responseHeaderLabel">
                     <span className={styles.boldText}>Response Headers:</span>
                 </div>
-                <NameValueTable
+                <KeyValueTable
                     key="responseHeader"
-                    valuePairs={selectedEvent.response.headers}
-                    nameLabel="Header Name"
+                    valuePairs={selectedEvent.response.headers.values}
+                    keyLabel="Header Name"
                     valueLabel="Header Value"
                 />
             </div>
@@ -159,7 +171,7 @@ const HeadersTab: React.FC<HeadersTabProps> = ({ selectedEvent }) => {
 };
 
 type NetworkEventDetailPanelProps = {
-    selectedEvent: FormattedNetworkEvents[0];
+    selectedEvent: NetworkEventDetailFragment$key;
     activeTabKey: string | null;
     onSelectTab: (x: string | null) => void;
     onDetailPanelClose: () => void;
@@ -169,25 +181,29 @@ const NetworkEventDetailPanel: React.FC<NetworkEventDetailPanelProps> = ({
     selectedEvent,
     activeTabKey,
     onSelectTab,
-    onDetailPanelClose
+    onDetailPanelClose,
 }) => {
+    const eventData = useFragment(NetworkEventDetailFragment, selectedEvent);
+
     const tabChildren = [
         {
             tabKey: 'headers',
             title: 'Headers',
-            children: <HeadersTab selectedEvent={selectedEvent} />,
+            children: <HeadersTab selectedEvent={eventData} />,
         },
         {
             tabKey: 'postData',
             title: 'Post',
-            children: <PostDataTab selectedEvent={selectedEvent} />,
+            children: <PostDataTab selectedEvent={eventData} />,
         },
         {
             tabKey: 'responseData',
             title: 'Response',
-            children: <ResponseDataTab selectedEvent={selectedEvent} />,
+            children: <ResponseDataTab selectedEvent={eventData} />,
         },
-    ].filter((tabChild) => tabChild?.tabKey!=='postData' || selectedEvent.request?.postData) ;
+    ].filter(
+        (tabChild) => tabChild?.tabKey !== 'postData' || eventData.request.body
+    );
 
     return (
         <div key="details" className={styles.networkDetailPanel}>

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ea17aa9e0677d446f6c3ecf5489988a7>>
+ * @generated SignedSource<<53dfa85dc7fc10fdd7e90fe7ccfaccb8>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -62,11 +62,18 @@ v5 = {
   "storageKey": null
 },
 v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+},
+v7 = {
   "kind": "Literal",
   "name": "type",
   "value": "CONSOLE"
 },
-v7 = [
+v8 = [
   {
     "alias": null,
     "args": null,
@@ -132,13 +139,7 @@ return {
         "plural": false,
         "selections": [
           (v5/*: any*/),
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "id",
-            "storageKey": null
-          },
+          (v6/*: any*/),
           {
             "kind": "InlineFragment",
             "selections": [
@@ -159,7 +160,7 @@ return {
                         "kind": "ObjectValue",
                         "name": "consoleFilter"
                       },
-                      (v6/*: any*/)
+                      (v7/*: any*/)
                     ],
                     "kind": "ObjectValue",
                     "name": "filter"
@@ -215,6 +216,14 @@ return {
                             ],
                             "type": "ConsoleLogEvent",
                             "abstractKey": null
+                          },
+                          {
+                            "kind": "InlineFragment",
+                            "selections": [
+                              (v6/*: any*/)
+                            ],
+                            "type": "HttpNetworkEvent",
+                            "abstractKey": null
                           }
                         ],
                         "storageKey": null
@@ -242,7 +251,7 @@ return {
                         "kind": "ObjectValue",
                         "name": "consoleFilter"
                       },
-                      (v6/*: any*/)
+                      (v7/*: any*/)
                     ],
                     "kind": "ObjectValue",
                     "name": "filter"
@@ -252,7 +261,7 @@ return {
                 "kind": "LinkedField",
                 "name": "events",
                 "plural": false,
-                "selections": (v7/*: any*/),
+                "selections": (v8/*: any*/),
                 "storageKey": null
               },
               {
@@ -272,7 +281,7 @@ return {
                         "kind": "ObjectValue",
                         "name": "consoleFilter"
                       },
-                      (v6/*: any*/)
+                      (v7/*: any*/)
                     ],
                     "kind": "ObjectValue",
                     "name": "filter"
@@ -282,7 +291,7 @@ return {
                 "kind": "LinkedField",
                 "name": "events",
                 "plural": false,
-                "selections": (v7/*: any*/),
+                "selections": (v8/*: any*/),
                 "storageKey": null
               },
               {
@@ -302,7 +311,7 @@ return {
                         "kind": "ObjectValue",
                         "name": "consoleFilter"
                       },
-                      (v6/*: any*/)
+                      (v7/*: any*/)
                     ],
                     "kind": "ObjectValue",
                     "name": "filter"
@@ -312,7 +321,7 @@ return {
                 "kind": "LinkedField",
                 "name": "events",
                 "plural": false,
-                "selections": (v7/*: any*/),
+                "selections": (v8/*: any*/),
                 "storageKey": null
               }
             ],
@@ -325,12 +334,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "0bb9894c42be3132f480a38a671df635",
+    "cacheID": "0865d25d2930e49858a68d4f1cbb53f2",
     "id": null,
     "metadata": {},
     "name": "ConsolePanelFragmentRefetchQuery",
     "operationKind": "query",
-    "text": "query ConsolePanelFragmentRefetchQuery(\n  $logLevels: [ConsoleLogLevel!] = null\n  $logSearch: String = null\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...ConsolePanelFragment_22FwjD\n    id\n  }\n}\n\nfragment ConsolePanelFragment_22FwjD on TestExecution {\n  id\n  searchedEvents: events(filter: {type: CONSOLE, consoleFilter: {logSearch: $logSearch, logLevel: $logLevels}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on ConsoleLogEvent {\n          at\n          ...LogEntryFragment\n        }\n      }\n    }\n  }\n  ...LogFiltersFragment_1imbBq\n}\n\nfragment LogEntryFragment on ConsoleLogEvent {\n  at\n  message\n  logLevel\n}\n\nfragment LogFiltersFragment_1imbBq on TestExecution {\n  warnings: events(filter: {type: CONSOLE, consoleFilter: {logSearch: $logSearch, logLevel: WARN}}) {\n    totalCount\n  }\n  errors: events(filter: {type: CONSOLE, consoleFilter: {logSearch: $logSearch, logLevel: ERROR}}) {\n    totalCount\n  }\n  logs: events(filter: {type: CONSOLE, consoleFilter: {logSearch: $logSearch, logLevel: LOG}}) {\n    totalCount\n  }\n  id\n}\n"
+    "text": "query ConsolePanelFragmentRefetchQuery(\n  $logLevels: [ConsoleLogLevel!] = null\n  $logSearch: String = null\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...ConsolePanelFragment_22FwjD\n    id\n  }\n}\n\nfragment ConsolePanelFragment_22FwjD on TestExecution {\n  id\n  searchedEvents: events(filter: {type: CONSOLE, consoleFilter: {logSearch: $logSearch, logLevel: $logLevels}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on ConsoleLogEvent {\n          at\n          ...LogEntryFragment\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n  ...LogFiltersFragment_1imbBq\n}\n\nfragment LogEntryFragment on ConsoleLogEvent {\n  at\n  message\n  logLevel\n}\n\nfragment LogFiltersFragment_1imbBq on TestExecution {\n  warnings: events(filter: {type: CONSOLE, consoleFilter: {logSearch: $logSearch, logLevel: WARN}}) {\n    totalCount\n  }\n  errors: events(filter: {type: CONSOLE, consoleFilter: {logSearch: $logSearch, logLevel: ERROR}}) {\n    totalCount\n  }\n  logs: events(filter: {type: CONSOLE, consoleFilter: {logSearch: $logSearch, logLevel: LOG}}) {\n    totalCount\n  }\n  id\n}\n"
   }
 };
 })();
