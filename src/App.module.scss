@@ -11,8 +11,8 @@
     grid-template-rows: 1fr 1fr;
     grid-template-columns: 1fr 2fr 2fr;
     grid-template-areas:
-        "steps dom console"
-        "cypress-error dom network";
+        'steps dom console'
+        'cypress-error dom network';
 }
 
 .expandableSteps {

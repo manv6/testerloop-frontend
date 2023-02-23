@@ -61,7 +61,7 @@ const Summary: React.FC<Props> = ({ fragmentKey }) => {
     const engineerUrl = [cicd.GITHUB_SERVER_URL, engineer].join('/');
     const endTime = results.endedTestsAt;
 
-    const logErrorCount = consoleData?.summaryConsoleErrors?.totalCount;
+    const logErrorCount = consoleData?.summaryConsoleErrors.totalCount;
 
     const networkErrorCount = useMemo(
         () =>
@@ -75,7 +75,7 @@ const Summary: React.FC<Props> = ({ fragmentKey }) => {
     );
 
     const errorObj = results.runs[0].tests[0].attempts[0];
-    const cypressErrorName = errorObj.error?.name;
+    const cypressErrorName = errorObj.error.name;
 
     return (
         <div className={styles.summary}>

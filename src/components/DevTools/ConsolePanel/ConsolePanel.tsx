@@ -26,14 +26,17 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
             fragment ConsolePanelFragment on TestExecution
             @argumentDefinitions(
                 logSearch: { type: "String", defaultValue: null }
-                logLevels: { type: "[ConsoleLogLevel!]", defaultValue: null}
+                logLevels: { type: "[ConsoleLogLevel!]", defaultValue: null }
             )
             @refetchable(queryName: "ConsolePanelFragmentRefetchQuery") {
                 id
                 searchedEvents: events(
                     filter: {
                         type: CONSOLE
-                        consoleFilter: { logSearch: $logSearch, logLevel: $logLevels }
+                        consoleFilter: {
+                            logSearch: $logSearch
+                            logLevel: $logLevels
+                        }
                     }
                 ) {
                     edges {
@@ -62,48 +65,48 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
     const [isPending, startTransition] = useTransition();
 
     const defaultActiveLogLevels = fillObjFromType(LogLevel, true);
-    const [activeLogLevels, setActiveLogLevels] = React.useState<
-        Record<LogLevel, boolean> | null
-    >(
-        null
-    );
+    const [activeLogLevels, setActiveLogLevels] = React.useState<Record<
+        LogLevel,
+        boolean
+    > | null>(null);
 
     useEffect(() => {
-        if(debouncedTerm === null && activeLogLevels === null){
+        if (debouncedTerm === null && activeLogLevels === null) {
             return;
         }
         const logLevels = activeLogLevels
             ? Object.keys(activeLogLevels).filter(
-                (key: string) => activeLogLevels[key as LogLevel])
+                  (key: string) => activeLogLevels[key as LogLevel]
+              )
             : null;
         startTransition(() => {
-            refetch({ logSearch: debouncedTerm, logLevels});
+            refetch({ logSearch: debouncedTerm, logLevels });
         });
     }, [activeLogLevels, debouncedTerm, refetch]);
 
-
-    const toggleActiveLogLevel = useCallback((level: LogLevel) => {
-        const activeLogs = activeLogLevels ?? defaultActiveLogLevels;
-        const newActiveLogs = {
-            ...activeLogs,
-            [level]: !activeLogs[level],
-        };
-        setActiveLogLevels(newActiveLogs);
-    }, [activeLogLevels, defaultActiveLogLevels]);
-
-    const logs = useMemo(
-        () => data
-            .searchedEvents
-            .edges
-            .map(({ node }) => node)
-            .filter(isOfType('ConsoleLogEvent'))
-            .map(({ at, ...event }) => ({
-                at: new Date(at),
-                ...event,
-            })),
-        [data.searchedEvents.edges]
+    const toggleActiveLogLevel = useCallback(
+        (level: LogLevel) => {
+            const activeLogs = activeLogLevels ?? defaultActiveLogLevels;
+            const newActiveLogs = {
+                ...activeLogs,
+                [level]: !activeLogs[level],
+            };
+            setActiveLogLevels(newActiveLogs);
+        },
+        [activeLogLevels, defaultActiveLogLevels]
     );
 
+    const logs = useMemo(
+        () =>
+            data.searchedEvents.edges
+                .map(({ node }) => node)
+                .filter(isOfType('ConsoleLogEvent'))
+                .map(({ at, ...event }) => ({
+                    at: new Date(at),
+                    ...event,
+                })),
+        [data.searchedEvents.edges]
+    );
 
     const getMostRecentLogIdx = useCallback(
         (timestamp: number): number => {
@@ -133,11 +136,12 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
                 toggleActiveLogLevel={toggleActiveLogLevel}
             />
 
-            {isPending
-                ? <div>Loading...</div>
-                : (<ul className={styles.logsList}>
-                    {(logs || [])?.map((node, idx) => {
-                    // TODO: Timestamp is not unique, provide an id or a way to make it unique.
+            {isPending ? (
+                <div>Loading...</div>
+            ) : (
+                <ul className={styles.logsList}>
+                    {logs.map((node, idx) => {
+                        // TODO: Timestamp is not unique, provide an id or a way to make it unique.
                         return (
                             <LogEntry
                                 key={idx}
@@ -147,7 +151,8 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
                             />
                         );
                     })}
-                </ul>)}
+                </ul>
+            )}
         </section>
     );
 };
