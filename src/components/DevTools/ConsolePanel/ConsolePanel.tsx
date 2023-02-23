@@ -88,9 +88,7 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
             ...activeLogs,
             [level]: !activeLogs[level],
         };
-        startTransition(() => {
-            setActiveLogLevels(newActiveLogs);
-        });
+        setActiveLogLevels(newActiveLogs);
     }, [activeLogLevels, defaultActiveLogLevels]);
 
     const logs = useMemo(
