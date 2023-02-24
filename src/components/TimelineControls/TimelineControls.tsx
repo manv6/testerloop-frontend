@@ -5,7 +5,11 @@ import { useFragment } from 'react-relay';
 import { useTimeline } from 'src/hooks/timeline';
 import { datesToElapsedTime, datesToFraction } from 'src/utils/date';
 import styles from './TimelineControls.module.scss';
-import { EventType, FILTER_LABELS, MARKER_COLOURS } from 'src/constants/eventType';
+import {
+    EventType,
+    FILTER_LABELS,
+    MARKER_COLOURS,
+} from 'src/constants/eventType';
 import * as formatter from 'src/utils/formatters';
 import networkEventData from 'src/data/networkEvents';
 import stepsData from 'src/data/steps';
@@ -53,7 +57,7 @@ export const TimelineControls: React.FC<Props> = ({ fragmentKey }) => {
 
     const data = {
         networkEvents: networkEventData.log.entries,
-        steps: stepsData
+        steps: stepsData,
     } as any; // eslint-disable-line
 
     const {
@@ -69,7 +73,7 @@ export const TimelineControls: React.FC<Props> = ({ fragmentKey }) => {
         filters,
         setFilters,
         speed,
-        setSpeed
+        setSpeed,
     } = useTimeline();
 
     // Add dates
@@ -92,14 +96,24 @@ export const TimelineControls: React.FC<Props> = ({ fragmentKey }) => {
 
     // Define step markers
 
-    const stepMarkers = useMemo(() =>
-        steps.filter(({ options }) => options.groupStart).map(({ options }) => ({
-            id: `${options.id}-${options.wallClockStartedAt.getTime()}-${options.state}`,
-            type: EventType.STEP,
-            start: options.wallClockStartedAt,
-            startFraction: datesToFraction(startTime, endTime, options.wallClockStartedAt),
-        })
-        ), [steps, startTime, endTime]);
+    const stepMarkers = useMemo(
+        () =>
+            steps
+                .filter(({ options }) => options.groupStart)
+                .map(({ options }) => ({
+                    id: `${
+                        options.id
+                    }-${options.wallClockStartedAt.getTime()}-${options.state}`,
+                    type: EventType.STEP,
+                    start: options.wallClockStartedAt,
+                    startFraction: datesToFraction(
+                        startTime,
+                        endTime,
+                        options.wallClockStartedAt
+                    ),
+                })),
+        [steps, startTime, endTime]
+    );
 
     const failedNetworkMarkers = useMemo(() => networkEvents.filter((evt) => {
         const status = evt.response.status.toString();
@@ -121,28 +135,49 @@ export const TimelineControls: React.FC<Props> = ({ fragmentKey }) => {
             startFraction: datesToFraction(startTime, endTime, evt.time.until),
         })), [networkEvents, startTime, endTime]);
 
-    const cypressErrorMarkers = useMemo(() =>
-        steps.filter(({ options }) => (
-            options.state === 'failed' &&
-            options.err
-        ))
-            .map(({ options }) => ({
-                id: `${options.id}-${options.wallClockStartedAt.getTime()}-${options.state}`,
-                type: EventType.CYPRESS_ERROR,
-                start: options.wallClockStartedAt,
-                startFraction: datesToFraction(startTime, endTime, options.wallClockStartedAt),
-            })), [steps, startTime, endTime]);
+    const cypressErrorMarkers = useMemo(
+        () =>
+            steps
+                .filter(
+                    ({ options }) => options.state === 'failed' && options.err
+                )
+                .map(({ options }) => ({
+                    id: `${
+                        options.id
+                    }-${options.wallClockStartedAt.getTime()}-${options.state}`,
+                    type: EventType.CYPRESS_ERROR,
+                    start: options.wallClockStartedAt,
+                    startFraction: datesToFraction(
+                        startTime,
+                        endTime,
+                        options.wallClockStartedAt
+                    ),
+                })),
+        [steps, startTime, endTime]
+    );
 
-    const markers = useMemo(() => [
-        ...(filters.step ? stepMarkers : []),
-        ...(filters.network_error ? failedNetworkMarkers : []),
-        ...(filters.network_success ? successNetworkMarkers : []),
-        ...(filters.cypress_error ? cypressErrorMarkers : [])
-    ], [stepMarkers, failedNetworkMarkers, successNetworkMarkers, cypressErrorMarkers, filters]);
+    const markers = useMemo(
+        () => [
+            ...(filters.step ? stepMarkers : []),
+            ...(filters.network_error ? failedNetworkMarkers : []),
+            ...(filters.network_success ? successNetworkMarkers : []),
+            ...(filters.cypress_error ? cypressErrorMarkers : []),
+        ],
+        [
+            stepMarkers,
+            failedNetworkMarkers,
+            successNetworkMarkers,
+            cypressErrorMarkers,
+            filters,
+        ]
+    );
 
-    const onSpeedChange = useCallback((ev: React.ChangeEvent<HTMLSelectElement>) => {
-        setSpeed(parseFloat(ev.target.value));
-    }, [setSpeed]);
+    const onSpeedChange = useCallback(
+        (ev: React.ChangeEvent<HTMLSelectElement>) => {
+            setSpeed(parseFloat(ev.target.value));
+        },
+        [setSpeed]
+    );
 
     useEffect(() => {
         // goto first cypress error
@@ -153,55 +188,58 @@ export const TimelineControls: React.FC<Props> = ({ fragmentKey }) => {
     }, [cypressErrorMarkers, seekFraction]);
 
     return (
-        <div
-            className={styles.timeline}
-        >
+        <div className={styles.timeline}>
             <div className={styles.seekerContainer}>
                 <div
                     className={styles.seeker}
                     onMouseMove={(ev) => {
-                        const parentOffset = ev.currentTarget.parentElement?.offsetLeft || 0;
-                        setHoverTimeFraction((ev.clientX - parentOffset - ev.currentTarget.offsetLeft) / ev.currentTarget.offsetWidth);
+                        const parentOffset =
+                            ev.currentTarget.parentElement?.offsetLeft || 0;
+                        setHoverTimeFraction(
+                            (ev.clientX -
+                                parentOffset -
+                                ev.currentTarget.offsetLeft) /
+                                ev.currentTarget.offsetWidth
+                        );
                     }}
                     onMouseLeave={() => {
                         setHoverTimeFraction(null);
                     }}
                     onClick={(ev) => {
-                        const parentOffset = ev.currentTarget.parentElement?.offsetLeft || 0;
-                        seekFraction((ev.clientX - parentOffset - ev.currentTarget.offsetLeft) / ev.currentTarget.offsetWidth);
+                        const parentOffset =
+                            ev.currentTarget.parentElement?.offsetLeft || 0;
+                        seekFraction(
+                            (ev.clientX -
+                                parentOffset -
+                                ev.currentTarget.offsetLeft) /
+                                ev.currentTarget.offsetWidth
+                        );
                     }}
                 >
-                    {
-                        hoverTimeFraction && (
-                            <div
-                                className={styles.hover}
-                                style={{
-                                    right: `${100 - 100 * hoverTimeFraction}%`
-                                }}
-                            >
-                            </div>
-                        )
-                    }
+                    {hoverTimeFraction && (
+                        <div
+                            className={styles.hover}
+                            style={{
+                                right: `${100 - 100 * hoverTimeFraction}%`,
+                            }}
+                        ></div>
+                    )}
                     <div
                         className={styles.fill}
                         style={{
-                            right: `${100 - 100 * currentTimeFraction}%`
+                            right: `${100 - 100 * currentTimeFraction}%`,
                         }}
-                    >
-                    </div>
-                    {
-                        markers.map((marker) => (
-                            <div
-                                key={marker.id}
-                                className={styles.marker}
-                                style={{
-                                    left: `${100 * marker.startFraction}%`,
-                                    borderColor: MARKER_COLOURS[marker.type]
-                                }}
-                            >
-                            </div>
-                        ))
-                    }
+                    ></div>
+                    {markers.map((marker) => (
+                        <div
+                            key={marker.id}
+                            className={styles.marker}
+                            style={{
+                                left: `${100 * marker.startFraction}%`,
+                                borderColor: MARKER_COLOURS[marker.type],
+                            }}
+                        ></div>
+                    ))}
                     <div
                         className={styles.play}
                         onClick={(ev) => {
@@ -212,32 +250,49 @@ export const TimelineControls: React.FC<Props> = ({ fragmentKey }) => {
                         <span>{isPlaying ? 'Ⅱ' : '▶'}</span>
                     </div>
                 </div>
-                <div className={styles.cursor}  style={{
-                    right: `${100 - 100 * currentTimeFraction}%`
-                }} data-after-content={datesToElapsedTime(startTime, currentTime) || 0}
+                <div
+                    className={styles.cursor}
+                    style={{
+                        right: `${100 - 100 * currentTimeFraction}%`,
+                    }}
+                    data-after-content={
+                        datesToElapsedTime(startTime, currentTime) || 0
+                    }
                 ></div>
             </div>
             <div className={styles.controlSection}>
                 <div className={styles.filters}>
-                    { Object.values(EventType).map((et) => (
+                    {Object.values(EventType).map((et) => (
                         <label key={`filter-${et}`} className={styles.filter}>
-                            <div className={styles.legend} style={{ background: MARKER_COLOURS[et] }}></div>
+                            <div
+                                className={styles.legend}
+                                style={{ background: MARKER_COLOURS[et] }}
+                            ></div>
                             <input
                                 type="checkbox"
                                 defaultChecked={filters[et]}
-                                onInput={() => setFilters({ ...filters, [et]: !filters[et] })}
+                                onInput={() =>
+                                    setFilters({
+                                        ...filters,
+                                        [et]: !filters[et],
+                                    })
+                                }
                             />
                             <span>{FILTER_LABELS[et]}</span>
                         </label>
-                    )) }
+                    ))}
                 </div>
                 <div>
-                    <label> Speed:
+                    <label>
+                        {' '}
+                        Speed:
                         <select value={speed} onChange={onSpeedChange}>
-                            {AVAILABLE_SPEEDS.map((s, idx) =>
+                            {AVAILABLE_SPEEDS.map((s, idx) => (
                                 // TODO: Better key?
-                                <option key={`speed-${s}-${idx}`} value={s}>× {s}</option>
-                            )}
+                                <option key={`speed-${s}-${idx}`} value={s}>
+                                    × {s}
+                                </option>
+                            ))}
                         </select>
                     </label>
                 </div>

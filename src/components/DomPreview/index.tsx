@@ -10,20 +10,14 @@ export const DomPreview: React.FC = () => {
 
     const currentSnapshot = useMemo(
         () => domSnapshots.filter(({ at }) => at <= currentTime).at(-1),
-        [domSnapshots, currentTime],
+        [domSnapshots, currentTime]
     );
-    const iframeUrl = useMemo(
-        () => {
-            const blobContent = new Blob(
-                [currentSnapshot?.body || ''],
-                {
-                    type: 'text/html',
-                },
-            );
-            return URL.createObjectURL(blobContent);
-        },
-        [currentSnapshot],
-    );
+    const iframeUrl = useMemo(() => {
+        const blobContent = new Blob([currentSnapshot?.body || ''], {
+            type: 'text/html',
+        });
+        return URL.createObjectURL(blobContent);
+    }, [currentSnapshot]);
 
     return (
         <iframe

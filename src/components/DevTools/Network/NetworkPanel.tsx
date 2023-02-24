@@ -48,7 +48,6 @@ const filterByResourceTypePredicate = (
     );
 };
 
-
 enum ProgressFilterType {
     COMPLETED = 'completed',
     STARTED = 'started',
@@ -60,7 +59,6 @@ const filterByProgressPredicate = (
     selectedOptions: Set<ProgressFilterType>,
     currentTime: Date
 ) => {
-
     return Array.from(selectedOptions).some((filter) => {
         switch (filter) {
         case ProgressFilterType.COMPLETED:
@@ -175,9 +173,12 @@ export const NetworkPanel: React.FC<Props> = ({fragmentKey}) => {
         [setFilterTerm]
     );
 
-    const onSelectTab = useCallback((key: string | null) => {
-        setActiveTabKey(key);
-    }, [setActiveTabKey]);
+    const onSelectTab = useCallback(
+        (key: string | null) => {
+            setActiveTabKey(key);
+        },
+        [setActiveTabKey]
+    );
 
     const onChangeProgressFilter = useCallback(
         (ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -243,17 +244,24 @@ export const NetworkPanel: React.FC<Props> = ({fragmentKey}) => {
                 <div>
                     <div className={styles.filterBlock}>
                         <div className={styles.inlineWrapper}>
-                            {Object.values(ProgressFilterType).map((value, idx) => (
-                                <div key={`${value}-${idx}`} className={styles.labelWrapper}>
-                                    <input
-                                        type="checkbox"
-                                        onChange={onChangeProgressFilter}
-                                        name={value}
-                                        checked={selectedProgressFilters.has(value)}
-                                    ></input>
-                                    <span>{value}</span>
-                                </div>
-                            ))}
+                            {Object.values(ProgressFilterType).map(
+                                (value, idx) => (
+                                    <div
+                                        key={`${value}-${idx}`}
+                                        className={styles.labelWrapper}
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            onChange={onChangeProgressFilter}
+                                            name={value}
+                                            checked={selectedProgressFilters.has(
+                                                value
+                                            )}
+                                        ></input>
+                                        <span>{value}</span>
+                                    </div>
+                                )
+                            )}
                         </div>
                     </div>
                     <div className={styles.filterBlock}>
@@ -261,8 +269,8 @@ export const NetworkPanel: React.FC<Props> = ({fragmentKey}) => {
                             onClick={onChangeResourceTypeAllFilter}
                             className={cx({
                                 [styles.resourceTypeFilterActive]:
-                                    !selectedResourceTypeFilters.size}
-                            )}
+                                    !selectedResourceTypeFilters.size,
+                            })}
                         >
                             all
                         </button>
@@ -272,9 +280,11 @@ export const NetworkPanel: React.FC<Props> = ({fragmentKey}) => {
                                 onClick={onChangeResourceTypeFilters(value)}
                                 className={cx({
                                     [styles.resourceTypeFilterActive]:
-                                        selectedResourceTypeFilters.has(value)}
-                                )}
-                            >{value}</button>
+                                        selectedResourceTypeFilters.has(value),
+                                })}
+                            >
+                                {value}
+                            </button>
                         ))}
                     </div>
                 </div>

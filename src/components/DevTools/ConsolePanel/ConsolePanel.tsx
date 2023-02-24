@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useTransition } from 'react';
 import { useRefetchableFragment } from 'react-relay';
 import { useTimeline } from 'src/hooks/timeline';
 import { LogEntry, LogFilters } from './components';
@@ -26,14 +26,17 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
             fragment ConsolePanelFragment on TestExecution
             @argumentDefinitions(
                 logSearch: { type: "String", defaultValue: null }
-                logLevels: { type: "[ConsoleLogLevel!]", defaultValue: null}
+                logLevels: { type: "[ConsoleLogLevel!]", defaultValue: null }
             )
             @refetchable(queryName: "ConsolePanelFragmentRefetchQuery") {
                 id
                 searchedEvents: events(
                     filter: {
                         type: CONSOLE
-                        consoleFilter: { logSearch: $logSearch, logLevel: $logLevels }
+                        consoleFilter: {
+                            logSearch: $logSearch
+                            logLevel: $logLevels
+                        }
                     }
                 ) {
                     edges {
@@ -55,44 +58,55 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
 
     const { currentTime, hoverTime } = useTimeline();
 
-    const [logSearch, setLogSearch] = React.useState<string>('');
+    const [logSearch, setLogSearch] = React.useState<string | null>(null);
     const debouncedResult = useDebounce(logSearch, 200);
     const debouncedTerm = debouncedResult[0];
 
+    const [isPending, startTransition] = useTransition();
+
+    const defaultActiveLogLevels = fillObjFromType(LogLevel, true);
+    const [activeLogLevels, setActiveLogLevels] = React.useState<Record<
+        LogLevel,
+        boolean
+    > | null>(null);
+
     useEffect(() => {
-        refetch({ logSearch: debouncedTerm });
-    }, [debouncedTerm, refetch]);
+        if (debouncedTerm === null && activeLogLevels === null) {
+            return;
+        }
+        const logLevels = activeLogLevels
+            ? Object.keys(activeLogLevels).filter(
+                  (key: string) => activeLogLevels[key as LogLevel]
+              )
+            : null;
+        startTransition(() => {
+            refetch({ logSearch: debouncedTerm, logLevels });
+        });
+    }, [activeLogLevels, debouncedTerm, refetch]);
 
-    const [activeLogLevels, setActiveLogLevels] = React.useState<
-        Record<LogLevel, boolean>
-    >(
-        fillObjFromType(LogLevel, true)
+    const toggleActiveLogLevel = useCallback(
+        (level: LogLevel) => {
+            const activeLogs = activeLogLevels ?? defaultActiveLogLevels;
+            const newActiveLogs = {
+                ...activeLogs,
+                [level]: !activeLogs[level],
+            };
+            setActiveLogLevels(newActiveLogs);
+        },
+        [activeLogLevels, defaultActiveLogLevels]
     );
-
-    const toggleActiveLogLevel = (level: LogLevel) => {
-        const newActiveLogs = {
-            ...activeLogLevels,
-            [level]: !activeLogLevels[level],
-        };
-        setActiveLogLevels(newActiveLogs);
-        const logLevels = Object.keys(newActiveLogs).filter(
-            (key: string) => newActiveLogs[key as LogLevel]);
-        refetch({ logSearch: debouncedTerm, logLevels });
-    };
 
     const logs = useMemo(
-        () => data
-            .searchedEvents
-            .edges
-            .map(({ node }) => node)
-            .filter(isOfType('ConsoleLogEvent'))
-            .map(({ at, ...event }) => ({
-                at: new Date(at),
-                ...event,
-            })),
+        () =>
+            data.searchedEvents.edges
+                .map(({ node }) => node)
+                .filter(isOfType('ConsoleLogEvent'))
+                .map(({ at, ...event }) => ({
+                    at: new Date(at),
+                    ...event,
+                })),
         [data.searchedEvents.edges]
     );
-
 
     const getMostRecentLogIdx = useCallback(
         (timestamp: number): number => {
@@ -116,25 +130,29 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
         <section className={styles.consolePanel}>
             <LogFilters
                 logFilters={data}
-                filterTerm={logSearch}
+                filterTerm={logSearch ?? ''}
                 setFilterTerm={setLogSearch}
-                activeLogLevels={activeLogLevels}
+                activeLogLevels={activeLogLevels ?? defaultActiveLogLevels}
                 toggleActiveLogLevel={toggleActiveLogLevel}
             />
 
-            <ul className={styles.logsList}>
-                {(logs || [])?.map((node, idx) => {
-                    // TODO: Timestamp is not unique, provide an id or a way to make it unique.
-                    return (
-                        <LogEntry
-                            key={idx}
-                            isLogSelected={currentLogIdx === idx}
-                            isLogHovered={hoveredLogIdx === idx}
-                            logEntry={node}
-                        />
-                    );
-                })}
-            </ul>
+            {isPending ? (
+                <div>Loading...</div>
+            ) : (
+                <ul className={styles.logsList}>
+                    {logs.map((node, idx) => {
+                        // TODO: Timestamp is not unique, provide an id or a way to make it unique.
+                        return (
+                            <LogEntry
+                                key={idx}
+                                isLogSelected={currentLogIdx === idx}
+                                isLogHovered={hoveredLogIdx === idx}
+                                logEntry={node}
+                            />
+                        );
+                    })}
+                </ul>
+            )}
         </section>
     );
 };

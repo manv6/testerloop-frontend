@@ -16,22 +16,19 @@ import AppQuery from './AppQuery';
 import { AppQuery as AppQueryType } from './__generated__/AppQuery.graphql';
 
 const SuspensePanel: React.FC<React.PropsWithChildren> = ({ children }) => (
-    <React.Suspense fallback={<div>Loading</div>}>
-        {children}
-    </React.Suspense>
+    <React.Suspense fallback={<div>Loading</div>}>{children}</React.Suspense>
 );
 
 const App: React.FC = () => {
     const data = { steps: stepsData } as any; // eslint-disable-line
-    const steps = useMemo(() =>
-        formatters.formatSteps(data.steps), [data.steps]);
-
-    const queryData = useLazyLoadQuery<AppQueryType>(
-        AppQuery,
-        {
-            testExecutionId: 'VGVzdEV4ZWN1dGlvbi8xMjM0', //base-64 string for 'TestExecution/1234'
-        },
+    const steps = useMemo(
+        () => formatters.formatSteps(data.steps),
+        [data.steps]
     );
+
+    const queryData = useLazyLoadQuery<AppQueryType>(AppQuery, {
+        testExecutionId: 'VGVzdEV4ZWN1dGlvbi8xMjM0', //base-64 string for 'TestExecution/1234'
+    });
 
     // TODO: We likely want to add some "lead" and "lag" time to these dates,
     // so that events that occur at or near the very beginning or end of the
@@ -41,10 +38,7 @@ const App: React.FC = () => {
 
     return (
         <div className={styles.app}>
-            <TimelineProvider
-                startTime={startTime}
-                endTime={endTime}
-            >
+            <TimelineProvider startTime={startTime} endTime={endTime}>
                 <SuspensePanel>
                     <Summary fragmentKey={queryData.testExecution} />
                 </SuspensePanel>
@@ -53,12 +47,21 @@ const App: React.FC = () => {
                 </SuspensePanel>
                 <Expandable.Parent className={styles.expandableParent}>
                     <SuspensePanel>
-                        <Expandable.Child className={styles.expandableSteps} notExpandable={true}>
-                            <Steps className={styles.steps} fragmentKey={data} />
+                        <Expandable.Child
+                            className={styles.expandableSteps}
+                            notExpandable={true}
+                        >
+                            <Steps
+                                className={styles.steps}
+                                fragmentKey={data}
+                            />
                         </Expandable.Child>
                     </SuspensePanel>
                     <SuspensePanel>
-                        <Expandable.Child className={styles.expandableCypressError} notExpandable={true}>
+                        <Expandable.Child
+                            className={styles.expandableCypressError}
+                            notExpandable={true}
+                        >
                             <CypressError />
                         </Expandable.Child>
                     </SuspensePanel>
@@ -70,7 +73,9 @@ const App: React.FC = () => {
                     <SuspensePanel>
                         <Expandable.Child className={styles.expandableConsole}>
                             {/* eslint-disable @typescript-eslint/no-non-null-assertion */}
-                            <ConsolePanel fragmentKey={queryData.testExecution!}/>
+                            <ConsolePanel
+                                fragmentKey={queryData.testExecution!}
+                            />
                         </Expandable.Child>
                     </SuspensePanel>
                     <SuspensePanel>

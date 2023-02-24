@@ -17,49 +17,62 @@ export type Step = formatter.FormattedSteps[0];
 export type StepHierarchy = {
     step: Step;
     actions: Step[];
-}
+};
 
-const getMostRecentStepIdx = (hierarchy: StepHierarchy[], timestamp: number): number => {
-    const nextStepIdx = hierarchy.findIndex(({ step }) =>
-        step.options.wallClockStartedAt.getTime() > timestamp);
+const getMostRecentStepIdx = (
+    hierarchy: StepHierarchy[],
+    timestamp: number
+): number => {
+    const nextStepIdx = hierarchy.findIndex(
+        ({ step }) => step.options.wallClockStartedAt.getTime() > timestamp
+    );
     return (nextStepIdx === -1 ? hierarchy.length : nextStepIdx) - 1;
 };
 
 const getMostRecentActionIdx = (actions: Step[], timestamp: number): number => {
-    const nextStepIdx = actions.findIndex((action) =>
-        action.options.wallClockStartedAt.getTime() > timestamp);
+    const nextStepIdx = actions.findIndex(
+        (action) => action.options.wallClockStartedAt.getTime() > timestamp
+    );
     return (nextStepIdx === -1 ? actions.length : nextStepIdx) - 1;
 };
 
 export const Steps: React.FC<Props> = ({ className }) => {
     const data = { steps: stepsData } as any; // eslint-disable-line
-    const steps = useMemo(() =>
-        formatter.formatSteps(data.steps), [data.steps]);
+    const steps = useMemo(
+        () => formatter.formatSteps(data.steps),
+        [data.steps]
+    );
 
-    const {
-        currentTime,
-        hoverTime,
-    } = useTimeline();
+    const { currentTime, hoverTime } = useTimeline();
 
     const currentTimestamp = currentTime.getTime();
     const hoverTimestamp = hoverTime?.getTime();
 
     const stepsHierarchy = useHierarchizeStepsData(steps);
 
-    const selectedStepIdx = getMostRecentStepIdx(stepsHierarchy, currentTimestamp);
+    const selectedStepIdx = getMostRecentStepIdx(
+        stepsHierarchy,
+        currentTimestamp
+    );
     const hoveredStepIdx = hoverTimestamp
         ? getMostRecentStepIdx(stepsHierarchy, hoverTimestamp)
         : null;
 
-    const selectedActionIdx = selectedStepIdx !== -1
-        ? getMostRecentActionIdx(
-            stepsHierarchy[selectedStepIdx].actions,
-            currentTimestamp)
-        : null;
+    const selectedActionIdx =
+        selectedStepIdx !== -1
+            ? getMostRecentActionIdx(
+                  stepsHierarchy[selectedStepIdx].actions,
+                  currentTimestamp
+              )
+            : null;
 
-    const hoveredActionIdx = hoverTimestamp && selectedStepIdx !== -1
-        ? getMostRecentActionIdx(stepsHierarchy[selectedStepIdx].actions, hoverTimestamp)
-        : null;
+    const hoveredActionIdx =
+        hoverTimestamp && selectedStepIdx !== -1
+            ? getMostRecentActionIdx(
+                  stepsHierarchy[selectedStepIdx].actions,
+                  hoverTimestamp
+              )
+            : null;
 
     return (
         <table className={cx(className, styles.stepsTable)}>
@@ -75,8 +88,12 @@ export const Steps: React.FC<Props> = ({ className }) => {
                             actions={actions}
                             isStepSelected={isStepSelected}
                             isStepHovered={isStepHovered}
-                            selectedActionIdx={isStepSelected ? selectedActionIdx : null}
-                            hoveredActionIdx={isStepHovered ? hoveredActionIdx : null}
+                            selectedActionIdx={
+                                isStepSelected ? selectedActionIdx : null
+                            }
+                            hoveredActionIdx={
+                                isStepHovered ? hoveredActionIdx : null
+                            }
                         />
                     );
                 })}

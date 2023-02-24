@@ -6,9 +6,6 @@ type Props = React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 export const CloseButton: React.FC<Props> = ({ className, ...props }) => {
     return (
-        <button
-            className={cx(className, styles.button)}
-            {...props}
-        ></button>
+        <button className={cx(className, styles.button)} {...props}></button>
     );
 };

@@ -84,7 +84,7 @@ const Summary: React.FC<Props> = ({ fragmentKey }) => {
     );
 
     const errorObj = results.runs[0].tests[0].attempts[0];
-    const cypressErrorName = errorObj.error?.name;
+    const cypressErrorName = errorObj.error.name;
 
     return (
         <div className={styles.summary}>

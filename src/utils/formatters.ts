@@ -8,17 +8,21 @@ import { isOfType } from 'src/utils/isOfType';
 
 export type FormattedSteps = ReturnType<typeof formatSteps>;
 export const formatSteps = (steps: TimelineControlsFragment$data['steps']) =>
-    steps.map((step) => ({
-        ...step,
-        options: {
-            ...step.options,
-            wallClockStartedAt:
-                new Date(Date.parse(step.options.wallClockStartedAt))
-        }
-    }))
-        .sort((a, b) => (
-            a.options.wallClockStartedAt.getTime() - b.options.wallClockStartedAt.getTime()
-        ));
+    steps
+        .map((step) => ({
+            ...step,
+            options: {
+                ...step.options,
+                wallClockStartedAt: new Date(
+                    Date.parse(step.options.wallClockStartedAt)
+                ),
+            },
+        }))
+        .sort(
+            (a, b) =>
+                a.options.wallClockStartedAt.getTime() -
+                b.options.wallClockStartedAt.getTime()
+        );
 
 export type FormattedNetworkEvents = ReturnType<typeof formatNetworkEvents>;
 export const formatNetworkEvents = (data: NetworkPanelFragment$data) =>
