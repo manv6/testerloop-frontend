@@ -44,11 +44,7 @@ const Summary: React.FC<Props> = ({ fragmentKey }) => {
                 ) {
                     totalCount
                 }
-                summaryNetworkEvents: events(
-                    filter: {
-                        type: NETWORK
-                    }
-                ) {
+                summaryNetworkEvents: events(filter: { type: NETWORK }) {
                     edges {
                         node {
                             __typename
@@ -70,7 +66,7 @@ const Summary: React.FC<Props> = ({ fragmentKey }) => {
     const engineerUrl = [cicd.GITHUB_SERVER_URL, engineer].join('/');
     const endTime = results.endedTestsAt;
 
-    const logErrorCount = summaryData?.summaryConsoleErrors?.totalCount;
+    const logErrorCount = summaryData?.summaryConsoleErrors.totalCount;
 
     const networkErrorCount = useMemo(
         () =>
@@ -78,7 +74,7 @@ const Summary: React.FC<Props> = ({ fragmentKey }) => {
                 .map(({ node }) => node)
                 .filter(isOfType('HttpNetworkEvent'))
                 .filter(
-                    (evt) => evt.response?.status && evt.response?.status >= 400
+                    (evt) => evt.response.status && evt.response.status >= 400
                 ).length,
         [summaryData]
     );

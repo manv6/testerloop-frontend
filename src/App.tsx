@@ -80,7 +80,9 @@ const App: React.FC = () => {
                     </SuspensePanel>
                     <SuspensePanel>
                         <Expandable.Child className={styles.expandableNetwork}>
-                            <NetworkPanel fragmentKey={queryData.testExecution!} />
+                            <NetworkPanel
+                                fragmentKey={queryData.testExecution!}
+                            />
                         </Expandable.Child>
                     </SuspensePanel>
                 </Expandable.Parent>

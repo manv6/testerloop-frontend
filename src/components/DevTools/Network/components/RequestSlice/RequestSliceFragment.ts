@@ -25,7 +25,6 @@ const RequestSliceFragment = graphql`
             }
             transferSize
         }
-
     }
 `;
 

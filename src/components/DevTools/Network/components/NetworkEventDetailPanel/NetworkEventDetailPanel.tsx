@@ -13,7 +13,6 @@ import {
 import NetworkEventDetailFragment from './NetworkEventDetailFragment';
 import styles from './NetworkEventDetailPanel.module.scss';
 
-
 type PostDataTabProps = {
     selectedEvent: NetworkEventDetailFragment$data;
 };
@@ -129,8 +128,8 @@ const HeadersTab: React.FC<HeadersTabProps> = ({ selectedEvent }) => {
                 <span className={styles.boldText}>Request to:</span>{' '}
                 {selectedEvent.request.url.url}
             </div>
-            {selectedEvent.request.queryString.length
-                ? (<>
+            {selectedEvent.request.queryString.length ? (
+                <>
                     <div key="queryParamsLabel">
                         <span className={styles.boldText}>Query Params:</span>
                     </div>
@@ -140,9 +139,8 @@ const HeadersTab: React.FC<HeadersTabProps> = ({ selectedEvent }) => {
                         keyLabel="Header Name"
                         valueLabel="Header Value"
                     />
-                </>)
-                : null
-            }
+                </>
+            ) : null}
             <div>
                 <div key="requestHeaderLabel">
                     <span className={styles.boldText}>Request Headers:</span>
@@ -201,7 +199,7 @@ const NetworkEventDetailPanel: React.FC<NetworkEventDetailPanelProps> = ({
             children: <ResponseDataTab selectedEvent={eventData} />,
         },
     ].filter(
-        (tabChild) => tabChild?.tabKey !== 'postData' || eventData.request.body
+        (tabChild) => tabChild.tabKey !== 'postData' || eventData.request.body
     );
 
     return (

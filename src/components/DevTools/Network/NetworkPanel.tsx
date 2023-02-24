@@ -61,25 +61,24 @@ const filterByProgressPredicate = (
 ) => {
     return Array.from(selectedOptions).some((filter) => {
         switch (filter) {
-        case ProgressFilterType.COMPLETED:
-            return event.time.until <= currentTime;
-        case ProgressFilterType.STARTED:
-            return (
-                event.time.at <= currentTime &&
-                currentTime < event.time.until
-            );
-        case ProgressFilterType.NOT_STARTED:
-            return currentTime < event.time.at;
-        default:
-            return false;
+            case ProgressFilterType.COMPLETED:
+                return event.time.until <= currentTime;
+            case ProgressFilterType.STARTED:
+                return (
+                    event.time.at <= currentTime &&
+                    currentTime < event.time.until
+                );
+            case ProgressFilterType.NOT_STARTED:
+                return currentTime < event.time.at;
+            default:
+                return false;
         }
     });
 };
 
 type Props = {
-    fragmentKey: NetworkPanelFragment$key
+    fragmentKey: NetworkPanelFragment$key;
 };
-
 
 const NetworkPanelFragment = graphql`
     fragment NetworkPanelFragment on TestExecution {
@@ -116,15 +115,13 @@ const NetworkPanelFragment = graphql`
     }
 `;
 
-export const NetworkPanel: React.FC<Props> = ({fragmentKey}) => {
+export const NetworkPanel: React.FC<Props> = ({ fragmentKey }) => {
+    const data = useFragment(NetworkPanelFragment, fragmentKey);
 
-    const data = useFragment(
-        NetworkPanelFragment,
-        fragmentKey
+    const networkEvents = useMemo(
+        () => formatter.formatNetworkEvents(data),
+        [data]
     );
-
-    const networkEvents = useMemo(() =>
-        formatter.formatNetworkEvents(data), [data]);
 
     const [selectedEventId, setSelectedEventId] = useState<null | string>(null);
     const [filterTerm, setFilterTerm] = useState<string>('');
@@ -142,24 +139,33 @@ export const NetworkPanel: React.FC<Props> = ({fragmentKey}) => {
     );
 
     const filteredEvents = useMemo(
-        () => networkEvents
-            .filter((networkEvent) =>
-                (filterTerm
-                    ? networkEvent.request.url.url.includes(filterTerm)
-                    : true)
-            )
-            .filter((event) =>
-                filterByProgressPredicate(
-                    event,
-                    selectedProgressFilters,
-                    currentTime
+        () =>
+            networkEvents
+                .filter((networkEvent) =>
+                    filterTerm
+                        ? networkEvent.request.url.url.includes(filterTerm)
+                        : true
                 )
-            )
-            .filter((event) => filterByResourceTypePredicate(
-                event,
-                selectedResourceTypeFilters,
-            )),
-        [networkEvents, filterTerm, currentTime, selectedProgressFilters, selectedResourceTypeFilters]
+                .filter((event) =>
+                    filterByProgressPredicate(
+                        event,
+                        selectedProgressFilters,
+                        currentTime
+                    )
+                )
+                .filter((event) =>
+                    filterByResourceTypePredicate(
+                        event,
+                        selectedResourceTypeFilters
+                    )
+                ),
+        [
+            networkEvents,
+            filterTerm,
+            currentTime,
+            selectedProgressFilters,
+            selectedResourceTypeFilters,
+        ]
     );
 
     const onDetailPanelClose = useCallback(() => {
@@ -221,9 +227,7 @@ export const NetworkPanel: React.FC<Props> = ({fragmentKey}) => {
     const lastStartedNetworkEvent = useMemo(
         () =>
             // Note that we assume networkEvents is already sorted by startedDateTime here
-            networkEvents
-                .filter((event) => currentTime > event.time.at)
-                .at(-1),
+            networkEvents.filter((event) => currentTime > event.time.at).at(-1),
 
         [currentTime, networkEvents]
     );

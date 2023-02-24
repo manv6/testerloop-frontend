@@ -14,10 +14,7 @@ type Props = {
 };
 
 const RequestSlice: React.FC<Props> = (props) => {
-    const eventData = useFragment(
-        RequestSliceFragment,
-        props.event
-    );
+    const eventData = useFragment(RequestSliceFragment, props.event);
 
     const eventTimeAt = new Date(eventData.time.at);
     const eventTimeUntil = new Date(eventData.time.until);
@@ -47,8 +44,7 @@ const RequestSlice: React.FC<Props> = (props) => {
     });
     const progressColorStyle = cx({
         [styles.progressStarted]:
-        eventTimeAt <= currentTime &&
-            currentTime < eventTimeUntil,
+            eventTimeAt <= currentTime && currentTime < eventTimeUntil,
         [styles.progressEnded]: eventTimeUntil <= currentTime,
     });
     let progressText = null;

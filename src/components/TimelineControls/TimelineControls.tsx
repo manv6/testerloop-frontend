@@ -24,15 +24,12 @@ type Props = {
 };
 
 export const TimelineControls: React.FC<Props> = ({ fragmentKey }) => {
-
     const timelineData = useFragment(
         graphql`
             fragment TimelineControlsFragment on TestExecution {
                 id
                 timelineControlNetworkEvents: events(
-                    filter: {
-                        type: NETWORK
-                    }
+                    filter: { type: NETWORK }
                 ) {
                     edges {
                         node {
@@ -78,8 +75,10 @@ export const TimelineControls: React.FC<Props> = ({ fragmentKey }) => {
 
     // Add dates
 
-    const steps = useMemo(() =>
-        formatter.formatSteps(data.steps), [data.steps]);
+    const steps = useMemo(
+        () => formatter.formatSteps(data.steps),
+        [data.steps]
+    );
     const networkEvents = useMemo(
         () =>
             timelineData?.timelineControlNetworkEvents.edges
@@ -115,25 +114,42 @@ export const TimelineControls: React.FC<Props> = ({ fragmentKey }) => {
         [steps, startTime, endTime]
     );
 
-    const failedNetworkMarkers = useMemo(() => networkEvents.filter((evt) => {
-        const status = evt.response.status.toString();
-        return status.startsWith('4') || status.startsWith('5');
-    }).map((evt) =>
-        ({
-            id: evt.id,
-            type: EventType.NETWORK_ERROR,
-            start: evt.time.until,
-            startFraction: datesToFraction(startTime, endTime, evt.time.until),
-        })), [networkEvents, startTime, endTime]);
+    const failedNetworkMarkers = useMemo(
+        () =>
+            networkEvents
+                .filter((evt) => {
+                    const status = evt.response.status.toString();
+                    return status.startsWith('4') || status.startsWith('5');
+                })
+                .map((evt) => ({
+                    id: evt.id,
+                    type: EventType.NETWORK_ERROR,
+                    start: evt.time.until,
+                    startFraction: datesToFraction(
+                        startTime,
+                        endTime,
+                        evt.time.until
+                    ),
+                })),
+        [networkEvents, startTime, endTime]
+    );
 
-    const successNetworkMarkers = useMemo(() => networkEvents.filter((evt) =>
-        evt.response.status.toString().startsWith('2')).map((evt) =>
-        ({
-            id: evt.id,
-            type: EventType.NETWORK_SUCCESS,
-            start: evt.time.until,
-            startFraction: datesToFraction(startTime, endTime, evt.time.until),
-        })), [networkEvents, startTime, endTime]);
+    const successNetworkMarkers = useMemo(
+        () =>
+            networkEvents
+                .filter((evt) => evt.response.status.toString().startsWith('2'))
+                .map((evt) => ({
+                    id: evt.id,
+                    type: EventType.NETWORK_SUCCESS,
+                    start: evt.time.until,
+                    startFraction: datesToFraction(
+                        startTime,
+                        endTime,
+                        evt.time.until
+                    ),
+                })),
+        [networkEvents, startTime, endTime]
+    );
 
     const cypressErrorMarkers = useMemo(
         () =>
