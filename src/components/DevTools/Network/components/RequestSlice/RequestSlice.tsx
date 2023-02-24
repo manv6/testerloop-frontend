@@ -3,21 +3,22 @@ import cx from 'classnames';
 import { useTimeline } from 'src/hooks/timeline';
 import { datesToFraction } from 'src/utils/date';
 import styles from './RequestSlice.module.scss';
-import RequestSliceFragment from './RequestSliceFragment';
-import { RequestSliceFragment$key } from './__generated__/RequestSliceFragment.graphql';
-import { useFragment } from 'react-relay';
+import { NetworkPanelFragment$data } from 'src/components/DevTools/Network/__generated__/NetworkPanelFragment.graphql.js';
+
+type EventNode =
+    NetworkPanelFragment$data['searchedNetworkEvents']['edges'][0]['node'] & {
+        __typename: 'HttpNetworkEvent';
+    };
 
 type Props = {
-    event: RequestSliceFragment$key;
+    event: EventNode;
     setSelectedEventId: (id: string) => void;
     isLastStartedEvent: boolean;
 };
 
 const RequestSlice: React.FC<Props> = (props) => {
-    const eventData = useFragment(RequestSliceFragment, props.event);
-
-    const eventTimeAt = new Date(eventData.time.at);
-    const eventTimeUntil = new Date(eventData.time.until);
+    const eventTimeAt = new Date(props.event.time.at);
+    const eventTimeUntil = new Date(props.event.time.until);
 
     const { startTime, endTime, currentTime, setHoverTimeFraction } =
         useTimeline();
@@ -40,7 +41,7 @@ const RequestSlice: React.FC<Props> = (props) => {
         100 * datesToFraction(startTime, endTime, currentTime);
 
     const textColorStyle = cx({
-        [styles.networkTableRowError]: eventData.response.status >= 400,
+        [styles.networkTableRowError]: props.event.response.status >= 400,
     });
     const progressColorStyle = cx({
         [styles.progressStarted]:
@@ -65,7 +66,7 @@ const RequestSlice: React.FC<Props> = (props) => {
             }}
             onClick={(ev) => {
                 ev.stopPropagation();
-                props.setSelectedEventId(eventData.id);
+                props.setSelectedEventId(props.event.id);
             }}
             className={styles.trBody}
         >
@@ -77,24 +78,24 @@ const RequestSlice: React.FC<Props> = (props) => {
                 {progressText} {props.isLastStartedEvent && '*'}
             </td>
             <td className={cx(styles.td, textColorStyle)}>
-                <span>{eventData.response.status}</span>
+                <span>{props.event.response.status}</span>
             </td>
             <td className={styles.td}>
                 <span className={textColorStyle}>
-                    {eventData.request.method}
+                    {props.event.request.method}
                 </span>
             </td>
             <td className={cx(styles.td, styles.urlColumn)}>
                 <span className={textColorStyle}>
-                    {truncateValue(eventData.request.url.url, 60)}
+                    {truncateValue(props.event.request.url.url, 60)}
                 </span>
             </td>
             <td className={styles.td}>
                 <span className={textColorStyle}>
                     {truncateValue(
-                        (eventData.initiator.origin || '') +
-                            (eventData.initiator.lineNo
-                                ? `:${eventData.initiator.lineNo}`
+                        (props.event.initiator.origin || '') +
+                            (props.event.initiator.lineNo
+                                ? `:${props.event.initiator.lineNo}`
                                 : ''),
                         40
                     )}
@@ -102,17 +103,17 @@ const RequestSlice: React.FC<Props> = (props) => {
             </td>
             <td className={styles.td}>
                 <span className={textColorStyle}>
-                    {eventData.response.body.mimeType}
+                    {props.event.response.body.mimeType}
                 </span>
             </td>
             <td className={styles.td}>
                 <span className={textColorStyle}>
-                    {eventData.response.transferSize}
+                    {props.event.response.transferSize}
                 </span>
             </td>
             <td className={styles.td}>
                 <span className={textColorStyle}>
-                    {eventData.response.body.size}
+                    {props.event.response.body.size}
                 </span>
             </td>
             <td className={cx(styles.td, styles.waterfall)}>

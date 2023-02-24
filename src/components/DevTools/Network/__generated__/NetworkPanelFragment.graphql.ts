@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e24273b831f7fa846f5dc9640d3754a1>>
+ * @generated SignedSource<<44a734a4a10c72068a78b1f4851c5162>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -18,21 +18,54 @@ export type NetworkPanelFragment$data = {
       readonly node: {
         readonly __typename: "HttpNetworkEvent";
         readonly id: string;
+        readonly initiator: {
+          readonly lineNo: number | null;
+          readonly origin: string | null;
+        };
         readonly request: {
+          readonly body: {
+            readonly data: string;
+            readonly mimeType: string;
+          } | null;
+          readonly cookies: ReadonlyArray<{
+            readonly name: string;
+            readonly value: string;
+          } | null>;
+          readonly headers: {
+            readonly values: ReadonlyArray<{
+              readonly key: string;
+              readonly value: string;
+            }>;
+          };
           readonly method: string;
+          readonly queryString: ReadonlyArray<{
+            readonly key: string;
+            readonly value: string;
+          }>;
           readonly url: {
             readonly url: string;
           };
         };
         readonly resourceType: string | null;
         readonly response: {
+          readonly body: {
+            readonly data: string;
+            readonly mimeType: string;
+            readonly size: number;
+          };
+          readonly headers: {
+            readonly values: ReadonlyArray<{
+              readonly key: string;
+              readonly value: string;
+            }>;
+          };
           readonly status: number;
+          readonly transferSize: number;
         };
         readonly time: {
           readonly at: any;
           readonly until: any;
         };
-        readonly " $fragmentSpreads": FragmentRefs<"NetworkEventDetailFragment" | "RequestSliceFragment">;
       } | {
         // This will never be '%other', but we need some
         // value in case none of the concrete values match.
@@ -60,6 +93,58 @@ v1 = {
   "args": null,
   "kind": "ScalarField",
   "name": "__typename",
+  "storageKey": null
+},
+v2 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "data",
+  "storageKey": null
+},
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "mimeType",
+  "storageKey": null
+},
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "value",
+  "storageKey": null
+},
+v5 = [
+  (v4/*: any*/),
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "key",
+    "storageKey": null
+  }
+],
+v6 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "HttpHeaders",
+  "kind": "LinkedField",
+  "name": "headers",
+  "plural": false,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "KeyValuePair",
+      "kind": "LinkedField",
+      "name": "values",
+      "plural": true,
+      "selections": (v5/*: any*/),
+      "storageKey": null
+    }
+  ],
   "storageKey": null
 };
 return {
@@ -142,6 +227,31 @@ return {
                     {
                       "alias": null,
                       "args": null,
+                      "concreteType": "HttpNetworkEventInitiator",
+                      "kind": "LinkedField",
+                      "name": "initiator",
+                      "plural": false,
+                      "selections": [
+                        {
+                          "alias": null,
+                          "args": null,
+                          "kind": "ScalarField",
+                          "name": "origin",
+                          "storageKey": null
+                        },
+                        {
+                          "alias": null,
+                          "args": null,
+                          "kind": "ScalarField",
+                          "name": "lineNo",
+                          "storageKey": null
+                        }
+                      ],
+                      "storageKey": null
+                    },
+                    {
+                      "alias": null,
+                      "args": null,
                       "concreteType": "HttpNetworkRequest",
                       "kind": "LinkedField",
                       "name": "request",
@@ -152,6 +262,49 @@ return {
                           "args": null,
                           "kind": "ScalarField",
                           "name": "method",
+                          "storageKey": null
+                        },
+                        {
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "HttpRequestBody",
+                          "kind": "LinkedField",
+                          "name": "body",
+                          "plural": false,
+                          "selections": [
+                            (v2/*: any*/),
+                            (v3/*: any*/)
+                          ],
+                          "storageKey": null
+                        },
+                        {
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "Cookie",
+                          "kind": "LinkedField",
+                          "name": "cookies",
+                          "plural": true,
+                          "selections": [
+                            {
+                              "alias": null,
+                              "args": null,
+                              "kind": "ScalarField",
+                              "name": "name",
+                              "storageKey": null
+                            },
+                            (v4/*: any*/)
+                          ],
+                          "storageKey": null
+                        },
+                        (v6/*: any*/),
+                        {
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "KeyValuePair",
+                          "kind": "LinkedField",
+                          "name": "queryString",
+                          "plural": true,
+                          "selections": (v5/*: any*/),
                           "storageKey": null
                         },
                         {
@@ -189,19 +342,37 @@ return {
                           "kind": "ScalarField",
                           "name": "status",
                           "storageKey": null
-                        }
+                        },
+                        {
+                          "alias": null,
+                          "args": null,
+                          "kind": "ScalarField",
+                          "name": "transferSize",
+                          "storageKey": null
+                        },
+                        {
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "HttpResponseBody",
+                          "kind": "LinkedField",
+                          "name": "body",
+                          "plural": false,
+                          "selections": [
+                            (v3/*: any*/),
+                            (v2/*: any*/),
+                            {
+                              "alias": null,
+                              "args": null,
+                              "kind": "ScalarField",
+                              "name": "size",
+                              "storageKey": null
+                            }
+                          ],
+                          "storageKey": null
+                        },
+                        (v6/*: any*/)
                       ],
                       "storageKey": null
-                    },
-                    {
-                      "args": null,
-                      "kind": "FragmentSpread",
-                      "name": "RequestSliceFragment"
-                    },
-                    {
-                      "args": null,
-                      "kind": "FragmentSpread",
-                      "name": "NetworkEventDetailFragment"
                     }
                   ],
                   "type": "HttpNetworkEvent",
@@ -222,6 +393,6 @@ return {
 };
 })();
 
-(node as any).hash = "548c5e5c5a5d10ca9e22805fa43319c2";
+(node as any).hash = "781ab569f0f8ddbee192d3ec2ad744d1";
 
 export default node;

@@ -1,20 +1,20 @@
 import React, { useMemo } from 'react';
 import { Tabs } from 'src/components/common/Tabs';
-import { useFragment } from 'react-relay';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 import { KeyValueTable } from 'src/components/DevTools/Network/components';
 import { CloseButton } from 'src/components/common/CloseButton';
-import {
-    NetworkEventDetailFragment$key,
-    NetworkEventDetailFragment$data,
-} from './__generated__/NetworkEventDetailFragment.graphql';
-import NetworkEventDetailFragment from './NetworkEventDetailFragment';
+import { NetworkPanelFragment$data } from 'src/components/DevTools/Network/__generated__/NetworkPanelFragment.graphql.js';
 import styles from './NetworkEventDetailPanel.module.scss';
 
+type EventNode =
+    NetworkPanelFragment$data['searchedNetworkEvents']['edges'][0]['node'] & {
+        __typename: 'HttpNetworkEvent';
+    };
+
 type PostDataTabProps = {
-    selectedEvent: NetworkEventDetailFragment$data;
+    selectedEvent: EventNode;
 };
 
 const PostDataTab: React.FC<PostDataTabProps> = ({ selectedEvent }) => {
@@ -65,7 +65,7 @@ const PostDataTab: React.FC<PostDataTabProps> = ({ selectedEvent }) => {
 };
 
 type ResponseDataTabProps = {
-    selectedEvent: NetworkEventDetailFragment$data;
+    selectedEvent: EventNode;
 };
 
 const ResponseDataTab: React.FC<ResponseDataTabProps> = ({ selectedEvent }) => {
@@ -118,7 +118,7 @@ const ResponseDataTab: React.FC<ResponseDataTabProps> = ({ selectedEvent }) => {
 };
 
 type HeadersTabProps = {
-    selectedEvent: NetworkEventDetailFragment$data;
+    selectedEvent: EventNode;
 };
 
 const HeadersTab: React.FC<HeadersTabProps> = ({ selectedEvent }) => {
@@ -168,7 +168,7 @@ const HeadersTab: React.FC<HeadersTabProps> = ({ selectedEvent }) => {
 };
 
 type NetworkEventDetailPanelProps = {
-    selectedEvent: NetworkEventDetailFragment$key;
+    selectedEvent: EventNode;
     activeTabKey: string | null;
     onSelectTab: (x: string | null) => void;
     onDetailPanelClose: () => void;
@@ -180,26 +180,25 @@ const NetworkEventDetailPanel: React.FC<NetworkEventDetailPanelProps> = ({
     onSelectTab,
     onDetailPanelClose,
 }) => {
-    const eventData = useFragment(NetworkEventDetailFragment, selectedEvent);
-
     const tabChildren = [
         {
             tabKey: 'headers',
             title: 'Headers',
-            children: <HeadersTab selectedEvent={eventData} />,
+            children: <HeadersTab selectedEvent={selectedEvent} />,
         },
         {
             tabKey: 'postData',
             title: 'Post',
-            children: <PostDataTab selectedEvent={eventData} />,
+            children: <PostDataTab selectedEvent={selectedEvent} />,
         },
         {
             tabKey: 'responseData',
             title: 'Response',
-            children: <ResponseDataTab selectedEvent={eventData} />,
+            children: <ResponseDataTab selectedEvent={selectedEvent} />,
         },
     ].filter(
-        (tabChild) => tabChild.tabKey !== 'postData' || eventData.request.body
+        (tabChild) =>
+            tabChild.tabKey !== 'postData' || selectedEvent.request.body
     );
 
     return (

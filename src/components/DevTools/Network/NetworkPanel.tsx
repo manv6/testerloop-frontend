@@ -2,7 +2,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useFragment } from 'react-relay';
-import graphql from 'babel-plugin-relay/macro';
 import cx from 'classnames';
 
 import type { NetworkPanelFragment$key } from './__generated__/NetworkPanelFragment.graphql';
@@ -11,6 +10,7 @@ import styles from './Network.module.scss';
 import { useTimeline } from 'src/hooks/timeline';
 import { TextInput } from 'src/components/common/TextInput';
 import * as formatter from 'src/utils/formatters';
+import NetworkPanelFragment from './NetworkPanelFragment';
 
 enum ResourceTypeFilterType {
     HTML = 'html',
@@ -79,41 +79,6 @@ const filterByProgressPredicate = (
 type Props = {
     fragmentKey: NetworkPanelFragment$key;
 };
-
-const NetworkPanelFragment = graphql`
-    fragment NetworkPanelFragment on TestExecution {
-        id
-        searchedNetworkEvents: events(filter: { type: NETWORK }) {
-            edges {
-                __typename
-                node {
-                    ... on HttpNetworkEvent {
-                        __typename
-                        # at
-                        id
-                        # initiator
-                        resourceType
-                        time {
-                            at
-                            until
-                        }
-                        request {
-                            method
-                            url {
-                                url
-                            }
-                        }
-                        response {
-                            status
-                        }
-                        ...RequestSliceFragment
-                        ...NetworkEventDetailFragment
-                    }
-                }
-            }
-        }
-    }
-`;
 
 export const NetworkPanel: React.FC<Props> = ({ fragmentKey }) => {
     const data = useFragment(NetworkPanelFragment, fragmentKey);
