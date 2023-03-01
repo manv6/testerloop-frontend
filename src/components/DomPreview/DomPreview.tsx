@@ -66,61 +66,32 @@ const DomPreview: React.FC = () => {
         }
     }, [currentSnapshot]);
 
-    const iframeBlob = useMemo(() => {
-        const html = currentSnapshot?.[tab];
-
-        // const top = snapshots[0].html as string;
-        // const head = snapshots[0].head as string;
-        // const body = currentSnapshot?.[tab];
-        // const html = top + head + body + '</html>';
-
-        return html;
-
-        // const blobContent = new Blob([html || ''], {
-        //     type: 'text/html;charset=utf-8',
-        // });
-        // return URL.createObjectURL(blobContent);
-    }, [currentSnapshot, tab]);
-
-    // console.log('iframe blob', iframeBlob);
-
     useEffect(() => {
-        console.log('here');
         const iframe = document.getElementById(
             'dom-iframe'
         ) as HTMLIFrameElement | null;
         if (iframe?.contentWindow) {
-            console.log('posting');
             iframe.contentWindow.postMessage(
-                { type: 'text/html;charset=utf-8', value: iframeBlob },
+                {
+                    type: 'text/html;charset=utf-8',
+                    value: currentSnapshot?.[tab],
+                },
                 '*'
             );
         }
-    }, [iframeBlob]);
+    }, [currentSnapshot, tab]);
 
     useEffect(() => {
-        console.log('in use efect here');
         const iframe = document.getElementById(
             'dom-iframe'
         ) as HTMLIFrameElement | null;
         const iframeWindow = iframe?.contentWindow;
 
-        // const handleMessage = (event: MessageEvent) => {
-        //     const { type, value } = event.data;
+        const handleMessage = (event: MessageEvent) => {
+            const { type, value } = event.data;
 
-        //     if (type === 'text/html;charset=utf-8') {
-        //         if (iframe) {
-        //             iframe.innerHTML = value;
-        //         }
-        //     }
-        // };
-
-        if (iframeWindow) {
-            iframeWindow.addEventListener('message', (event) => {
-                const { type, value } = event.data;
-
-                if (type === 'text/html;charset=utf-8') {
-                    // iframe.srcdoc = value;
+            if (type === 'text/html;charset=utf-8') {
+                if (iframe) {
                     const doc = iframe.contentDocument;
 
                     if (doc) {
@@ -129,14 +100,18 @@ const DomPreview: React.FC = () => {
                         doc.close();
                     }
                 }
-            });
+            }
+        };
+
+        if (iframeWindow) {
+            iframeWindow.addEventListener('message', handleMessage);
         }
 
-        // return () => {
-        //     if (iframeWindow) {
-        //         iframeWindow.removeEventListener('message', handleMessage);
-        //     }
-        // };
+        return () => {
+            if (iframeWindow) {
+                iframeWindow.removeEventListener('message', handleMessage);
+            }
+        };
     }, [currentSnapshot, tab]);
 
     const changeTab = useCallback((tab: DOMTab) => {
@@ -162,7 +137,6 @@ const DomPreview: React.FC = () => {
                 className={styles.iframe}
                 sandbox="allow-scripts allow-same-origin"
                 id="dom-iframe"
-                // src={iframeUrl}
                 title="domSnapshot"
             />
         </div>
