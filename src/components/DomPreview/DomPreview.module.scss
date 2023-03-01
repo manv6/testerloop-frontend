@@ -1,7 +1,32 @@
+header {
+    background-color: lightgrey;
+    padding: 8px 16px;
+    padding-right: 0px;
+    display: flex;
+    justify-content: space-between;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.controls {
+    display: flex;
+    margin-right: calc(8px + 16px + 64px); //expand right + margin between buttons + width of expand
+
+    button {
+        margin-left: 16px;
+    }
+}
+
+.domPreview {
+    width: 100%;
+    height: 100%;
+}
+
 .iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
     border: 0;
