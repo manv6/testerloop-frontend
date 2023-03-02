@@ -14,9 +14,21 @@ import networkEventData from 'src/data/networkEvents';
 import { useFragment } from 'react-relay';
 import { SummaryFragment$key } from './__generated__/SummaryFragment.graphql';
 import graphql from 'babel-plugin-relay/macro';
+import { useTheme } from 'src/hooks/theme/useTheme';
+import Button from 'src/components/common/Button';
 
 type Props = {
     fragmentKey: SummaryFragment$key | null;
+};
+
+const ThemeToggle: React.FC = () => {
+    const { mode, setMode } = useTheme();
+    const toggleMode = () => setMode(mode === 'dark' ? 'light' : 'dark');
+    return (
+        <div className={styles.themeToggle}>
+            <Button onClick={toggleMode}>{mode}</Button>
+        </div>
+    );
 };
 
 const Summary: React.FC<Props> = ({ fragmentKey }) => {
@@ -113,6 +125,7 @@ const Summary: React.FC<Props> = ({ fragmentKey }) => {
                     <button>Re-run</button>
                 </div>
             </div>
+            <ThemeToggle />
         </div>
     );
 };

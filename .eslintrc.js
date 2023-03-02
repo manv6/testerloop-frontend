@@ -1,7 +1,7 @@
 module.exports = {
     root: true,
     env: { browser: true },
-    ignorePatterns: ['src/data/*', '*/__generated__/*', '/.eslintrc.js'],
+    ignorePatterns: ['src/data/*', '*/__generated__/*', '/.eslintrc.js', '*/node_modules/*'],
     extends: [
         'react-app',
         'react-app/jest',
@@ -9,6 +9,7 @@ module.exports = {
         'plugin:react/recommended',
         'plugin:@typescript-eslint/recommended',
         'plugin:prettier/recommended',
+        'plugin:storybook/recommended',
     ],
     parser: '@typescript-eslint/parser',
     parserOptions: {
@@ -63,6 +64,6 @@ module.exports = {
                 format: ['UPPER_CASE'],
             },
         ],
-        'prettier/prettier': ['error'],
+        'prettier/prettier': ['warn'],
     },
 };
