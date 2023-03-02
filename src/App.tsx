@@ -14,7 +14,11 @@ import stepsData from 'src/data/steps';
 import { useLazyLoadQuery } from 'react-relay';
 import AppQuery from './AppQuery';
 import { AppQuery as AppQueryType } from './__generated__/AppQuery.graphql';
-import ThemeProvider from 'src/hooks/theme/Provider';
+import { styled } from '@mui/material/styles';
+
+const StyledApp = styled('div')(({ theme }) => ({
+    backgroundColor: theme.palette.primary[500],
+}));
 
 const SuspensePanel: React.FC<React.PropsWithChildren> = ({ children }) => (
     <React.Suspense fallback={<div>Loading</div>}>{children}</React.Suspense>
@@ -38,11 +42,17 @@ const App: React.FC = () => {
     const endTime = new Date(Date.parse(results.endedTestsAt));
 
     return (
-        <div className={styles.app}>
-            <ThemeProvider>
-                <TimelineProvider startTime={startTime} endTime={endTime}>
+        <StyledApp className={styles.app}>
+            <TimelineProvider startTime={startTime} endTime={endTime}>
+                <SuspensePanel>
+                    <Summary
+                        className={styles.summaryPanel}
+                        fragmentKey={queryData.testExecution}
+                    />
+                </SuspensePanel>
+                <div className={styles.appContent}>
                     <SuspensePanel>
-                        <Summary fragmentKey={queryData.testExecution} />
+                        <CypressError />
                     </SuspensePanel>
                     <SuspensePanel>
                         <TimelineControls fragmentKey={data} />
@@ -57,14 +67,6 @@ const App: React.FC = () => {
                                     className={styles.steps}
                                     fragmentKey={data}
                                 />
-                            </Expandable.Child>
-                        </SuspensePanel>
-                        <SuspensePanel>
-                            <Expandable.Child
-                                className={styles.expandableCypressError}
-                                notExpandable={true}
-                            >
-                                <CypressError />
                             </Expandable.Child>
                         </SuspensePanel>
                         <SuspensePanel>
@@ -90,9 +92,9 @@ const App: React.FC = () => {
                             </Expandable.Child>
                         </SuspensePanel>
                     </Expandable.Parent>
-                </TimelineProvider>
-            </ThemeProvider>
-        </div>
+                </div>
+            </TimelineProvider>
+        </StyledApp>
     );
 };
 

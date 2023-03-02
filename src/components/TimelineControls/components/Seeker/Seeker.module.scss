@@ -1,0 +1,107 @@
+@use 'src/constants/layers.scss';
+
+:root {
+    --timeline-played-colour: #2c88d9;
+    --timeline-tooltip-colour: #4b5c6b;
+}
+
+.seeker {
+    position: relative;
+    flex-grow: 1;
+    overflow: hidden;
+    height: 12vh;
+
+    &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        width: 100%;
+        bottom: 50%;
+        height: 5px;
+        transform: translateY(50%);
+        background: lightgrey;
+    }
+}
+
+.seekerContainer {
+    flex-grow: 1;
+    position: relative;
+    height: 12vh;
+    margin-left: 5px;
+    margin-right: 10px;
+}
+
+.fill {
+    position: absolute;
+    left: 0;
+    bottom: 50%;
+    height: 5px;
+    transform: translateY(50%);
+    background: var(--timeline-played-colour);
+}
+
+.cursor {
+    position: absolute;
+    bottom: 50%;
+    right: 0;
+    transform: translate(50%, 50%);
+    height: 20px;
+    width: 20px;
+    background: var(--timeline-played-colour);
+    border-radius: 50%;
+
+    &:hover {
+        &::after {
+            content: attr(data-after-content);
+            font-size: 12px;
+            color: white;
+            position: relative;
+            bottom: 30px;
+            background-color: var(--timeline-tooltip-colour);
+            z-index: var(--timeline-tooltip-layer);
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+        &::before {
+            content: '';
+            position: absolute;
+            bottom: 80%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: var(--timeline-tooltip-colour) transparent transparent
+                transparent;
+        }
+    }
+}
+
+.hover {
+    position: absolute;
+    left: 0;
+    bottom: 50%;
+    height: 5px;
+    transform: translateY(50%);
+    background: grey;
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 50%;
+        right: 0;
+        transform: translate(50%, 50%);
+        height: 10px;
+        width: 10px;
+        background: grey;
+        border-radius: 50%;
+    }
+}
+
+.marker {
+    position: absolute;
+    height: 100%;
+    border-left: 1.5px solid black;
+    border-right: 1.5px solid black;
+    z-index: var(--timeline-marker-layer);
+}

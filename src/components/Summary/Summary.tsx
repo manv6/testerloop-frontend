@@ -16,9 +16,12 @@ import { SummaryFragment$key } from './__generated__/SummaryFragment.graphql';
 import graphql from 'babel-plugin-relay/macro';
 import { useTheme } from 'src/hooks/theme/useTheme';
 import Button from 'src/components/common/Button';
+import { Panel } from 'src/core/components';
+import cx from 'classnames';
 
 type Props = {
     fragmentKey: SummaryFragment$key | null;
+    className?: string;
 };
 
 const ThemeToggle: React.FC = () => {
@@ -31,7 +34,7 @@ const ThemeToggle: React.FC = () => {
     );
 };
 
-const Summary: React.FC<Props> = ({ fragmentKey }) => {
+const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
     const consoleData = useFragment(
         graphql`
             fragment SummaryFragment on TestExecution {
@@ -90,7 +93,7 @@ const Summary: React.FC<Props> = ({ fragmentKey }) => {
     const cypressErrorName = errorObj.error.name;
 
     return (
-        <div className={styles.summary}>
+        <Panel className={cx(styles.summary, className)}>
             <p className={styles.summaryMessage}>
                 <ErrorIcon />
                 <span>
@@ -126,7 +129,7 @@ const Summary: React.FC<Props> = ({ fragmentKey }) => {
                 </div>
             </div>
             <ThemeToggle />
-        </div>
+        </Panel>
     );
 };
 

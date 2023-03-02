@@ -4,6 +4,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { RelayEnvironment } from './gql/RelayEnvironment';
 import './index.scss';
+import ThemeProvider from 'src/hooks/theme/Provider';
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -12,7 +13,9 @@ root.render(
     <React.StrictMode>
         <RelayEnvironment>
             <React.Suspense fallback={<div>App loading...</div>}>
-                <App />
+                <ThemeProvider>
+                    <App />
+                </ThemeProvider>
             </React.Suspense>
         </RelayEnvironment>
     </React.StrictMode>
