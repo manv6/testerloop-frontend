@@ -1,7 +1,7 @@
 header {
     background-color: lightgrey;
     padding: 8px 16px;
-    padding-right: 0px;
+    padding-right: 0;
     display: flex;
     justify-content: space-between;
 }
@@ -14,7 +14,9 @@ ul {
 
 .controls {
     display: flex;
-    margin-right: calc(8px + 16px + 64px); //expand right + margin between buttons + width of expand
+    margin-right: calc(
+        8px + 16px + 64px
+    ); // expand 'right' + margin between buttons + width of expand
 
     button {
         margin-left: 16px;
