@@ -1,14 +1,23 @@
 /*eslint-disable */
 import React, { useEffect, useMemo } from 'react';
-import { EventType, MARKER_COLOURS } from 'src/constants';
+import { EventType } from 'src/constants';
 import { useTimeline } from 'src/hooks/timeline';
 import { datesToElapsedTime, datesToFraction } from 'src/utils/date';
 import networkEventData from 'src/data/networkEvents';
 import stepsData from 'src/data/steps';
 import * as formatter from 'src/utils/formatters';
 import styles from './Seeker.module.scss';
+import { styled } from '@mui/material';
 
-const Seeker: React.FC = () => {
+const StyledFill = styled('div')(({ theme }) => ({
+    backgroundColor: theme.palette.primary[100],
+}));
+
+type Props = {
+    getMarker: (ev: EventType) => JSX.Element;
+};
+
+const Seeker: React.FC<Props> = ({ getMarker }) => {
     const data = {
         networkEvents: networkEventData.log.entries,
         steps: stepsData,
@@ -176,32 +185,23 @@ const Seeker: React.FC = () => {
                         }}
                     ></div>
                 )}
-                <div
+                <StyledFill
                     className={styles.fill}
                     style={{
                         right: `${100 - 100 * currentTimeFraction}%`,
                     }}
-                ></div>
+                ></StyledFill>
                 {markers.map((marker: any) => (
                     <div
                         key={marker.id}
                         className={styles.marker}
                         style={{
                             left: `${100 * marker.startFraction}%`,
-                            borderColor:
-                                MARKER_COLOURS[marker.type as EventType], //fix
                         }}
-                    ></div>
+                    >
+                        {getMarker(marker.type)}
+                    </div>
                 ))}
-                {/* <div
-                    className={styles.play}
-                    onClick={(ev) => {
-                        ev.stopPropagation();
-                        setPlaying(!isPlaying);
-                    }}
-                >
-                    <span>{isPlaying ? 'Ⅱ' : '▶'}</span>
-                </div> */}
             </div>
             <div
                 className={styles.cursor}

@@ -11,6 +11,11 @@ import {
     SpeedControl,
     TimelineFilters,
 } from './components';
+import { EventType } from 'src/constants';
+import CypressErrorMarker from './components/CypressErrorMarker';
+import FailedNetworkMarker from './components/FailedNetworkMarker';
+import StepMarker from './components/StepMarker';
+import SuccessNetworkMarker from './components/SuccessNetworkMarker';
 
 type Props = {
     // TODO: Update fragment key type
@@ -35,6 +40,19 @@ export const TimelineControls: React.FC<Props> = () => {
         [setSpeed]
     );
 
+    const getMarker = useCallback((type: EventType): JSX.Element => {
+        switch (type) {
+            case EventType.STEP:
+                return <StepMarker />;
+            case EventType.CYPRESS_ERROR:
+                return <CypressErrorMarker />;
+            case EventType.NETWORK_ERROR:
+                return <FailedNetworkMarker />;
+            case EventType.NETWORK_SUCCESS:
+                return <SuccessNetworkMarker />;
+        }
+    }, []);
+
     return (
         <Panel className={styles.timeline}>
             <div className={styles.controlSection}>
@@ -46,9 +64,13 @@ export const TimelineControls: React.FC<Props> = () => {
                     </div>
                     <SpeedControl speed={speed} onSpeedChange={onSpeedChange} />
                 </div>
-                <TimelineFilters filters={filters} setFilters={setFilters} />
+                <TimelineFilters
+                    getMarker={getMarker}
+                    filters={filters}
+                    setFilters={setFilters}
+                />
             </div>
-            <Seeker />
+            <Seeker getMarker={getMarker} />
         </Panel>
     );
 };
