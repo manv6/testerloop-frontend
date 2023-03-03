@@ -11,6 +11,9 @@ import { styled } from '@mui/material';
 
 const StyledFill = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.primary[100],
+    '&:after': {
+        backgroundColor: theme.palette.primary[100],
+    },
 }));
 
 type Props = {
@@ -149,6 +152,10 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
         }
     }, [cypressErrorMarkers, seekFraction]);
 
+    console.log('cursor', 100 - 100 * currentTimeFraction);
+
+    console.log('markers', markers);
+
     return (
         <div className={styles.seekerContainer}>
             <div
@@ -191,12 +198,23 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
                         right: `${100 - 100 * currentTimeFraction}%`,
                     }}
                 ></StyledFill>
+                <div
+                    className={styles.cursor}
+                    style={{
+                        right: `${100 - 100 * currentTimeFraction}%`,
+                    }}
+                    // data-after-content={
+                    //     datesToElapsedTime(startTime, currentTime) || 0
+                    // }
+                ></div>
                 {markers.map((marker: any) => (
                     <div
                         key={marker.id}
                         className={styles.marker}
                         style={{
-                            left: `${100 * marker.startFraction}%`,
+                            right: `calc(${
+                                100 - 100 * marker.startFraction
+                            }% - 7px)`,
                         }}
                     >
                         {getMarker(marker.type)}
@@ -208,9 +226,9 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
                 style={{
                     right: `${100 - 100 * currentTimeFraction}%`,
                 }}
-                data-after-content={
-                    datesToElapsedTime(startTime, currentTime) || 0
-                }
+                // data-after-content={
+                //     datesToElapsedTime(startTime, currentTime) || 0
+                // }
             ></div>
         </div>
     );

@@ -16,11 +16,16 @@ import CypressErrorMarker from './components/CypressErrorMarker';
 import FailedNetworkMarker from './components/FailedNetworkMarker';
 import StepMarker from './components/StepMarker';
 import SuccessNetworkMarker from './components/SuccessNetworkMarker';
+import { styled } from '@mui/material';
 
 type Props = {
     // TODO: Update fragment key type
     fragmentKey: any; // eslint-disable-line
 };
+
+const StyledControlSection = styled('div')(({ theme }) => ({
+    borderBottom: `1px solid ${theme.palette.primary[300]}`,
+}));
 
 export const TimelineControls: React.FC<Props> = () => {
     const {
@@ -55,7 +60,7 @@ export const TimelineControls: React.FC<Props> = () => {
 
     return (
         <Panel className={styles.timeline}>
-            <div className={styles.controlSection}>
+            <StyledControlSection className={styles.controlSection}>
                 <div className={styles.controlsContainer}>
                     <PlayButton />
                     <div className={styles.time}>
@@ -69,7 +74,7 @@ export const TimelineControls: React.FC<Props> = () => {
                     filters={filters}
                     setFilters={setFilters}
                 />
-            </div>
+            </StyledControlSection>
             <Seeker getMarker={getMarker} />
         </Panel>
     );
