@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTimeline } from 'src/hooks/timeline';
 import styles from './DomPreview.module.scss';
 import { formatSteps } from 'src/utils/formatters';
@@ -47,13 +47,11 @@ const DomPreview: React.FC = () => {
                 const window = iframe.contentWindow;
                 const nodeList =
                     window?.document.querySelectorAll('[data-otf-value]');
-                const elements = nodeList && Array.from(nodeList);
+                const elements =
+                    nodeList && (Array.from(nodeList) as ElementWithValue[]);
                 if (elements) {
                     for (const elem of elements) {
-                        (elem as ElementWithValue).value =
-                            (elem as ElementWithValue).getAttribute(
-                                'data-otf-value'
-                            ) || '';
+                        elem.value = elem.getAttribute('data-otf-value') || '';
                     }
                 }
             };
@@ -114,10 +112,6 @@ const DomPreview: React.FC = () => {
         };
     }, [currentSnapshot, tab]);
 
-    const changeTab = useCallback((tab: DOMTab) => {
-        setTab(tab);
-    }, []);
-
     return (
         <div className={styles.domPreview}>
             <header>
@@ -125,12 +119,10 @@ const DomPreview: React.FC = () => {
                     <li>Snapshot</li>
                 </ul>
                 <div className={styles.controls}>
-                    <button onClick={() => changeTab(DOMTab.BEFORE)}>
+                    <button onClick={() => setTab(DOMTab.BEFORE)}>
                         Before
                     </button>
-                    <button onClick={() => changeTab(DOMTab.AFTER)}>
-                        After
-                    </button>
+                    <button onClick={() => setTab(DOMTab.AFTER)}>After</button>
                 </div>
             </header>
             <iframe
