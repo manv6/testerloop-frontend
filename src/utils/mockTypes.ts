@@ -180,6 +180,7 @@ export type TimelineControlsFragment$data = {
             readonly type: string;
             readonly url: string;
             readonly wallClockStartedAt: string;
+            readonly snapshotID: number;
         };
     }>;
     readonly ' $fragmentType': 'TimelineControlsFragment';

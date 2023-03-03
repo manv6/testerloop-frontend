@@ -2,7 +2,6 @@ import React, { useMemo } from 'react';
 import { TimelineProvider } from './hooks/timeline';
 import { TimelineControls } from './components/TimelineControls';
 import { NetworkPanel, ConsolePanel } from './components/DevTools';
-import { DomPreview } from './components/DomPreview';
 import { Steps } from './components/Steps';
 import * as Expandable from './components/Expandable';
 import CypressError from './components/CypressError';
@@ -14,6 +13,7 @@ import stepsData from 'src/data/steps';
 import { useLazyLoadQuery } from 'react-relay';
 import AppQuery from './AppQuery';
 import { AppQuery as AppQueryType } from './__generated__/AppQuery.graphql';
+import DomPreview from './components/DomPreview';
 import ThemeProvider from 'src/hooks/theme/Provider';
 
 const SuspensePanel: React.FC<React.PropsWithChildren> = ({ children }) => (
