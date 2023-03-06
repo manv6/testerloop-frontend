@@ -24,26 +24,16 @@ type Props = {
 };
 
 const StyledControlSection = styled('div')(({ theme }) => ({
-    borderBottom: `1px solid ${theme.palette.primary[300]}`,
+    borderBottom: `1px solid ${theme.palette.base[300]}`,
+}));
+
+const StyledTime = styled('div')(({ theme }) => ({
+    color: theme.palette.base[200],
 }));
 
 export const TimelineControls: React.FC<Props> = () => {
-    const {
-        currentTime,
-        startTime,
-        endTime,
-        filters,
-        setFilters,
-        speed,
-        setSpeed,
-    } = useTimeline();
-
-    const onSpeedChange = useCallback(
-        (ev: React.ChangeEvent<HTMLSelectElement>) => {
-            setSpeed(parseFloat(ev.target.value));
-        },
-        [setSpeed]
-    );
+    const { currentTime, startTime, endTime, filters, setFilters } =
+        useTimeline();
 
     const getMarker = useCallback((type: EventType): JSX.Element => {
         switch (type) {
@@ -63,11 +53,11 @@ export const TimelineControls: React.FC<Props> = () => {
             <StyledControlSection className={styles.controlSection}>
                 <div className={styles.controlsContainer}>
                     <PlayButton />
-                    <div className={styles.time}>
-                        {datesToElapsedTime(startTime, currentTime) || 0} :{' '}
+                    <StyledTime className={styles.time}>
+                        {datesToElapsedTime(startTime, currentTime) || 0} /{' '}
                         {datesToElapsedTime(startTime, endTime)}
-                    </div>
-                    <SpeedControl speed={speed} onSpeedChange={onSpeedChange} />
+                    </StyledTime>
+                    <SpeedControl />
                 </div>
                 <TimelineFilters
                     getMarker={getMarker}

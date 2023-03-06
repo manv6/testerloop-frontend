@@ -4,8 +4,8 @@ import cx from 'classnames';
 import styles from './Panel.module.scss';
 
 const StyledDiv = styled('div')(({ theme }) => ({
-    backgroundColor: theme.palette.primary[400],
-    borderColor: theme.palette.primary[300],
+    backgroundColor: theme.palette.base[400],
+    borderColor: theme.palette.base[300],
 }));
 
 interface Props extends React.PropsWithChildren {

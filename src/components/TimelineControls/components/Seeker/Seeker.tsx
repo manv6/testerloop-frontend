@@ -1,5 +1,5 @@
 /*eslint-disable */
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { EventType } from 'src/constants';
 import { useTimeline } from 'src/hooks/timeline';
 import { datesToElapsedTime, datesToFraction } from 'src/utils/date';
@@ -7,12 +7,38 @@ import networkEventData from 'src/data/networkEvents';
 import stepsData from 'src/data/steps';
 import * as formatter from 'src/utils/formatters';
 import styles from './Seeker.module.scss';
-import { styled } from '@mui/material';
+import { styled, Tooltip } from '@mui/material';
+import MarkerTooltip from '../MarkerTooltip';
+import { TIMELINE_SVG_WIDTH } from 'src/constants/widths';
 
 const StyledFill = styled('div')(({ theme }) => ({
-    backgroundColor: theme.palette.primary[100],
+    backgroundColor: theme.palette.base[100],
     '&:after': {
-        backgroundColor: theme.palette.primary[100],
+        backgroundColor: theme.palette.base[100],
+    },
+}));
+
+const StyledSeeker = styled('div')(({ theme }) => ({
+    '&:before': {
+        backgroundColor: theme.palette.base[300],
+    },
+}));
+
+const StyledHover = styled('div')(({ theme }) => ({
+    '&:after': {
+        background: theme.palette.base[400],
+        border: `2px solid ${theme.palette.base[100]}`,
+    },
+}));
+
+interface StyledMarkerProps {
+    size: number;
+}
+
+const StyledMarker = styled('div')<StyledMarkerProps>(({ size }) => ({
+    svg: {
+        height: size,
+        width: size,
     },
 }));
 
@@ -26,17 +52,16 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
         steps: stepsData,
     } as any; // eslint-disable-line
     const {
-        currentTime,
         currentTimeFraction,
         hoverTimeFraction,
-        isPlaying,
-        setPlaying,
+        hoverTime,
         setHoverTimeFraction,
         seekFraction,
         startTime,
         endTime,
         filters,
     } = useTimeline();
+    const [displayHoverTooltip, setDisplayHoverTooltip] = useState(true);
 
     // Add dates
 
@@ -66,6 +91,9 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
                         endTime,
                         options.wallClockStartedAt
                     ),
+                    name: options.name,
+                    message: options.message.replaceAll('*', ''),
+                    hasFailed: options.state === 'failed',
                 })),
         [steps, startTime, endTime]
     );
@@ -86,6 +114,8 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
                         endTime,
                         evt.endedDateTime
                     ),
+                    name: evt.request.method,
+                    message: evt.request.url,
                 })),
         [networkEvents, startTime, endTime]
     );
@@ -103,6 +133,8 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
                         endTime,
                         evt.endedDateTime
                     ),
+                    name: evt.request.method,
+                    message: evt.request.url,
                 })),
         [networkEvents, startTime, endTime]
     );
@@ -124,6 +156,9 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
                         endTime,
                         options.wallClockStartedAt
                     ),
+                    name: options.name,
+                    message: options.message.replaceAll('*', ''),
+                    hasFailed: true,
                 })),
         [steps, startTime, endTime]
     );
@@ -145,30 +180,33 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
     );
 
     useEffect(() => {
-        // goto first cypress error
+        // Go to first cypress error
         const firstErrorStartFraction = cypressErrorMarkers[0]?.startFraction;
         if (firstErrorStartFraction) {
             seekFraction(firstErrorStartFraction);
         }
     }, [cypressErrorMarkers, seekFraction]);
 
-    console.log('cursor', 100 - 100 * currentTimeFraction);
-
-    console.log('markers', markers);
-
     return (
         <div className={styles.seekerContainer}>
-            <div
+            <StyledSeeker
                 className={styles.seeker}
                 onMouseMove={(ev) => {
                     const parentOffset =
                         ev.currentTarget.parentElement?.offsetLeft || 0;
-                    setHoverTimeFraction(
+                    const hoverTimeFraction =
                         (ev.clientX -
                             parentOffset -
                             ev.currentTarget.offsetLeft) /
-                            ev.currentTarget.offsetWidth
+                        ev.currentTarget.offsetWidth;
+
+                    // Limit hover fraction between 0 and 1
+                    const adjustedHoverTimeFraction = Math.min(
+                        Math.max(hoverTimeFraction, 0),
+                        1
                     );
+
+                    setHoverTimeFraction(adjustedHoverTimeFraction);
                 }}
                 onMouseLeave={() => {
                     setHoverTimeFraction(null);
@@ -176,22 +214,44 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
                 onClick={(ev) => {
                     const parentOffset =
                         ev.currentTarget.parentElement?.offsetLeft || 0;
-                    seekFraction(
+                    const timeFraction =
                         (ev.clientX -
                             parentOffset -
                             ev.currentTarget.offsetLeft) /
-                            ev.currentTarget.offsetWidth
+                        ev.currentTarget.offsetWidth;
+
+                    // Limit fraction between 0 and 1
+                    const adjustedTimeFraction = Math.min(
+                        Math.max(timeFraction, 0),
+                        1
                     );
+
+                    seekFraction(adjustedTimeFraction);
                 }}
             >
-                {hoverTimeFraction && (
-                    <div
+                {hoverTimeFraction ? (
+                    <StyledHover
                         className={styles.hover}
                         style={{
                             right: `${100 - 100 * hoverTimeFraction}%`,
                         }}
-                    ></div>
-                )}
+                    ></StyledHover>
+                ) : null}
+                {hoverTimeFraction && hoverTime && displayHoverTooltip ? (
+                    <Tooltip
+                        title={datesToElapsedTime(startTime, hoverTime)}
+                        placement="top"
+                        open
+                        arrow
+                    >
+                        <div
+                            className={styles.hoverCursor}
+                            style={{
+                                right: `${100 - 100 * hoverTimeFraction}%`,
+                            }}
+                        ></div>
+                    </Tooltip>
+                ) : null}
                 <StyledFill
                     className={styles.fill}
                     style={{
@@ -203,33 +263,57 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
                     style={{
                         right: `${100 - 100 * currentTimeFraction}%`,
                     }}
-                    // data-after-content={
-                    //     datesToElapsedTime(startTime, currentTime) || 0
-                    // }
                 ></div>
-                {markers.map((marker: any) => (
-                    <div
-                        key={marker.id}
-                        className={styles.marker}
-                        style={{
-                            right: `calc(${
-                                100 - 100 * marker.startFraction
-                            }% - 7px)`,
-                        }}
-                    >
-                        {getMarker(marker.type)}
-                    </div>
-                ))}
-            </div>
-            <div
-                className={styles.cursor}
-                style={{
-                    right: `${100 - 100 * currentTimeFraction}%`,
-                }}
-                // data-after-content={
-                //     datesToElapsedTime(startTime, currentTime) || 0
-                // }
-            ></div>
+                {markers.map((marker: any, i) => {
+                    const svgSize =
+                        marker.type === EventType.CYPRESS_ERROR
+                            ? Math.round(1.8 * TIMELINE_SVG_WIDTH)
+                            : TIMELINE_SVG_WIDTH;
+                    return (
+                        <Tooltip
+                            key={i}
+                            placement="top"
+                            onOpen={() => setDisplayHoverTooltip(false)}
+                            onClose={() => setDisplayHoverTooltip(true)}
+                            arrow
+                            title={
+                                <MarkerTooltip
+                                    type={marker.type}
+                                    hasFailed={marker.hasFailed}
+                                    prefix={
+                                        marker.type === EventType.STEP
+                                            ? marker.name.toUpperCase()
+                                            : marker.name
+                                    }
+                                    message={
+                                        marker.message.length > 100
+                                            ? marker.message.slice(0, 100) +
+                                              '...'
+                                            : marker.message
+                                    }
+                                    time={datesToElapsedTime(
+                                        startTime,
+                                        marker.start
+                                    )}
+                                />
+                            }
+                        >
+                            <StyledMarker
+                                size={svgSize}
+                                key={marker.id}
+                                className={styles.marker}
+                                style={{
+                                    right: `calc(${
+                                        100 - 100 * marker.startFraction
+                                    }% - ${svgSize / 2}px)`, // For the cursor to be centered on the svg
+                                }}
+                            >
+                                {getMarker(marker.type)}
+                            </StyledMarker>
+                        </Tooltip>
+                    );
+                })}
+            </StyledSeeker>
         </div>
     );
 };

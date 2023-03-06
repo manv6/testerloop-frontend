@@ -17,7 +17,7 @@ import { AppQuery as AppQueryType } from './__generated__/AppQuery.graphql';
 import { styled } from '@mui/material/styles';
 
 const StyledApp = styled('div')(({ theme }) => ({
-    backgroundColor: theme.palette.primary[500],
+    backgroundColor: theme.palette.base[500],
 }));
 
 const SuspensePanel: React.FC<React.PropsWithChildren> = ({ children }) => (
@@ -76,19 +76,19 @@ const App: React.FC = () => {
                         </SuspensePanel>
                         <SuspensePanel>
                             <Expandable.Child
+                                className={styles.expandableNetwork}
+                            >
+                                <NetworkPanel fragmentKey={data} />
+                            </Expandable.Child>
+                        </SuspensePanel>
+                        <SuspensePanel>
+                            <Expandable.Child
                                 className={styles.expandableConsole}
                             >
                                 {/* eslint-disable @typescript-eslint/no-non-null-assertion */}
                                 <ConsolePanel
                                     fragmentKey={queryData.testExecution!}
                                 />
-                            </Expandable.Child>
-                        </SuspensePanel>
-                        <SuspensePanel>
-                            <Expandable.Child
-                                className={styles.expandableNetwork}
-                            >
-                                <NetworkPanel fragmentKey={data} />
                             </Expandable.Child>
                         </SuspensePanel>
                     </Expandable.Parent>

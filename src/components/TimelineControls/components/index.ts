@@ -6,3 +6,4 @@ export { default as SpeedControl } from './SpeedControl';
 export { default as TimelineFilters } from './TimelineFilters';
 export { default as PlayButton } from './PlayButton';
 export { default as Seeker } from './Seeker';
+export { default as MarkerTooltip } from './MarkerTooltip';
