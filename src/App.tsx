@@ -2,7 +2,6 @@ import React, { useMemo } from 'react';
 import { TimelineProvider } from './hooks/timeline';
 import { TimelineControls } from './components/TimelineControls';
 import { NetworkPanel, ConsolePanel } from './components/DevTools';
-import { DomPreview } from './components/DomPreview';
 import { Steps } from './components/Steps';
 import * as Expandable from './components/Expandable';
 import CypressError from './components/CypressError';
@@ -15,6 +14,7 @@ import { useLazyLoadQuery } from 'react-relay';
 import AppQuery from './AppQuery';
 import { AppQuery as AppQueryType } from './__generated__/AppQuery.graphql';
 import { styled } from '@mui/material/styles';
+import DomPreview from './components/DomPreview';
 
 const StyledApp = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.base[500],
