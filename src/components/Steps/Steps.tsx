@@ -1,5 +1,5 @@
 import cx from 'classnames';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTimeline } from 'src/hooks/timeline';
 import { StepRecord } from './components';
 import { useHierarchizeStepsData } from './hooks';
@@ -42,6 +42,9 @@ export const Steps: React.FC<Props> = ({ className }) => {
         () => formatter.formatSteps(data.steps),
         [data.steps]
     );
+    const [expandedStepIdx, setExpandedStepIdx] = useState<
+        number | undefined
+    >();
 
     const { currentTime, hoverTime } = useTimeline();
 
@@ -80,10 +83,14 @@ export const Steps: React.FC<Props> = ({ className }) => {
                 {stepsHierarchy.map(({ step, actions }, idx) => {
                     const isStepSelected = selectedStepIdx === idx;
                     const isStepHovered = hoveredStepIdx === idx;
+                    const isExpanded = expandedStepIdx === idx;
 
                     return (
                         <StepRecord
                             key={step.options.id}
+                            isExpanded={isExpanded}
+                            setExpandedStepIdx={setExpandedStepIdx}
+                            idx={idx}
                             step={step}
                             actions={actions}
                             isStepSelected={isStepSelected}

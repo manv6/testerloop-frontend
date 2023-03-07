@@ -1,5 +1,8 @@
+import { styled } from '@mui/material';
 import cx from 'classnames';
-import React, { useState } from 'react';
+import React from 'react';
+import { StepPrefix } from 'src/components/common';
+import { EventType } from 'src/constants';
 import { useTimeline } from 'src/hooks/timeline';
 import { Step } from '../../Steps';
 import ActionRecord from '../ActionRecord';
@@ -7,6 +10,9 @@ import ChevronIcon from './ChevronIcon';
 import styles from './StepRecord.module.scss';
 
 interface Props {
+    idx: number;
+    isExpanded: boolean;
+    setExpandedStepIdx: (idx: number | undefined) => void;
     step: Step;
     actions: Step[];
 
@@ -17,7 +23,31 @@ interface Props {
     hoveredActionIdx: number | null;
 }
 
+interface StyledStepHeaderProps {
+    isSelected: boolean;
+}
+
+const StyledStepHeader = styled('tr')<StyledStepHeaderProps>(
+    ({ theme, isSelected }) => {
+        let backgroundColor = theme.palette.base[400];
+        let borderColor = theme.palette.base[300];
+        if (isSelected) {
+            backgroundColor = theme.palette.base[300];
+            borderColor = theme.palette.base[200];
+        }
+
+        return {
+            backgroundColor,
+            borderBottom: `1px solid ${borderColor}`,
+            borderTop: `1px solid ${borderColor}`,
+        };
+    }
+);
+
 const StepRecord: React.FC<Props> = ({
+    idx,
+    isExpanded,
+    setExpandedStepIdx,
     step,
     actions,
     isStepSelected,
@@ -26,7 +56,6 @@ const StepRecord: React.FC<Props> = ({
     hoveredActionIdx,
 }) => {
     const { options } = step;
-    const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const { seek } = useTimeline();
 
     const hasFailedActions = actions.some(
@@ -36,12 +65,13 @@ const StepRecord: React.FC<Props> = ({
 
     return (
         <>
-            <tr
+            <StyledStepHeader
                 key={`${options.id}`}
+                isSelected={isStepSelected}
                 onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    setIsExpanded(!isExpanded);
+                    setExpandedStepIdx(isExpanded ? undefined : idx);
                     seek(step.options.wallClockStartedAt);
                 }}
                 className={cx(styles.stepHeader, {
@@ -49,7 +79,17 @@ const StepRecord: React.FC<Props> = ({
                     [styles.hovered]: isStepHovered,
                 })}
             >
-                <td className={styles.stepName}>{options.name}</td>
+                <td className={styles.stepName}>
+                    <StepPrefix
+                        type={
+                            hasFailed ? EventType.CYPRESS_ERROR : EventType.STEP
+                        }
+                        hasFailed={hasFailed}
+                        className={styles.stepPrefix}
+                    >
+                        {options.name.toUpperCase()}
+                    </StepPrefix>
+                </td>
 
                 <td
                     className={cx(
@@ -64,7 +104,7 @@ const StepRecord: React.FC<Props> = ({
                 <td className={styles.stepAccordionIcon}>
                     <ChevronIcon direction={isExpanded ? 'up' : 'down'} />
                 </td>
-            </tr>
+            </StyledStepHeader>
 
             {isExpanded && (
                 <tr className={styles.expandedPanel}>

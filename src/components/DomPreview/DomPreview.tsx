@@ -127,7 +127,7 @@ const DomPreview: React.FC = () => {
             </header>
             <iframe
                 className={styles.iframe}
-                sandbox="allow-scripts allow-same-origin"
+                sandbox="allow-same-origin"
                 id="dom-iframe"
                 title="domSnapshot"
             />

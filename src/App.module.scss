@@ -19,7 +19,7 @@
     flex-grow: 1;
     gap: 10px;
     grid-template-rows: 1fr 1fr;
-    grid-template-columns: 1fr 2fr 2fr 2fr;
+    grid-template-columns: 2fr 2fr 2fr 2fr;
     grid-template-areas:
         'steps dom dom dom'
         'console console network network';
