@@ -16,6 +16,9 @@ const LIGHT = createTheme({
 const DARK = createTheme({
     palette: {
         mode: 'dark',
+        text: {
+            primary: '#FEFDFF',
+        },
         base: {
             500: '#030505',
             400: '#1B2028',
@@ -92,6 +95,16 @@ const DARK = createTheme({
                     '&::before': {
                         backgroundColor: theme.palette.base[500],
                         border: `1px solid ${theme.palette.base[300]}`,
+                    },
+                }),
+            },
+        },
+        MuiButton: {
+            styleOverrides: {
+                root: ({ theme }) => ({
+                    '&:hover': {
+                        backgroundColor: theme.palette.base[300],
+                        border: `1px solid ${theme.palette.base[200]}`,
                     },
                 }),
             },
