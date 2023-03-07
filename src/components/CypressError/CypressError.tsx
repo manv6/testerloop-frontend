@@ -1,5 +1,5 @@
 import React from 'react';
-import { Panel } from 'src/core/components';
+import { Panel } from 'src/components/common';
 import cicd from 'src/data/cicd';
 import results from 'src/data/results';
 

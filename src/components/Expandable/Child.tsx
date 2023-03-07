@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import cx from 'classnames';
 import styles from './Child.module.scss';
-import { Panel } from 'src/core/components';
+import { Panel } from 'src/components/common';
 
 type Props = React.PropsWithChildren<{
     notExpandable?: boolean;

@@ -1,6 +1,6 @@
 /*eslint-disable */
 import React, { useEffect, useMemo, useState } from 'react';
-import { EventType } from 'src/constants';
+import { EventType, TIMELINE_SVG_PX_WIDTH } from 'src/constants';
 import { useTimeline } from 'src/hooks/timeline';
 import { datesToElapsedTime, datesToFraction } from 'src/utils/date';
 import networkEventData from 'src/data/networkEvents';
@@ -9,7 +9,7 @@ import * as formatter from 'src/utils/formatters';
 import styles from './Seeker.module.scss';
 import { styled, Tooltip } from '@mui/material';
 import MarkerTooltip from '../MarkerTooltip';
-import { TIMELINE_SVG_WIDTH } from 'src/constants/widths';
+import fractionToPercentage from 'src/utils/fractionToPercentage';
 
 const StyledFill = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.base[100],
@@ -233,7 +233,9 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
                     <StyledHover
                         className={styles.hover}
                         style={{
-                            right: `${100 - 100 * hoverTimeFraction}%`,
+                            right: `${fractionToPercentage(
+                                hoverTimeFraction
+                            )}%`,
                         }}
                     ></StyledHover>
                 ) : null}
@@ -247,7 +249,9 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
                         <div
                             className={styles.hoverCursor}
                             style={{
-                                right: `${100 - 100 * hoverTimeFraction}%`,
+                                right: `${fractionToPercentage(
+                                    hoverTimeFraction
+                                )}%`,
                             }}
                         ></div>
                     </Tooltip>
@@ -255,20 +259,21 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
                 <StyledFill
                     className={styles.fill}
                     style={{
-                        right: `${100 - 100 * currentTimeFraction}%`,
+                        right: `${fractionToPercentage(currentTimeFraction)}%`,
                     }}
                 ></StyledFill>
                 <div
                     className={styles.cursor}
                     style={{
-                        right: `${100 - 100 * currentTimeFraction}%`,
+                        right: `${fractionToPercentage(currentTimeFraction)}%`,
                     }}
                 ></div>
+                {/*TODO: remove 'any' once temp data is removed */}
                 {markers.map((marker: any, i) => {
                     const svgSize =
                         marker.type === EventType.CYPRESS_ERROR
-                            ? Math.round(1.8 * TIMELINE_SVG_WIDTH)
-                            : TIMELINE_SVG_WIDTH;
+                            ? Math.round(1.8 * TIMELINE_SVG_PX_WIDTH)
+                            : TIMELINE_SVG_PX_WIDTH;
                     return (
                         <Tooltip
                             key={i}
@@ -303,9 +308,9 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
                                 key={marker.id}
                                 className={styles.marker}
                                 style={{
-                                    right: `calc(${
-                                        100 - 100 * marker.startFraction
-                                    }% - ${svgSize / 2}px)`, // For the cursor to be centered on the svg
+                                    right: `calc(${fractionToPercentage(
+                                        marker.startFraction
+                                    )}% - ${svgSize / 2}px)`, // For the cursor to be centered on the svg
                                 }}
                             >
                                 {getMarker(marker.type)}

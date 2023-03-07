@@ -8,12 +8,20 @@ const StyledDiv = styled('div')(({ theme }) => ({
     borderColor: theme.palette.base[300],
 }));
 
+const SuspensePanel: React.FC<React.PropsWithChildren> = ({ children }) => (
+    <React.Suspense fallback={<div>Loading</div>}>{children}</React.Suspense>
+);
+
 interface Props extends React.PropsWithChildren {
     className?: string;
 }
 
 const Panel: React.FC<Props> = ({ children, className }) => (
-    <StyledDiv className={cx(styles.panel, className)}>{children}</StyledDiv>
+    <SuspensePanel>
+        <StyledDiv className={cx(styles.panel, className)}>
+            {children}
+        </StyledDiv>
+    </SuspensePanel>
 );
 
 export default Panel;

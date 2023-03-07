@@ -4,7 +4,6 @@ import React, { useCallback } from 'react';
 import { useTimeline } from 'src/hooks/timeline';
 import { datesToElapsedTime } from 'src/utils/date';
 import styles from './TimelineControls.module.scss';
-import { Panel } from 'src/core/components';
 import {
     PlayButton,
     Seeker,
@@ -17,6 +16,7 @@ import FailedNetworkMarker from './components/FailedNetworkMarker';
 import StepMarker from './components/StepMarker';
 import SuccessNetworkMarker from './components/SuccessNetworkMarker';
 import { styled } from '@mui/material';
+import { Panel } from 'src/components/common';
 
 type Props = {
     // TODO: Update fragment key type

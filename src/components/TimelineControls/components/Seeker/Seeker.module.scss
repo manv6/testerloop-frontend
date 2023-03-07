@@ -1,5 +1,32 @@
 @use 'src/constants/layers.scss';
 
+:root {
+    --cursor-linear-gradient-normal-state: linear-gradient(
+        180deg,
+        rgb(254 253 255 / 0%) 0%,
+        rgb(254 253 255 / 40%) 5%,
+        rgb(255 255 255 / 40%) 10%,
+        rgb(254 253 255 / 90%) 70%,
+        rgb(254 253 255 / 80%) 50%,
+        rgb(254 253 255 / 90%) 70%,
+        rgb(255 255 255 / 40%) 90%,
+        rgb(254 253 255 / 40%) 95%,
+        rgb(254 253 255 / 0%) 100%
+    );
+    --cursor-linear-gradient-hover-state: linear-gradient(
+        180deg,
+        rgba(254 253 255 / 0%) 0%,
+        rgba(254 253 255 / 10%) 5%,
+        rgba(255 255 255 / 10%) 10%,
+        rgba(254 253 255 / 30%) 70%,
+        rgba(254 253 255 / 60%) 50%,
+        rgba(254 253 255 / 30%) 70%,
+        rgba(255 255 255 / 10%) 90%,
+        rgba(254 253 255 / 10%) 95%,
+        rgba(254 253 255 / 0%) 100%
+    );
+}
+
 .seeker {
     position: relative;
     min-height: 80px;
@@ -56,18 +83,7 @@
     height: 100%;
     width: 3px;
     z-index: var(--timeline-cursor-layer);
-    background: linear-gradient(
-        180deg,
-        rgb(254 253 255 / 0%) 0%,
-        rgb(254 253 255 / 40%) 5%,
-        rgb(255 255 255 / 40%) 10%,
-        rgb(254 253 255 / 90%) 70%,
-        rgb(254 253 255 / 80%) 50%,
-        rgb(254 253 255 / 90%) 70%,
-        rgb(255 255 255 / 40%) 90%,
-        rgb(254 253 255 / 40%) 95%,
-        rgb(254 253 255 / 0%) 100%
-    );
+    background: var(--cursor-linear-gradient-normal-state);
 }
 
 .hoverCursor {
@@ -78,18 +94,7 @@
     height: 100%;
     width: 3px;
     z-index: var(--timeline-cursor-layer);
-    background: linear-gradient(
-        180deg,
-        rgba(254 253 255 / 0%) 0%,
-        rgba(254 253 255 / 10%) 5%,
-        rgba(255 255 255 / 10%) 10%,
-        rgba(254 253 255 / 30%) 70%,
-        rgba(254 253 255 / 60%) 50%,
-        rgba(254 253 255 / 30%) 70%,
-        rgba(255 255 255 / 10%) 90%,
-        rgba(254 253 255 / 10%) 95%,
-        rgba(254 253 255 / 0%) 100%
-    );
+    background: var(--cursor-linear-gradient-hover-state);
 }
 
 .hover {

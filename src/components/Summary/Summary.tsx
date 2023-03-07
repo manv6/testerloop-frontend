@@ -14,7 +14,7 @@ import networkEventData from 'src/data/networkEvents';
 import { useFragment } from 'react-relay';
 import { SummaryFragment$key } from './__generated__/SummaryFragment.graphql';
 import graphql from 'babel-plugin-relay/macro';
-import { Panel } from 'src/core/components';
+import { Panel } from 'src/components/common';
 import cx from 'classnames';
 
 type Props = {
