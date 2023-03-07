@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import cx from 'classnames';
 import styles from './Child.module.scss';
+import { Panel } from 'src/components/common';
 
 type Props = React.PropsWithChildren<{
     notExpandable?: boolean;
@@ -11,7 +12,7 @@ const Child: React.FC<Props> = ({ className, notExpandable, children }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     return (
-        <div
+        <Panel
             className={cx(className, styles.child, {
                 [styles.expanded]: isExpanded,
             })}
@@ -25,7 +26,7 @@ const Child: React.FC<Props> = ({ className, notExpandable, children }) => {
                 </button>
             )}
             {children}
-        </div>
+        </Panel>
     );
 };
 

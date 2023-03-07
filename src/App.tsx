@@ -13,12 +13,12 @@ import stepsData from 'src/data/steps';
 import { useLazyLoadQuery } from 'react-relay';
 import AppQuery from './AppQuery';
 import { AppQuery as AppQueryType } from './__generated__/AppQuery.graphql';
+import { styled } from '@mui/material/styles';
 import DomPreview from './components/DomPreview';
-import ThemeProvider from 'src/hooks/theme/Provider';
 
-const SuspensePanel: React.FC<React.PropsWithChildren> = ({ children }) => (
-    <React.Suspense fallback={<div>Loading</div>}>{children}</React.Suspense>
-);
+const StyledApp = styled('div')(({ theme }) => ({
+    backgroundColor: theme.palette.base[500],
+}));
 
 const App: React.FC = () => {
     const data = { steps: stepsData } as any; // eslint-disable-line
@@ -38,61 +38,42 @@ const App: React.FC = () => {
     const endTime = new Date(Date.parse(results.endedTestsAt));
 
     return (
-        <div className={styles.app}>
-            <ThemeProvider>
-                <TimelineProvider startTime={startTime} endTime={endTime}>
-                    <SuspensePanel>
-                        <Summary fragmentKey={queryData.testExecution} />
-                    </SuspensePanel>
-                    <SuspensePanel>
-                        <TimelineControls fragmentKey={data} />
-                    </SuspensePanel>
+        <StyledApp className={styles.app}>
+            <TimelineProvider startTime={startTime} endTime={endTime}>
+                <Summary
+                    className={styles.summaryPanel}
+                    fragmentKey={queryData.testExecution}
+                />
+                <div className={styles.appContent}>
+                    <CypressError />
+                    <TimelineControls fragmentKey={data} />
                     <Expandable.Parent className={styles.expandableParent}>
-                        <SuspensePanel>
-                            <Expandable.Child
-                                className={styles.expandableSteps}
-                                notExpandable={true}
-                            >
-                                <Steps
-                                    className={styles.steps}
-                                    fragmentKey={data}
-                                />
-                            </Expandable.Child>
-                        </SuspensePanel>
-                        <SuspensePanel>
-                            <Expandable.Child
-                                className={styles.expandableCypressError}
-                                notExpandable={true}
-                            >
-                                <CypressError />
-                            </Expandable.Child>
-                        </SuspensePanel>
-                        <SuspensePanel>
-                            <Expandable.Child className={styles.expandableDom}>
-                                <DomPreview />
-                            </Expandable.Child>
-                        </SuspensePanel>
-                        <SuspensePanel>
-                            <Expandable.Child
-                                className={styles.expandableConsole}
-                            >
-                                {/* eslint-disable @typescript-eslint/no-non-null-assertion */}
-                                <ConsolePanel
-                                    fragmentKey={queryData.testExecution!}
-                                />
-                            </Expandable.Child>
-                        </SuspensePanel>
-                        <SuspensePanel>
-                            <Expandable.Child
-                                className={styles.expandableNetwork}
-                            >
-                                <NetworkPanel fragmentKey={data} />
-                            </Expandable.Child>
-                        </SuspensePanel>
+                        <Expandable.Child
+                            className={styles.expandableSteps}
+                            notExpandable={true}
+                        >
+                            <Steps
+                                className={styles.steps}
+                                fragmentKey={data}
+                            />
+                        </Expandable.Child>
+                        <Expandable.Child className={styles.expandableDom}>
+                            <DomPreview />
+                        </Expandable.Child>
+                        <Expandable.Child className={styles.expandableNetwork}>
+                            <NetworkPanel fragmentKey={data} />
+                        </Expandable.Child>
+
+                        <Expandable.Child className={styles.expandableConsole}>
+                            {/* eslint-disable @typescript-eslint/no-non-null-assertion */}
+                            <ConsolePanel
+                                fragmentKey={queryData.testExecution!}
+                            />
+                        </Expandable.Child>
                     </Expandable.Parent>
-                </TimelineProvider>
-            </ThemeProvider>
-        </div>
+                </div>
+            </TimelineProvider>
+        </StyledApp>
     );
 };
 

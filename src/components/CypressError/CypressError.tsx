@@ -1,4 +1,5 @@
 import React from 'react';
+import { Panel } from 'src/components/common';
 import cicd from 'src/data/cicd';
 import results from 'src/data/results';
 
@@ -28,7 +29,7 @@ const CypressError: React.FC = () => {
     const hrefText = [relativePath, line, column].join(':');
 
     return (
-        <div className={styles.cypressError}>
+        <Panel className={styles.cypressError}>
             <div>
                 <div className={styles.title}>
                     <span>!</span> {error.name}
@@ -38,7 +39,7 @@ const CypressError: React.FC = () => {
                     {hrefText}
                 </a>
             </div>
-        </div>
+        </Panel>
     );
 };
 

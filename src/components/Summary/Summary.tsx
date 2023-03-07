@@ -14,24 +14,15 @@ import networkEventData from 'src/data/networkEvents';
 import { useFragment } from 'react-relay';
 import { SummaryFragment$key } from './__generated__/SummaryFragment.graphql';
 import graphql from 'babel-plugin-relay/macro';
-import { useTheme } from 'src/hooks/theme/useTheme';
-import Button from 'src/components/common/Button';
+import { Panel } from 'src/components/common';
+import cx from 'classnames';
 
 type Props = {
     fragmentKey: SummaryFragment$key | null;
+    className?: string;
 };
 
-const ThemeToggle: React.FC = () => {
-    const { mode, setMode } = useTheme();
-    const toggleMode = () => setMode(mode === 'dark' ? 'light' : 'dark');
-    return (
-        <div className={styles.themeToggle}>
-            <Button onClick={toggleMode}>{mode}</Button>
-        </div>
-    );
-};
-
-const Summary: React.FC<Props> = ({ fragmentKey }) => {
+const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
     const consoleData = useFragment(
         graphql`
             fragment SummaryFragment on TestExecution {
@@ -90,7 +81,7 @@ const Summary: React.FC<Props> = ({ fragmentKey }) => {
     const cypressErrorName = errorObj.error.name;
 
     return (
-        <div className={styles.summary}>
+        <Panel className={cx(styles.summary, className)}>
             <p className={styles.summaryMessage}>
                 <ErrorIcon />
                 <span>
@@ -125,8 +116,7 @@ const Summary: React.FC<Props> = ({ fragmentKey }) => {
                     <button>Re-run</button>
                 </div>
             </div>
-            <ThemeToggle />
-        </div>
+        </Panel>
     );
 };
 

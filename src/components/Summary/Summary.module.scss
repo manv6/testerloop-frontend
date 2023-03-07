@@ -8,9 +8,8 @@
     display: flex;
     justify-content: space-between;
     padding: 1rem;
-    border: 3px solid lightgrey;
-    border-radius: 5px;
     position: relative;
+    overflow: scroll;
 }
 
 .summaryMessage {
@@ -82,11 +81,4 @@
 
 .consoleError {
     color: salmon;
-}
-
-// TODO: Move to component
-.themeToggle {
-    position: absolute;
-    bottom: 0;
-    left: 0;
 }

@@ -1,0 +1,126 @@
+@use 'src/constants/layers.scss';
+
+:root {
+    --cursor-linear-gradient-normal-state: linear-gradient(
+        180deg,
+        rgb(254 253 255 / 0%) 0%,
+        rgb(254 253 255 / 40%) 5%,
+        rgb(255 255 255 / 40%) 10%,
+        rgb(254 253 255 / 90%) 70%,
+        rgb(254 253 255 / 80%) 50%,
+        rgb(254 253 255 / 90%) 70%,
+        rgb(255 255 255 / 40%) 90%,
+        rgb(254 253 255 / 40%) 95%,
+        rgb(254 253 255 / 0%) 100%
+    );
+    --cursor-linear-gradient-hover-state: linear-gradient(
+        180deg,
+        rgba(254 253 255 / 0%) 0%,
+        rgba(254 253 255 / 10%) 5%,
+        rgba(255 255 255 / 10%) 10%,
+        rgba(254 253 255 / 30%) 70%,
+        rgba(254 253 255 / 60%) 50%,
+        rgba(254 253 255 / 30%) 70%,
+        rgba(255 255 255 / 10%) 90%,
+        rgba(254 253 255 / 10%) 95%,
+        rgba(254 253 255 / 0%) 100%
+    );
+}
+
+.seeker {
+    position: relative;
+    min-height: 80px;
+
+    svg {
+        transition: all 0.2s ease-in-out;
+
+        &:hover {
+            transform: scale(1.5);
+        }
+    }
+
+    &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        width: 100%;
+        bottom: 50%;
+        height: 5px;
+        transform: translateY(50%);
+    }
+}
+
+.seekerContainer {
+    flex-grow: 1;
+    position: relative;
+    margin: 0 24px;
+}
+
+.fill {
+    position: absolute;
+    left: 0;
+    bottom: 50%;
+    height: 5px;
+    transform: translateY(50%);
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 50%;
+        right: 0;
+        transform: translate(50%, 50%);
+        height: 10px;
+        width: 10px;
+        border-radius: 50%;
+    }
+}
+
+.cursor {
+    position: absolute;
+    bottom: 50%;
+    right: 0;
+    transform: translate(50%, 50%);
+    height: 100%;
+    width: 3px;
+    z-index: var(--timeline-cursor-layer);
+    background: var(--cursor-linear-gradient-normal-state);
+}
+
+.hoverCursor {
+    position: absolute;
+    bottom: 50%;
+    right: 0;
+    transform: translate(50%, 50%);
+    height: 100%;
+    width: 3px;
+    z-index: var(--timeline-cursor-layer);
+    background: var(--cursor-linear-gradient-hover-state);
+}
+
+.hover {
+    position: absolute;
+    left: 0;
+    bottom: 50%;
+    height: 5px;
+    transform: translateY(50%);
+    z-index: var(--timeline-hover-layer);
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 50%;
+        right: 0;
+        transform: translate(50%, 50%);
+        height: 10px;
+        width: 10px;
+        border-radius: 50%;
+    }
+}
+
+.marker {
+    display: flex;
+    position: absolute;
+    bottom: 50%;
+    transform: translateY(50%);
+    z-index: var(--timeline-marker-layer);
+}
