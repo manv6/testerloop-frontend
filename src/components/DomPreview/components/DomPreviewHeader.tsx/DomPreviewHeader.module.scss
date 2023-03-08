@@ -1,0 +1,15 @@
+.domPreviewHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.controls {
+    display: flex;
+
+    button {
+        margin-left: 16px;
+        text-transform: none;
+    }
+}

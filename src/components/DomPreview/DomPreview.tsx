@@ -5,8 +5,9 @@ import { formatSteps } from 'src/utils/formatters';
 import stepsData from 'src/data/steps';
 import snapshots from 'src/data/snapshots';
 import * as Expandable from 'src/components/Expandable';
+import { DomPreviewHeader } from './components';
 
-enum DOMTab {
+export enum DOMTab {
     BEFORE = 'beforeBody',
     AFTER = 'afterBody',
 }
@@ -113,22 +114,11 @@ const DomPreview: React.FC = () => {
         };
     }, [currentSnapshot, tab]);
 
+    const header = useMemo(() => <DomPreviewHeader setTab={setTab} />, []);
+
     return (
-        <Expandable.Child className={styles.expandableDom}>
+        <Expandable.Child className={styles.expandableDom} header={header}>
             <div className={styles.domPreview}>
-                <header>
-                    <ul>
-                        <li>Snapshot</li>
-                    </ul>
-                    <div className={styles.controls}>
-                        <button onClick={() => setTab(DOMTab.BEFORE)}>
-                            Before
-                        </button>
-                        <button onClick={() => setTab(DOMTab.AFTER)}>
-                            After
-                        </button>
-                    </div>
-                </header>
                 <iframe
                     className={styles.iframe}
                     sandbox="allow-same-origin"

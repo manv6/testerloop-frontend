@@ -199,7 +199,10 @@ export const NetworkPanel: React.FC<Props> = () => {
     );
 
     return (
-        <Expandable.Child className={styles.expandableNetwork}>
+        <Expandable.Child
+            className={styles.expandableNetwork}
+            header={<div>Network</div>}
+        >
             <div className={styles.network}>
                 <div className={styles.verticalStack}>
                     <div>
