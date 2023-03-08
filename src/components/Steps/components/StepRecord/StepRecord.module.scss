@@ -1,52 +1,27 @@
 .stepHeader {
     cursor: pointer;
     height: 3rem;
-    // border-bottom: 1px solid lightgray;
-    // border-top: 1px solid black;
-
-    // &.hovered,
-    // &:hover {
-    //     background-color: rgb(0 0 0 / 5%);
-    // }
-
-    // &.selected {
-    //     background-color: #f7e6b0;
-    // }
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
     & > .stepName {
         font-weight: 500;
     }
 
-    // & > .stepName,
-    // & > .stepContent {
-    //     padding: 0.25rem;
-    // }
+    & > .stepContent {
+        flex-grow: 1;
+    }
 
     .stepPrefix {
         margin-left: 24px;
         margin-right: 8px;
     }
-
-    // & > .stepName {
-    //     text-align: right;
-    //     color: #2c88d9;
-    //     font-weight: 800;
-    // }
-
-    // & > .stepContent {
-    //     &.success {
-    //         color: #117924;
-    //     }
-
-    //     &.error {
-    //         color: #d3455b;
-    //     }
-    // }
-
+    
     & > .stepAccordionIcon > svg {
-        width: 32px;
-        height: 32px;
-        margin-right: 0.5rem;
+        width: 14px !important;
+        height: 7px !important;
+        margin: 0 8px;
         border: none;
     }
 }

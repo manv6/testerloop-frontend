@@ -48,28 +48,11 @@ const App: React.FC = () => {
                     <CypressError />
                     <TimelineControls fragmentKey={data} />
                     <Expandable.Parent className={styles.expandableParent}>
-                        <Expandable.Child
-                            className={styles.expandableSteps}
-                            notExpandable={true}
-                        >
-                            <Steps
-                                className={styles.steps}
-                                fragmentKey={data}
-                            />
-                        </Expandable.Child>
-                        <Expandable.Child className={styles.expandableDom}>
-                            <DomPreview />
-                        </Expandable.Child>
-                        <Expandable.Child className={styles.expandableNetwork}>
-                            <NetworkPanel fragmentKey={data} />
-                        </Expandable.Child>
-
-                        <Expandable.Child className={styles.expandableConsole}>
-                            {/* eslint-disable @typescript-eslint/no-non-null-assertion */}
-                            <ConsolePanel
-                                fragmentKey={queryData.testExecution!}
-                            />
-                        </Expandable.Child>
+                        <Steps className={styles.steps} fragmentKey={data} />
+                        <DomPreview />
+                        <NetworkPanel fragmentKey={data} />
+                        {/* eslint-disable @typescript-eslint/no-non-null-assertion */}
+                        <ConsolePanel fragmentKey={queryData.testExecution!} />
                     </Expandable.Parent>
                 </div>
             </TimelineProvider>

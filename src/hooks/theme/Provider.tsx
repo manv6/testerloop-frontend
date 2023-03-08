@@ -14,6 +14,14 @@ const LIGHT = createTheme({
 });
 
 const DARK = createTheme({
+    typography: {
+        fontFamily: 'Roboto, sans-serif',
+        body1: {
+            fontSize: '13.33px',
+            fontWeight: 400,
+            lineHeight: '20px',
+        },
+    },
     palette: {
         mode: 'dark',
         text: {

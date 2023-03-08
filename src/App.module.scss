@@ -24,19 +24,3 @@
         'steps dom dom dom'
         'console console network network';
 }
-
-.expandableSteps {
-    grid-area: steps;
-}
-
-.expandableDom {
-    grid-area: dom;
-}
-
-.expandableConsole {
-    grid-area: console;
-}
-
-.expandableNetwork {
-    grid-area: network;
-}

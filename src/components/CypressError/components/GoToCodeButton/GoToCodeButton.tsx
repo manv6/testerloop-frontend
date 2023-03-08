@@ -9,8 +9,6 @@ type Props = {
 };
 
 const StyledButton = styled(Button)<StyledComponentProps>(({ theme }) => ({
-    color: theme.palette.status.error[400],
-    border: `1px solid ${theme.palette.base[300]}`,
     a: {
         color: theme.palette.base[100],
     },

@@ -15,30 +15,31 @@ interface Props {
     setExpandedStepIdx: (idx: number | undefined) => void;
     step: Step;
     actions: Step[];
-
     isStepSelected: boolean;
     isStepHovered: boolean;
-
+    isPreviousToSelected: boolean;
     selectedActionIdx: number | null;
     hoveredActionIdx: number | null;
 }
 
 interface StyledStepHeaderProps {
     isSelected: boolean;
+    isPreviousToSelected: boolean;
 }
 
 const StyledStepHeader = styled('tr')<StyledStepHeaderProps>(
-    ({ theme, isSelected }) => {
+    ({ theme, isSelected, isPreviousToSelected }) => {
         let backgroundColor = theme.palette.base[400];
         let borderColor = theme.palette.base[300];
         if (isSelected) {
             backgroundColor = theme.palette.base[300];
-            borderColor = theme.palette.base[200];
+            borderColor = `${theme.palette.base[200]}`;
         }
 
         return {
             backgroundColor,
             borderBottom: `1px solid ${borderColor}`,
+            ...(isPreviousToSelected && { borderBottom: 'none' }),
             borderTop: `1px solid ${borderColor}`,
         };
     }
@@ -47,6 +48,7 @@ const StyledStepHeader = styled('tr')<StyledStepHeaderProps>(
 const StepRecord: React.FC<Props> = ({
     idx,
     isExpanded,
+    isPreviousToSelected,
     setExpandedStepIdx,
     step,
     actions,
@@ -67,6 +69,7 @@ const StepRecord: React.FC<Props> = ({
         <>
             <StyledStepHeader
                 key={`${options.id}`}
+                isPreviousToSelected={isPreviousToSelected}
                 isSelected={isStepSelected}
                 onClick={(e) => {
                     e.preventDefault();

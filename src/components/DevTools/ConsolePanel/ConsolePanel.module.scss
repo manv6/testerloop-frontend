@@ -1,6 +1,12 @@
+
+.expandableConsole {
+    grid-area: console;
+}
+
 .consolePanel {
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
 }
 
 .logsList {

@@ -42,7 +42,7 @@ const CypressError: React.FC = () => {
                     <ErrorIcon />
                 </div>
                 <div className={styles.errorContent}>
-                    <StyledErrorName>
+                    <StyledErrorName className={styles.errorName}>
                         {splitCamelCase(error.name)}
                     </StyledErrorName>
                     <div>{error.message}</div>

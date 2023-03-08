@@ -9,6 +9,7 @@ import { useTimeline } from 'src/hooks/timeline';
 import { TextInput } from 'src/components/common/TextInput';
 import * as formatter from 'src/utils/formatters';
 import networkEventData from 'src/data/networkEvents';
+import * as Expandable from 'src/components/Expandable';
 
 enum ResourceTypeFilterType {
     HTML = 'html',
@@ -198,104 +199,114 @@ export const NetworkPanel: React.FC<Props> = () => {
     );
 
     return (
-        <div className={styles.network}>
-            <div className={styles.verticalStack}>
-                <div>
-                    <label className={styles.labelWrapper}>
-                        <span>Filter:</span>
-                        <TextInput
-                            value={filterTerm}
-                            onChange={filterTermInputOnChange}
-                            placeholder="Filter"
-                        ></TextInput>
-                    </label>
-                </div>
-                <div>
-                    <div className={styles.filterBlock}>
-                        <div className={styles.inlineWrapper}>
-                            {Object.values(ProgressFilterType).map(
-                                (value, idx) => (
-                                    <div
-                                        key={`${value}-${idx}`}
-                                        className={styles.labelWrapper}
+        <Expandable.Child className={styles.expandableNetwork}>
+            <div className={styles.network}>
+                <div className={styles.verticalStack}>
+                    <div>
+                        <label className={styles.labelWrapper}>
+                            <span>Filter:</span>
+                            <TextInput
+                                value={filterTerm}
+                                onChange={filterTermInputOnChange}
+                                placeholder="Filter"
+                            ></TextInput>
+                        </label>
+                    </div>
+                    <div>
+                        <div className={styles.filterBlock}>
+                            <div className={styles.inlineWrapper}>
+                                {Object.values(ProgressFilterType).map(
+                                    (value, idx) => (
+                                        <div
+                                            key={`${value}-${idx}`}
+                                            className={styles.labelWrapper}
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                onChange={
+                                                    onChangeProgressFilter
+                                                }
+                                                name={value}
+                                                checked={selectedProgressFilters.has(
+                                                    value
+                                                )}
+                                            ></input>
+                                            <span>{value}</span>
+                                        </div>
+                                    )
+                                )}
+                            </div>
+                        </div>
+                        <div className={styles.filterBlock}>
+                            <button
+                                onClick={onChangeResourceTypeAllFilter}
+                                className={cx({
+                                    [styles.resourceTypeFilterActive]:
+                                        !selectedResourceTypeFilters.size,
+                                })}
+                            >
+                                all
+                            </button>
+                            {Object.values(ResourceTypeFilterType).map(
+                                (value) => (
+                                    <button
+                                        key={`${value}`}
+                                        onClick={onChangeResourceTypeFilters(
+                                            value
+                                        )}
+                                        className={cx({
+                                            [styles.resourceTypeFilterActive]:
+                                                selectedResourceTypeFilters.has(
+                                                    value
+                                                ),
+                                        })}
                                     >
-                                        <input
-                                            type="checkbox"
-                                            onChange={onChangeProgressFilter}
-                                            name={value}
-                                            checked={selectedProgressFilters.has(
-                                                value
-                                            )}
-                                        ></input>
-                                        <span>{value}</span>
-                                    </div>
+                                        {value}
+                                    </button>
                                 )
                             )}
                         </div>
                     </div>
-                    <div className={styles.filterBlock}>
-                        <button
-                            onClick={onChangeResourceTypeAllFilter}
-                            className={cx({
-                                [styles.resourceTypeFilterActive]:
-                                    !selectedResourceTypeFilters.size,
-                            })}
-                        >
-                            all
-                        </button>
-                        {Object.values(ResourceTypeFilterType).map((value) => (
-                            <button
-                                key={`${value}`}
-                                onClick={onChangeResourceTypeFilters(value)}
-                                className={cx({
-                                    [styles.resourceTypeFilterActive]:
-                                        selectedResourceTypeFilters.has(value),
-                                })}
-                            >
-                                {value}
-                            </button>
-                        ))}
+                    <div className={styles.networkTablePanel}>
+                        <table className={styles.table}>
+                            <thead>
+                                <tr>
+                                    <th className={styles.th}>Progress</th>
+                                    <th className={styles.th}>Status</th>
+                                    <th className={styles.th}>Method</th>
+                                    <th className={styles.th}>Domain</th>
+                                    <th className={styles.th}>Initiator</th>
+                                    <th className={styles.th}>Type</th>
+                                    <th className={styles.th}>Transferred</th>
+                                    <th className={styles.th}>Size</th>
+                                    <th className={styles.th}>Waterfall</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {filteredEvents.map((networkEvent, i) => (
+                                    <RequestSlice
+                                        key={networkEvent.id}
+                                        event={networkEvent}
+                                        setSelectedEventId={setSelectedEventId}
+                                        isLastStartedEvent={
+                                            lastStartedNetworkEvent?.id ===
+                                            networkEvent.id
+                                        }
+                                    />
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <div className={styles.networkTablePanel}>
-                    <table className={styles.table}>
-                        <thead>
-                            <tr>
-                                <th className={styles.th}>Progress</th>
-                                <th className={styles.th}>Status</th>
-                                <th className={styles.th}>Method</th>
-                                <th className={styles.th}>Domain</th>
-                                <th className={styles.th}>Initiator</th>
-                                <th className={styles.th}>Type</th>
-                                <th className={styles.th}>Transferred</th>
-                                <th className={styles.th}>Size</th>
-                                <th className={styles.th}>Waterfall</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredEvents.map((networkEvent, i) => (
-                                <RequestSlice
-                                    key={networkEvent.id}
-                                    event={networkEvent}
-                                    setSelectedEventId={setSelectedEventId}
-                                    isLastStartedEvent={
-                                        lastStartedNetworkEvent?.id ===
-                                        networkEvent.id
-                                    }
-                                />
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                {selectedEvent && (
+                    <NetworkEventDetailPanel
+                        selectedEvent={selectedEvent}
+                        activeTabKey={activeTabKey}
+                        onSelectTab={onSelectTab}
+                        onDetailPanelClose={onDetailPanelClose}
+                    />
+                )}
             </div>
-            {selectedEvent && (
-                <NetworkEventDetailPanel
-                    selectedEvent={selectedEvent}
-                    activeTabKey={activeTabKey}
-                    onSelectTab={onSelectTab}
-                    onDetailPanelClose={onDetailPanelClose}
-                />
-            )}
-        </div>
+        </Expandable.Child>
     );
 };
