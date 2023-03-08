@@ -5,10 +5,12 @@ import { LogEntry, LogFilters } from './components';
 import styles from './ConsolePanel.module.scss';
 import graphql from 'babel-plugin-relay/macro';
 import { useDebounce } from 'use-debounce';
+import * as Expandable from 'src/components/Expandable';
 
 import type { ConsolePanelFragment$key } from './__generated__/ConsolePanelFragment.graphql';
 import { isOfType } from 'src/utils/isOfType';
 import { fillObjFromType } from 'src/utils/fillObjFromType';
+import { PanelHeader } from 'src/components/common';
 
 export enum LogLevel {
     LOG = 'LOG',
@@ -127,33 +129,38 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
         : null;
 
     return (
-        <section className={styles.consolePanel}>
-            <LogFilters
-                logFilters={data}
-                filterTerm={logSearch ?? ''}
-                setFilterTerm={setLogSearch}
-                activeLogLevels={activeLogLevels ?? defaultActiveLogLevels}
-                toggleActiveLogLevel={toggleActiveLogLevel}
-            />
+        <Expandable.Child
+            className={styles.expandableConsole}
+            header={<PanelHeader>Console</PanelHeader>}
+        >
+            <section className={styles.consolePanel}>
+                <LogFilters
+                    logFilters={data}
+                    filterTerm={logSearch ?? ''}
+                    setFilterTerm={setLogSearch}
+                    activeLogLevels={activeLogLevels ?? defaultActiveLogLevels}
+                    toggleActiveLogLevel={toggleActiveLogLevel}
+                />
 
-            {isPending ? (
-                <div>Loading...</div>
-            ) : (
-                <ul className={styles.logsList}>
-                    {logs.map((node, idx) => {
-                        // TODO: Timestamp is not unique, provide an id or a way to make it unique.
-                        return (
-                            <LogEntry
-                                key={idx}
-                                isLogSelected={currentLogIdx === idx}
-                                isLogHovered={hoveredLogIdx === idx}
-                                logEntry={node}
-                            />
-                        );
-                    })}
-                </ul>
-            )}
-        </section>
+                {isPending ? (
+                    <div>Loading...</div>
+                ) : (
+                    <ul className={styles.logsList}>
+                        {logs.map((node, idx) => {
+                            // TODO: Timestamp is not unique, provide an id or a way to make it unique.
+                            return (
+                                <LogEntry
+                                    key={idx}
+                                    isLogSelected={currentLogIdx === idx}
+                                    isLogHovered={hoveredLogIdx === idx}
+                                    logEntry={node}
+                                />
+                            );
+                        })}
+                    </ul>
+                )}
+            </section>
+        </Expandable.Child>
     );
 };
 

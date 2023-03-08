@@ -4,6 +4,7 @@ import styles from './DomPreview.module.scss';
 import { formatSteps } from 'src/utils/formatters';
 import stepsData from 'src/data/steps';
 import snapshots from 'src/data/snapshots';
+import * as Expandable from 'src/components/Expandable';
 
 enum DOMTab {
     BEFORE = 'beforeBody',
@@ -113,25 +114,29 @@ const DomPreview: React.FC = () => {
     }, [currentSnapshot, tab]);
 
     return (
-        <div className={styles.domPreview}>
-            <header>
-                <ul>
-                    <li>Snapshot</li>
-                </ul>
-                <div className={styles.controls}>
-                    <button onClick={() => setTab(DOMTab.BEFORE)}>
-                        Before
-                    </button>
-                    <button onClick={() => setTab(DOMTab.AFTER)}>After</button>
-                </div>
-            </header>
-            <iframe
-                className={styles.iframe}
-                sandbox="allow-scripts allow-same-origin"
-                id="dom-iframe"
-                title="domSnapshot"
-            />
-        </div>
+        <Expandable.Child className={styles.expandableDom}>
+            <div className={styles.domPreview}>
+                <header>
+                    <ul>
+                        <li>Snapshot</li>
+                    </ul>
+                    <div className={styles.controls}>
+                        <button onClick={() => setTab(DOMTab.BEFORE)}>
+                            Before
+                        </button>
+                        <button onClick={() => setTab(DOMTab.AFTER)}>
+                            After
+                        </button>
+                    </div>
+                </header>
+                <iframe
+                    className={styles.iframe}
+                    sandbox="allow-same-origin"
+                    id="dom-iframe"
+                    title="domSnapshot"
+                />
+            </div>
+        </Expandable.Child>
     );
 };
 

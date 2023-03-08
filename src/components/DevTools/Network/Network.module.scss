@@ -1,5 +1,9 @@
 @use 'src/components/common/styles/table.scss';
 
+.expandableNetwork {
+    grid-area: network;
+}
+
 .network {
     overflow: auto;
     isolation: isolate;

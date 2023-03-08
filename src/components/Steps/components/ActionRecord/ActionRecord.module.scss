@@ -1,23 +1,6 @@
 .actionRecord {
     cursor: pointer;
-    padding: 0.5rem 1rem 0.5rem 2rem;
-
-    &.hovered,
-    &:hover {
-        background-color: rgb(50 50 50 / 5%);
-    }
-
-    &.selected {
-        background-color: #f1ebd8;
-    }
-
-    &.success {
-        color: #117924;
-    }
-
-    &.error {
-        color: #d3455b;
-    }
+    padding: 8px 24px 8px 40px;
 
     & > .expandedActionName {
         font-weight: 700;
@@ -26,7 +9,6 @@
 
     & > .expandedActionMessage {
         font-weight: 300;
-        font-style: italic;
         word-break: break-all;
     }
 }

@@ -1,9 +1,16 @@
+import { styled } from '@mui/material';
 import React from 'react';
 import { Panel } from 'src/components/common';
 import cicd from 'src/data/cicd';
 import results from 'src/data/results';
+import splitCamelCase from 'src/utils/splitCamelCase';
+import { ErrorIcon, GoToCodeButton } from './components';
 
 import styles from './CypressError.module.scss';
+
+const StyledErrorName = styled('div')(({ theme }) => ({
+    color: theme.palette.status.error[400],
+}));
 
 const CypressError: React.FC = () => {
     const githubUrl = cicd.GITHUB_SERVER_URL;
@@ -26,19 +33,22 @@ const CypressError: React.FC = () => {
         `?#L${line}`,
     ].join('/');
 
-    const hrefText = [relativePath, line, column].join(':');
+    const tooltipText = [relativePath, line, column].join(':');
 
     return (
         <Panel className={styles.cypressError}>
-            <div>
+            <div className={styles.errorDetail}>
                 <div className={styles.title}>
-                    <span>!</span> {error.name}
+                    <ErrorIcon />
                 </div>
-                <div className={styles.errorMessage}>{error.message}</div>
-                <a href={url} target="_blank" rel="noreferrer">
-                    {hrefText}
-                </a>
+                <div className={styles.errorContent}>
+                    <StyledErrorName className={styles.errorName}>
+                        {splitCamelCase(error.name)}
+                    </StyledErrorName>
+                    <div>{error.message}</div>
+                </div>
             </div>
+            <GoToCodeButton url={url} tooltipText={tooltipText} />
         </Panel>
     );
 };

@@ -3,6 +3,8 @@
 .child {
     position: relative;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 
     // TODO: This is a simple but slightly hacky way of doing expansions
     // and it proably won't support lerping of the element's position.

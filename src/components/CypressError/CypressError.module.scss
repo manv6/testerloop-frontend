@@ -1,24 +1,30 @@
-:root {
-    --error-colour: #d3455b;
+.cypressError {
+    padding: 16px 24px;
+    overflow: scroll;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.cypressError {
-    padding: 5px 10px;
-    overflow: scroll;
+.errorDetail {
+    display: flex;
+    align-items: center;
+}
+
+.errorContent {
+    margin-left: 12px;
+
+    .errorName {
+        font-weight: 500;
+    }
 }
 
 .title {
     font-weight: bold;
-    color: var(--error-colour);
     margin-bottom: 5px;
-    background-color: rgb(50 50 50 / 5%);
 
     span {
         margin-left: 4px;
         margin-right: 6px;
     }
-}
-
-.errorMessage {
-    color: var(--error-colour);
 }

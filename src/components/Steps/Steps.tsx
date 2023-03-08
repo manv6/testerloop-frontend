@@ -1,11 +1,13 @@
 import cx from 'classnames';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTimeline } from 'src/hooks/timeline';
-import { StepRecord } from './components';
+import { StepRecord, StepsHeader } from './components';
 import { useHierarchizeStepsData } from './hooks';
 import styles from './Steps.module.scss';
 import * as formatter from 'src/utils/formatters';
 import stepsData from 'src/data/steps';
+import * as Expandable from 'src/components/Expandable';
+import results from 'src/data/results';
 
 type Props = {
     className?: string;
@@ -42,6 +44,9 @@ export const Steps: React.FC<Props> = ({ className }) => {
         () => formatter.formatSteps(data.steps),
         [data.steps]
     );
+    const [expandedStepIdx, setExpandedStepIdx] = useState<
+        number | undefined
+    >();
 
     const { currentTime, hoverTime } = useTimeline();
 
@@ -74,30 +79,45 @@ export const Steps: React.FC<Props> = ({ className }) => {
               )
             : null;
 
-    return (
-        <table className={cx(className, styles.stepsTable)}>
-            <tbody className={styles.stepsTableBody}>
-                {stepsHierarchy.map(({ step, actions }, idx) => {
-                    const isStepSelected = selectedStepIdx === idx;
-                    const isStepHovered = hoveredStepIdx === idx;
+    const headerTitle = results.runs[0].tests[0].title.slice(-1)[0];
 
-                    return (
-                        <StepRecord
-                            key={step.options.id}
-                            step={step}
-                            actions={actions}
-                            isStepSelected={isStepSelected}
-                            isStepHovered={isStepHovered}
-                            selectedActionIdx={
-                                isStepSelected ? selectedActionIdx : null
-                            }
-                            hoveredActionIdx={
-                                isStepHovered ? hoveredActionIdx : null
-                            }
-                        />
-                    );
-                })}
-            </tbody>
-        </table>
+    return (
+        <Expandable.Child
+            className={styles.steps}
+            notExpandable={true}
+            header={<StepsHeader headerTitle={headerTitle} />}
+        >
+            <table className={cx(className, styles.stepsTable)}>
+                <tbody className={styles.stepsTableBody}>
+                    {stepsHierarchy.map(({ step, actions }, idx) => {
+                        const isStepSelected = selectedStepIdx === idx;
+                        const isStepHovered = hoveredStepIdx === idx;
+                        const isExpanded = expandedStepIdx === idx;
+                        const isPreviousToSelected =
+                            selectedStepIdx - 1 === idx;
+
+                        return (
+                            <StepRecord
+                                key={step.options.id}
+                                isExpanded={isExpanded}
+                                setExpandedStepIdx={setExpandedStepIdx}
+                                idx={idx}
+                                isPreviousToSelected={isPreviousToSelected}
+                                step={step}
+                                actions={actions}
+                                isStepSelected={isStepSelected}
+                                isStepHovered={isStepHovered}
+                                selectedActionIdx={
+                                    isStepSelected ? selectedActionIdx : null
+                                }
+                                hoveredActionIdx={
+                                    isStepHovered ? hoveredActionIdx : null
+                                }
+                            />
+                        );
+                    })}
+                </tbody>
+            </table>
+        </Expandable.Child>
     );
 };
