@@ -1,6 +1,7 @@
 .logsFilters {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
     padding: 8px 24px;
     width: 100%;
 }

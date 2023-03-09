@@ -1,11 +1,10 @@
 import React from 'react';
 import styles from './LogFilters.module.scss';
 import { LogLevel } from '../../ConsolePanel';
-import { TextInput } from 'src/components/common/TextInput';
 import LogFiltersFragment from './LogFiltersFragment';
 import { useFragment } from 'react-relay';
 import { LogFiltersFragment$key } from './__generated__/LogFiltersFragment.graphql';
-import { Button } from 'src/components/common';
+import { Button, TextInput } from 'src/components/common';
 import { LogErrorIcon, LogWarnIcon, OtherLogIcon } from '..';
 import { styled } from '@mui/material';
 
@@ -18,7 +17,7 @@ interface Props {
 }
 
 interface StyledButtonProps {
-    active: boolean;
+    active: number;
 }
 
 const StyledButton = styled(Button)<StyledButtonProps>(({ theme, active }) => ({
@@ -40,8 +39,8 @@ const LogFilters: React.FC<Props> = ({
     return (
         <aside className={styles.logsFilters}>
             <TextInput
-                type="text"
-                value={filterTerm}
+                inputProps={{ value: filterTerm }}
+                variant="outlined"
                 placeholder="Filter events"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     setFilterTerm(e.target.value);
@@ -50,7 +49,7 @@ const LogFilters: React.FC<Props> = ({
             <div className={styles.toggleButtons}>
                 <StyledButton
                     onClick={() => toggleActiveLogLevel(LogLevel.ERROR)}
-                    active={activeLogLevels.ERROR}
+                    active={activeLogLevels.ERROR ? 1 : 0}
                     className={styles.toggleLogLevelButton}
                 >
                     <LogErrorIcon />
@@ -61,7 +60,7 @@ const LogFilters: React.FC<Props> = ({
 
                 <StyledButton
                     onClick={() => toggleActiveLogLevel(LogLevel.WARN)}
-                    active={activeLogLevels.WARN}
+                    active={activeLogLevels.WARN ? 1 : 0}
                     className={styles.toggleLogLevelButton}
                 >
                     <LogWarnIcon />
@@ -72,7 +71,7 @@ const LogFilters: React.FC<Props> = ({
 
                 <StyledButton
                     onClick={() => toggleActiveLogLevel(LogLevel.LOG)}
-                    active={activeLogLevels.LOG}
+                    active={activeLogLevels.LOG ? 1 : 0}
                     className={styles.toggleLogLevelButton}
                 >
                     <OtherLogIcon />

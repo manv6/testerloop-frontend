@@ -9,16 +9,9 @@
     isolation: isolate;
 }
 
-.resourceTypeFilterActive {
-    background-color: lightgray;
-}
-
 .filterBlock {
     display: inline-block;
-}
-
-.filterBlock ~ .filterBlock {
-    margin-left: 50px;
+    margin-bottom: 8px;
 }
 
 .labelWrapper {
@@ -35,5 +28,23 @@
 .verticalStack {
     display: flex;
     flex-direction: column;
-    gap: 15px;
 }
+
+.filters {
+    padding: 8px 24px;
+    padding-bottom: 0;
+}
+
+.filterRow {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.toggleNetworkStateType, .resourceTypeFilter {
+    text-transform: none;
+}
+

@@ -29,7 +29,7 @@ export const datesToElapsedTime = (startTime: Date, currentTime: Date) => {
     let ms = currentTime.getTime() - startTime.getTime();
 
     if (ms < 0) {
-        return 0;
+        return '0:00';
     }
 
     const hours = Math.floor(ms / (3600 * 1000));

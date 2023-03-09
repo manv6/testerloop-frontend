@@ -1,15 +1,14 @@
-// TODO: Remove this check once temp data is removed!!
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import cx from 'classnames';
 
 import { RequestSlice, NetworkEventDetailPanel } from './components/';
 import styles from './Network.module.scss';
 import { useTimeline } from 'src/hooks/timeline';
-import { TextInput } from 'src/components/common/TextInput';
+import { Button, TextInput } from 'src/components/common';
 import * as formatter from 'src/utils/formatters';
 import networkEventData from 'src/data/networkEvents';
 import * as Expandable from 'src/components/Expandable';
+import { HeaderWithFilter } from 'src/components/common';
+import { styled } from '@mui/material';
 
 enum ResourceTypeFilterType {
     HTML = 'html',
@@ -48,10 +47,49 @@ const filterByResourceTypePredicate = (
 };
 
 enum ProgressFilterType {
-    COMPLETED = 'completed',
-    STARTED = 'started',
-    NOT_STARTED = 'not started',
+    NOT_STARTED = 'Not Started',
+    IN_PROGRESS = 'In Progress',
+    COMPLETED = 'Completed',
 }
+
+interface StyledButtonProps {
+    active: number;
+    statetype?: string;
+}
+
+const StyledButton = styled(Button)<StyledButtonProps>(
+    ({ theme, active, statetype }) => {
+        let backgroundColor;
+        let borderColor;
+
+        switch (statetype) {
+            case ProgressFilterType.IN_PROGRESS:
+                backgroundColor = theme.palette.status.caution[500];
+                borderColor = theme.palette.status.caution[400];
+                break;
+            case ProgressFilterType.COMPLETED:
+                backgroundColor = theme.palette.status.success[500];
+                borderColor = theme.palette.status.success[400];
+                break;
+            default:
+                backgroundColor = theme.palette.base[300];
+                borderColor = theme.palette.base[200];
+                break;
+        }
+
+        return {
+            ...(active
+                ? {
+                      backgroundColor,
+                      borderColor,
+                  }
+                : {
+                      backgroundColor: theme.palette.base[400],
+                      borderColor: theme.palette.base[300],
+                  }),
+        };
+    }
+);
 
 const filterByProgressPredicate = (
     event: formatter.FormattedNetworkEvents[0],
@@ -62,7 +100,7 @@ const filterByProgressPredicate = (
         switch (filter) {
             case ProgressFilterType.COMPLETED:
                 return event.endedDateTime <= currentTime;
-            case ProgressFilterType.STARTED:
+            case ProgressFilterType.IN_PROGRESS:
                 return (
                     event.startedDateTime <= currentTime &&
                     currentTime < event.endedDateTime
@@ -87,6 +125,7 @@ export const NetworkPanel: React.FC<Props> = () => {
         [data.networkEvents]
     );
 
+    const [showFilters, setShowFilters] = useState(true);
     const [selectedEventId, setSelectedEventId] = useState<null | string>(null);
     const [filterTerm, setFilterTerm] = useState<string>('');
     const [activeTabKey, setActiveTabKey] = useState<string | null>('headers');
@@ -151,13 +190,12 @@ export const NetworkPanel: React.FC<Props> = () => {
     );
 
     const onChangeProgressFilter = useCallback(
-        (ev: React.ChangeEvent<HTMLInputElement>) => {
+        (value: ProgressFilterType) => {
             const newFilters = new Set(selectedProgressFilters);
-            const newValue = ev.target.name as ProgressFilterType;
-            if (ev.target.checked) {
-                newFilters.add(newValue);
+            if (selectedProgressFilters.has(value)) {
+                newFilters.delete(value);
             } else {
-                newFilters.delete(newValue);
+                newFilters.add(value);
             }
 
             setSelectedProgressFilters(newFilters);
@@ -165,8 +203,8 @@ export const NetworkPanel: React.FC<Props> = () => {
         [selectedProgressFilters, setSelectedProgressFilters]
     );
 
-    const onChangeResourceTypeFilters =
-        (filter: ResourceTypeFilterType) => () => {
+    const onChangeResourceTypeFilters = useCallback(
+        (filter: ResourceTypeFilterType) => {
             const newFilters = new Set(selectedResourceTypeFilters);
             if (newFilters.has(filter)) {
                 newFilters.delete(filter);
@@ -174,11 +212,13 @@ export const NetworkPanel: React.FC<Props> = () => {
                 newFilters.add(filter);
             }
             setSelectedResourceTypeFilters(newFilters);
-        };
+        },
+        [selectedResourceTypeFilters]
+    );
 
     const onChangeResourceTypeAllFilter = useCallback(() => {
         setSelectedResourceTypeFilters(new Set());
-    }, [selectedResourceTypeFilters, setSelectedResourceTypeFilters]);
+    }, [setSelectedResourceTypeFilters]);
 
     useEffect(() => {
         setSelectedEventId(null);
@@ -198,76 +238,103 @@ export const NetworkPanel: React.FC<Props> = () => {
         [currentTime, networkEvents]
     );
 
+    const header = useMemo(
+        () => (
+            <HeaderWithFilter
+                title="Network"
+                toggleFilter={() => setShowFilters(!showFilters)}
+            />
+        ),
+        [showFilters]
+    );
+
     return (
-        <Expandable.Child
-            className={styles.expandableNetwork}
-            header={<div>Network</div>}
-        >
+        <Expandable.Child className={styles.expandableNetwork} header={header}>
             <div className={styles.network}>
                 <div className={styles.verticalStack}>
-                    <div>
-                        <label className={styles.labelWrapper}>
-                            <span>Filter:</span>
-                            <TextInput
-                                value={filterTerm}
-                                onChange={filterTermInputOnChange}
-                                placeholder="Filter"
-                            ></TextInput>
-                        </label>
-                    </div>
-                    <div>
-                        <div className={styles.filterBlock}>
-                            <div className={styles.inlineWrapper}>
-                                {Object.values(ProgressFilterType).map(
-                                    (value, idx) => (
-                                        <div
-                                            key={`${value}-${idx}`}
-                                            className={styles.labelWrapper}
-                                        >
-                                            <input
-                                                type="checkbox"
-                                                onChange={
-                                                    onChangeProgressFilter
+                    <div className={styles.filters}>
+                        <div>
+                            <label className={styles.labelWrapper}>
+                                <TextInput
+                                    inputProps={{ value: filterTerm }}
+                                    variant="outlined"
+                                    onChange={filterTermInputOnChange}
+                                    placeholder="Filter"
+                                ></TextInput>
+                            </label>
+                        </div>
+                        <div className={styles.filterRow}>
+                            <div className={styles.filterBlock}>
+                                <div className={styles.inlineWrapper}>
+                                    {Object.values(ProgressFilterType).map(
+                                        (value, idx) => (
+                                            <StyledButton
+                                                key={idx}
+                                                size="small"
+                                                statetype={value}
+                                                onClick={() => {
+                                                    onChangeProgressFilter(
+                                                        value
+                                                    );
+                                                }}
+                                                active={
+                                                    selectedProgressFilters.has(
+                                                        value
+                                                    )
+                                                        ? 1
+                                                        : 0
                                                 }
-                                                name={value}
-                                                checked={selectedProgressFilters.has(
+                                                className={
+                                                    styles.toggleNetworkStateType
+                                                }
+                                            >
+                                                {value}
+                                            </StyledButton>
+                                        )
+                                    )}
+                                </div>
+                            </div>
+                            <div className={styles.filterBlock}>
+                                <StyledButton
+                                    size="small"
+                                    onClick={() => {
+                                        onChangeResourceTypeAllFilter();
+                                    }}
+                                    active={
+                                        !selectedResourceTypeFilters.size
+                                            ? 1
+                                            : 0
+                                    }
+                                    className={styles.resourceTypeFilter}
+                                >
+                                    all
+                                </StyledButton>
+                                {Object.values(ResourceTypeFilterType).map(
+                                    (value) => (
+                                        <StyledButton
+                                            key={`${value}`}
+                                            size="small"
+                                            onClick={() => {
+                                                onChangeResourceTypeFilters(
                                                     value
-                                                )}
-                                            ></input>
-                                            <span>{value}</span>
-                                        </div>
+                                                );
+                                            }}
+                                            active={
+                                                selectedResourceTypeFilters.has(
+                                                    value
+                                                )
+                                                    ? 1
+                                                    : 0
+                                            }
+                                            className={
+                                                styles.resourceTypeFilter
+                                            }
+                                        >
+                                            {value}
+                                        </StyledButton>
                                     )
                                 )}
                             </div>
-                        </div>
-                        <div className={styles.filterBlock}>
-                            <button
-                                onClick={onChangeResourceTypeAllFilter}
-                                className={cx({
-                                    [styles.resourceTypeFilterActive]:
-                                        !selectedResourceTypeFilters.size,
-                                })}
-                            >
-                                all
-                            </button>
-                            {Object.values(ResourceTypeFilterType).map(
-                                (value) => (
-                                    <button
-                                        key={`${value}`}
-                                        onClick={onChangeResourceTypeFilters(
-                                            value
-                                        )}
-                                        className={cx({
-                                            [styles.resourceTypeFilterActive]:
-                                                selectedResourceTypeFilters.has(
-                                                    value
-                                                ),
-                                        })}
-                                    >
-                                        {value}
-                                    </button>
-                                )
-                            )}
                         </div>
                     </div>
                     <div className={styles.networkTablePanel}>

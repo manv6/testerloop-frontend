@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import { useRefetchableFragment } from 'react-relay';
 import { useTimeline } from 'src/hooks/timeline';
-import { ConsoleHeader, LogEntry, LogFilters } from './components';
+import { LogEntry, LogFilters } from './components';
 import styles from './ConsolePanel.module.scss';
 import graphql from 'babel-plugin-relay/macro';
 import { useDebounce } from 'use-debounce';
@@ -16,6 +16,7 @@ import * as Expandable from 'src/components/Expandable';
 import type { ConsolePanelFragment$key } from './__generated__/ConsolePanelFragment.graphql';
 import { isOfType } from 'src/utils/isOfType';
 import { fillObjFromType } from 'src/utils/fillObjFromType';
+import { HeaderWithFilter } from 'src/components/common';
 
 export enum LogLevel {
     LOG = 'LOG',
@@ -137,7 +138,8 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
 
     const header = useMemo(
         () => (
-            <ConsoleHeader
+            <HeaderWithFilter
+                title="Console"
                 toggleFilter={() => setShowLogFilters(!showLogFilters)}
             />
         ),
