@@ -8,6 +8,7 @@ import { NameValueTable } from 'src/components/DevTools/Network/components';
 import styles from './NetworkEventDetailPanel.module.scss';
 import { CloseButton } from 'src/components/common/CloseButton';
 import { FormattedNetworkEvents } from 'src/utils/formatters';
+import { styled } from '@mui/material';
 
 type PostDataTabProps = {
     selectedEvent: FormattedNetworkEvents[0];
@@ -170,6 +171,10 @@ type NetworkEventDetailPanelProps = {
     onDetailPanelClose: () => void;
 };
 
+const StyledDetails = styled('div')(({ theme }) => ({
+    backgroundColor: theme.palette.base[400],
+}));
+
 const NetworkEventDetailPanel: React.FC<NetworkEventDetailPanelProps> = ({
     selectedEvent,
     activeTabKey,
@@ -198,7 +203,7 @@ const NetworkEventDetailPanel: React.FC<NetworkEventDetailPanelProps> = ({
     );
 
     return (
-        <div key="details" className={styles.networkDetailPanel}>
+        <StyledDetails key="details" className={styles.networkDetailPanel}>
             {
                 <CloseButton
                     className={styles.closeButton}
@@ -212,7 +217,7 @@ const NetworkEventDetailPanel: React.FC<NetworkEventDetailPanelProps> = ({
                     tabChildren={tabChildren}
                 />
             </div>
-        </div>
+        </StyledDetails>
     );
 };
 

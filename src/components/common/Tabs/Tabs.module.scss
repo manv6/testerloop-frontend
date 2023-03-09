@@ -4,33 +4,13 @@
 }
 
 .tabButton {
-    border: 1px;
-    border-color: rgb(0 0 0 / 0%) rgb(0 0 0 / 0%) var(--tab-border-color)
-        rgb(0 0 0 / 0%);
-    background-color: white;
-    padding: 10px 15px;
-    box-shadow: none;
-    border-style: solid;
-    outline: none;
-    margin-bottom: -1px;
-    color: dodgerblue;
-    font-size: 16px;
-
-    &:not(.tabButtonActive):hover {
-        border-top-left-radius: 7px;
-        border-top-right-radius: 7px;
-        border-color: var(--tab-border-color-hover)
-            var(--tab-border-color-hover) var(--tab-border-color-hover);
-    }
+    text-transform: none;
 }
 
 .tabButtonActive {
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
-    border-color: var(--tab-border-color) var(--tab-border-color) white
-        var(--tab-border-color);
     border-width: 1px;
-    color: black;
 }
 
 .tabButtonContainer {

@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './Tabs.module.scss';
 import cx from 'classnames';
+import Button from '../Button';
 
 type TabProps = React.PropsWithChildren<{
     tabKey: string;
@@ -16,14 +17,14 @@ type TabButtonProps = {
 
 const TabButton = (props: TabButtonProps) => {
     return (
-        <button
+        <Button
             onClick={() => props.onSelect(props.tabKey)}
             className={cx(styles.tabButton, {
                 [styles.tabButtonActive]: props.active,
             })}
         >
             {props.title}
-        </button>
+        </Button>
     );
 };
 

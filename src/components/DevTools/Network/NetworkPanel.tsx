@@ -46,7 +46,7 @@ const filterByResourceTypePredicate = (
     );
 };
 
-enum ProgressFilterType {
+export enum ProgressFilterType {
     NOT_STARTED = 'Not Started',
     IN_PROGRESS = 'In Progress',
     COMPLETED = 'Completed',
@@ -90,6 +90,11 @@ const StyledButton = styled(Button)<StyledButtonProps>(
         };
     }
 );
+
+const StyledTh = styled('th')(({ theme }) => ({
+    border: `1px solid ${theme.palette.base[300]}`,
+    color: theme.palette.base[200],
+}));
 
 const filterByProgressPredicate = (
     event: formatter.FormattedNetworkEvents[0],
@@ -341,15 +346,31 @@ export const NetworkPanel: React.FC<Props> = () => {
                         <table className={styles.table}>
                             <thead>
                                 <tr>
-                                    <th className={styles.th}>Progress</th>
-                                    <th className={styles.th}>Status</th>
-                                    <th className={styles.th}>Method</th>
-                                    <th className={styles.th}>Domain</th>
-                                    <th className={styles.th}>Initiator</th>
-                                    <th className={styles.th}>Type</th>
-                                    <th className={styles.th}>Transferred</th>
-                                    <th className={styles.th}>Size</th>
-                                    <th className={styles.th}>Waterfall</th>
+                                    <StyledTh className={styles.th}></StyledTh>
+                                    <StyledTh className={styles.th}>
+                                        Status
+                                    </StyledTh>
+                                    <StyledTh className={styles.th}>
+                                        Method
+                                    </StyledTh>
+                                    <StyledTh className={styles.th}>
+                                        Domain
+                                    </StyledTh>
+                                    <StyledTh className={styles.th}>
+                                        Initiator
+                                    </StyledTh>
+                                    <StyledTh className={styles.th}>
+                                        Type
+                                    </StyledTh>
+                                    <StyledTh className={styles.th}>
+                                        Transferred
+                                    </StyledTh>
+                                    <StyledTh className={styles.th}>
+                                        Size
+                                    </StyledTh>
+                                    <StyledTh className={styles.th}>
+                                        Waterfall
+                                    </StyledTh>
                                 </tr>
                             </thead>
                             <tbody>

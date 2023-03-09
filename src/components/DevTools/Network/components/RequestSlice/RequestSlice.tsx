@@ -4,12 +4,19 @@ import { useTimeline } from 'src/hooks/timeline';
 import { datesToFraction } from 'src/utils/date';
 import styles from './RequestSlice.module.scss';
 import { FormattedNetworkEvents } from 'src/utils/formatters';
+import { styled } from '@mui/material';
+import NetworkProgress from '../NetworkProgress';
+import { ProgressFilterType } from '../../NetworkPanel';
 
 type Props = {
     event: FormattedNetworkEvents[0];
     setSelectedEventId: (id: string) => void;
     isLastStartedEvent: boolean;
 };
+
+const StyledTd = styled('td')(({ theme }) => ({
+    border: `1px solid ${theme.palette.base[300]}`,
+}));
 
 const RequestSlice: React.FC<Props> = (props) => {
     const { startTime, endTime, currentTime, setHoverTimeFraction } =
@@ -41,11 +48,11 @@ const RequestSlice: React.FC<Props> = (props) => {
             currentTime < props.event.endedDateTime,
         [styles.progressEnded]: props.event.endedDateTime <= currentTime,
     });
-    let progressText = null;
+    let progress = ProgressFilterType.NOT_STARTED;
     if (props.event.endedDateTime <= currentTime) {
-        progressText = 'completed';
+        progress = ProgressFilterType.COMPLETED;
     } else if (props.event.startedDateTime <= currentTime) {
-        progressText = 'started';
+        progress = ProgressFilterType.IN_PROGRESS;
     }
 
     return (
@@ -63,27 +70,28 @@ const RequestSlice: React.FC<Props> = (props) => {
             }}
             className={styles.trBody}
         >
-            <td
+            <StyledTd
                 className={cx(styles.td, progressColorStyle, {
                     [styles.progressLastStartEvent]: props.isLastStartedEvent,
                 })}
             >
-                {progressText} {props.isLastStartedEvent && '*'}
-            </td>
-            <td className={cx(styles.td, textColorStyle)}>
+                <NetworkProgress progress={progress} />
+                {/* {progressText} {props.isLastStartedEvent && '*'} */}
+            </StyledTd>
+            <StyledTd className={cx(styles.td, textColorStyle)}>
                 <span>{props.event.response.status}</span>
-            </td>
-            <td className={styles.td}>
+            </StyledTd>
+            <StyledTd className={styles.td}>
                 <span className={textColorStyle}>
                     {props.event.request.method}
                 </span>
-            </td>
-            <td className={cx(styles.td, styles.urlColumn)}>
+            </StyledTd>
+            <StyledTd className={cx(styles.td, styles.urlColumn)}>
                 <span className={textColorStyle}>
                     {truncateValue(props.event.request.url, 60)}
                 </span>
-            </td>
-            <td className={styles.td}>
+            </StyledTd>
+            <StyledTd className={styles.td}>
                 <span className={textColorStyle}>
                     {truncateValue(
                         (props.event._initiator || '') +
@@ -93,23 +101,23 @@ const RequestSlice: React.FC<Props> = (props) => {
                         40
                     )}
                 </span>
-            </td>
-            <td className={styles.td}>
+            </StyledTd>
+            <StyledTd className={styles.td}>
                 <span className={textColorStyle}>
                     {props.event.response.content.mimeType}
                 </span>
-            </td>
-            <td className={styles.td}>
+            </StyledTd>
+            <StyledTd className={styles.td}>
                 <span className={textColorStyle}>
                     {props.event.response._transferSize}
                 </span>
-            </td>
-            <td className={styles.td}>
+            </StyledTd>
+            <StyledTd className={styles.td}>
                 <span className={textColorStyle}>
                     {props.event.response.bodySize}
                 </span>
-            </td>
-            <td className={cx(styles.td, styles.waterfall)}>
+            </StyledTd>
+            <StyledTd className={cx(styles.td, styles.waterfall)}>
                 <div
                     className={styles.waterfallBar}
                     style={{
@@ -121,7 +129,7 @@ const RequestSlice: React.FC<Props> = (props) => {
                     className={styles.waterfallProgressLine}
                     style={{ left: `${currentTimePercentage}%` }}
                 />
-            </td>
+            </StyledTd>
         </tr>
     );
 };
