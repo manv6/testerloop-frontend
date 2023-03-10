@@ -13,7 +13,7 @@ export const TimelineProvider: React.FC<Props> = (props) => {
     const { startTime, endTime } = props;
 
     const [currentTime, seek] = useState(startTime);
-    const [speed, setSpeed] = useState(1);
+    const [speed, setSpeed] = useState(0.25);
     useEffect(() => {
         seek((currentTime) => {
             if (currentTime < startTime) {

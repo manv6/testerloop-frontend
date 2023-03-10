@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Tabs } from 'src/components/common/Tabs';
 
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 import { NameValueTable } from 'src/components/DevTools/Network/components';
 import styles from './NetworkEventDetailPanel.module.scss';
@@ -26,7 +26,7 @@ const PostDataTab: React.FC<PostDataTabProps> = ({ selectedEvent }) => {
             return (
                 <SyntaxHighlighter
                     language="json"
-                    style={vs}
+                    style={vscDarkPlus}
                     wrapLongLines={true}
                 >
                     {JSON.stringify(JSON.parse(postData), null, 2)}
@@ -85,7 +85,7 @@ const ResponseDataTab: React.FC<ResponseDataTabProps> = ({ selectedEvent }) => {
             return (
                 <SyntaxHighlighter
                     language="json"
-                    style={vs}
+                    style={vscDarkPlus}
                     wrapLongLines={true}
                 >
                     {JSON.stringify(JSON.parse(responsePayload), null, 2)}

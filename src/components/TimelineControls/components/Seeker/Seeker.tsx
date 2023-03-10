@@ -114,7 +114,7 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
                         endTime,
                         evt.endedDateTime
                     ),
-                    name: evt.request.method,
+                    name: `${evt.request.method} ${evt.response.status}`,
                     message: evt.request.url,
                 })),
         [networkEvents, startTime, endTime]
@@ -133,7 +133,7 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
                         endTime,
                         evt.endedDateTime
                     ),
-                    name: evt.request.method,
+                    name: `${evt.request.method} ${evt.response.status}`,
                     message: evt.request.url,
                 })),
         [networkEvents, startTime, endTime]
