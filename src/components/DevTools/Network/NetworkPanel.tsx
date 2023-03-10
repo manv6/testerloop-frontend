@@ -257,40 +257,83 @@ export const NetworkPanel: React.FC<Props> = () => {
         <Expandable.Child className={styles.expandableNetwork} header={header}>
             <div className={styles.network}>
                 <div className={styles.verticalStack}>
-                    <div className={styles.filters}>
-                        <div>
-                            <label className={styles.labelWrapper}>
-                                <TextInput
-                                    inputProps={{ value: filterTerm }}
-                                    variant="outlined"
-                                    onChange={filterTermInputOnChange}
-                                    placeholder="Filter"
-                                ></TextInput>
-                            </label>
-                        </div>
-                        <div className={styles.filterRow}>
-                            <div className={styles.filterBlock}>
-                                <div className={styles.inlineWrapper}>
-                                    {Object.values(ProgressFilterType).map(
-                                        (value, idx) => (
+                    {showFilters && (
+                        <div className={styles.filters}>
+                            <div>
+                                <label className={styles.labelWrapper}>
+                                    <TextInput
+                                        inputProps={{ value: filterTerm }}
+                                        variant="outlined"
+                                        onChange={filterTermInputOnChange}
+                                        placeholder="Filter"
+                                    ></TextInput>
+                                </label>
+                            </div>
+                            <div className={styles.filterRow}>
+                                <div className={styles.filterBlock}>
+                                    <div className={styles.inlineWrapper}>
+                                        {Object.values(ProgressFilterType).map(
+                                            (value, idx) => (
+                                                <StyledButton
+                                                    key={idx}
+                                                    size="small"
+                                                    statetype={value}
+                                                    onClick={() => {
+                                                        onChangeProgressFilter(
+                                                            value
+                                                        );
+                                                    }}
+                                                    active={
+                                                        selectedProgressFilters.has(
+                                                            value
+                                                        )
+                                                            ? 1
+                                                            : 0
+                                                    }
+                                                    className={
+                                                        styles.toggleNetworkStateType
+                                                    }
+                                                >
+                                                    {value}
+                                                </StyledButton>
+                                            )
+                                        )}
+                                    </div>
+                                </div>
+                                <div className={styles.filterBlock}>
+                                    <StyledButton
+                                        size="small"
+                                        onClick={() => {
+                                            onChangeResourceTypeAllFilter();
+                                        }}
+                                        active={
+                                            !selectedResourceTypeFilters.size
+                                                ? 1
+                                                : 0
+                                        }
+                                        className={styles.resourceTypeFilter}
+                                    >
+                                        all
+                                    </StyledButton>
+                                    {Object.values(ResourceTypeFilterType).map(
+                                        (value) => (
                                             <StyledButton
-                                                key={idx}
+                                                key={`${value}`}
                                                 size="small"
-                                                statetype={value}
                                                 onClick={() => {
-                                                    onChangeProgressFilter(
+                                                    onChangeResourceTypeFilters(
                                                         value
                                                     );
                                                 }}
                                                 active={
-                                                    selectedProgressFilters.has(
+                                                    selectedResourceTypeFilters.has(
                                                         value
                                                     )
                                                         ? 1
                                                         : 0
                                                 }
                                                 className={
-                                                    styles.toggleNetworkStateType
+                                                    styles.resourceTypeFilter
                                                 }
                                             >
                                                 {value}
@@ -299,49 +342,8 @@ export const NetworkPanel: React.FC<Props> = () => {
                                     )}
                                 </div>
                             </div>
-                            <div className={styles.filterBlock}>
-                                <StyledButton
-                                    size="small"
-                                    onClick={() => {
-                                        onChangeResourceTypeAllFilter();
-                                    }}
-                                    active={
-                                        !selectedResourceTypeFilters.size
-                                            ? 1
-                                            : 0
-                                    }
-                                    className={styles.resourceTypeFilter}
-                                >
-                                    all
-                                </StyledButton>
-                                {Object.values(ResourceTypeFilterType).map(
-                                    (value) => (
-                                        <StyledButton
-                                            key={`${value}`}
-                                            size="small"
-                                            onClick={() => {
-                                                onChangeResourceTypeFilters(
-                                                    value
-                                                );
-                                            }}
-                                            active={
-                                                selectedResourceTypeFilters.has(
-                                                    value
-                                                )
-                                                    ? 1
-                                                    : 0
-                                            }
-                                            className={
-                                                styles.resourceTypeFilter
-                                            }
-                                        >
-                                            {value}
-                                        </StyledButton>
-                                    )
-                                )}
-                            </div>
                         </div>
-                    </div>
+                    )}
                     <div className={styles.networkTablePanel}>
                         <table className={styles.table}>
                             <thead>

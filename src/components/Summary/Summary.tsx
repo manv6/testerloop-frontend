@@ -6,8 +6,6 @@ import cicd from 'src/data/cicd';
 import results from 'src/data/results';
 import BlankAvatar from './components/BlankAvatar';
 import ChromeIcon from './components/ChromeIcon';
-import CommitIcon from './components/CommitIcon';
-import ErrorIcon from './components/ErrorIcon';
 import { formatDate } from 'src/utils/date';
 import * as formatter from 'src/utils/formatters';
 import networkEventData from 'src/data/networkEvents';
@@ -16,6 +14,7 @@ import { SummaryFragment$key } from './__generated__/SummaryFragment.graphql';
 import graphql from 'babel-plugin-relay/macro';
 import { Panel } from 'src/components/common';
 import cx from 'classnames';
+import DetailColumn from './components/DetailColumn';
 
 type Props = {
     fragmentKey: SummaryFragment$key | null;
@@ -80,23 +79,49 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
     const errorObj = results.runs[0].tests[0].attempts[0];
     const cypressErrorName = errorObj.error.name;
 
+    const title = results.runs[0].tests[0].title.slice(-1)[0];
+
+    const failedAt = formatDate(endTime);
+
     return (
         <Panel className={cx(styles.summary, className)}>
-            <p className={styles.summaryMessage}>
-                <ErrorIcon />
-                <span>
-                    Test failed on {formatDate(endTime)} by{' '}
-                    <BlankAvatar className={styles.avatar} />{' '}
-                    <a href={engineerUrl} target="_blank" rel="noreferrer">
-                        {engineer}
-                    </a>{' '}
-                    on branch <CommitIcon /> {branch}
-                </span>
-                <ChromeIcon />
-            </p>
-            <div className={styles.summaryRightBlock}>
+            <div className={styles.row}>
+                <h1>{title}</h1>
+                <div className={styles.buttons}>
+                    <button>Compare</button>
+                    <button>Re-run</button>
+                </div>
+            </div>
+            <div className={styles.row}>
+                <div className={styles.envDetails}>
+                    <DetailColumn title="Browser">
+                        <div>
+                            <ChromeIcon /> Chrome
+                        </div>
+                    </DetailColumn>
+                    <DetailColumn title="Branch">
+                        <div>{branch}</div>
+                    </DetailColumn>
+                    <DetailColumn title="Commit">
+                        <div>hash</div>
+                    </DetailColumn>
+                    <DetailColumn title="Time">
+                        <div>{failedAt}</div>
+                    </DetailColumn>
+                    <DetailColumn title="By">
+                        <div>
+                            <BlankAvatar className={styles.avatar} />{' '}
+                            <a
+                                href={engineerUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                {engineer}
+                            </a>{' '}
+                        </div>
+                    </DetailColumn>
+                </div>
                 <div className={styles.errorsContainer}>
-                    <div className={styles.errorsLabel}>Errors:</div>
                     <ul>
                         {cypressErrorName && (
                             <li className={styles.cypressError}>
@@ -110,10 +135,6 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
                             {logErrorCount} Console errors
                         </li>
                     </ul>
-                </div>
-                <div className={styles.buttons}>
-                    <button>Compare with latest passed</button>
-                    <button>Re-run</button>
                 </div>
             </div>
         </Panel>

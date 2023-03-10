@@ -1,14 +1,19 @@
-:root {
-    --blue: #2c88d9;
-    --error: #d3455b;
-}
-
 .summary {
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     padding: 1rem;
     position: relative;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.envDetails {
+    display: flex;
 }
 
 .summaryMessage {
@@ -39,7 +44,6 @@
 
 .buttons {
     display: flex;
-    flex-direction: column;
     margin-left: 2rem;
 
     button {
@@ -56,28 +60,11 @@
     }
 }
 
-.errorsLabel {
-    color: var(--error);
-}
-
 .errorsContainer {
-    font-weight: bold;
-    display: flex;
-
     ul {
+        display: flex;
         list-style-type: none;
         margin: 0;
     }
 }
 
-.cypressError {
-    color: var(--error);
-}
-
-.networkError {
-    color: var(--blue);
-}
-
-.consoleError {
-    color: salmon;
-}
