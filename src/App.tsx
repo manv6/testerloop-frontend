@@ -40,10 +40,7 @@ const App: React.FC = () => {
     return (
         <StyledApp className={styles.app}>
             <TimelineProvider startTime={startTime} endTime={endTime}>
-                <Summary
-                    className={styles.summaryPanel}
-                    fragmentKey={queryData.testExecution}
-                />
+                <Summary fragmentKey={queryData.testExecution} />
                 <div className={styles.appContent}>
                     <CypressError />
                     <TimelineControls fragmentKey={data} />

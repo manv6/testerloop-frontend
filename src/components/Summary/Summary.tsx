@@ -1,26 +1,41 @@
 // TODO: Remove this check once temp data is removed!!
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import styles from './Summary.module.scss';
 import cicd from 'src/data/cicd';
 import results from 'src/data/results';
-import BlankAvatar from './components/BlankAvatar';
-import ChromeIcon from './components/ChromeIcon';
-import CommitIcon from './components/CommitIcon';
-import ErrorIcon from './components/ErrorIcon';
 import { formatDate } from 'src/utils/date';
 import * as formatter from 'src/utils/formatters';
 import networkEventData from 'src/data/networkEvents';
 import { useFragment } from 'react-relay';
 import { SummaryFragment$key } from './__generated__/SummaryFragment.graphql';
 import graphql from 'babel-plugin-relay/macro';
-import { Panel } from 'src/components/common';
+import { Panel, Tag, Button, ChevronIcon } from 'src/components/common';
 import cx from 'classnames';
+import { styled, Tooltip } from '@mui/material';
+import {
+    RerunButton,
+    CompareButton,
+    DetailColumn,
+    ChromeIcon,
+    FrameworkErrorIcon,
+    NetworkErrorIcon,
+    WarnIcon,
+} from './components';
+import splitCamelCase from 'src/utils/splitCamelCase';
 
 type Props = {
     fragmentKey: SummaryFragment$key | null;
     className?: string;
 };
+
+const StyledLink = styled('a')(({ theme }) => ({
+    color: theme.palette.base[100],
+}));
+
+const StyledDivider = styled('div')(({ theme }) => ({
+    backgroundColor: theme.palette.base[300],
+}));
 
 const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
     const consoleData = useFragment(
@@ -59,7 +74,16 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
         [data.networkEvents]
     );
 
-    const branch = cicd.GITHUB_REF_NAME;
+    const [displayCollapse, setDisplayCollapse] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(true);
+    const [isButtonHovered, setIsButtonHovered] = useState(false);
+
+    const branchName = cicd.gitBranch;
+    const branchUrl = [cicd.gitUrl, 'tree', cicd.gitBranch].join('/');
+
+    const commitHash = cicd.shortHash;
+    const commitUrl = [cicd.gitUrl, 'commit', cicd.hash].join('/');
+
     const engineer = cicd.GITHUB_TRIGGERING_ACTOR;
     const engineerUrl = [cicd.GITHUB_SERVER_URL, engineer].join('/');
     const endTime = results.endedTestsAt;
@@ -78,44 +102,123 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
     );
 
     const errorObj = results.runs[0].tests[0].attempts[0];
-    const cypressErrorName = errorObj.error.name;
+    const frameworkErrorName = errorObj.error.name;
+    const title = results.runs[0].tests[0].title.slice(-1)[0];
+
+    const failedAt = formatDate(endTime);
 
     return (
-        <Panel className={cx(styles.summary, className)}>
-            <p className={styles.summaryMessage}>
-                <ErrorIcon />
-                <span>
-                    Test failed on {formatDate(endTime)} by{' '}
-                    <BlankAvatar className={styles.avatar} />{' '}
-                    <a href={engineerUrl} target="_blank" rel="noreferrer">
-                        {engineer}
-                    </a>{' '}
-                    on branch <CommitIcon /> {branch}
-                </span>
-                <ChromeIcon />
-            </p>
-            <div className={styles.summaryRightBlock}>
-                <div className={styles.errorsContainer}>
-                    <div className={styles.errorsLabel}>Errors:</div>
-                    <ul>
-                        {cypressErrorName && (
-                            <li className={styles.cypressError}>
-                                1 {cypressErrorName}
-                            </li>
-                        )}
-                        <li className={styles.networkError}>
-                            {networkErrorCount} Network errors
-                        </li>
-                        <li className={styles.consoleError}>
-                            {logErrorCount} Console errors
-                        </li>
-                    </ul>
+        <Panel
+            className={cx(styles.summary, className)}
+            onMouseEnter={() => setDisplayCollapse(true)}
+            onMouseLeave={() => setDisplayCollapse(false)}
+        >
+            <div className={styles.row}>
+                <div className={styles.pageTitle}>
+                    <h1>{title}</h1>
+                    <Tag text="Failed" />
                 </div>
                 <div className={styles.buttons}>
-                    <button>Compare with latest passed</button>
-                    <button>Re-run</button>
+                    <CompareButton />
+                    <RerunButton />
                 </div>
             </div>
+            {isExpanded && (
+                <div className={cx(styles.row, styles.detailsRow)}>
+                    <div className={styles.envDetails}>
+                        <DetailColumn title="Browser">
+                            <div className={styles.columnContent}>
+                                <ChromeIcon /> Chrome
+                            </div>
+                        </DetailColumn>
+                        <DetailColumn title="Branch">
+                            <StyledLink
+                                className={styles.columnContent}
+                                target="_blank"
+                                rel="noreferrer"
+                                href={branchUrl}
+                            >
+                                {branchName}
+                            </StyledLink>
+                        </DetailColumn>
+                        <DetailColumn title="Commit">
+                            <StyledLink
+                                className={styles.columnContent}
+                                target="_blank"
+                                rel="noreferrer"
+                                href={commitUrl}
+                            >
+                                {commitHash}
+                            </StyledLink>
+                        </DetailColumn>
+                        <DetailColumn title="Time">
+                            <div className={styles.columnContent}>
+                                {failedAt}
+                            </div>
+                        </DetailColumn>
+                        <DetailColumn title="By">
+                            <div className={styles.columnContent}>
+                                <StyledLink
+                                    href={engineerUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className={styles.engineerLink}
+                                >
+                                    <img
+                                        src={cicd.author.avatarUrl}
+                                        alt="kkavasik"
+                                        className={styles.avatar}
+                                    />
+                                    {engineer}
+                                </StyledLink>{' '}
+                            </div>
+                        </DetailColumn>
+                    </div>
+                    <div className={styles.errorsContainer}>
+                        <ul>
+                            {frameworkErrorName && (
+                                <li className={styles.cypressError}>
+                                    <FrameworkErrorIcon />
+                                    <span>
+                                        1 {splitCamelCase(frameworkErrorName)}
+                                    </span>
+                                </li>
+                            )}
+                            <StyledDivider className={styles.divider} />
+                            <li className={styles.networkError}>
+                                <NetworkErrorIcon />
+                                <span>{networkErrorCount} Network errors</span>
+                            </li>
+                            <StyledDivider className={styles.divider} />
+                            <li className={styles.consoleError}>
+                                <WarnIcon />
+                                <span>{logErrorCount} Console errors</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            )}
+            {displayCollapse && (
+                <Tooltip
+                    title={isExpanded ? 'Collapse' : 'Expand'}
+                    placement="top"
+                    arrow
+                    open={isButtonHovered}
+                >
+                    <div>
+                        <Button
+                            className={styles.collapseButton}
+                            onClick={() => setIsExpanded(!isExpanded)}
+                            onMouseEnter={() => setIsButtonHovered(true)}
+                            onMouseLeave={() => setIsButtonHovered(false)}
+                        >
+                            <ChevronIcon
+                                direction={isExpanded ? 'up' : 'down'}
+                            />
+                        </Button>
+                    </div>
+                </Tooltip>
+            )}
         </Panel>
     );
 };
