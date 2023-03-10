@@ -9,11 +9,10 @@ import type {
     LogEntryFragment$key,
 } from './__generated__/LogEntryFragment.graphql';
 import { styled } from '@mui/material';
-import { useTimeline } from 'src/hooks/timeline';
-import { datesToElapsedTime } from 'src/utils/date';
 import { LogLevel } from '../../ConsolePanel';
 import { LogErrorIcon, LogWarnIcon, OtherLogIcon } from '..';
 import { ChevronIcon } from 'src/components/common';
+import ElapsedTime from 'src/components/common/ElapsedTime';
 
 interface Props {
     isLogSelected: boolean;
@@ -47,10 +46,6 @@ const StyledLogEntry = styled('li')<StyledLogEntryProps>(
     }
 );
 
-const StyledDisplayTime = styled('span')(({ theme }) => ({
-    color: theme.palette.base[200],
-}));
-
 interface StyledLineMarkertProps {
     logType: ConsoleLogLevel;
 }
@@ -80,7 +75,6 @@ const LogEntry: React.FC<Props> = ({
     isLogHovered,
     logEntry,
 }) => {
-    const { startTime } = useTimeline();
     const data = useFragment(LogEntryFragment, logEntry);
 
     const timestamp = data.at;
@@ -88,15 +82,6 @@ const LogEntry: React.FC<Props> = ({
     const [textOverflows, setTextOverflows] = useState<boolean>(false);
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const messageRef = useRef<HTMLSpanElement>(null);
-
-    const displayTime = useMemo(() => {
-        const date = timestamp ? new Date(timestamp) : undefined;
-        if (!date) {
-            return;
-        }
-        const elapsedTime = datesToElapsedTime(startTime, date);
-        return elapsedTime.replace('.', ' • ') + ' ms';
-    }, [startTime, timestamp]);
 
     const logIcon = useMemo(() => {
         switch (data.logLevel) {
@@ -126,9 +111,7 @@ const LogEntry: React.FC<Props> = ({
                 className={styles.lineMarker}
                 logType={data.logLevel}
             />
-            <StyledDisplayTime className={styles.displayTime}>
-                {displayTime}
-            </StyledDisplayTime>
+            <ElapsedTime timestamp={timestamp} />
             <span
                 className={cx(styles.message, {
                     [styles.expanded]: isExpanded,

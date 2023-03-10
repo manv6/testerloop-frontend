@@ -87,14 +87,6 @@ const DARK = createTheme({
                         display: 'none',
                     },
                 },
-                // input: ({ theme }) => ({
-                //     backgroundColor: theme.palette.base[300],
-                //     outline: `1px solid ${theme.palette.base[200]}`,
-                //     borderRadius: '5px',
-                //     '&:focus': {
-                //         outline: `1px solid ${theme.palette.base[100]}`,
-                //     },
-                // }),
             },
         },
         MuiOutlinedInput: {
