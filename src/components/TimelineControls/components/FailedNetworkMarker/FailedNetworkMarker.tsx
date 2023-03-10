@@ -2,15 +2,15 @@ import React from 'react';
 
 const FailedNetworkMarker: React.FC = () => (
     <svg
-        width="10"
-        height="10"
-        viewBox="0 0 10 10"
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
     >
         <rect
-            x="1"
-            y="1"
+            x="5"
+            y="5"
             width="8"
             height="8"
             rx="2"

@@ -6,8 +6,8 @@ export enum EventType {
 }
 
 export const FILTER_LABELS: Record<EventType, string> = {
-    [EventType.STEP]: 'Step definitions',
-    [EventType.CYPRESS_ERROR]: 'Cypress error',
+    [EventType.STEP]: 'Step definition',
+    [EventType.CYPRESS_ERROR]: 'Error',
     [EventType.NETWORK_ERROR]: 'Failed network',
     [EventType.NETWORK_SUCCESS]: 'Success network',
 };

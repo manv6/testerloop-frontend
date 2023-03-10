@@ -2,9 +2,9 @@ import React from 'react';
 
 const CypressErrorMarker: React.FC = () => (
     <svg
-        width="14"
-        height="12"
-        viewBox="0 0 14 12"
+        width="16"
+        height="16"
+        viewBox="-1 -1 15 15"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
     >
