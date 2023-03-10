@@ -1,5 +1,4 @@
 import React, { ReactNode } from 'react';
-import { PanelHeader } from 'src/components/common';
 import styles from './StepsHeader.module.scss';
 
 type Props = {
@@ -7,9 +6,9 @@ type Props = {
 };
 
 const StepHeader: React.FC<Props> = ({ headerTitle }) => (
-    <PanelHeader>
+    <div>
         <div className={styles.headerTitle}>{headerTitle}</div>
-    </PanelHeader>
+    </div>
 );
 
 export default StepHeader;

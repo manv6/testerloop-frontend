@@ -1,12 +1,11 @@
 import { styled } from '@mui/material';
 import cx from 'classnames';
 import React from 'react';
-import { StepPrefix } from 'src/components/common';
+import { StepPrefix, ChevronIcon } from 'src/components/common';
 import { EventType } from 'src/constants';
 import { useTimeline } from 'src/hooks/timeline';
 import { Step } from '../../Steps';
 import ActionRecord from '../ActionRecord';
-import ChevronIcon from './ChevronIcon';
 import styles from './StepRecord.module.scss';
 
 interface Props {

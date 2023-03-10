@@ -1,41 +1,56 @@
 .logEntry {
     display: flex;
+    align-items: center;
     flex-direction: row;
     column-gap: 0.75rem;
-    border: 1px solid lightgray;
-    padding: 0.25rem 0.75rem;
-
-    &.hovered {
-        border-width: 3px;
-        border-style: dashed;
-    }
-
-    &.selected {
-        border-width: 3px;
-        border-style: ridge;
-    }
-}
-
-.displayDate {
-    font-size: small;
-    line-height: 24px;
-    min-width: 80px;
+    padding: 8px 24px 8px 0;
 }
 
 .expandButton {
     padding-left: 0;
     background: transparent;
     border: none;
+    align-self: flex-start;
 }
 
 .message {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    width: 100%;
+}
+
+.messageContent {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.messageText {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 4px;
+    word-break: break-word;
 }
 
 .expanded {
     overflow: inherit;
     white-space: inherit;
     word-break: break-all;
+}
+
+.lineMarker {
+    width: 2px;
+    height: 20px;
+    border-radius: 0 4px 4px 0;
+}
+
+.logIcon {
+    margin-right: 4px;
+    display: flex;
+    align-items: center;
 }

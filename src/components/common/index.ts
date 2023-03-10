@@ -2,3 +2,8 @@ export { default as Panel } from './Panel';
 export { default as Button } from './Button';
 export { default as StepPrefix } from './StepPrefix';
 export { default as PanelHeader } from './PanelHeader';
+export { default as ChevronIcon } from './ChevronIcon';
+export { default as TextInput } from './TextInput';
+export { default as SearchIcon } from './SearchIcon';
+export { default as FilterButton } from './FilterButton';
+export { default as HeaderWithFilter } from './HeaderWithFilter';

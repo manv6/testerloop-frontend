@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useTransition } from 'react';
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useState,
+    useTransition,
+} from 'react';
 import { useRefetchableFragment } from 'react-relay';
 import { useTimeline } from 'src/hooks/timeline';
 import { LogEntry, LogFilters } from './components';
@@ -10,7 +16,7 @@ import * as Expandable from 'src/components/Expandable';
 import type { ConsolePanelFragment$key } from './__generated__/ConsolePanelFragment.graphql';
 import { isOfType } from 'src/utils/isOfType';
 import { fillObjFromType } from 'src/utils/fillObjFromType';
-import { PanelHeader } from 'src/components/common';
+import { HeaderWithFilter } from 'src/components/common';
 
 export enum LogLevel {
     LOG = 'LOG',
@@ -65,6 +71,8 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
     const debouncedTerm = debouncedResult[0];
 
     const [isPending, startTransition] = useTransition();
+
+    const [showLogFilters, setShowLogFilters] = useState(true);
 
     const defaultActiveLogLevels = fillObjFromType(LogLevel, true);
     const [activeLogLevels, setActiveLogLevels] = React.useState<Record<
@@ -128,20 +136,30 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
         ? getMostRecentLogIdx(hoverTimestamp)
         : null;
 
-    return (
-        <Expandable.Child
-            className={styles.expandableConsole}
-            header={<PanelHeader>Console</PanelHeader>}
-        >
-            <section className={styles.consolePanel}>
-                <LogFilters
-                    logFilters={data}
-                    filterTerm={logSearch ?? ''}
-                    setFilterTerm={setLogSearch}
-                    activeLogLevels={activeLogLevels ?? defaultActiveLogLevels}
-                    toggleActiveLogLevel={toggleActiveLogLevel}
-                />
+    const header = useMemo(
+        () => (
+            <HeaderWithFilter
+                title="Console"
+                toggleFilter={() => setShowLogFilters(!showLogFilters)}
+            />
+        ),
+        [showLogFilters]
+    );
 
+    return (
+        <Expandable.Child className={styles.expandableConsole} header={header}>
+            <section className={styles.consolePanel}>
+                {showLogFilters && (
+                    <LogFilters
+                        logFilters={data}
+                        filterTerm={logSearch ?? ''}
+                        setFilterTerm={setLogSearch}
+                        activeLogLevels={
+                            activeLogLevels ?? defaultActiveLogLevels
+                        }
+                        toggleActiveLogLevel={toggleActiveLogLevel}
+                    />
+                )}
                 {isPending ? (
                     <div>Loading...</div>
                 ) : (

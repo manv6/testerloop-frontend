@@ -2,8 +2,6 @@
 
 :root {
     --table-row-hover-background: rgb(0 0 0 / 10%);
-    --progress-started-background: rgb(255 255 0 / 80%);
-    --progress-ended-background: rgb(255 215 0 / 80%);
 }
 
 .trBody {
@@ -43,16 +41,6 @@
     bottom: 0;
     width: 1px;
     background-color: grey;
-}
-
-.progressStarted {
-    min-width: 110px;
-    background-color: var(--progress-started-background);
-}
-
-.progressEnded {
-    min-width: 110px;
-    background-color: var(--progress-ended-background);
 }
 
 .progressLastStartEvent {

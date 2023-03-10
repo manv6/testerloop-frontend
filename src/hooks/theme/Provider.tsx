@@ -56,6 +56,13 @@ const DARK = createTheme({
                 200: '#69FEBF',
                 100: '#89FECD',
             },
+            caution: {
+                500: '#665310',
+                400: '#FECF28',
+                300: '#FED648',
+                200: '#FEDD69',
+                100: '#FEE589',
+            },
         },
     },
     components: {
@@ -80,6 +87,22 @@ const DARK = createTheme({
                         display: 'none',
                     },
                 },
+            },
+        },
+        MuiOutlinedInput: {
+            styleOverrides: {
+                root: ({ theme }) => ({
+                    '& .MuiOutlinedInput-notchedOutline': {
+                        borderColor: theme.palette.base[200],
+                    },
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                        borderColor: theme.palette.base[200],
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                        borderColor: theme.palette.base[100],
+                        borderWidth: '1px',
+                    },
+                }),
             },
         },
         MuiMenuItem: {
@@ -124,6 +147,7 @@ declare module '@mui/material/styles' {
     interface StatusPalette {
         error: Partial<PaletteColor>;
         success: Partial<PaletteColor>;
+        caution: Partial<PaletteColor>;
     }
 
     interface Palette {

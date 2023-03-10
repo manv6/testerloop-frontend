@@ -4,6 +4,7 @@ import { styled } from '@mui/material';
 
 const StyledButton = styled(MUIButton)(({ theme }) => ({
     border: `1px solid ${theme.palette.base[300]}`,
+    color: theme.palette.base[100],
 }));
 
 type Props = React.ComponentProps<typeof MUIButton>;

@@ -25,9 +25,18 @@
 }
 
 .expand {
-    width: 64px;
-    position: absolute;
-    right: 8px;
-    top: 8px;
+    width: 32px;
+    height: 32px;
     z-index: var(--expandable-child-button-layer);
+}
+
+.header {
+    width: 100%;
+    margin-right: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.hide {
+    visibility: hidden;
 }

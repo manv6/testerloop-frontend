@@ -1,7 +1,7 @@
 import React, { ReactNode, useState } from 'react';
 import cx from 'classnames';
 import styles from './Child.module.scss';
-import { Button, Panel } from 'src/components/common';
+import { Button, Panel, PanelHeader } from 'src/components/common';
 import { CollapseIcon, ExpandIcon } from './components';
 
 type Props = React.PropsWithChildren<{
@@ -24,16 +24,20 @@ const Child: React.FC<Props> = ({
                 [styles.expanded]: isExpanded,
             })}
         >
-            {header}
-            {notExpandable ? null : (
-                <Button
-                    size="small"
-                    className={styles.expand}
-                    onClick={() => setIsExpanded(!isExpanded)}
-                >
-                    {isExpanded ? <CollapseIcon /> : <ExpandIcon />}
-                </Button>
-            )}
+            <PanelHeader>
+                <div className={styles.header}>{header}</div>
+                <div>
+                    <Button
+                        size="small"
+                        className={cx(styles.expand, {
+                            [styles.hide]: notExpandable,
+                        })}
+                        onClick={() => setIsExpanded(!isExpanded)}
+                    >
+                        {isExpanded ? <CollapseIcon /> : <ExpandIcon />}
+                    </Button>
+                </div>
+            </PanelHeader>
             {children}
         </Panel>
     );
