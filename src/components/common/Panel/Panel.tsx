@@ -13,12 +13,14 @@ const SuspensePanel: React.FC<React.PropsWithChildren> = ({ children }) => (
 );
 
 interface Props extends React.PropsWithChildren {
+    onMouseEnter?: () => void;
+    onMouseLeave?: () => void;
     className?: string;
 }
 
-const Panel: React.FC<Props> = ({ children, className }) => (
+const Panel: React.FC<Props> = ({ children, className, ...props }) => (
     <SuspensePanel>
-        <StyledDiv className={cx(styles.panel, className)}>
+        <StyledDiv className={cx(styles.panel, className)} {...props}>
             {children}
         </StyledDiv>
     </SuspensePanel>

@@ -15,7 +15,7 @@ const DetailColumn: React.FC<Props> = ({ title, children }) => {
     return (
         <div className={styles.detailColumn}>
             <StyledTitle className={styles.title}>{title}</StyledTitle>
-            {children}
+            <div className={styles.detailContent}>{children}</div>
         </div>
     );
 };
