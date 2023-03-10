@@ -30,6 +30,15 @@
     }
 }
 
+.columnContent {
+    display: flex;
+    align-items: center;
+
+    svg {
+        margin-right: 4px;
+    }
+}
+
 .errorsContainer {
     ul {
         display: flex;
@@ -44,15 +53,6 @@
                 margin-right: 8px;
             }
         }
-    }
-}
-
-.columnContent {
-    display: flex;
-    align-items: center;
-
-    svg {
-        margin-right: 4px;
     }
 }
 
