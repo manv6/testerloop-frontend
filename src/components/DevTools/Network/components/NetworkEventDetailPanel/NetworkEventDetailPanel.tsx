@@ -1,14 +1,15 @@
 import React, { useMemo } from 'react';
-import { Tabs } from 'src/components/common/Tabs';
+import { Tabs, Accordion, Divider, Button } from 'src/components/common';
 
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 import { NameValueTable } from 'src/components/DevTools/Network/components';
 import styles from './NetworkEventDetailPanel.module.scss';
-import { CloseButton } from 'src/components/common/CloseButton';
 import { FormattedNetworkEvents } from 'src/utils/formatters';
 import { styled } from '@mui/material';
+import { CollapseIcon } from 'src/components/Expandable/components';
+import { TabLabel } from '../../NetworkPanel';
 
 type PostDataTabProps = {
     selectedEvent: FormattedNetworkEvents[0];
@@ -51,7 +52,7 @@ const PostDataTab: React.FC<PostDataTabProps> = ({ selectedEvent }) => {
     }, [selectedEvent]);
 
     return (
-        <div className={styles.verticalStack}>
+        <div>
             <div>
                 <span className={styles.boldText}>Mime Type: </span>
                 {selectedEvent.request.postData?.mimeType}
@@ -92,130 +93,134 @@ const ResponseDataTab: React.FC<ResponseDataTabProps> = ({ selectedEvent }) => {
                 </SyntaxHighlighter>
             );
         }
-        return (
-            <div className={styles.responseContentTextOther}>
-                {responsePayload}
-            </div>
-        );
+        return <div>{responsePayload}</div>;
     }, [selectedEvent]);
 
     return (
-        <div className={styles.verticalStack}>
-            <div>
-                <span className={styles.boldText}>Mime Type: </span>
+        <div>
+            <Accordion title={<div>Mime Type</div>}>
                 {selectedEvent.response.content.mimeType}
-            </div>
+            </Accordion>
+            <Divider />
             {snippet && (
-                <div className={styles.responseContentTextWrapper}>
-                    {snippet}
-                </div>
+                <>
+                    <Accordion title={<div>Payload</div>}>
+                        <div className={styles.responseContentTextWrapper}>
+                            {snippet}
+                        </div>
+                    </Accordion>
+                    <Divider />
+                </>
             )}
+            <Accordion title={<div>Response Headers</div>}>
+                <NameValueTable
+                    key="responseHeader"
+                    valuePairs={selectedEvent.response.headers}
+                />
+            </Accordion>
+            <Divider />
         </div>
     );
 };
 
-type HeadersTabProps = {
+type RequestTabProps = {
     selectedEvent: FormattedNetworkEvents[0];
 };
 
-const HeadersTab: React.FC<HeadersTabProps> = ({ selectedEvent }) => {
+const RequestTab: React.FC<RequestTabProps> = ({ selectedEvent }) => {
     return (
-        <div className={styles.verticalStack}>
-            <div key="requestURL" className={styles.requestUrl}>
-                <span className={styles.boldText}>Request to:</span>{' '}
+        <div>
+            <Accordion title={<div>Request to</div>}>
                 {selectedEvent.request.url}
-            </div>
+            </Accordion>
+            <Divider />
             {selectedEvent.request.queryString.length ? (
                 <>
-                    <div key="queryParamsLabel">
-                        <span className={styles.boldText}>Query Params:</span>
-                    </div>
-                    <NameValueTable
-                        key="queryParams"
-                        valuePairs={selectedEvent.request.queryString}
-                        nameLabel="Header Name"
-                        valueLabel="Header Value"
-                    />
+                    <Accordion title={<div>Query params</div>}>
+                        <NameValueTable
+                            key="queryParams"
+                            valuePairs={selectedEvent.request.queryString}
+                        />
+                    </Accordion>
+                    <Divider />
                 </>
             ) : null}
-            <div>
-                <div key="requestHeaderLabel">
-                    <span className={styles.boldText}>Request Headers:</span>
-                </div>
+            {selectedEvent.request.postData && (
+                <>
+                    <Accordion title={<div>Payload</div>}>
+                        <PostDataTab selectedEvent={selectedEvent} />
+                    </Accordion>
+                    <Divider />
+                </>
+            )}
+            <Accordion title={<div>Request Headers</div>}>
                 <NameValueTable
                     key="requestHeader"
                     valuePairs={selectedEvent.request.headers}
-                    nameLabel="Header Name"
-                    valueLabel="Header Value"
                 />
-            </div>
-            <div>
-                <div key="responseHeaderLabel">
-                    <span className={styles.boldText}>Response Headers:</span>
-                </div>
-                <NameValueTable
-                    key="responseHeader"
-                    valuePairs={selectedEvent.response.headers}
-                    nameLabel="Header Name"
-                    valueLabel="Header Value"
-                />
-            </div>
+            </Accordion>
+            <Divider />
         </div>
     );
 };
 
 type NetworkEventDetailPanelProps = {
     selectedEvent: FormattedNetworkEvents[0];
-    activeTabKey: string | null;
-    onSelectTab: (x: string | null) => void;
+    activeTab: number | null;
+    onSelectTab: (value: number) => void;
     onDetailPanelClose: () => void;
 };
 
 const StyledDetails = styled('div')(({ theme }) => ({
+    borderLeft: `1px solid ${theme.palette.base[300]}`,
     backgroundColor: theme.palette.base[400],
+}));
+
+const StyledTabs = styled('div')(({ theme }) => ({
+    borderBottom: `1px solid ${theme.palette.base[300]}`,
 }));
 
 const NetworkEventDetailPanel: React.FC<NetworkEventDetailPanelProps> = ({
     selectedEvent,
-    activeTabKey,
+    activeTab,
     onSelectTab,
     onDetailPanelClose,
 }) => {
     const tabChildren = [
         {
-            tabKey: 'headers',
-            title: 'Headers',
-            children: <HeadersTab selectedEvent={selectedEvent} />,
+            tabLabel: TabLabel.REQUEST,
+            title: 'Request',
+            children: <RequestTab selectedEvent={selectedEvent} />,
         },
         {
-            tabKey: 'postData',
-            title: 'Post',
-            children: <PostDataTab selectedEvent={selectedEvent} />,
-        },
-        {
-            tabKey: 'responseData',
+            tabLabel: TabLabel.RESPONSE,
             title: 'Response',
             children: <ResponseDataTab selectedEvent={selectedEvent} />,
         },
-    ].filter(
-        (tabChild) =>
-            tabChild.tabKey !== 'postData' || selectedEvent.request.postData
-    );
+    ];
 
     return (
         <StyledDetails key="details" className={styles.networkDetailPanel}>
-            {
-                <CloseButton
-                    className={styles.closeButton}
-                    onClick={onDetailPanelClose}
-                />
-            }
             <div className={styles.networkDetailPanelContent}>
-                <Tabs
-                    onSelect={onSelectTab}
-                    activeTabKey={activeTabKey}
-                    tabChildren={tabChildren}
-                />
+                <StyledTabs className={styles.tabs}>
+                    <Tabs
+                        onChange={onSelectTab}
+                        activeTab={activeTab}
+                        tabChildren={tabChildren}
+                    />
+                    <Button
+                        size="small"
+                        onClick={onDetailPanelClose}
+                        className={styles.closeButton}
+                    >
+                        <CollapseIcon />
+                    </Button>
+                </StyledTabs>
+                {tabChildren.map((tabProps, i) => {
+                    const { children } = tabProps;
+                    if (activeTab !== i) return null;
+                    return <div key={i}>{children}</div>;
+                })}
             </div>
         </StyledDetails>
     );

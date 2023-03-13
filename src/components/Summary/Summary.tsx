@@ -10,7 +10,13 @@ import networkEventData from 'src/data/networkEvents';
 import { useFragment } from 'react-relay';
 import { SummaryFragment$key } from './__generated__/SummaryFragment.graphql';
 import graphql from 'babel-plugin-relay/macro';
-import { Panel, Tag, Button, ChevronIcon } from 'src/components/common';
+import {
+    Panel,
+    Tag,
+    Button,
+    ChevronIcon,
+    Divider,
+} from 'src/components/common';
 import cx from 'classnames';
 import { styled, Tooltip } from '@mui/material';
 import {
@@ -31,10 +37,6 @@ type Props = {
 
 const StyledLink = styled('a')(({ theme }) => ({
     color: theme.palette.base[100],
-}));
-
-const StyledDivider = styled('div')(({ theme }) => ({
-    backgroundColor: theme.palette.base[300],
 }));
 
 const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
@@ -184,12 +186,12 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
                                     </span>
                                 </li>
                             )}
-                            <StyledDivider className={styles.divider} />
+                            <Divider className={styles.divider} />
                             <li className={styles.networkError}>
                                 <NetworkErrorIcon />
                                 <span>{networkErrorCount} Network errors</span>
                             </li>
-                            <StyledDivider className={styles.divider} />
+                            <Divider className={styles.divider} />
                             <li className={styles.consoleError}>
                                 <WarnIcon />
                                 <span>{logErrorCount} Console errors</span>

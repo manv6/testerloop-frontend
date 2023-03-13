@@ -5,8 +5,9 @@
 }
 
 .network {
-    overflow: auto;
-    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
 }
 
 .filterBlock {
@@ -23,11 +24,6 @@
 .inlineWrapper {
     display: flex;
     gap: 15px;
-}
-
-.verticalStack {
-    display: flex;
-    flex-direction: column;
 }
 
 .filters {
@@ -52,4 +48,8 @@
 th {
     font-weight: 500;
     text-transform: uppercase;
+}
+
+.networkTablePanel {
+    overflow: auto;
 }

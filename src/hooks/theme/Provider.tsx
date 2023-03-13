@@ -140,6 +140,51 @@ const DARK = createTheme({
                 }),
             },
         },
+        MuiPaper: {
+            styleOverrides: {
+                root: ({ theme }) => ({
+                    backgroundColor: theme.palette.base[400],
+                    backgroundImage: 'none',
+                    boxShadow: 'none',
+                    '&::before': {
+                        display: 'none',
+                    },
+                    padding: 0,
+                }),
+            },
+        },
+        MuiAccordionDetails: {
+            styleOverrides: {
+                root: {
+                    padding: '12px 24px',
+                },
+            },
+        },
+        MuiCollapse: {
+            styleOverrides: {
+                root: {
+                    overflow: 'scroll',
+                },
+            },
+        },
+        MuiTab: {
+            styleOverrides: {
+                root: ({ theme }) => ({
+                    color: theme.palette.base[200],
+                    '&.Mui-selected': {
+                        color: theme.palette.base[100],
+                    },
+                    textTransform: 'capitalize',
+                }),
+            },
+        },
+        MuiTabs: {
+            styleOverrides: {
+                indicator: ({ theme }) => ({
+                    backgroundColor: theme.palette.base[100],
+                }),
+            },
+        },
     },
 });
 

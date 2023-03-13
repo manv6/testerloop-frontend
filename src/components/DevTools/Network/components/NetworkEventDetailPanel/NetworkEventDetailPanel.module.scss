@@ -4,7 +4,6 @@
     right: 0;
     bottom: 0;
     left: 50%;
-    border-left: 3px solid black;
 }
 
 .networkDetailPanelContent {
@@ -21,25 +20,19 @@
     font-weight: bold;
 }
 
-.closeButton {
-    position: absolute;
-    right: 70px;
-    top: 5px;
-}
-
-.verticalStack {
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-    padding: 12px 24px;
-}
-
 .responseContentTextWrapper {
     overflow: auto;
     width: 100%;
 }
 
-.responseContentTextOther {
-    border: 1px solid lightgray;
-    padding: 10px;
+.tabs {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .closeButton {
+        min-width: 32px;
+        min-height: 32px;
+        margin-right: 24px;
+    }
 }

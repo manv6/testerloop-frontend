@@ -25,8 +25,8 @@
 }
 
 .expand {
-    width: 32px;
-    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
     z-index: var(--expandable-child-button-layer);
 }
 

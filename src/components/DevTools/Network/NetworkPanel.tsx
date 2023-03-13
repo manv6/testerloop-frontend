@@ -20,6 +20,11 @@ enum ResourceTypeFilterType {
     OTHER = 'other',
 }
 
+export enum TabLabel {
+    REQUEST = 'request',
+    RESPONSE = 'response',
+}
+
 const filterByResourceTypePredicate = (
     event: formatter.FormattedNetworkEvents[0],
     selectedOptions: Set<ResourceTypeFilterType>
@@ -133,7 +138,7 @@ export const NetworkPanel: React.FC<Props> = () => {
     const [showFilters, setShowFilters] = useState(true);
     const [selectedEventId, setSelectedEventId] = useState<null | string>(null);
     const [filterTerm, setFilterTerm] = useState<string>('');
-    const [activeTabKey, setActiveTabKey] = useState<string | null>('headers');
+    const [activeTab, setActiveTab] = useState<number | null>(0);
     const [selectedProgressFilters, setSelectedProgressFilters] = useState<
         Set<ProgressFilterType>
     >(new Set(Object.values(ProgressFilterType)));
@@ -187,13 +192,6 @@ export const NetworkPanel: React.FC<Props> = () => {
         [setFilterTerm]
     );
 
-    const onSelectTab = useCallback(
-        (key: string | null) => {
-            setActiveTabKey(key);
-        },
-        [setActiveTabKey]
-    );
-
     const onChangeProgressFilter = useCallback(
         (value: ProgressFilterType) => {
             const newFilters = new Set(selectedProgressFilters);
@@ -230,7 +228,7 @@ export const NetworkPanel: React.FC<Props> = () => {
     }, [filterTerm]);
 
     useEffect(() => {
-        setActiveTabKey('headers');
+        setActiveTab(0);
     }, [selectedEventId]);
 
     const lastStartedNetworkEvent = useMemo(
@@ -254,86 +252,47 @@ export const NetworkPanel: React.FC<Props> = () => {
     );
 
     return (
-        <Expandable.Child className={styles.expandableNetwork} header={header}>
+        <Expandable.Child
+            className={styles.expandableNetwork}
+            header={header}
+            notExpandable={!!selectedEvent}
+        >
             <div className={styles.network}>
-                <div className={styles.verticalStack}>
-                    {showFilters && (
-                        <div className={styles.filters}>
-                            <div>
-                                <label className={styles.labelWrapper}>
-                                    <TextInput
-                                        inputProps={{ value: filterTerm }}
-                                        variant="outlined"
-                                        onChange={filterTermInputOnChange}
-                                        placeholder="Filter"
-                                    ></TextInput>
-                                </label>
-                            </div>
-                            <div className={styles.filterRow}>
-                                <div className={styles.filterBlock}>
-                                    <div className={styles.inlineWrapper}>
-                                        {Object.values(ProgressFilterType).map(
-                                            (value, idx) => (
-                                                <StyledButton
-                                                    key={idx}
-                                                    size="small"
-                                                    statetype={value}
-                                                    onClick={() => {
-                                                        onChangeProgressFilter(
-                                                            value
-                                                        );
-                                                    }}
-                                                    active={
-                                                        selectedProgressFilters.has(
-                                                            value
-                                                        )
-                                                            ? 1
-                                                            : 0
-                                                    }
-                                                    className={
-                                                        styles.toggleNetworkStateType
-                                                    }
-                                                >
-                                                    {value}
-                                                </StyledButton>
-                                            )
-                                        )}
-                                    </div>
-                                </div>
-                                <div className={styles.filterBlock}>
-                                    <StyledButton
-                                        size="small"
-                                        onClick={() => {
-                                            onChangeResourceTypeAllFilter();
-                                        }}
-                                        active={
-                                            !selectedResourceTypeFilters.size
-                                                ? 1
-                                                : 0
-                                        }
-                                        className={styles.resourceTypeFilter}
-                                    >
-                                        all
-                                    </StyledButton>
-                                    {Object.values(ResourceTypeFilterType).map(
-                                        (value) => (
+                {showFilters && (
+                    <div className={styles.filters}>
+                        <div>
+                            <label className={styles.labelWrapper}>
+                                <TextInput
+                                    inputProps={{ value: filterTerm }}
+                                    variant="outlined"
+                                    onChange={filterTermInputOnChange}
+                                    placeholder="Filter"
+                                ></TextInput>
+                            </label>
+                        </div>
+                        <div className={styles.filterRow}>
+                            <div className={styles.filterBlock}>
+                                <div className={styles.inlineWrapper}>
+                                    {Object.values(ProgressFilterType).map(
+                                        (value, idx) => (
                                             <StyledButton
-                                                key={`${value}`}
+                                                key={idx}
                                                 size="small"
+                                                statetype={value}
                                                 onClick={() => {
-                                                    onChangeResourceTypeFilters(
+                                                    onChangeProgressFilter(
                                                         value
                                                     );
                                                 }}
                                                 active={
-                                                    selectedResourceTypeFilters.has(
+                                                    selectedProgressFilters.has(
                                                         value
                                                     )
                                                         ? 1
                                                         : 0
                                                 }
                                                 className={
-                                                    styles.resourceTypeFilter
+                                                    styles.toggleNetworkStateType
                                                 }
                                             >
                                                 {value}
@@ -342,64 +301,101 @@ export const NetworkPanel: React.FC<Props> = () => {
                                     )}
                                 </div>
                             </div>
+                            <div className={styles.filterBlock}>
+                                <StyledButton
+                                    size="small"
+                                    onClick={() => {
+                                        onChangeResourceTypeAllFilter();
+                                    }}
+                                    active={
+                                        !selectedResourceTypeFilters.size
+                                            ? 1
+                                            : 0
+                                    }
+                                    className={styles.resourceTypeFilter}
+                                >
+                                    all
+                                </StyledButton>
+                                {Object.values(ResourceTypeFilterType).map(
+                                    (value) => (
+                                        <StyledButton
+                                            key={`${value}`}
+                                            size="small"
+                                            onClick={() => {
+                                                onChangeResourceTypeFilters(
+                                                    value
+                                                );
+                                            }}
+                                            active={
+                                                selectedResourceTypeFilters.has(
+                                                    value
+                                                )
+                                                    ? 1
+                                                    : 0
+                                            }
+                                            className={
+                                                styles.resourceTypeFilter
+                                            }
+                                        >
+                                            {value}
+                                        </StyledButton>
+                                    )
+                                )}
+                            </div>
                         </div>
-                    )}
-                    <div className={styles.networkTablePanel}>
-                        <table className={styles.table}>
-                            <thead>
-                                <tr>
-                                    <StyledTh className={styles.th}></StyledTh>
-                                    <StyledTh className={styles.th}>
-                                        Status
-                                    </StyledTh>
-                                    <StyledTh className={styles.th}>
-                                        Method
-                                    </StyledTh>
-                                    <StyledTh className={styles.th}>
-                                        Domain
-                                    </StyledTh>
-                                    <StyledTh className={styles.th}>
-                                        Initiator
-                                    </StyledTh>
-                                    <StyledTh className={styles.th}>
-                                        Type
-                                    </StyledTh>
-                                    <StyledTh className={styles.th}>
-                                        Transferred
-                                    </StyledTh>
-                                    <StyledTh className={styles.th}>
-                                        Size
-                                    </StyledTh>
-                                    <StyledTh className={styles.th}>
-                                        Waterfall
-                                    </StyledTh>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredEvents.map((networkEvent, i) => (
-                                    <RequestSlice
-                                        key={networkEvent.id}
-                                        event={networkEvent}
-                                        setSelectedEventId={setSelectedEventId}
-                                        isLastStartedEvent={
-                                            lastStartedNetworkEvent?.id ===
-                                            networkEvent.id
-                                        }
-                                    />
-                                ))}
-                            </tbody>
-                        </table>
                     </div>
-                </div>
-                {selectedEvent && (
-                    <NetworkEventDetailPanel
-                        selectedEvent={selectedEvent}
-                        activeTabKey={activeTabKey}
-                        onSelectTab={onSelectTab}
-                        onDetailPanelClose={onDetailPanelClose}
-                    />
                 )}
+                <div className={styles.networkTablePanel}>
+                    <table className={styles.table}>
+                        <thead>
+                            <tr>
+                                <StyledTh className={styles.th}></StyledTh>
+                                <StyledTh className={styles.th}>
+                                    Status
+                                </StyledTh>
+                                <StyledTh className={styles.th}>
+                                    Method
+                                </StyledTh>
+                                <StyledTh className={styles.th}>
+                                    Domain
+                                </StyledTh>
+                                <StyledTh className={styles.th}>
+                                    Initiator
+                                </StyledTh>
+                                <StyledTh className={styles.th}>Type</StyledTh>
+                                <StyledTh className={styles.th}>
+                                    Transferred
+                                </StyledTh>
+                                <StyledTh className={styles.th}>Size</StyledTh>
+                                <StyledTh className={styles.th}>
+                                    Waterfall
+                                </StyledTh>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {filteredEvents.map((networkEvent, i) => (
+                                <RequestSlice
+                                    key={networkEvent.id}
+                                    event={networkEvent}
+                                    setSelectedEventId={setSelectedEventId}
+                                    isLastStartedEvent={
+                                        lastStartedNetworkEvent?.id ===
+                                        networkEvent.id
+                                    }
+                                />
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
+            {selectedEvent && (
+                <NetworkEventDetailPanel
+                    selectedEvent={selectedEvent}
+                    activeTab={activeTab}
+                    onSelectTab={(value) => setActiveTab(value)}
+                    onDetailPanelClose={onDetailPanelClose}
+                />
+            )}
         </Expandable.Child>
     );
 };
