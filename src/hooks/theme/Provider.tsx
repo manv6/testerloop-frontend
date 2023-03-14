@@ -137,6 +137,10 @@ const DARK = createTheme({
                         backgroundColor: theme.palette.base[300],
                         border: `1px solid ${theme.palette.base[200]}`,
                     },
+                    '&.selected': {
+                        backgroundColor: theme.palette.base[300],
+                        border: `1px solid ${theme.palette.base[200]}`,
+                    },
                 }),
             },
         },

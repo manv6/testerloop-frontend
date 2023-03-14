@@ -1,4 +1,3 @@
-/*eslint-disable */
 import React, { useEffect, useMemo, useState } from 'react';
 import { EventType, TIMELINE_SVG_PX_WIDTH } from 'src/constants';
 import { useTimeline } from 'src/hooks/timeline';
@@ -62,6 +61,7 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
         filters,
     } = useTimeline();
     const [displayHoverTooltip, setDisplayHoverTooltip] = useState(true);
+    const [isHovering, setIsHovering] = useState(true);
 
     // Add dates
 
@@ -231,6 +231,8 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
             >
                 {hoverTimeFraction ? (
                     <StyledHover
+                        onMouseEnter={() => setIsHovering(true)}
+                        onMouseLeave={() => setIsHovering(false)}
                         className={styles.hover}
                         style={{
                             right: `${fractionToPercentage(
@@ -243,10 +245,12 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
                     <Tooltip
                         title={datesToElapsedTime(startTime, hoverTime)}
                         placement="top"
-                        open
+                        open={isHovering}
                         arrow
                     >
                         <div
+                            onMouseEnter={() => setIsHovering(true)}
+                            onMouseLeave={() => setIsHovering(false)}
                             className={styles.hoverCursor}
                             style={{
                                 right: `${fractionToPercentage(
@@ -269,6 +273,7 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
                     }}
                 ></div>
                 {/*TODO: remove 'any' once temp data is removed */}
+                {/*eslint-disable-next-line*/}
                 {markers.map((marker: any, i) => {
                     const svgSize =
                         marker.type === EventType.CYPRESS_ERROR
@@ -282,6 +287,7 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
                             onClose={() => setDisplayHoverTooltip(true)}
                             arrow
                             title={
+                                /* eslint-disable */
                                 <MarkerTooltip
                                     type={marker.type}
                                     hasFailed={marker.hasFailed}

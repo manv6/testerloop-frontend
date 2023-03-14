@@ -1,5 +1,5 @@
 import cx from 'classnames';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTimeline } from 'src/hooks/timeline';
 import { StepRecord, StepsHeader } from './components';
 import { useHierarchizeStepsData } from './hooks';
@@ -80,6 +80,10 @@ export const Steps: React.FC<Props> = ({ className }) => {
             : null;
 
     const headerTitle = results.runs[0].tests[0].title.slice(-1)[0];
+
+    useEffect(() => {
+        setExpandedStepIdx(selectedStepIdx);
+    }, [selectedStepIdx]);
 
     return (
         <Expandable.Child
