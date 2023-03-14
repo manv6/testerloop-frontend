@@ -8,3 +8,6 @@ export { default as SearchIcon } from './SearchIcon';
 export { default as FilterButton } from './FilterButton';
 export { default as HeaderWithFilter } from './HeaderWithFilter';
 export { default as Tag } from './Tag';
+export { default as Accordion } from './Accordion';
+export { default as Tabs } from './Tabs';
+export { default as Divider } from './Divider';
