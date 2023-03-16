@@ -124,3 +124,9 @@
     transform: translateY(50%);
     z-index: var(--timeline-marker-layer);
 }
+
+.screenshotContainer {
+    position: absolute;
+    top: 100%;
+    z-index: var(--timeline-screenshot-layer);
+}
