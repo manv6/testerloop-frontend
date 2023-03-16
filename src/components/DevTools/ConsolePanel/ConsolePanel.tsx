@@ -2,6 +2,7 @@ import React, {
     useCallback,
     useEffect,
     useMemo,
+    useRef,
     useState,
     useTransition,
 } from 'react';
@@ -17,6 +18,7 @@ import type { ConsolePanelFragment$key } from './__generated__/ConsolePanelFragm
 import { isOfType } from 'src/utils/isOfType';
 import { fillObjFromType } from 'src/utils/fillObjFromType';
 import { HeaderWithFilter } from 'src/components/common';
+import useScrollToChild from 'src/hooks/scrollTo/useScrollToChild';
 
 export enum LogLevel {
     LOG = 'LOG',
@@ -146,6 +148,15 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
         [showLogFilters]
     );
 
+    const listRef = useRef<HTMLUListElement>(null);
+    const logEntryRef = useRef<HTMLLIElement>(null);
+
+    useScrollToChild({
+        childRef: logEntryRef,
+        containerRef: listRef,
+        dependencies: [currentLogIdx],
+    });
+
     return (
         <Expandable.Child className={styles.expandableConsole} header={header}>
             <section className={styles.consolePanel}>
@@ -163,12 +174,17 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
                 {isPending ? (
                     <div>Loading...</div>
                 ) : (
-                    <ul className={styles.logsList}>
+                    <ul ref={listRef} className={styles.logsList}>
                         {logs.map((node, idx) => {
                             // TODO: Timestamp is not unique, provide an id or a way to make it unique.
                             return (
                                 <LogEntry
                                     key={idx}
+                                    ref={
+                                        currentLogIdx === idx
+                                            ? logEntryRef
+                                            : null
+                                    }
                                     isLogSelected={currentLogIdx === idx}
                                     isLogHovered={hoveredLogIdx === idx}
                                     logEntry={node}

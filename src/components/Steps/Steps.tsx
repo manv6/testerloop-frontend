@@ -1,5 +1,5 @@
 import cx from 'classnames';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, memo } from 'react';
 import { useTimeline } from 'src/hooks/timeline';
 import { StepRecord, StepsHeader } from './components';
 import { useHierarchizeStepsData } from './hooks';
@@ -38,15 +38,13 @@ const getMostRecentActionIdx = (actions: Step[], timestamp: number): number => {
     return (nextStepIdx === -1 ? actions.length : nextStepIdx) - 1;
 };
 
-export const Steps: React.FC<Props> = ({ className }) => {
+// eslint-disable-next-line react/display-name
+export const Steps: React.FC<Props> = memo(({ className }) => {
     const data = { steps: stepsData } as any; // eslint-disable-line
     const steps = useMemo(
         () => formatter.formatSteps(data.steps),
         [data.steps]
     );
-    const [expandedStepIdx, setExpandedStepIdx] = useState<
-        number | undefined
-    >();
 
     const { currentTime, hoverTime } = useTimeline();
 
@@ -92,16 +90,12 @@ export const Steps: React.FC<Props> = ({ className }) => {
                     {stepsHierarchy.map(({ step, actions }, idx) => {
                         const isStepSelected = selectedStepIdx === idx;
                         const isStepHovered = hoveredStepIdx === idx;
-                        const isExpanded = expandedStepIdx === idx;
                         const isPreviousToSelected =
                             selectedStepIdx - 1 === idx;
 
                         return (
                             <StepRecord
                                 key={step.options.id}
-                                isExpanded={isExpanded}
-                                setExpandedStepIdx={setExpandedStepIdx}
-                                idx={idx}
                                 isPreviousToSelected={isPreviousToSelected}
                                 step={step}
                                 actions={actions}
@@ -120,4 +114,4 @@ export const Steps: React.FC<Props> = ({ className }) => {
             </table>
         </Expandable.Child>
     );
-};
+});

@@ -9,9 +9,6 @@ import ActionRecord from '../ActionRecord';
 import styles from './StepRecord.module.scss';
 
 interface Props {
-    idx: number;
-    isExpanded: boolean;
-    setExpandedStepIdx: (idx: number | undefined) => void;
     step: Step;
     actions: Step[];
     isStepSelected: boolean;
@@ -45,10 +42,7 @@ const StyledStepHeader = styled('tr')<StyledStepHeaderProps>(
 );
 
 const StepRecord: React.FC<Props> = ({
-    idx,
-    isExpanded,
     isPreviousToSelected,
-    setExpandedStepIdx,
     step,
     actions,
     isStepSelected,
@@ -73,7 +67,6 @@ const StepRecord: React.FC<Props> = ({
                 onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    setExpandedStepIdx(isExpanded ? undefined : idx);
                     seek(step.options.wallClockStartedAt);
                 }}
                 className={cx(styles.stepHeader, {
@@ -104,11 +97,10 @@ const StepRecord: React.FC<Props> = ({
                 </td>
 
                 <td className={styles.stepAccordionIcon}>
-                    <ChevronIcon direction={isExpanded ? 'up' : 'down'} />
+                    <ChevronIcon direction={isStepSelected ? 'up' : 'down'} />
                 </td>
             </StyledStepHeader>
-
-            {isExpanded && (
+            {isStepSelected && (
                 <tr className={styles.expandedPanel}>
                     <td colSpan={4}>
                         {actions.map((action, idx) => (

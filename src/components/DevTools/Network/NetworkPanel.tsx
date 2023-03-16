@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 
 import { RequestSlice, NetworkEventDetailPanel } from './components/';
 import styles from './Network.module.scss';
@@ -9,6 +15,7 @@ import networkEventData from 'src/data/networkEvents';
 import * as Expandable from 'src/components/Expandable';
 import { HeaderWithFilter } from 'src/components/common';
 import { styled } from '@mui/material';
+import useScrollToChild from 'src/hooks/scrollTo';
 
 enum ResourceTypeFilterType {
     HTML = 'html',
@@ -251,6 +258,15 @@ export const NetworkPanel: React.FC<Props> = () => {
         [showFilters]
     );
 
+    const containerRef = useRef<HTMLDivElement>(null);
+    const networkEntryRef = useRef<HTMLTableRowElement>(null);
+
+    useScrollToChild({
+        childRef: networkEntryRef,
+        containerRef,
+        dependencies: [lastStartedNetworkEvent?.id],
+    });
+
     return (
         <Expandable.Child
             className={styles.expandableNetwork}
@@ -345,7 +361,7 @@ export const NetworkPanel: React.FC<Props> = () => {
                         </div>
                     </div>
                 )}
-                <div className={styles.networkTablePanel}>
+                <div ref={containerRef} className={styles.networkTablePanel}>
                     <table className={styles.table}>
                         <thead>
                             <tr>
@@ -375,6 +391,12 @@ export const NetworkPanel: React.FC<Props> = () => {
                         <tbody>
                             {filteredEvents.map((networkEvent, i) => (
                                 <RequestSlice
+                                    ref={
+                                        lastStartedNetworkEvent?.id ===
+                                        networkEvent.id
+                                            ? networkEntryRef
+                                            : null
+                                    }
                                     key={networkEvent.id}
                                     event={networkEvent}
                                     setSelectedEventId={setSelectedEventId}
