@@ -129,4 +129,5 @@
     position: absolute;
     top: 100%;
     z-index: var(--timeline-screenshot-layer);
+    pointer-events: none;
 }

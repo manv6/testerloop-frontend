@@ -114,7 +114,10 @@ const DomPreview: React.FC = () => {
         };
     }, [currentSnapshot, tab]);
 
-    const header = useMemo(() => <DomPreviewHeader setTab={setTab} />, []);
+    const header = useMemo(
+        () => <DomPreviewHeader setTab={setTab} tab={tab} />,
+        [tab]
+    );
 
     return (
         <Expandable.Child className={styles.expandableDom} header={header}>

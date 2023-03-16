@@ -292,7 +292,7 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
                     <Tooltip
                         title={datesToElapsedTime(startTime, hoverTime)}
                         placement="top"
-                        open
+                        open={!!hoverTimeFraction}
                         arrow
                     >
                         <div
@@ -339,7 +339,7 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
                     }}
                 ></div>
                 {/*TODO: remove 'any' once temp data is removed */}
-                {/*eslint-disable-next-line */}
+                {/*eslint-disable-next-line*/}
                 {markers.map((marker: any, i) => {
                     const svgSize =
                         marker.type === EventType.CYPRESS_ERROR

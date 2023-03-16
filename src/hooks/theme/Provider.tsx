@@ -128,12 +128,19 @@ const DARK = createTheme({
                         border: `1px solid ${theme.palette.base[300]}`,
                     },
                 }),
+                popper: {
+                    pointerEvents: 'none',
+                },
             },
         },
         MuiButton: {
             styleOverrides: {
                 root: ({ theme }) => ({
                     '&:hover': {
+                        backgroundColor: theme.palette.base[300],
+                        border: `1px solid ${theme.palette.base[200]}`,
+                    },
+                    '&.selected': {
                         backgroundColor: theme.palette.base[300],
                         border: `1px solid ${theme.palette.base[200]}`,
                     },
