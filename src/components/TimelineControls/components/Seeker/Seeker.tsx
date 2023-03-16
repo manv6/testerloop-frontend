@@ -292,7 +292,7 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
                     <Tooltip
                         title={datesToElapsedTime(startTime, hoverTime)}
                         placement="top"
-                        open={!!hoverTimeFraction}
+                        open
                         arrow
                     >
                         <div
@@ -303,15 +303,12 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
                         ></div>
                     </Tooltip>
                 ) : null}
-                {hoverTimeFraction ? (
+                {hoverPercentage ? (
                     <div
                         className={styles.screenshotContainer}
                         style={{
                             right: `calc(${Math.max(
-                                Math.min(
-                                    fractionToPercentage(hoverTimeFraction),
-                                    85
-                                ),
+                                Math.min(hoverPercentage, 85),
                                 15
                             )}% - ${screenshotWidth / 2}px)`,
                         }}
