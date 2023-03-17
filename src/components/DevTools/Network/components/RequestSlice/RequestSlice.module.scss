@@ -1,18 +1,9 @@
 @use 'src/components/common/styles/table.scss';
 
-:root {
-    --table-row-hover-background: rgb(0 0 0 / 10%);
-}
-
 .trBody {
     &:hover {
-        background-color: var(--table-row-hover-background);
         cursor: pointer;
     }
-}
-
-.networkTableRowError {
-    color: red;
 }
 
 .urlColumn {
@@ -43,8 +34,6 @@
     background-color: grey;
 }
 
-.progressLastStartEvent {
-    border: 2px solid dodgerblue;
-    color: dodgerblue;
-    font-weight: bold;
+.td {
+    border: none !important;
 }

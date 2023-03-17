@@ -143,7 +143,9 @@ export const NetworkPanel: React.FC<Props> = () => {
     );
 
     const [showFilters, setShowFilters] = useState(true);
-    const [selectedEventId, setSelectedEventId] = useState<null | string>(null);
+    const [selectedEventIdx, setSelectedEventIdx] = useState<null | number>(
+        null
+    );
     const [filterTerm, setFilterTerm] = useState<string>('');
     const [activeTab, setActiveTab] = useState<number | null>(0);
     const [selectedProgressFilters, setSelectedProgressFilters] = useState<
@@ -153,10 +155,9 @@ export const NetworkPanel: React.FC<Props> = () => {
         useState<Set<ResourceTypeFilterType>>(new Set());
     const { currentTime } = useTimeline();
 
-    const selectedEvent = useMemo(
-        () => networkEvents.find(({ id }) => id === selectedEventId),
-        [networkEvents, selectedEventId]
-    );
+    const selectedEvent = selectedEventIdx
+        ? networkEvents[selectedEventIdx]
+        : undefined;
 
     const filteredEvents = useMemo(
         () =>
@@ -189,8 +190,8 @@ export const NetworkPanel: React.FC<Props> = () => {
     );
 
     const onDetailPanelClose = useCallback(() => {
-        setSelectedEventId(null);
-    }, [setSelectedEventId]);
+        setSelectedEventIdx(null);
+    }, [setSelectedEventIdx]);
 
     const filterTermInputOnChange = useCallback(
         (ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -231,22 +232,27 @@ export const NetworkPanel: React.FC<Props> = () => {
     }, [setSelectedResourceTypeFilters]);
 
     useEffect(() => {
-        setSelectedEventId(null);
+        setSelectedEventIdx(null);
     }, [filterTerm]);
 
     useEffect(() => {
         setActiveTab(0);
-    }, [selectedEventId]);
+    }, [selectedEventIdx]);
 
-    const lastStartedNetworkEvent = useMemo(
-        () =>
-            // Note that we assume networkEvents is already sorted by startedDateTime here
-            networkEvents
-                .filter((event) => currentTime > event.startedDateTime)
-                .at(-1),
+    const lastStartedNetworkEventIdx = useMemo(() => {
+        // Note that we assume networkEvents is already sorted by startedDateTime here
+        return networkEvents.reduceRight((acc, event, index) => {
+            if (acc !== -1) {
+                return acc;
+            }
+            return currentTime > event.startedDateTime ? index : acc;
+        }, -1);
+    }, [currentTime, networkEvents]);
 
-        [currentTime, networkEvents]
-    );
+    const lastStartedNetworkEvent =
+        lastStartedNetworkEventIdx !== -1
+            ? networkEvents[lastStartedNetworkEventIdx]
+            : undefined;
 
     const header = useMemo(
         () => (
@@ -391,6 +397,7 @@ export const NetworkPanel: React.FC<Props> = () => {
                         <tbody>
                             {filteredEvents.map((networkEvent, i) => (
                                 <RequestSlice
+                                    idx={i}
                                     ref={
                                         lastStartedNetworkEvent?.id ===
                                         networkEvent.id
@@ -399,7 +406,12 @@ export const NetworkPanel: React.FC<Props> = () => {
                                     }
                                     key={networkEvent.id}
                                     event={networkEvent}
-                                    setSelectedEventId={setSelectedEventId}
+                                    setSelectedEventIdx={setSelectedEventIdx}
+                                    selectedEventIdx={selectedEventIdx}
+                                    selectedEvent={selectedEvent}
+                                    lastStartedNetworkEventIdx={
+                                        lastStartedNetworkEventIdx
+                                    }
                                     isLastStartedEvent={
                                         lastStartedNetworkEvent?.id ===
                                         networkEvent.id

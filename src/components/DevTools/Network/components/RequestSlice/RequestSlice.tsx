@@ -7,16 +7,46 @@ import { FormattedNetworkEvents } from 'src/utils/formatters';
 import { styled } from '@mui/material';
 import NetworkProgress from '../NetworkProgress';
 import { ProgressFilterType } from '../../NetworkPanel';
+import entryStyles from 'src/components/common/styles/entryStyles';
+
+interface StyledEntryProps {
+    isSelected?: boolean;
+    isHovered?: boolean;
+    isError?: boolean;
+    isClicked?: boolean;
+    isPreviousToSelected?: boolean;
+    isPreviousToClicked?: boolean;
+}
+
+const StyledEntry = styled('tr')<StyledEntryProps>((props) => {
+    const clickedBorderColor = props.theme.palette.base[200];
+    return {
+        ...entryStyles(props),
+        ...(props.isError && { color: props.theme.palette.status.error[200] }),
+        ...(!props.isSelected &&
+            !props.isClicked && {
+                border: `1px solid ${props.theme.palette.base[300]}`,
+            }),
+        ...((props.isPreviousToClicked || props.isPreviousToSelected) && {
+            borderBottom: 'none !important',
+        }),
+        ...(props.isClicked && {
+            backgroundColor: props.theme.palette.base[300],
+            borderBottom: `1px solid ${clickedBorderColor} !important`,
+            borderTop: `1px solid ${clickedBorderColor} !important`,
+        }),
+    };
+});
 
 type Props = {
+    idx: number;
     event: FormattedNetworkEvents[0];
-    setSelectedEventId: (id: string) => void;
+    selectedEvent?: FormattedNetworkEvents[0];
+    selectedEventIdx: number | null;
+    setSelectedEventIdx: (idx: number) => void;
     isLastStartedEvent: boolean;
+    lastStartedNetworkEventIdx: number;
 };
-
-const StyledTd = styled('td')(({ theme }) => ({
-    border: `1px solid ${theme.palette.base[300]}`,
-}));
 
 type RequestSliceWithRefProps = Props & {
     ref: React.Ref<HTMLTableRowElement>;
@@ -50,15 +80,6 @@ const RequestSlice = forwardRef<HTMLTableRowElement, RequestSliceWithRefProps>(
         const currentTimePercentage =
             100 * datesToFraction(startTime, endTime, currentTime);
 
-        const textColorStyle = cx({
-            [styles.networkTableRowError]: props.event.response.status >= 400,
-        });
-        const progressColorStyle = cx({
-            [styles.progressStarted]:
-                props.event.startedDateTime <= currentTime &&
-                currentTime < props.event.endedDateTime,
-            [styles.progressEnded]: props.event.endedDateTime <= currentTime,
-        });
         let progress = ProgressFilterType.NOT_STARTED;
         if (props.event.endedDateTime <= currentTime) {
             progress = ProgressFilterType.COMPLETED;
@@ -67,7 +88,14 @@ const RequestSlice = forwardRef<HTMLTableRowElement, RequestSliceWithRefProps>(
         }
 
         return (
-            <tr
+            <StyledEntry
+                isClicked={props.selectedEvent?.id === props.event.id}
+                isError={props.event.response.status >= 400}
+                isSelected={props.isLastStartedEvent}
+                isPreviousToClicked={props.idx + 1 === props.selectedEventIdx}
+                isPreviousToSelected={
+                    props.idx + 1 === props.lastStartedNetworkEventIdx
+                }
                 ref={ref}
                 onMouseMove={(ev) => {
                     ev.stopPropagation();
@@ -78,34 +106,24 @@ const RequestSlice = forwardRef<HTMLTableRowElement, RequestSliceWithRefProps>(
                 }}
                 onClick={(ev) => {
                     ev.stopPropagation();
-                    props.setSelectedEventId(props.event.id);
+                    props.setSelectedEventIdx(props.idx);
                 }}
                 className={styles.trBody}
             >
-                <StyledTd
-                    className={cx(styles.td, progressColorStyle, {
-                        [styles.progressLastStartEvent]:
-                            props.isLastStartedEvent,
-                    })}
-                >
+                <td className={styles.td}>
                     <NetworkProgress progress={progress} />
-                    {/* {progressText} {props.isLastStartedEvent && '*'} */}
-                </StyledTd>
-                <StyledTd className={cx(styles.td, textColorStyle)}>
+                </td>
+                <td className={styles.td}>
                     <span>{props.event.response.status}</span>
-                </StyledTd>
-                <StyledTd className={styles.td}>
-                    <span className={textColorStyle}>
-                        {props.event.request.method}
-                    </span>
-                </StyledTd>
-                <StyledTd className={cx(styles.td, styles.urlColumn)}>
-                    <span className={textColorStyle}>
-                        {truncateValue(props.event.request.url, 60)}
-                    </span>
-                </StyledTd>
-                <StyledTd className={styles.td}>
-                    <span className={textColorStyle}>
+                </td>
+                <td className={styles.td}>
+                    <span>{props.event.request.method}</span>
+                </td>
+                <td className={cx(styles.td, styles.urlColumn)}>
+                    <span>{truncateValue(props.event.request.url, 60)}</span>
+                </td>
+                <td className={styles.td}>
+                    <span>
                         {truncateValue(
                             (props.event._initiator || '') +
                                 (props.event._initiator_line
@@ -114,23 +132,17 @@ const RequestSlice = forwardRef<HTMLTableRowElement, RequestSliceWithRefProps>(
                             40
                         )}
                     </span>
-                </StyledTd>
-                <StyledTd className={styles.td}>
-                    <span className={textColorStyle}>
-                        {props.event.response.content.mimeType}
-                    </span>
-                </StyledTd>
-                <StyledTd className={styles.td}>
-                    <span className={textColorStyle}>
-                        {props.event.response._transferSize}
-                    </span>
-                </StyledTd>
-                <StyledTd className={styles.td}>
-                    <span className={textColorStyle}>
-                        {props.event.response.bodySize}
-                    </span>
-                </StyledTd>
-                <StyledTd className={cx(styles.td, styles.waterfall)}>
+                </td>
+                <td className={styles.td}>
+                    <span>{props.event.response.content.mimeType}</span>
+                </td>
+                <td className={styles.td}>
+                    <span>{props.event.response._transferSize}</span>
+                </td>
+                <td className={styles.td}>
+                    <span>{props.event.response.bodySize}</span>
+                </td>
+                <td className={cx(styles.td, styles.waterfall)}>
                     <div
                         className={styles.waterfallBar}
                         style={{
@@ -142,8 +154,8 @@ const RequestSlice = forwardRef<HTMLTableRowElement, RequestSliceWithRefProps>(
                         className={styles.waterfallProgressLine}
                         style={{ left: `${currentTimePercentage}%` }}
                     />
-                </StyledTd>
-            </tr>
+                </td>
+            </StyledEntry>
         );
     }
 );
