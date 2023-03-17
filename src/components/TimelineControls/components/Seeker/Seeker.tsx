@@ -61,7 +61,6 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
         filters,
     } = useTimeline();
     const [displayHoverTooltip, setDisplayHoverTooltip] = useState(true);
-    const [isHovering, setIsHovering] = useState(true);
 
     // Add dates
 
@@ -187,6 +186,58 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
         }
     }, [cypressErrorMarkers, seekFraction]);
 
+    const screenshotsSource = useMemo(() => {
+        const screenshotContext = require.context(
+            'src/data/screenshots',
+            false,
+            /\.png$/
+        );
+        const sources: Record<string, string> = {};
+        screenshotContext.keys().forEach((fileName) => {
+            const name = fileName.includes('/')
+                ? fileName.split('/').pop()?.split('.')[0]
+                : fileName.split('.')[0];
+            if (name) {
+                sources[name] = screenshotContext(fileName);
+            }
+        });
+
+        return sources;
+    }, []);
+
+    const screenshot = useMemo(() => {
+        const hoverTimestamp = hoverTime?.getTime();
+        if (!hoverTimestamp) {
+            return;
+        }
+        let closestTimestamp: number | undefined;
+
+        for (const key in screenshotsSource) {
+            const timestamp = parseInt(key);
+            if (
+                !closestTimestamp ||
+                (timestamp < hoverTimestamp &&
+                    hoverTimestamp - timestamp <
+                        hoverTimestamp - closestTimestamp)
+            ) {
+                closestTimestamp = timestamp;
+            }
+        }
+
+        if (!closestTimestamp) {
+            return;
+        }
+
+        return screenshotsSource[closestTimestamp];
+    }, [hoverTime, screenshotsSource]);
+
+    const hoverPercentage = hoverTimeFraction
+        ? fractionToPercentage(hoverTimeFraction)
+        : undefined;
+
+    const screenshotWidth = window.innerWidth / 3;
+    const screenshotHeight = window.innerWidth / 4;
+
     return (
         <div className={styles.seekerContainer}>
             <StyledSeeker
@@ -229,36 +280,48 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
                     seekFraction(adjustedTimeFraction);
                 }}
             >
-                {hoverTimeFraction ? (
+                {hoverPercentage ? (
                     <StyledHover
-                        onMouseEnter={() => setIsHovering(true)}
-                        onMouseLeave={() => setIsHovering(false)}
                         className={styles.hover}
                         style={{
-                            right: `${fractionToPercentage(
-                                hoverTimeFraction
-                            )}%`,
+                            right: `${hoverPercentage}%`,
                         }}
                     ></StyledHover>
                 ) : null}
-                {hoverTimeFraction && hoverTime && displayHoverTooltip ? (
+                {hoverPercentage && hoverTime && displayHoverTooltip ? (
                     <Tooltip
                         title={datesToElapsedTime(startTime, hoverTime)}
                         placement="top"
-                        open={isHovering}
+                        open
                         arrow
                     >
                         <div
-                            onMouseEnter={() => setIsHovering(true)}
-                            onMouseLeave={() => setIsHovering(false)}
                             className={styles.hoverCursor}
                             style={{
-                                right: `${fractionToPercentage(
-                                    hoverTimeFraction
-                                )}%`,
+                                right: `${hoverPercentage}%`,
                             }}
                         ></div>
                     </Tooltip>
+                ) : null}
+                {hoverPercentage ? (
+                    <div
+                        className={styles.screenshotContainer}
+                        style={{
+                            right: `calc(${Math.max(
+                                Math.min(hoverPercentage, 85),
+                                15
+                            )}% - ${screenshotWidth / 2}px)`,
+                        }}
+                    >
+                        <img
+                            src={screenshot}
+                            alt="screenshot"
+                            style={{
+                                width: `${screenshotWidth}px`,
+                                height: `${screenshotHeight}px`,
+                            }}
+                        />
+                    </div>
                 ) : null}
                 <StyledFill
                     className={styles.fill}
@@ -287,7 +350,7 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
                             onClose={() => setDisplayHoverTooltip(true)}
                             arrow
                             title={
-                                /* eslint-disable */
+                                //eslint-disable-next-line
                                 <MarkerTooltip
                                     type={marker.type}
                                     hasFailed={marker.hasFailed}

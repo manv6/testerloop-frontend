@@ -128,6 +128,9 @@ const DARK = createTheme({
                         border: `1px solid ${theme.palette.base[300]}`,
                     },
                 }),
+                popper: {
+                    pointerEvents: 'none',
+                },
             },
         },
         MuiButton: {
