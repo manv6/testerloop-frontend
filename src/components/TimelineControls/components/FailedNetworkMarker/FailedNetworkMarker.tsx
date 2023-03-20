@@ -9,8 +9,8 @@ const FailedNetworkMarker: React.FC = () => (
         xmlns="http://www.w3.org/2000/svg"
     >
         <rect
-            x="5"
-            y="5"
+            x="4"
+            y="4"
             width="8"
             height="8"
             rx="2"
