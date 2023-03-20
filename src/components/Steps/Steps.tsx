@@ -7,7 +7,6 @@ import styles from './Steps.module.scss';
 import * as formatter from 'src/utils/formatters';
 import stepsData from 'src/data/steps';
 import * as Expandable from 'src/components/Expandable';
-import results from 'src/data/results';
 
 type Props = {
     className?: string;
@@ -77,13 +76,11 @@ export const Steps: React.FC<Props> = memo(({ className }) => {
               )
             : null;
 
-    const headerTitle = results.runs[0].tests[0].title.slice(-1)[0];
-
     return (
         <Expandable.Child
             className={styles.steps}
             notExpandable={true}
-            header={<StepsHeader headerTitle={headerTitle} />}
+            header={<StepsHeader headerTitle="Scenario" />}
         >
             <table className={cx(className, styles.stepsTable)}>
                 <tbody className={styles.stepsTableBody}>
