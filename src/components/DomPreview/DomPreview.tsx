@@ -97,6 +97,12 @@ const DomPreview: React.FC = () => {
                     if (doc) {
                         doc.open();
                         doc.write(value);
+                        const links = doc.getElementsByTagName('a');
+                        for (let i = 0; i < links.length; i++) {
+                            links[i].addEventListener('click', (e) => {
+                                e.preventDefault();
+                            });
+                        }
                         doc.close();
                     }
                 }
