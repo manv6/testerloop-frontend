@@ -7,9 +7,14 @@
 
 .controls {
     display: flex;
+    align-items: center;
 
     button {
         margin-left: 16px;
         text-transform: none;
     }
+}
+
+.zoomValue {
+    font-size: 16px;
 }

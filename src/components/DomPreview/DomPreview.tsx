@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTimeline } from 'src/hooks/timeline';
 import styles from './DomPreview.module.scss';
 import { formatSteps } from 'src/utils/formatters';
@@ -6,6 +6,7 @@ import stepsData from 'src/data/steps';
 import snapshots from 'src/data/snapshots';
 import * as Expandable from 'src/components/Expandable';
 import { DomPreviewHeader } from './components';
+import { DEFAULT_DOM_ZOOM, DOM_ZOOM_STEP_PERCENTAGE } from 'src/constants';
 
 export enum DOMTab {
     BEFORE = 'beforeBody',
@@ -21,6 +22,7 @@ const DomPreview: React.FC = () => {
     const { currentTime } = useTimeline();
     const steps = useMemo(() => formatSteps(stepsData as any), [stepsData]); //eslint-disable-line
     const [tab, setTab] = useState(DOMTab.BEFORE);
+    const [zoom, setZoom] = useState(DEFAULT_DOM_ZOOM);
 
     const currentSnapshot = useMemo(() => {
         const nextStepIdx = steps.findIndex(
@@ -54,6 +56,15 @@ const DomPreview: React.FC = () => {
                 if (elements) {
                     for (const elem of elements) {
                         elem.value = elem.getAttribute('data-otf-value') || '';
+                    }
+                }
+
+                const links = window?.document.getElementsByTagName('a');
+                if (links) {
+                    for (let i = 0; i < links.length; i++) {
+                        links[i].addEventListener('click', (e) => {
+                            e.preventDefault();
+                        });
                     }
                 }
             };
@@ -97,12 +108,7 @@ const DomPreview: React.FC = () => {
                     if (doc) {
                         doc.open();
                         doc.write(value);
-                        const links = doc.getElementsByTagName('a');
-                        for (let i = 0; i < links.length; i++) {
-                            links[i].addEventListener('click', (e) => {
-                                e.preventDefault();
-                            });
-                        }
+                        (doc.body.style as any).zoom = zoom; //eslint-disable-line
                         doc.close();
                     }
                 }
@@ -118,11 +124,39 @@ const DomPreview: React.FC = () => {
                 iframeWindow.removeEventListener('message', handleMessage);
             }
         };
-    }, [currentSnapshot, tab]);
+    }, [currentSnapshot, tab, zoom]);
+
+    const handleZoom = useCallback((direction: 'in' | 'out') => {
+        const iframe = document.getElementById(
+            'dom-iframe'
+        ) as HTMLIFrameElement | null;
+        const body = iframe?.contentDocument?.body as HTMLBodyElement | null;
+
+        if (body) {
+            const newZoom =
+                direction === 'in'
+                    ? DOM_ZOOM_STEP_PERCENTAGE
+                    : -DOM_ZOOM_STEP_PERCENTAGE;
+            const currentZoom = parseFloat((body.style as any).zoom || '1'); //eslint-disable-line
+            const newZoomValue = currentZoom + newZoom;
+            if (newZoomValue === 0 || newZoomValue > 1) {
+                return;
+            }
+            setZoom(newZoomValue);
+            (body.style as any).zoom = newZoomValue.toString(); //eslint-disable-line
+        }
+    }, []);
 
     const header = useMemo(
-        () => <DomPreviewHeader setTab={setTab} tab={tab} />,
-        [tab]
+        () => (
+            <DomPreviewHeader
+                setTab={setTab}
+                tab={tab}
+                handleZoom={handleZoom}
+                zoom={zoom}
+            />
+        ),
+        [handleZoom, tab, zoom]
     );
 
     return (
