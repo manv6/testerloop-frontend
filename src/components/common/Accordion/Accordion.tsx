@@ -4,13 +4,14 @@ import {
     AccordionSummary,
     Accordion as MUIAccordion,
     styled,
+    AccordionProps,
 } from '@mui/material';
 import cx from 'classnames';
 import styles from './Accordion.module.scss';
 import ChevronIcon from '../ChevronIcon';
 
 interface Props extends React.PropsWithChildren {
-    accordionProps?: typeof MUIAccordion;
+    accordionProps?: Partial<AccordionProps>;
     accordionClassName?: string;
     summaryProps?: typeof AccordionSummary;
     summaryClassName?: string;

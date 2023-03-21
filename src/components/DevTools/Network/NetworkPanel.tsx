@@ -155,10 +155,6 @@ export const NetworkPanel: React.FC<Props> = () => {
         useState<Set<ResourceTypeFilterType>>(new Set());
     const { currentTime } = useTimeline();
 
-    const selectedEvent = selectedEventIdx
-        ? networkEvents[selectedEventIdx]
-        : undefined;
-
     const filteredEvents = useMemo(
         () =>
             networkEvents
@@ -188,6 +184,11 @@ export const NetworkPanel: React.FC<Props> = () => {
             selectedResourceTypeFilters,
         ]
     );
+
+    const selectedEvent =
+        selectedEventIdx !== null
+            ? filteredEvents[selectedEventIdx]
+            : undefined;
 
     const onDetailPanelClose = useCallback(() => {
         setSelectedEventIdx(null);
