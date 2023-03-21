@@ -11,6 +11,16 @@ import { styled } from '@mui/material';
 import { CollapseIcon } from 'src/components/Expandable/components';
 import { TabLabel } from '../../NetworkPanel';
 
+const sortByName = (
+    array: ReadonlyArray<{
+        readonly name: string;
+        readonly value: string;
+    }>
+) =>
+    [...array].sort((a, b) =>
+        a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
+    );
+
 type PostDataProps = {
     selectedEvent: FormattedNetworkEvents[0];
 };
@@ -88,6 +98,11 @@ const ResponseDataTab: React.FC<ResponseDataTabProps> = ({ selectedEvent }) => {
         return <div>{responsePayload}</div>;
     }, [selectedEvent]);
 
+    const orderedHeaders = useMemo(
+        () => sortByName(selectedEvent.response.headers),
+        [selectedEvent.response.headers]
+    );
+
     return (
         <div>
             <Accordion title={<div>Mime Type</div>}>
@@ -96,7 +111,10 @@ const ResponseDataTab: React.FC<ResponseDataTabProps> = ({ selectedEvent }) => {
             <Divider />
             {snippet && (
                 <>
-                    <Accordion title={<div>Payload</div>}>
+                    <Accordion
+                        accordionProps={{ defaultExpanded: true }}
+                        title={<div>Payload</div>}
+                    >
                         <div className={styles.responseContentTextWrapper}>
                             {snippet}
                         </div>
@@ -107,7 +125,7 @@ const ResponseDataTab: React.FC<ResponseDataTabProps> = ({ selectedEvent }) => {
             <Accordion title={<div>Response Headers</div>}>
                 <NameValueTable
                     key="responseHeader"
-                    valuePairs={selectedEvent.response.headers}
+                    valuePairs={orderedHeaders}
                 />
             </Accordion>
             <Divider />
@@ -120,9 +138,17 @@ type RequestTabProps = {
 };
 
 const RequestTab: React.FC<RequestTabProps> = ({ selectedEvent }) => {
+    const orderedHeaders = useMemo(
+        () => sortByName(selectedEvent.request.headers),
+        [selectedEvent.request.headers]
+    );
+
     return (
         <div>
-            <Accordion title={<div>Request to</div>}>
+            <Accordion
+                accordionProps={{ defaultExpanded: true }}
+                title={<div>Request to</div>}
+            >
                 {selectedEvent.request.url}
             </Accordion>
             <Divider />
@@ -152,7 +178,7 @@ const RequestTab: React.FC<RequestTabProps> = ({ selectedEvent }) => {
             <Accordion title={<div>Request Headers</div>}>
                 <NameValueTable
                     key="requestHeader"
-                    valuePairs={selectedEvent.request.headers}
+                    valuePairs={orderedHeaders}
                 />
             </Accordion>
             <Divider />
