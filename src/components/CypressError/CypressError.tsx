@@ -46,6 +46,9 @@ const CypressError: React.FC = () => {
                         {splitCamelCase(error.name)}
                     </StyledErrorName>
                     <div>{error.message}</div>
+                    <br />
+                    {/*eslint-disable-next-line*/}
+                    {false && <div>{error.stack}</div>}
                 </div>
             </div>
             <GoToCodeButton url={url} tooltipText={tooltipText} />
