@@ -37,7 +37,11 @@ const FrameworkError: React.FC = () => {
                         </StyledErrorName>
                         <div>{error.message}</div>
                         <br />
-                        {isExpanded && <div>{error.stack}</div>}
+                        {isExpanded && (
+                            <div className={styles.stackMessage}>
+                                {error.stack}
+                            </div>
+                        )}
                     </div>
                 </div>
                 <GoToCodeButton url={url} tooltipText={tooltipText} />
