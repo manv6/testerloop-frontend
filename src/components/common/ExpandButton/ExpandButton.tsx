@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Tooltip } from '@mui/material';
 import Button from '../Button';
 import ChevronIcon from '../ChevronIcon';
@@ -9,19 +9,28 @@ type Props = {
     onClick: () => void;
 };
 
-const ExpandButton: React.FC<Props> = ({ isExpanded, onClick }) => (
-    <Tooltip
-        title={isExpanded ? 'Collapse' : 'Expand'}
-        placement="top"
-        arrow
-        open
-    >
-        <div>
-            <Button className={styles.expandButton} onClick={onClick}>
-                <ChevronIcon direction={isExpanded ? 'up' : 'down'} />
-            </Button>
-        </div>
-    </Tooltip>
-);
+const ExpandButton: React.FC<Props> = ({ isExpanded, onClick }) => {
+    const [isButtonHovered, setIsButtonHovered] = useState(false);
+
+    return (
+        <Tooltip
+            title={isExpanded ? 'Collapse' : 'Expand'}
+            placement="top"
+            arrow
+            open={isButtonHovered}
+        >
+            <div>
+                <Button
+                    className={styles.expandButton}
+                    onClick={onClick}
+                    onMouseEnter={() => setIsButtonHovered(true)}
+                    onMouseLeave={() => setIsButtonHovered(false)}
+                >
+                    <ChevronIcon direction={isExpanded ? 'up' : 'down'} />
+                </Button>
+            </div>
+        </Tooltip>
+    );
+};
 
 export default ExpandButton;

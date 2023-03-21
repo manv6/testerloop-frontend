@@ -3,9 +3,11 @@ import cx from 'classnames';
 import { useTimeline } from 'src/hooks/timeline';
 import { Step } from '../../Steps';
 import styles from './ActionRecord.module.scss';
-import { StepPrefix } from 'src/components/common';
+import { Accordion, StepPrefix } from 'src/components/common';
 import { EventType } from 'src/constants';
 import { styled } from '@mui/material';
+import results from 'src/data/results';
+import getFrameworkErrorInfo from 'src/utils/getFrameworkErrorInfo';
 
 interface Props {
     action: Step;
@@ -16,6 +18,10 @@ interface Props {
 interface StyledActionProps {
     isSelected: boolean;
 }
+
+const StyledLink = styled('a')(({ theme }) => ({
+    color: theme.palette.base[100],
+}));
 
 const StyledAction = styled('div')<StyledActionProps>(
     ({ theme, isSelected }) => {
@@ -45,10 +51,14 @@ const ActionRecord: React.FC<Props> = ({
     isActionHovered,
 }) => {
     const { seek } = useTimeline();
+    const { url, text: urlText } = getFrameworkErrorInfo();
 
     const navigateInTimeline = () => {
         seek(options.wallClockStartedAt);
     };
+
+    const errorObj = results.runs[0].tests[0].attempts[0];
+    const error = errorObj.error;
 
     return (
         <StyledAction
@@ -79,6 +89,24 @@ const ActionRecord: React.FC<Props> = ({
             <span className={styles.expandedActionMessage}>
                 {options.message}
             </span>
+            {options.state === 'failed' && (
+                <>
+                    <div className={styles.errorUrl}>
+                        <StyledLink href={url} target="_blank" rel="noreferrer">
+                            {urlText}
+                        </StyledLink>
+                    </div>
+                    <Accordion
+                        accordionClassName={styles.stackAccordionRoot}
+                        summaryClassName={styles.stackAccordion}
+                        summaryContentClassName={styles.stackAccordionContent}
+                        detailsClassName={styles.accordionDetails}
+                        title={<div>View stack trace</div>}
+                    >
+                        {error.stack}
+                    </Accordion>
+                </>
+            )}
         </StyledAction>
     );
 };

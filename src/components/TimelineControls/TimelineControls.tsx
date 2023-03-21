@@ -11,7 +11,7 @@ import {
     TimelineFilters,
 } from './components';
 import { EventType } from 'src/constants';
-import CypressErrorMarker from './components/CypressErrorMarker';
+import FrameworkErrorMarker from './components/FrameworkErrorMarker';
 import FailedNetworkMarker from './components/FailedNetworkMarker';
 import StepMarker from './components/StepMarker';
 import SuccessNetworkMarker from './components/SuccessNetworkMarker';
@@ -40,7 +40,7 @@ export const TimelineControls: React.FC<Props> = () => {
             case EventType.STEP:
                 return <StepMarker />;
             case EventType.CYPRESS_ERROR:
-                return <CypressErrorMarker />;
+                return <FrameworkErrorMarker />;
             case EventType.NETWORK_ERROR:
                 return <FailedNetworkMarker />;
             case EventType.NETWORK_SUCCESS:

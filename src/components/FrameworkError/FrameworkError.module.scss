@@ -1,4 +1,9 @@
-.cypressError {
+.errorPanel {
+    position: relative;
+    margin-bottom: 16px;
+}
+
+.frameworkError {
     padding: 16px 24px;
     display: flex;
     justify-content: space-between;
@@ -17,6 +22,10 @@
     .errorName {
         font-weight: 500;
     }
+}
+
+.contentMargin {
+    margin-bottom: 16px;
 }
 
 .title {

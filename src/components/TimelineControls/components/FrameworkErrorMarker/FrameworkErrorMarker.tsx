@@ -1,6 +1,6 @@
 import React from 'react';
 
-const CypressErrorMarker: React.FC = () => (
+const FrameworkErrorMarker: React.FC = () => (
     <svg
         width="16"
         height="16"
@@ -17,4 +17,4 @@ const CypressErrorMarker: React.FC = () => (
     </svg>
 );
 
-export default CypressErrorMarker;
+export default FrameworkErrorMarker;

@@ -12,3 +12,26 @@
         word-break: break-all;
     }
 }
+
+.stackAccordionRoot {
+    display: inline;
+    width: fit-content !important;
+}
+
+.stackAccordion {
+    padding: 0;
+    justify-content: flex-start !important;
+}
+
+.stackAccordionContent {
+    flex-grow: unset !important;
+    margin-right: 8px !important;
+}
+
+.errorUrl {
+    margin-top: 8px;
+}
+
+.accordionDetails {
+    word-break: break-all;
+}
