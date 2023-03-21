@@ -10,15 +10,9 @@ import networkEventData from 'src/data/networkEvents';
 import { useFragment } from 'react-relay';
 import { SummaryFragment$key } from './__generated__/SummaryFragment.graphql';
 import graphql from 'babel-plugin-relay/macro';
-import {
-    Panel,
-    Tag,
-    Button,
-    ChevronIcon,
-    Divider,
-} from 'src/components/common';
+import { Panel, Tag, Divider, ExpandButton } from 'src/components/common';
 import cx from 'classnames';
-import { styled, Tooltip } from '@mui/material';
+import { styled } from '@mui/material';
 import {
     RerunButton,
     CompareButton,
@@ -77,7 +71,6 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
     );
 
     const [isExpanded, setIsExpanded] = useState(false);
-    const [isButtonHovered, setIsButtonHovered] = useState(false);
 
     const branchName = cicd.gitBranch;
     const branchUrl = [cicd.gitUrl, 'tree', cicd.gitBranch].join('/');
@@ -174,7 +167,7 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
                     <div className={styles.errorsContainer}>
                         <ul>
                             {frameworkErrorName && (
-                                <li className={styles.cypressError}>
+                                <li>
                                     <FrameworkErrorIcon />
                                     <span>
                                         1 {splitCamelCase(frameworkErrorName)}
@@ -195,23 +188,10 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
                     </div>
                 </div>
             )}
-            <Tooltip
-                title={isExpanded ? 'Collapse' : 'Expand'}
-                placement="top"
-                arrow
-                open={isButtonHovered}
-            >
-                <div>
-                    <Button
-                        className={styles.collapseButton}
-                        onClick={() => setIsExpanded(!isExpanded)}
-                        onMouseEnter={() => setIsButtonHovered(true)}
-                        onMouseLeave={() => setIsButtonHovered(false)}
-                    >
-                        <ChevronIcon direction={isExpanded ? 'up' : 'down'} />
-                    </Button>
-                </div>
-            </Tooltip>
+            <ExpandButton
+                onClick={() => setIsExpanded(!isExpanded)}
+                isExpanded={isExpanded}
+            />
         </Panel>
     );
 };

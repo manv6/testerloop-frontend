@@ -4,7 +4,7 @@ import { TimelineControls } from './components/TimelineControls';
 import { NetworkPanel, ConsolePanel } from './components/DevTools';
 import { Steps } from './components/Steps';
 import * as Expandable from './components/Expandable';
-import CypressError from './components/CypressError';
+import FrameworkError from './components/FrameworkError';
 import Summary from './components/Summary';
 import styles from './App.module.scss';
 import results from './data/results';
@@ -42,7 +42,7 @@ const App: React.FC = () => {
             <TimelineProvider startTime={startTime} endTime={endTime}>
                 <Summary fragmentKey={queryData.testExecution} />
                 <div className={styles.appContent}>
-                    <CypressError />
+                    <FrameworkError />
                     <TimelineControls fragmentKey={data} />
                     <Expandable.Parent className={styles.expandableParent}>
                         <Steps className={styles.steps} fragmentKey={data} />

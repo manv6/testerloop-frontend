@@ -1,4 +1,9 @@
-.cypressError {
+.errorPanel {
+    position: relative;
+    margin-bottom: 16px;
+}
+
+.frameworkError {
     padding: 16px 24px;
     display: flex;
     justify-content: space-between;
@@ -7,7 +12,8 @@
 
 .errorDetail {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    margin-right: 8px;
 }
 
 .errorContent {
@@ -18,6 +24,10 @@
     }
 }
 
+.contentMargin {
+    margin-bottom: 16px;
+}
+
 .title {
     font-weight: bold;
     margin-bottom: 5px;
@@ -26,4 +36,8 @@
         margin-left: 4px;
         margin-right: 6px;
     }
+}
+
+.stackMessage {
+    white-space: pre-wrap;
 }

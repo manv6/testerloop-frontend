@@ -11,3 +11,4 @@ export { default as Tag } from './Tag';
 export { default as Accordion } from './Accordion';
 export { default as Tabs } from './Tabs';
 export { default as Divider } from './Divider';
+export { default as ExpandButton } from './ExpandButton';

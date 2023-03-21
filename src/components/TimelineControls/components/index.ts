@@ -1,5 +1,5 @@
 export { default as StepMarker } from './StepMarker';
-export { default as CypressErrorMarker } from './CypressErrorMarker';
+export { default as FrameworkErrorMarker } from './FrameworkErrorMarker';
 export { default as FailedNetworkMarker } from './FailedNetworkMarker';
 export { default as SuccessNetworkMarker } from './SuccessNetworkMarker';
 export { default as SpeedControl } from './SpeedControl';

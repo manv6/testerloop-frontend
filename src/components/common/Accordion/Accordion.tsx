@@ -10,9 +10,13 @@ import styles from './Accordion.module.scss';
 import ChevronIcon from '../ChevronIcon';
 
 interface Props extends React.PropsWithChildren {
-    accordionProps?: typeof MUIAccordion & { className?: string };
-    summaryProps?: typeof AccordionSummary & { className?: string };
-    detailsProps?: typeof AccordionDetails & { className?: string };
+    accordionProps?: typeof MUIAccordion;
+    accordionClassName?: string;
+    summaryProps?: typeof AccordionSummary;
+    summaryClassName?: string;
+    summaryContentClassName?: string;
+    detailsProps?: typeof AccordionDetails;
+    detailsClassName?: string;
     title: ReactNode;
 }
 
@@ -22,20 +26,34 @@ const StyledAccordionSummary = styled(AccordionSummary)(({ theme }) => ({
 
 const Accordion: React.FC<Props> = ({
     accordionProps,
+    accordionClassName,
     summaryProps,
+    summaryClassName,
+    summaryContentClassName,
+    detailsClassName,
     detailsProps,
     title,
     children,
 }) => (
-    <MUIAccordion TransitionProps={{ timeout: 200 }} {...accordionProps}>
+    <MUIAccordion
+        TransitionProps={{ timeout: 200 }}
+        className={accordionClassName}
+        {...accordionProps}
+    >
         <StyledAccordionSummary
             expandIcon={<ChevronIcon direction={'down'} />}
-            className={cx(styles.accordionSummary, summaryProps?.className)}
+            className={cx(styles.accordionSummary, summaryClassName)}
+            classes={{
+                content: summaryContentClassName,
+                expanded: summaryContentClassName,
+            }}
             {...summaryProps}
         >
             {title}
         </StyledAccordionSummary>
-        <AccordionDetails {...detailsProps}>{children}</AccordionDetails>
+        <AccordionDetails className={detailsClassName} {...detailsProps}>
+            {children}
+        </AccordionDetails>
     </MUIAccordion>
 );
 
