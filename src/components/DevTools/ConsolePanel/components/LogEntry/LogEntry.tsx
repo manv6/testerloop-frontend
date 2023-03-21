@@ -13,6 +13,7 @@ import { LogLevel } from '../../ConsolePanel';
 import { LogErrorIcon, LogWarnIcon, OtherLogIcon } from '..';
 import { ChevronIcon } from 'src/components/common';
 import ElapsedTime from 'src/components/common/ElapsedTime';
+import entryStyles from 'src/components/common/styles/entryStyles';
 
 interface Props {
     isLogSelected: boolean;
@@ -25,26 +26,9 @@ interface StyledLogEntryProps {
     isHovered: boolean;
 }
 
-const StyledLogEntry = styled('li')<StyledLogEntryProps>(
-    ({ theme, isSelected, isHovered }) => {
-        let backgroundColor = theme.palette.base[400];
-        let borderColor = theme.palette.base[300];
-        if (isSelected) {
-            backgroundColor = theme.palette.primary[500];
-            borderColor = `${theme.palette.primary[400]}`;
-        }
-        if (isHovered) {
-            backgroundColor = `${theme.palette.base[300]}7F`;
-            borderColor = theme.palette.base[300];
-        }
-
-        return {
-            backgroundColor,
-            borderBottom: `1px solid ${borderColor}`,
-            borderTop: `1px solid ${borderColor}`,
-        };
-    }
-);
+const StyledLogEntry = styled('li')<StyledLogEntryProps>((props) => {
+    return entryStyles(props);
+});
 
 interface StyledLineMarkertProps {
     logType: ConsoleLogLevel;
