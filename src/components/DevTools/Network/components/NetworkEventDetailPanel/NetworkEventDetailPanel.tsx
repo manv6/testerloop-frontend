@@ -11,11 +11,11 @@ import { styled } from '@mui/material';
 import { CollapseIcon } from 'src/components/Expandable/components';
 import { TabLabel } from '../../NetworkPanel';
 
-type PostDataTabProps = {
+type PostDataProps = {
     selectedEvent: FormattedNetworkEvents[0];
 };
 
-const PostDataTab: React.FC<PostDataTabProps> = ({ selectedEvent }) => {
+const PostData: React.FC<PostDataProps> = ({ selectedEvent }) => {
     const snippet = useMemo(() => {
         const mimeType = selectedEvent.request.postData?.mimeType;
         const postData = selectedEvent.request.postData?.text;
@@ -51,15 +51,7 @@ const PostDataTab: React.FC<PostDataTabProps> = ({ selectedEvent }) => {
         return <div>{postData}</div>;
     }, [selectedEvent]);
 
-    return (
-        <div>
-            <div>
-                <span className={styles.boldText}>Mime Type: </span>
-                {selectedEvent.request.postData?.mimeType}
-            </div>
-            {snippet}
-        </div>
-    );
+    return <div>{snippet}</div>;
 };
 
 type ResponseDataTabProps = {
@@ -147,8 +139,12 @@ const RequestTab: React.FC<RequestTabProps> = ({ selectedEvent }) => {
             ) : null}
             {selectedEvent.request.postData && (
                 <>
+                    <Accordion title={<div>Mime Type</div>}>
+                        {selectedEvent.request.postData.mimeType}
+                    </Accordion>
+                    <Divider />
                     <Accordion title={<div>Payload</div>}>
-                        <PostDataTab selectedEvent={selectedEvent} />
+                        <PostData selectedEvent={selectedEvent} />
                     </Accordion>
                     <Divider />
                 </>

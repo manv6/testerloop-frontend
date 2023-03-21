@@ -58,6 +58,15 @@ const DomPreview: React.FC = () => {
                         elem.value = elem.getAttribute('data-otf-value') || '';
                     }
                 }
+
+                const links = window?.document.getElementsByTagName('a');
+                if (links) {
+                    for (let i = 0; i < links.length; i++) {
+                        links[i].addEventListener('click', (e) => {
+                            e.preventDefault();
+                        });
+                    }
+                }
             };
 
             iframe.addEventListener('load', handleLoad);
