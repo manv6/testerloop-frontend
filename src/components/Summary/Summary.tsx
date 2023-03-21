@@ -76,8 +76,7 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
         [data.networkEvents]
     );
 
-    const [displayCollapse, setDisplayCollapse] = useState(false);
-    const [isExpanded, setIsExpanded] = useState(true);
+    const [isExpanded, setIsExpanded] = useState(false);
     const [isButtonHovered, setIsButtonHovered] = useState(false);
 
     const branchName = cicd.gitBranch;
@@ -110,14 +109,10 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
     const failedAt = formatDate(endTime);
 
     return (
-        <Panel
-            className={cx(styles.summary, className)}
-            onMouseEnter={() => setDisplayCollapse(true)}
-            onMouseLeave={() => setDisplayCollapse(false)}
-        >
+        <Panel className={cx(styles.summary, className)}>
             <div className={styles.row}>
                 <div className={styles.pageTitle}>
-                    <h1>{title}</h1>
+                    <h1>Scenario: {title}</h1>
                     <Tag text="Failed" />
                 </div>
                 <div className={styles.buttons}>
@@ -200,27 +195,23 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
                     </div>
                 </div>
             )}
-            {displayCollapse && (
-                <Tooltip
-                    title={isExpanded ? 'Collapse' : 'Expand'}
-                    placement="top"
-                    arrow
-                    open={isButtonHovered}
-                >
-                    <div>
-                        <Button
-                            className={styles.collapseButton}
-                            onClick={() => setIsExpanded(!isExpanded)}
-                            onMouseEnter={() => setIsButtonHovered(true)}
-                            onMouseLeave={() => setIsButtonHovered(false)}
-                        >
-                            <ChevronIcon
-                                direction={isExpanded ? 'up' : 'down'}
-                            />
-                        </Button>
-                    </div>
-                </Tooltip>
-            )}
+            <Tooltip
+                title={isExpanded ? 'Collapse' : 'Expand'}
+                placement="top"
+                arrow
+                open={isButtonHovered}
+            >
+                <div>
+                    <Button
+                        className={styles.collapseButton}
+                        onClick={() => setIsExpanded(!isExpanded)}
+                        onMouseEnter={() => setIsButtonHovered(true)}
+                        onMouseLeave={() => setIsButtonHovered(false)}
+                    >
+                        <ChevronIcon direction={isExpanded ? 'up' : 'down'} />
+                    </Button>
+                </div>
+            </Tooltip>
         </Panel>
     );
 };

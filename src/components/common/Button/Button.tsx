@@ -3,14 +3,14 @@ import MUIButton from '@mui/material/Button';
 import { styled } from '@mui/material';
 
 type StyledButtonProps = {
-    styleType?: 'default' | 'primary';
+    styletype?: 'default' | 'primary';
 };
 
 const StyledButton = styled(MUIButton)<StyledButtonProps>(
-    ({ theme, styleType }) => {
+    ({ theme, styletype }) => {
         let backgroundColor;
         let borderColor;
-        switch (styleType) {
+        switch (styletype) {
             case 'primary':
                 backgroundColor = theme.palette.primary[400];
                 borderColor = theme.palette.primary[300];
@@ -30,11 +30,11 @@ const StyledButton = styled(MUIButton)<StyledButtonProps>(
 type Props = React.ComponentProps<typeof MUIButton> & StyledButtonProps;
 const Button: React.FC<Props> = ({
     children,
-    styleType = 'default',
+    styletype = 'default',
     ...props
 }) => {
     return (
-        <StyledButton styleType={styleType} {...props}>
+        <StyledButton styletype={styletype} {...props}>
             {children}
         </StyledButton>
     );

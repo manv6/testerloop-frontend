@@ -1,1 +1,1 @@
-export { default as DomPreviewHeader } from './DomPreviewHeader.tsx';
+export { default as DomPreviewHeader } from './DomPreviewHeader';

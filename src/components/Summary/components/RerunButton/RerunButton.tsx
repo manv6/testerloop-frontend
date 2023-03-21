@@ -4,7 +4,7 @@ import styles from './RerunButton.module.scss';
 
 const RerunButton: React.FC = () => {
     return (
-        <Button size="small" styleType="primary" className={styles.rerunButton}>
+        <Button size="small" styletype="primary" className={styles.rerunButton}>
             <svg
                 width="16"
                 height="16"
