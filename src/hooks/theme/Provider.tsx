@@ -170,7 +170,7 @@ const DARK = createTheme({
         MuiCollapse: {
             styleOverrides: {
                 root: {
-                    overflow: 'scroll',
+                    overflow: 'auto',
                 },
             },
         },
