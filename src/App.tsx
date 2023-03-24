@@ -20,6 +20,10 @@ const StyledApp = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.base[500],
 }));
 
+//base-64 string for 'TestExecution/d7a674e5-9726-4c62-924b-0bb846e9f213/00343af4-acf3-473b-9975-0c2bd26e47o1'
+const testExecutionId =
+    'VGVzdEV4ZWN1dGlvbi9kN2E2NzRlNS05NzI2LTRjNjItOTI0Yi0wYmI4NDZlOWYyMTMvMDAzNDNhZjQtYWNmMy00NzNiLTk5NzUtMGMyYmQyNmU0N28x';
+
 const App: React.FC = () => {
     const data = { steps: stepsData } as any; // eslint-disable-line
     const steps = useMemo(
@@ -28,7 +32,7 @@ const App: React.FC = () => {
     );
 
     const queryData = useLazyLoadQuery<AppQueryType>(AppQuery, {
-        testExecutionId: 'VGVzdEV4ZWN1dGlvbi8xMjM0', //base-64 string for 'TestExecution/1234'
+        testExecutionId,
     });
 
     // TODO: We likely want to add some "lead" and "lag" time to these dates,
