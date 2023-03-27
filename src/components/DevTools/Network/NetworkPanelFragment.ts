@@ -17,8 +17,6 @@ const NetworkPanelFragment = graphql`
                             origin
                             lineNumber
                         }
-                        at
-                        until
                         request {
                             method
                             body {

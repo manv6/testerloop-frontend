@@ -2,9 +2,9 @@
 // Should we generate all types in a single folder?
 
 // TODO: Update this with non-mock schema type
+import { NetworkPanelFragment$data } from 'src/components/DevTools/Network/__generated__/NetworkPanelFragment.graphql';
+import { isOfType } from './isOfType';
 import { TimelineControlsFragment$data } from './mockTypes';
-import type { NetworkPanelFragment$data } from 'src/components/DevTools/Network/__generated__/NetworkPanelFragment.graphql';
-import { isOfType } from 'src/utils/isOfType';
 
 export type FormattedSteps = ReturnType<typeof formatSteps>;
 export const formatSteps = (steps: TimelineControlsFragment$data['steps']) =>
@@ -34,5 +34,5 @@ export const formatNetworkEvents = (data: NetworkPanelFragment$data) =>
                 at: new Date(evt.at),
                 until: new Date(evt.until),
             };
-            return { ...evt, time };
+            return { ...evt, ...time };
         });

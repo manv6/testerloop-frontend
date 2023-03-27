@@ -47,12 +47,15 @@ const App: React.FC = () => {
                 <Summary fragmentKey={queryData.testExecution} />
                 <div className={styles.appContent}>
                     <FrameworkError />
-                    <TimelineControls fragmentKey={data} />
+                    {/* eslint-disable @typescript-eslint/no-non-null-assertion */}
+                    <TimelineControls fragmentKey={queryData.testExecution!} />
                     <Expandable.Parent className={styles.expandableParent}>
-                        <Steps className={styles.steps} fragmentKey={data} />
+                        <Steps
+                            className={styles.steps}
+                            fragmentKey={queryData.testExecution!}
+                        />
                         <DomPreview />
-                        <NetworkPanel fragmentKey={data} />
-                        {/* eslint-disable @typescript-eslint/no-non-null-assertion */}
+                        <NetworkPanel fragmentKey={queryData.testExecution!} />
                         <ConsolePanel fragmentKey={queryData.testExecution!} />
                     </Expandable.Parent>
                 </div>
