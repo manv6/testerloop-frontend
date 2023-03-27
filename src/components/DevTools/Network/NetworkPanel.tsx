@@ -120,14 +120,11 @@ const filterByProgressPredicate = (
     return Array.from(selectedOptions).some((filter) => {
         switch (filter) {
             case ProgressFilterType.COMPLETED:
-                return event.time.until <= currentTime;
+                return event.until <= currentTime;
             case ProgressFilterType.IN_PROGRESS:
-                return (
-                    event.time.at <= currentTime &&
-                    currentTime < event.time.until
-                );
+                return event.at <= currentTime && currentTime < event.until;
             case ProgressFilterType.NOT_STARTED:
-                return currentTime < event.time.at;
+                return currentTime < event.at;
             default:
                 return false;
         }
@@ -250,7 +247,7 @@ export const NetworkPanel: React.FC<Props> = ({ fragmentKey }) => {
             if (acc !== -1) {
                 return acc;
             }
-            return currentTime > event.time.at ? index : acc;
+            return currentTime > event.at ? index : acc;
         }, -1);
     }, [currentTime, networkEvents]);
 

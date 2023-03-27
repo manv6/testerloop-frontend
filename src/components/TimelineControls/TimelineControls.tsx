@@ -17,10 +17,10 @@ import StepMarker from './components/StepMarker';
 import SuccessNetworkMarker from './components/SuccessNetworkMarker';
 import { styled } from '@mui/material';
 import { Panel } from 'src/components/common';
-import { TimelineControlsFragment$key } from './__generated__/TimelineControlsFragment.graphql';
+import { SeekerFragment$key } from './components/Seeker/__generated__/SeekerFragment.graphql';
 
 type Props = {
-    fragmentKey: TimelineControlsFragment$key | null;
+    fragmentKey: SeekerFragment$key | null;
 };
 
 const StyledControlSection = styled('div')(({ theme }) => ({

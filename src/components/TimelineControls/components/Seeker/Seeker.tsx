@@ -12,7 +12,7 @@ import fractionToPercentage from 'src/utils/fractionToPercentage';
 import graphql from 'babel-plugin-relay/macro';
 import { useFragment } from 'react-relay';
 import { isOfType } from 'src/utils/isOfType';
-import { TimelineControlsFragment$key } from '../../__generated__/TimelineControlsFragment.graphql';
+import { SeekerFragment$key } from './__generated__/SeekerFragment.graphql';
 
 const StyledFill = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.base[100],
@@ -47,17 +47,15 @@ const StyledMarker = styled('div')<StyledMarkerProps>(({ size }) => ({
 
 type Props = {
     getMarker: (ev: EventType) => JSX.Element;
-    fragmentKey: TimelineControlsFragment$key | null;
+    fragmentKey: SeekerFragment$key | null;
 };
 
 const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
     const timelineData = useFragment(
         graphql`
-            fragment TimelineControlsFragment on TestExecution {
+            fragment SeekerFragment on TestExecution {
                 id
-                timelineControlNetworkEvents: events(
-                    filter: { type: NETWORK }
-                ) {
+                seekerNetworkEvents: events(filter: { type: NETWORK }) {
                     edges {
                         node {
                             __typename
@@ -66,10 +64,8 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
                                 response {
                                     status
                                 }
-                                time {
-                                    at
-                                    until
-                                }
+                                at
+                                until
                             }
                         }
                     }
@@ -127,13 +123,14 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
 
     const networkEvents = useMemo(
         () =>
-            timelineData?.timelineControlNetworkEvents.edges
+            timelineData?.seekerNetworkEvents.edges
                 .map(({ node }) => node)
                 .filter(isOfType('HttpNetworkEvent'))
-                .map(({ time: { at, until }, ...rest }) => {
+                .map(({ at, until, ...rest }) => {
                     return {
                         ...rest,
-                        time: { at: new Date(at), until: new Date(until) },
+                        at: new Date(at),
+                        until: new Date(until),
                     };
                 }) || [],
         [timelineData]
@@ -149,11 +146,11 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
                 .map((evt) => ({
                     id: evt.id,
                     type: EventType.NETWORK_ERROR,
-                    start: evt.time.until,
+                    start: evt.until,
                     startFraction: datesToFraction(
                         startTime,
                         endTime,
-                        evt.time.until
+                        evt.until
                     ),
                 })),
         [networkEvents, startTime, endTime]
@@ -166,11 +163,11 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
                 .map((evt) => ({
                     id: evt.id,
                     type: EventType.NETWORK_SUCCESS,
-                    start: evt.time.until,
+                    start: evt.until,
                     startFraction: datesToFraction(
                         startTime,
                         endTime,
-                        evt.time.until
+                        evt.until
                     ),
                 })),
         [networkEvents, startTime, endTime]

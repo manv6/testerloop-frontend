@@ -1,3 +1,7 @@
+directive @defer(if: Boolean! = true, label: String) on FRAGMENT_SPREAD | INLINE_FRAGMENT
+
+directive @stream(if: Boolean! = true, initialCount: Int = 0, label: String) on FIELD
+
 interface ConsoleEvent implements Event & TestExecutionEvent {
   at: DateTime!
   testExecution: TestExecution!
@@ -61,21 +65,20 @@ type HttpHeaders {
   values: [KeyValuePair!]!
 }
 
-type HttpNetworkEvent implements Event & NetworkEvent & TestExecutionEvent {
+type HttpNetworkEvent implements Event & IntervalEvent & NetworkEvent & TestExecutionEvent {
   at: DateTime!
   id: ID!
   initiator: HttpNetworkEventInitiator!
   request: HttpNetworkRequest!
   resourceType: String
   response: HttpNetworkResponse!
-  startedDateTime: String!
   testExecution: TestExecution!
-  time: NetworkEventTime!
   timings: HttpNetworkTimings!
+  until: DateTime!
 }
 
 type HttpNetworkEventInitiator {
-  lineNo: Int
+  lineNumber: Int
   origin: String
 }
 
@@ -149,14 +152,9 @@ type KeyValuePair {
   value: String!
 }
 
-interface NetworkEvent {
-  id: ID!
-  startedDateTime: String!
-  time: NetworkEventTime!
-}
-
-type NetworkEventTime implements Event & IntervalEvent {
+interface NetworkEvent implements Event & IntervalEvent {
   at: DateTime!
+  id: ID!
   until: DateTime!
 }
 

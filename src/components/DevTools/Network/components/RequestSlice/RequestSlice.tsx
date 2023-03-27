@@ -60,8 +60,8 @@ type RequestSliceWithRefProps = Props & {
 // eslint-disable-next-line react/display-name
 const RequestSlice = forwardRef<HTMLTableRowElement, RequestSliceWithRefProps>(
     (props, ref) => {
-        const eventTimeAt = new Date(props.event.time.at);
-        const eventTimeUntil = new Date(props.event.time.until);
+        const eventTimeAt = new Date(props.event.at);
+        const eventTimeUntil = new Date(props.event.until);
         const { startTime, endTime, currentTime, setHoverTimeFraction } =
             useTimeline();
 
@@ -130,8 +130,8 @@ const RequestSlice = forwardRef<HTMLTableRowElement, RequestSliceWithRefProps>(
                     <span>
                         {truncateValue(
                             (props.event.initiator.origin || '') +
-                                (props.event.initiator.lineNo
-                                    ? `:${props.event.initiator.lineNo}`
+                                (props.event.initiator.lineNumber
+                                    ? `:${props.event.initiator.lineNumber}`
                                     : ''),
                             40
                         )}

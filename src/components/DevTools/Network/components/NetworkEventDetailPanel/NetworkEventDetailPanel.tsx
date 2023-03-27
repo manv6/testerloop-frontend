@@ -5,7 +5,6 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 import styles from './NetworkEventDetailPanel.module.scss';
-import { FormattedNetworkEvents } from 'src/utils/formatters';
 import { styled } from '@mui/material';
 import { CollapseIcon } from 'src/components/Expandable/components';
 import { TabLabel } from '../../NetworkPanel';
@@ -23,7 +22,7 @@ const sortByName = (
     );
 
 type PostDataProps = {
-    selectedEvent: FormattedNetworkEvents[0];
+    selectedEvent: EventNode;
 };
 
 type EventNode =

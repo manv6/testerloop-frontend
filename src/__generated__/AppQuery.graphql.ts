@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<064c22db607c0ace86e1ac07f35e6ef7>>
+ * @generated SignedSource<<a72a1dcfe7032c3200160443fcf8796d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,7 +15,7 @@ export type AppQuery$variables = {
 };
 export type AppQuery$data = {
   readonly testExecution: {
-    readonly " $fragmentSpreads": FragmentRefs<"ConsolePanelFragment" | "NetworkPanelFragment" | "StepsFragment" | "SummaryFragment" | "TimelineControlsFragment">;
+    readonly " $fragmentSpreads": FragmentRefs<"ConsolePanelFragment" | "NetworkPanelFragment" | "SeekerFragment" | "StepsFragment" | "SummaryFragment">;
   } | null;
 };
 export type AppQuery = {
@@ -131,20 +131,8 @@ v13 = {
 v14 = {
   "alias": null,
   "args": null,
-  "concreteType": "NetworkEventTime",
-  "kind": "LinkedField",
-  "name": "time",
-  "plural": false,
-  "selections": [
-    (v6/*: any*/),
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "until",
-      "storageKey": null
-    }
-  ],
+  "kind": "ScalarField",
+  "name": "until",
   "storageKey": null
 },
 v15 = {
@@ -222,7 +210,7 @@ return {
           {
             "args": null,
             "kind": "FragmentSpread",
-            "name": "TimelineControlsFragment"
+            "name": "SeekerFragment"
           },
           {
             "args": null,
@@ -418,7 +406,7 @@ return {
             "storageKey": "events(filter:{\"consoleFilter\":{\"logLevel\":\"LOG\",\"logSearch\":null},\"type\":\"CONSOLE\"})"
           },
           {
-            "alias": "timelineControlNetworkEvents",
+            "alias": "seekerNetworkEvents",
             "args": (v11/*: any*/),
             "concreteType": "TestExecutionEventConnection",
             "kind": "LinkedField",
@@ -447,6 +435,7 @@ return {
                         "selections": [
                           (v2/*: any*/),
                           (v13/*: any*/),
+                          (v6/*: any*/),
                           (v14/*: any*/)
                         ],
                         "type": "HttpNetworkEvent",
@@ -498,6 +487,7 @@ return {
                             "name": "resourceType",
                             "storageKey": null
                           },
+                          (v6/*: any*/),
                           (v14/*: any*/),
                           {
                             "alias": null,
@@ -518,7 +508,7 @@ return {
                                 "alias": null,
                                 "args": null,
                                 "kind": "ScalarField",
-                                "name": "lineNo",
+                                "name": "lineNumber",
                                 "storageKey": null
                               }
                             ],
@@ -780,16 +770,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "27fb5c50497b25a89370bd0d754a5380",
+    "cacheID": "c230c9a5c3e98b81ffc3e10026f99684",
     "id": null,
     "metadata": {},
     "name": "AppQuery",
     "operationKind": "query",
-    "text": "query AppQuery(\n  $testExecutionId: ID!\n) {\n  testExecution(id: $testExecutionId) {\n    ...ConsolePanelFragment\n    ...TimelineControlsFragment\n    ...NetworkPanelFragment\n    ...SummaryFragment\n    ...StepsFragment\n    id\n  }\n}\n\nfragment ConsolePanelFragment on TestExecution {\n  id\n  searchedEvents: events(filter: {type: CONSOLE, consoleFilter: {}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on ConsoleLogEvent {\n          at\n          ...LogEntryFragment\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n  ...LogFiltersFragment_qvNWU\n}\n\nfragment LogEntryFragment on ConsoleLogEvent {\n  at\n  message\n  logLevel\n}\n\nfragment LogFiltersFragment_qvNWU on TestExecution {\n  warnings: events(filter: {type: CONSOLE, consoleFilter: {logLevel: WARN}}) {\n    totalCount\n  }\n  errors: events(filter: {type: CONSOLE, consoleFilter: {logLevel: ERROR}}) {\n    totalCount\n  }\n  logs: events(filter: {type: CONSOLE, consoleFilter: {logLevel: LOG}}) {\n    totalCount\n  }\n  id\n}\n\nfragment NetworkPanelFragment on TestExecution {\n  id\n  searchedNetworkEvents: events(filter: {type: NETWORK}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          __typename\n          id\n          resourceType\n          time {\n            at\n            until\n          }\n          initiator {\n            origin\n            lineNo\n          }\n          request {\n            method\n            body {\n              data\n              mimeType\n            }\n            cookies {\n              name\n              value\n            }\n            headers {\n              values {\n                value\n                key\n              }\n            }\n            queryString {\n              value\n              key\n            }\n            url {\n              url\n            }\n          }\n          response {\n            status\n            transferSize\n            body {\n              mimeType\n              data\n              size\n            }\n            headers {\n              values {\n                value\n                key\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment StepsFragment on TestExecution {\n  id\n}\n\nfragment SummaryFragment on TestExecution {\n  id\n  events(filter: {type: CONSOLE}) {\n    edges {\n      __typename\n      node {\n        __typename\n        at\n        ... on ConsoleLogEvent {\n          at\n          message\n          logLevel\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n  summaryConsoleErrors: events(filter: {type: CONSOLE, consoleFilter: {logLevel: ERROR}}) {\n    totalCount\n  }\n  summaryNetworkEvents: events(filter: {type: NETWORK}) {\n    edges {\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          response {\n            status\n          }\n          id\n        }\n      }\n    }\n  }\n}\n\nfragment TimelineControlsFragment on TestExecution {\n  id\n  timelineControlNetworkEvents: events(filter: {type: NETWORK}) {\n    edges {\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          id\n          response {\n            status\n          }\n          time {\n            at\n            until\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query AppQuery(\n  $testExecutionId: ID!\n) {\n  testExecution(id: $testExecutionId) {\n    ...ConsolePanelFragment\n    ...SeekerFragment\n    ...NetworkPanelFragment\n    ...SummaryFragment\n    ...StepsFragment\n    id\n  }\n}\n\nfragment ConsolePanelFragment on TestExecution {\n  id\n  searchedEvents: events(filter: {type: CONSOLE, consoleFilter: {}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on ConsoleLogEvent {\n          at\n          ...LogEntryFragment\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n  ...LogFiltersFragment_qvNWU\n}\n\nfragment LogEntryFragment on ConsoleLogEvent {\n  at\n  message\n  logLevel\n}\n\nfragment LogFiltersFragment_qvNWU on TestExecution {\n  warnings: events(filter: {type: CONSOLE, consoleFilter: {logLevel: WARN}}) {\n    totalCount\n  }\n  errors: events(filter: {type: CONSOLE, consoleFilter: {logLevel: ERROR}}) {\n    totalCount\n  }\n  logs: events(filter: {type: CONSOLE, consoleFilter: {logLevel: LOG}}) {\n    totalCount\n  }\n  id\n}\n\nfragment NetworkPanelFragment on TestExecution {\n  id\n  searchedNetworkEvents: events(filter: {type: NETWORK}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          __typename\n          id\n          resourceType\n          at\n          until\n          initiator {\n            origin\n            lineNumber\n          }\n          request {\n            method\n            body {\n              data\n              mimeType\n            }\n            cookies {\n              name\n              value\n            }\n            headers {\n              values {\n                value\n                key\n              }\n            }\n            queryString {\n              value\n              key\n            }\n            url {\n              url\n            }\n          }\n          response {\n            status\n            transferSize\n            body {\n              mimeType\n              data\n              size\n            }\n            headers {\n              values {\n                value\n                key\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment SeekerFragment on TestExecution {\n  id\n  seekerNetworkEvents: events(filter: {type: NETWORK}) {\n    edges {\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          id\n          response {\n            status\n          }\n          at\n          until\n        }\n      }\n    }\n  }\n}\n\nfragment StepsFragment on TestExecution {\n  id\n}\n\nfragment SummaryFragment on TestExecution {\n  id\n  events(filter: {type: CONSOLE}) {\n    edges {\n      __typename\n      node {\n        __typename\n        at\n        ... on ConsoleLogEvent {\n          at\n          message\n          logLevel\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n  summaryConsoleErrors: events(filter: {type: CONSOLE, consoleFilter: {logLevel: ERROR}}) {\n    totalCount\n  }\n  summaryNetworkEvents: events(filter: {type: NETWORK}) {\n    edges {\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          response {\n            status\n          }\n          id\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "779e4173599ca7d1a15c7e35dff6015a";
+(node as any).hash = "5d7201e982d405fb653c8fed87a984a8";
 
 export default node;

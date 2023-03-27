@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ba63a43fb1a72005fe75707ead8acfd2>>
+ * @generated SignedSource<<1ab2f284856d4ca4620ca0d9564f27b3>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,20 +10,18 @@
 
 import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type TimelineControlsFragment$data = {
+export type SeekerFragment$data = {
   readonly id: string;
-  readonly timelineControlNetworkEvents: {
+  readonly seekerNetworkEvents: {
     readonly edges: ReadonlyArray<{
       readonly node: {
         readonly __typename: "HttpNetworkEvent";
+        readonly at: any;
         readonly id: string;
         readonly response: {
           readonly status: number;
         };
-        readonly time: {
-          readonly at: any;
-          readonly until: any;
-        };
+        readonly until: any;
       } | {
         // This will never be '%other', but we need some
         // value in case none of the concrete values match.
@@ -31,11 +29,11 @@ export type TimelineControlsFragment$data = {
       };
     }>;
   };
-  readonly " $fragmentType": "TimelineControlsFragment";
+  readonly " $fragmentType": "SeekerFragment";
 };
-export type TimelineControlsFragment$key = {
-  readonly " $data"?: TimelineControlsFragment$data;
-  readonly " $fragmentSpreads": FragmentRefs<"TimelineControlsFragment">;
+export type SeekerFragment$key = {
+  readonly " $data"?: SeekerFragment$data;
+  readonly " $fragmentSpreads": FragmentRefs<"SeekerFragment">;
 };
 
 const node: ReaderFragment = (function(){
@@ -50,11 +48,11 @@ return {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
-  "name": "TimelineControlsFragment",
+  "name": "SeekerFragment",
   "selections": [
     (v0/*: any*/),
     {
-      "alias": "timelineControlNetworkEvents",
+      "alias": "seekerNetworkEvents",
       "args": [
         {
           "kind": "Literal",
@@ -117,26 +115,15 @@ return {
                     {
                       "alias": null,
                       "args": null,
-                      "concreteType": "NetworkEventTime",
-                      "kind": "LinkedField",
-                      "name": "time",
-                      "plural": false,
-                      "selections": [
-                        {
-                          "alias": null,
-                          "args": null,
-                          "kind": "ScalarField",
-                          "name": "at",
-                          "storageKey": null
-                        },
-                        {
-                          "alias": null,
-                          "args": null,
-                          "kind": "ScalarField",
-                          "name": "until",
-                          "storageKey": null
-                        }
-                      ],
+                      "kind": "ScalarField",
+                      "name": "at",
+                      "storageKey": null
+                    },
+                    {
+                      "alias": null,
+                      "args": null,
+                      "kind": "ScalarField",
+                      "name": "until",
                       "storageKey": null
                     }
                   ],
@@ -158,6 +145,6 @@ return {
 };
 })();
 
-(node as any).hash = "b56b3f8fda4698a84404c02f4780f5c1";
+(node as any).hash = "3c96b8cc657c2ba44a29c8a38b48aaff";
 
 export default node;

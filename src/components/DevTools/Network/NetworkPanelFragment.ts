@@ -11,18 +11,14 @@ const NetworkPanelFragment = graphql`
                         __typename
                         id
                         resourceType
-                        time {
-                            at
-                            until
-                        }
+                        at
+                        until
                         initiator {
                             origin
-                            lineNo
+                            lineNumber
                         }
-                        time {
-                            at
-                            until
-                        }
+                        at
+                        until
                         request {
                             method
                             body {

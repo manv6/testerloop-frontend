@@ -31,8 +31,8 @@ export const formatNetworkEvents = (data: NetworkPanelFragment$data) =>
         .filter(isOfType('HttpNetworkEvent'))
         .map((evt) => {
             const time = {
-                at: new Date(evt.time.at),
-                until: new Date(evt.time.until),
+                at: new Date(evt.at),
+                until: new Date(evt.until),
             };
             return { ...evt, time };
         });

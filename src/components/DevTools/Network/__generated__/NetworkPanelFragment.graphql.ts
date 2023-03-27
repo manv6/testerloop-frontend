@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<44a734a4a10c72068a78b1f4851c5162>>
+ * @generated SignedSource<<b91a483e314e1c93577ec1b5741fd413>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -17,9 +17,10 @@ export type NetworkPanelFragment$data = {
       readonly __typename: "TestExecutionEventEdge";
       readonly node: {
         readonly __typename: "HttpNetworkEvent";
+        readonly at: any;
         readonly id: string;
         readonly initiator: {
-          readonly lineNo: number | null;
+          readonly lineNumber: number | null;
           readonly origin: string | null;
         };
         readonly request: {
@@ -62,10 +63,7 @@ export type NetworkPanelFragment$data = {
           readonly status: number;
           readonly transferSize: number;
         };
-        readonly time: {
-          readonly at: any;
-          readonly until: any;
-        };
+        readonly until: any;
       } | {
         // This will never be '%other', but we need some
         // value in case none of the concrete values match.
@@ -202,26 +200,15 @@ return {
                     {
                       "alias": null,
                       "args": null,
-                      "concreteType": "NetworkEventTime",
-                      "kind": "LinkedField",
-                      "name": "time",
-                      "plural": false,
-                      "selections": [
-                        {
-                          "alias": null,
-                          "args": null,
-                          "kind": "ScalarField",
-                          "name": "at",
-                          "storageKey": null
-                        },
-                        {
-                          "alias": null,
-                          "args": null,
-                          "kind": "ScalarField",
-                          "name": "until",
-                          "storageKey": null
-                        }
-                      ],
+                      "kind": "ScalarField",
+                      "name": "at",
+                      "storageKey": null
+                    },
+                    {
+                      "alias": null,
+                      "args": null,
+                      "kind": "ScalarField",
+                      "name": "until",
                       "storageKey": null
                     },
                     {
@@ -243,7 +230,7 @@ return {
                           "alias": null,
                           "args": null,
                           "kind": "ScalarField",
-                          "name": "lineNo",
+                          "name": "lineNumber",
                           "storageKey": null
                         }
                       ],
@@ -393,6 +380,6 @@ return {
 };
 })();
 
-(node as any).hash = "781ab569f0f8ddbee192d3ec2ad744d1";
+(node as any).hash = "f133828ecb1fc615dd39864bc4539c52";
 
 export default node;
