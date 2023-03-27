@@ -1,18 +1,18 @@
 interface ConsoleEvent implements Event & TestExecutionEvent {
-    at: DateTime!
-    testExecution: TestExecution!
+  at: DateTime!
+  testExecution: TestExecution!
 }
 
 input ConsoleEventFilterInput {
-    logLevel: [ConsoleLogLevel!]
-    logSearch: String
+  logLevel: [ConsoleLogLevel!]
+  logSearch: String
 }
 
 type ConsoleLogEvent implements ConsoleEvent & Event & InstantaneousEvent & TestExecutionEvent {
-    at: DateTime!
-    logLevel: ConsoleLogLevel!
-    message: String!
-    testExecution: TestExecution!
+  at: DateTime!
+  logLevel: ConsoleLogLevel!
+  message: String!
+  testExecution: TestExecution!
 }
 
 """
@@ -22,10 +22,20 @@ See:
 - https://console.spec.whatwg.org/#loglevel-severity
 """
 enum ConsoleLogLevel {
-    ERROR
-    INFO
-    LOG
-    WARN
+  ERROR
+  INFO
+  LOG
+  WARN
+}
+
+type Cookie {
+  domain: String
+  expires: String
+  httpOnly: Boolean!
+  name: String!
+  path: String
+  secure: Boolean!
+  value: String!
 }
 
 scalar Cursor
@@ -36,16 +46,123 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 scalar DateTime
 
 interface Event {
-    at: DateTime!
+  at: DateTime!
+}
+
+interface HttpBody {
+  data: String!
+  encoding: String
+  mimeType: String!
+  size: Int!
+}
+
+type HttpHeaders {
+  size: Int!
+  values: [KeyValuePair!]!
+}
+
+type HttpNetworkEvent implements Event & NetworkEvent & TestExecutionEvent {
+  at: DateTime!
+  id: ID!
+  initiator: HttpNetworkEventInitiator!
+  request: HttpNetworkRequest!
+  resourceType: String
+  response: HttpNetworkResponse!
+  startedDateTime: String!
+  testExecution: TestExecution!
+  time: NetworkEventTime!
+  timings: HttpNetworkTimings!
+}
+
+type HttpNetworkEventInitiator {
+  lineNo: Int
+  origin: String
+}
+
+type HttpNetworkRequest {
+  body: HttpRequestBody
+  cookies: [Cookie]!
+  headers: HttpHeaders!
+  httpVersion: String!
+  method: String!
+  queryString: [KeyValuePair!]!
+  url: HttpNetworkRequestUrl!
+}
+
+type HttpNetworkRequestUrl {
+  nonKeyValueQueryString: String
+  url: String!
+}
+
+type HttpNetworkResponse {
+  body: HttpResponseBody!
+  cookies: [Cookie!]!
+  headers: HttpHeaders!
+  redirectURL: String!
+  status: Int!
+  statusText: String!
+  transferSize: Int!
+}
+
+type HttpNetworkTimings {
+  blocked: NetworkEventTiming!
+  connect: NetworkEventTiming!
+  queued: NetworkEventTiming!
+  receive: NetworkEventTiming!
+  send: NetworkEventTiming!
+  ssl: NetworkEventTiming!
+  wait: NetworkEventTiming!
+}
+
+type HttpRequestBody implements HttpBody {
+  data: String!
+  encoding: String
+  mimeType: String!
+  size: Int!
+}
+
+type HttpResponseBody implements HttpBody {
+  chunks: [HttpResponseBodyChunk!]!
+  data: String!
+  encoding: String
+  mimeType: String!
+  size: Int!
+}
+
+type HttpResponseBodyChunk implements Event & InstantaneousEvent {
+  at: DateTime!
+  data: String!
+  size: Int!
 }
 
 interface InstantaneousEvent implements Event {
-    at: DateTime!
+  at: DateTime!
 }
 
 interface IntervalEvent implements Event {
-    at: DateTime!
-    until: DateTime!
+  at: DateTime!
+  until: DateTime!
+}
+
+type KeyValuePair {
+  key: String!
+  value: String!
+}
+
+interface NetworkEvent {
+  id: ID!
+  startedDateTime: String!
+  time: NetworkEventTime!
+}
+
+type NetworkEventTime implements Event & IntervalEvent {
+  at: DateTime!
+  until: DateTime!
+}
+
+type NetworkEventTiming implements Event & IntervalEvent {
+  at: DateTime!
+  until: DateTime!
 }
 
 """
@@ -54,7 +171,7 @@ Represents a Node according to the Global Object Identification spec.
 See https://graphql.org/learn/global-object-identification/
 """
 interface Node {
-    id: ID!
+  id: ID!
 }
 
 """
@@ -65,32 +182,28 @@ See:
 - https://relay.dev/graphql/connections.htm#sec-undefined.PageInfo
 """
 type PageInfo {
-    endCursor: Cursor
-    hasNextPage: Boolean!
-    hasPreviousPage: Boolean!
-    startCursor: Cursor
+  endCursor: Cursor
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: Cursor
 }
 
 type Query {
-    node(id: ID!): Node
-    test: Boolean!
-    testExecution(id: ID!): TestExecution
+  node(id: ID!): Node
+  test: Boolean!
+  testExecution(id: ID!): TestExecution
 }
 
 type TestExecution implements Event & IntervalEvent & Node {
-    at: DateTime!
-    events(
-        after: Cursor
-        filter: TestExecutionEventFilterInput
-        first: Int
-    ): TestExecutionEventConnection!
-    id: ID!
-    until: DateTime!
+  at: DateTime!
+  events(after: Cursor, filter: TestExecutionEventFilterInput, first: Int): TestExecutionEventConnection!
+  id: ID!
+  until: DateTime!
 }
 
 interface TestExecutionEvent implements Event {
-    at: DateTime!
-    testExecution: TestExecution!
+  at: DateTime!
+  testExecution: TestExecution!
 }
 
 """
@@ -100,9 +213,9 @@ See:
 - https://relay.dev/graphql/connections.htm#sec-Connection-Types
 """
 type TestExecutionEventConnection {
-    edges: [TestExecutionEventEdge!]!
-    pageInfo: PageInfo!
-    totalCount: Int!
+  edges: [TestExecutionEventEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
 }
 
 """
@@ -112,16 +225,16 @@ See:
 - https://relay.dev/graphql/connections.htm#sec-Edge-Types
 """
 type TestExecutionEventEdge {
-    cursor: Cursor!
-    node: TestExecutionEvent!
+  cursor: Cursor!
+  node: TestExecutionEvent!
 }
 
 input TestExecutionEventFilterInput {
-    consoleFilter: ConsoleEventFilterInput
-    type: [TestExecutionEventType!]
+  consoleFilter: ConsoleEventFilterInput
+  type: [TestExecutionEventType!]
 }
 
 enum TestExecutionEventType {
-    CONSOLE
-    NETWORK
+  CONSOLE
+  NETWORK
 }

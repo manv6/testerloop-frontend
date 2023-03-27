@@ -17,10 +17,10 @@ import StepMarker from './components/StepMarker';
 import SuccessNetworkMarker from './components/SuccessNetworkMarker';
 import { styled } from '@mui/material';
 import { Panel } from 'src/components/common';
+import { TimelineControlsFragment$key } from './__generated__/TimelineControlsFragment.graphql';
 
 type Props = {
-    // TODO: Update fragment key type
-    fragmentKey: any; // eslint-disable-line
+    fragmentKey: TimelineControlsFragment$key | null;
 };
 
 const StyledControlSection = styled('div')(({ theme }) => ({
@@ -31,7 +31,7 @@ const StyledTime = styled('div')(({ theme }) => ({
     color: theme.palette.base[200],
 }));
 
-export const TimelineControls: React.FC<Props> = () => {
+export const TimelineControls: React.FC<Props> = ({ fragmentKey }) => {
     const { currentTime, startTime, endTime, filters, setFilters } =
         useTimeline();
 
@@ -65,7 +65,7 @@ export const TimelineControls: React.FC<Props> = () => {
                     setFilters={setFilters}
                 />
             </StyledControlSection>
-            <Seeker getMarker={getMarker} />
+            <Seeker getMarker={getMarker} fragmentKey={fragmentKey} />
         </Panel>
     );
 };

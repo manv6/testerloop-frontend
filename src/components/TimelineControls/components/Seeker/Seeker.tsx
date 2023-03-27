@@ -9,6 +9,10 @@ import styles from './Seeker.module.scss';
 import { styled, Tooltip } from '@mui/material';
 import MarkerTooltip from '../MarkerTooltip';
 import fractionToPercentage from 'src/utils/fractionToPercentage';
+import graphql from 'babel-plugin-relay/macro';
+import { useFragment } from 'react-relay';
+import { isOfType } from 'src/utils/isOfType';
+import { TimelineControlsFragment$key } from '../../__generated__/TimelineControlsFragment.graphql';
 
 const StyledFill = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.base[100],
@@ -43,9 +47,37 @@ const StyledMarker = styled('div')<StyledMarkerProps>(({ size }) => ({
 
 type Props = {
     getMarker: (ev: EventType) => JSX.Element;
+    fragmentKey: TimelineControlsFragment$key | null;
 };
 
-const Seeker: React.FC<Props> = ({ getMarker }) => {
+const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
+    const timelineData = useFragment(
+        graphql`
+            fragment TimelineControlsFragment on TestExecution {
+                id
+                timelineControlNetworkEvents: events(
+                    filter: { type: NETWORK }
+                ) {
+                    edges {
+                        node {
+                            __typename
+                            ... on HttpNetworkEvent {
+                                id
+                                response {
+                                    status
+                                }
+                                time {
+                                    at
+                                    until
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        `,
+        fragmentKey
+    );
     const data = {
         networkEvents: networkEventData.log.entries,
         steps: stepsData,
@@ -67,10 +99,6 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
     const steps = useMemo(
         () => formatter.formatSteps(data.steps),
         [data.steps]
-    );
-    const networkEvents = useMemo(
-        () => formatter.formatNetworkEvents(data.networkEvents),
-        [data.networkEvents]
     );
 
     // Define step markers
@@ -97,6 +125,20 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
         [steps, startTime, endTime]
     );
 
+    const networkEvents = useMemo(
+        () =>
+            timelineData?.timelineControlNetworkEvents.edges
+                .map(({ node }) => node)
+                .filter(isOfType('HttpNetworkEvent'))
+                .map(({ time: { at, until }, ...rest }) => {
+                    return {
+                        ...rest,
+                        time: { at: new Date(at), until: new Date(until) },
+                    };
+                }) || [],
+        [timelineData]
+    );
+
     const failedNetworkMarkers = useMemo(
         () =>
             networkEvents
@@ -105,16 +147,14 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
                     return status.startsWith('4') || status.startsWith('5');
                 })
                 .map((evt) => ({
-                    id: evt._requestId,
+                    id: evt.id,
                     type: EventType.NETWORK_ERROR,
-                    start: evt.endedDateTime,
+                    start: evt.time.until,
                     startFraction: datesToFraction(
                         startTime,
                         endTime,
-                        evt.endedDateTime
+                        evt.time.until
                     ),
-                    name: `${evt.request.method} ${evt.response.status}`,
-                    message: evt.request.url,
                 })),
         [networkEvents, startTime, endTime]
     );
@@ -124,16 +164,14 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
             networkEvents
                 .filter((evt) => evt.response.status.toString().startsWith('2'))
                 .map((evt) => ({
-                    id: evt._requestId,
+                    id: evt.id,
                     type: EventType.NETWORK_SUCCESS,
-                    start: evt.endedDateTime,
+                    start: evt.time.until,
                     startFraction: datesToFraction(
                         startTime,
                         endTime,
-                        evt.endedDateTime
+                        evt.time.until
                     ),
-                    name: `${evt.request.method} ${evt.response.status}`,
-                    message: evt.request.url,
                 })),
         [networkEvents, startTime, endTime]
     );
@@ -155,9 +193,6 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
                         endTime,
                         options.wallClockStartedAt
                     ),
-                    name: options.name,
-                    message: options.message.replaceAll('*', ''),
-                    hasFailed: true,
                 })),
         [steps, startTime, endTime]
     );

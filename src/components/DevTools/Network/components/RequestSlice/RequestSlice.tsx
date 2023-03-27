@@ -3,11 +3,11 @@ import cx from 'classnames';
 import { useTimeline } from 'src/hooks/timeline';
 import { datesToFraction } from 'src/utils/date';
 import styles from './RequestSlice.module.scss';
-import { FormattedNetworkEvents } from 'src/utils/formatters';
 import { styled } from '@mui/material';
 import NetworkProgress from '../NetworkProgress';
 import { ProgressFilterType } from '../../NetworkPanel';
 import entryStyles from 'src/components/common/styles/entryStyles';
+import { NetworkPanelFragment$data } from 'src/components/DevTools/Network/__generated__/NetworkPanelFragment.graphql.js';
 
 interface StyledEntryProps {
     isSelected?: boolean;
@@ -38,12 +38,17 @@ const StyledEntry = styled('tr')<StyledEntryProps>((props) => {
     };
 });
 
+type EventNode =
+    NetworkPanelFragment$data['searchedNetworkEvents']['edges'][0]['node'] & {
+        __typename: 'HttpNetworkEvent';
+    };
+
 type Props = {
     idx: number;
-    event: FormattedNetworkEvents[0];
-    selectedEvent?: FormattedNetworkEvents[0];
-    selectedEventIdx: number | null;
+    event: EventNode;
+    selectedEvent?: EventNode;
     setSelectedEventIdx: (idx: number) => void;
+    selectedEventIdx: number | null;
     isLastStartedEvent: boolean;
     lastStartedNetworkEventIdx: number;
 };
@@ -55,6 +60,8 @@ type RequestSliceWithRefProps = Props & {
 // eslint-disable-next-line react/display-name
 const RequestSlice = forwardRef<HTMLTableRowElement, RequestSliceWithRefProps>(
     (props, ref) => {
+        const eventTimeAt = new Date(props.event.time.at);
+        const eventTimeUntil = new Date(props.event.time.until);
         const { startTime, endTime, currentTime, setHoverTimeFraction } =
             useTimeline();
 
@@ -65,25 +72,20 @@ const RequestSlice = forwardRef<HTMLTableRowElement, RequestSliceWithRefProps>(
         };
 
         const waterfallStartPositionPercentage =
-            100 *
-            datesToFraction(startTime, endTime, props.event.startedDateTime);
+            100 * datesToFraction(startTime, endTime, eventTimeAt);
 
         const waterfallWidthPercentage =
             100 *
-            (datesToFraction(startTime, endTime, props.event.endedDateTime) -
-                datesToFraction(
-                    startTime,
-                    endTime,
-                    props.event.startedDateTime
-                ));
+            (datesToFraction(startTime, endTime, eventTimeUntil) -
+                datesToFraction(startTime, endTime, eventTimeAt));
 
         const currentTimePercentage =
             100 * datesToFraction(startTime, endTime, currentTime);
 
         let progress = ProgressFilterType.NOT_STARTED;
-        if (props.event.endedDateTime <= currentTime) {
+        if (eventTimeUntil <= currentTime) {
             progress = ProgressFilterType.COMPLETED;
-        } else if (props.event.startedDateTime <= currentTime) {
+        } else if (eventTimeAt <= currentTime) {
             progress = ProgressFilterType.IN_PROGRESS;
         }
 
@@ -120,27 +122,29 @@ const RequestSlice = forwardRef<HTMLTableRowElement, RequestSliceWithRefProps>(
                     <span>{props.event.request.method}</span>
                 </td>
                 <td className={cx(styles.td, styles.urlColumn)}>
-                    <span>{truncateValue(props.event.request.url, 60)}</span>
+                    <span>
+                        {truncateValue(props.event.request.url.url, 60)}
+                    </span>
                 </td>
                 <td className={styles.td}>
                     <span>
                         {truncateValue(
-                            (props.event._initiator || '') +
-                                (props.event._initiator_line
-                                    ? `:${props.event._initiator_line}`
+                            (props.event.initiator.origin || '') +
+                                (props.event.initiator.lineNo
+                                    ? `:${props.event.initiator.lineNo}`
                                     : ''),
                             40
                         )}
                     </span>
                 </td>
                 <td className={styles.td}>
-                    <span>{props.event.response.content.mimeType}</span>
+                    <span>{props.event.response.body.mimeType}</span>
                 </td>
                 <td className={styles.td}>
-                    <span>{props.event.response._transferSize}</span>
+                    <span>{props.event.response.transferSize}</span>
                 </td>
                 <td className={styles.td}>
-                    <span>{props.event.response.bodySize}</span>
+                    <span>{props.event.response.body.size}</span>
                 </td>
                 <td className={cx(styles.td, styles.waterfall)}>
                     <div

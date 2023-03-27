@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7009e4b1f5bbc99fae0ab6e1d6a7a704>>
+ * @generated SignedSource<<871a1345b711801eda35cad998b8259a>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -26,6 +26,20 @@ export type SummaryFragment$data = {
   readonly summaryConsoleErrors: {
     readonly totalCount: number;
   };
+  readonly summaryNetworkEvents: {
+    readonly edges: ReadonlyArray<{
+      readonly node: {
+        readonly __typename: "HttpNetworkEvent";
+        readonly response: {
+          readonly status: number;
+        };
+      } | {
+        // This will never be '%other', but we need some
+        // value in case none of the concrete values match.
+        readonly __typename: "%other";
+      };
+    }>;
+  };
   readonly " $fragmentType": "SummaryFragment";
 };
 export type SummaryFragment$key = {
@@ -33,7 +47,15 @@ export type SummaryFragment$key = {
   readonly " $fragmentSpreads": FragmentRefs<"SummaryFragment">;
 };
 
-const node: ReaderFragment = {
+const node: ReaderFragment = (function(){
+var v0 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "__typename",
+  "storageKey": null
+};
+return {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
@@ -70,13 +92,7 @@ const node: ReaderFragment = {
           "name": "edges",
           "plural": true,
           "selections": [
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "__typename",
-              "storageKey": null
-            },
+            (v0/*: any*/),
             {
               "alias": null,
               "args": null,
@@ -150,12 +166,80 @@ const node: ReaderFragment = {
         }
       ],
       "storageKey": "events(filter:{\"consoleFilter\":{\"logLevel\":\"ERROR\"},\"type\":\"CONSOLE\"})"
+    },
+    {
+      "alias": "summaryNetworkEvents",
+      "args": [
+        {
+          "kind": "Literal",
+          "name": "filter",
+          "value": {
+            "type": "NETWORK"
+          }
+        }
+      ],
+      "concreteType": "TestExecutionEventConnection",
+      "kind": "LinkedField",
+      "name": "events",
+      "plural": false,
+      "selections": [
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": "TestExecutionEventEdge",
+          "kind": "LinkedField",
+          "name": "edges",
+          "plural": true,
+          "selections": [
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": null,
+              "kind": "LinkedField",
+              "name": "node",
+              "plural": false,
+              "selections": [
+                (v0/*: any*/),
+                {
+                  "kind": "InlineFragment",
+                  "selections": [
+                    {
+                      "alias": null,
+                      "args": null,
+                      "concreteType": "HttpNetworkResponse",
+                      "kind": "LinkedField",
+                      "name": "response",
+                      "plural": false,
+                      "selections": [
+                        {
+                          "alias": null,
+                          "args": null,
+                          "kind": "ScalarField",
+                          "name": "status",
+                          "storageKey": null
+                        }
+                      ],
+                      "storageKey": null
+                    }
+                  ],
+                  "type": "HttpNetworkEvent",
+                  "abstractKey": null
+                }
+              ],
+              "storageKey": null
+            }
+          ],
+          "storageKey": null
+        }
+      ],
+      "storageKey": "events(filter:{\"type\":\"NETWORK\"})"
     }
   ],
   "type": "TestExecution",
   "abstractKey": null
 };
+})();
 
-(node as any).hash = "a96e411c74c73dd62a35e85d7970676d";
+(node as any).hash = "73e4452632cd1b065629db605e806016";
 
 export default node;

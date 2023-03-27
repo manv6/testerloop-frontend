@@ -1,21 +1,25 @@
+// TODO: Remove this check once temp data is removed!!
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {
     useCallback,
     useEffect,
     useMemo,
-    useRef,
     useState,
+    useRef,
 } from 'react';
+import { useFragment } from 'react-relay';
 
+import type { NetworkPanelFragment$key } from './__generated__/NetworkPanelFragment.graphql';
 import { RequestSlice, NetworkEventDetailPanel } from './components/';
 import styles from './Network.module.scss';
 import { useTimeline } from 'src/hooks/timeline';
 import { Button, TextInput } from 'src/components/common';
 import * as formatter from 'src/utils/formatters';
-import networkEventData from 'src/data/networkEvents';
 import * as Expandable from 'src/components/Expandable';
 import { HeaderWithFilter } from 'src/components/common';
 import { styled } from '@mui/material';
 import useScrollToChild from 'src/hooks/scrollTo';
+import NetworkPanelFragment from './NetworkPanelFragment';
 
 enum ResourceTypeFilterType {
     HTML = 'html',
@@ -36,7 +40,7 @@ const filterByResourceTypePredicate = (
     event: formatter.FormattedNetworkEvents[0],
     selectedOptions: Set<ResourceTypeFilterType>
 ) => {
-    const resourceType = event._resourceType;
+    const resourceType = event.resourceType;
 
     const resourceTypeLookup = {
         [ResourceTypeFilterType.HTML]: 'document',
@@ -116,14 +120,14 @@ const filterByProgressPredicate = (
     return Array.from(selectedOptions).some((filter) => {
         switch (filter) {
             case ProgressFilterType.COMPLETED:
-                return event.endedDateTime <= currentTime;
+                return event.time.until <= currentTime;
             case ProgressFilterType.IN_PROGRESS:
                 return (
-                    event.startedDateTime <= currentTime &&
-                    currentTime < event.endedDateTime
+                    event.time.at <= currentTime &&
+                    currentTime < event.time.until
                 );
             case ProgressFilterType.NOT_STARTED:
-                return currentTime < event.startedDateTime;
+                return currentTime < event.time.at;
             default:
                 return false;
         }
@@ -131,15 +135,15 @@ const filterByProgressPredicate = (
 };
 
 type Props = {
-    // TODO: Update this with fragment key type
-    fragmentKey: any; // eslint-disable-line
+    fragmentKey: NetworkPanelFragment$key;
 };
 
-export const NetworkPanel: React.FC<Props> = () => {
-    const data = { networkEvents: networkEventData.log.entries } as any; // eslint-disable-line
+export const NetworkPanel: React.FC<Props> = ({ fragmentKey }) => {
+    const data = useFragment(NetworkPanelFragment, fragmentKey);
+
     const networkEvents = useMemo(
-        () => formatter.formatNetworkEvents(data.networkEvents),
-        [data.networkEvents]
+        () => formatter.formatNetworkEvents(data),
+        [data]
     );
 
     const [showFilters, setShowFilters] = useState(true);
@@ -160,7 +164,7 @@ export const NetworkPanel: React.FC<Props> = () => {
             networkEvents
                 .filter((networkEvent) =>
                     filterTerm
-                        ? networkEvent.request.url.includes(filterTerm)
+                        ? networkEvent.request.url.url.includes(filterTerm)
                         : true
                 )
                 .filter((event) =>
@@ -246,7 +250,7 @@ export const NetworkPanel: React.FC<Props> = () => {
             if (acc !== -1) {
                 return acc;
             }
-            return currentTime > event.startedDateTime ? index : acc;
+            return currentTime > event.time.at ? index : acc;
         }, -1);
     }, [currentTime, networkEvents]);
 
@@ -427,7 +431,7 @@ export const NetworkPanel: React.FC<Props> = () => {
                 <NetworkEventDetailPanel
                     selectedEvent={selectedEvent}
                     activeTab={activeTab}
-                    onSelectTab={(value) => setActiveTab(value)}
+                    onSelectTab={(value: number) => setActiveTab(value)}
                     onDetailPanelClose={onDetailPanelClose}
                 />
             )}
