@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1ab2f284856d4ca4620ca0d9564f27b3>>
+ * @generated SignedSource<<e0874f968864f2a011e43c8733fc555e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -18,6 +18,12 @@ export type SeekerFragment$data = {
         readonly __typename: "HttpNetworkEvent";
         readonly at: any;
         readonly id: string;
+        readonly request: {
+          readonly method: string;
+          readonly url: {
+            readonly url: string;
+          };
+        };
         readonly response: {
           readonly status: number;
         };
@@ -115,6 +121,42 @@ return {
                     {
                       "alias": null,
                       "args": null,
+                      "concreteType": "HttpNetworkRequest",
+                      "kind": "LinkedField",
+                      "name": "request",
+                      "plural": false,
+                      "selections": [
+                        {
+                          "alias": null,
+                          "args": null,
+                          "kind": "ScalarField",
+                          "name": "method",
+                          "storageKey": null
+                        },
+                        {
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "HttpNetworkRequestUrl",
+                          "kind": "LinkedField",
+                          "name": "url",
+                          "plural": false,
+                          "selections": [
+                            {
+                              "alias": null,
+                              "args": null,
+                              "kind": "ScalarField",
+                              "name": "url",
+                              "storageKey": null
+                            }
+                          ],
+                          "storageKey": null
+                        }
+                      ],
+                      "storageKey": null
+                    },
+                    {
+                      "alias": null,
+                      "args": null,
                       "kind": "ScalarField",
                       "name": "at",
                       "storageKey": null
@@ -145,6 +187,6 @@ return {
 };
 })();
 
-(node as any).hash = "3c96b8cc657c2ba44a29c8a38b48aaff";
+(node as any).hash = "427cbcad7ce23aa4b19a13ecc9edddbd";
 
 export default node;

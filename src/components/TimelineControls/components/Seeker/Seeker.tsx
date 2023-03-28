@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { EventType, TIMELINE_SVG_PX_WIDTH } from 'src/constants';
 import { useTimeline } from 'src/hooks/timeline';
 import { datesToElapsedTime, datesToFraction } from 'src/utils/date';
-import networkEventData from 'src/data/networkEvents';
 import stepsData from 'src/data/steps';
 import * as formatter from 'src/utils/formatters';
 import styles from './Seeker.module.scss';
@@ -64,6 +63,12 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
                                 response {
                                     status
                                 }
+                                request {
+                                    method
+                                    url {
+                                        url
+                                    }
+                                }
                                 at
                                 until
                             }
@@ -75,7 +80,6 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
         fragmentKey
     );
     const data = {
-        networkEvents: networkEventData.log.entries,
         steps: stepsData,
     } as any; // eslint-disable-line
     const {
@@ -126,11 +130,15 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
             timelineData?.seekerNetworkEvents.edges
                 .map(({ node }) => node)
                 .filter(isOfType('HttpNetworkEvent'))
-                .map(({ at, until, ...rest }) => {
+                .map(({ at, until, request, response, ...rest }) => {
                     return {
                         ...rest,
+                        request,
+                        response,
                         at: new Date(at),
                         until: new Date(until),
+                        name: `${request.method} ${response.status}`,
+                        message: request.url.url,
                     };
                 }) || [],
         [timelineData]
@@ -144,6 +152,7 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
                     return status.startsWith('4') || status.startsWith('5');
                 })
                 .map((evt) => ({
+                    ...evt,
                     id: evt.id,
                     type: EventType.NETWORK_ERROR,
                     start: evt.until,
@@ -161,6 +170,7 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
             networkEvents
                 .filter((evt) => evt.response.status.toString().startsWith('2'))
                 .map((evt) => ({
+                    ...evt,
                     id: evt.id,
                     type: EventType.NETWORK_SUCCESS,
                     start: evt.until,
@@ -190,6 +200,9 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
                         endTime,
                         options.wallClockStartedAt
                     ),
+                    name: options.name,
+                    message: options.message.replaceAll('*', ''),
+                    hasFailed: true,
                 })),
         [steps, startTime, endTime]
     );
@@ -392,7 +405,7 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
                                             : marker.name
                                     }
                                     message={
-                                        marker.message.length > 100
+                                        marker?.message?.length > 100
                                             ? marker.message.slice(0, 100) +
                                               '...'
                                             : marker.message
