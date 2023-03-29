@@ -9,7 +9,12 @@ import { styled } from '@mui/material';
 import { CollapseIcon } from 'src/components/Expandable/components';
 import { TabLabel } from '../../NetworkPanel';
 import { KeyValueTable } from 'src/components/DevTools/Network/components';
-import { NetworkPanelFragment$data } from 'src/components/DevTools/Network/__generated__/NetworkPanelFragment.graphql.js';
+import { useFragment } from 'react-relay';
+import NetworkEventDetailPanelFragment from './NetworkEventDetailPanelFragment';
+import {
+    NetworkEventDetailPanelFragment$data,
+    NetworkEventDetailPanelFragment$key,
+} from './__generated__/NetworkEventDetailPanelFragment.graphql';
 
 const sortByName = (
     array: ReadonlyArray<{
@@ -22,13 +27,8 @@ const sortByName = (
     );
 
 type PostDataProps = {
-    selectedEvent: EventNode;
+    selectedEvent: NetworkEventDetailPanelFragment$data;
 };
-
-type EventNode =
-    NetworkPanelFragment$data['searchedNetworkEvents']['edges'][0]['node'] & {
-        __typename: 'HttpNetworkEvent';
-    };
 
 const PostData: React.FC<PostDataProps> = ({ selectedEvent }) => {
     const snippet = useMemo(() => {
@@ -70,7 +70,7 @@ const PostData: React.FC<PostDataProps> = ({ selectedEvent }) => {
 };
 
 type ResponseDataTabProps = {
-    selectedEvent: EventNode;
+    selectedEvent: NetworkEventDetailPanelFragment$data;
 };
 
 const ResponseDataTab: React.FC<ResponseDataTabProps> = ({ selectedEvent }) => {
@@ -139,7 +139,7 @@ const ResponseDataTab: React.FC<ResponseDataTabProps> = ({ selectedEvent }) => {
 };
 
 type RequestTabProps = {
-    selectedEvent: EventNode;
+    selectedEvent: NetworkEventDetailPanelFragment$data;
 };
 
 const RequestTab: React.FC<RequestTabProps> = ({ selectedEvent }) => {
@@ -192,7 +192,7 @@ const RequestTab: React.FC<RequestTabProps> = ({ selectedEvent }) => {
 };
 
 type NetworkEventDetailPanelProps = {
-    selectedEvent: EventNode;
+    selectedEvent: NetworkEventDetailPanelFragment$key;
     activeTab: number | null;
     onSelectTab: (value: number) => void;
     onDetailPanelClose: () => void;
@@ -213,16 +213,18 @@ const NetworkEventDetailPanel: React.FC<NetworkEventDetailPanelProps> = ({
     onSelectTab,
     onDetailPanelClose,
 }) => {
+    const data = useFragment(NetworkEventDetailPanelFragment, selectedEvent);
+
     const tabChildren = [
         {
             tabLabel: TabLabel.REQUEST,
             title: 'Request',
-            children: <RequestTab selectedEvent={selectedEvent} />,
+            children: <RequestTab selectedEvent={data} />,
         },
         {
             tabLabel: TabLabel.RESPONSE,
             title: 'Response',
-            children: <ResponseDataTab selectedEvent={selectedEvent} />,
+            children: <ResponseDataTab selectedEvent={data} />,
         },
     ];
 

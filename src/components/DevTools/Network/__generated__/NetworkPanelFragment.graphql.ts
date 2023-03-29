@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<14d97e3dc7180144aac49c3568663f29>>
+ * @generated SignedSource<<b5095e84b1506580285e6bff61271356>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -8,7 +8,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { Fragment, ReaderFragment } from 'relay-runtime';
+import { ReaderFragment, RefetchableFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type NetworkPanelFragment$data = {
   readonly id: string;
@@ -19,51 +19,8 @@ export type NetworkPanelFragment$data = {
         readonly __typename: "HttpNetworkEvent";
         readonly at: any;
         readonly id: string;
-        readonly initiator: {
-          readonly lineNumber: number | null;
-          readonly origin: string | null;
-        };
-        readonly request: {
-          readonly body: {
-            readonly data: string;
-            readonly mimeType: string;
-          } | null;
-          readonly cookies: ReadonlyArray<{
-            readonly name: string;
-            readonly value: string;
-          } | null>;
-          readonly headers: {
-            readonly values: ReadonlyArray<{
-              readonly key: string;
-              readonly value: string;
-            }>;
-          };
-          readonly method: string;
-          readonly queryString: ReadonlyArray<{
-            readonly key: string;
-            readonly value: string;
-          }>;
-          readonly url: {
-            readonly url: string;
-          };
-        };
-        readonly resourceType: string | null;
-        readonly response: {
-          readonly body: {
-            readonly data: string;
-            readonly mimeType: string;
-            readonly size: number;
-          };
-          readonly headers: {
-            readonly values: ReadonlyArray<{
-              readonly key: string;
-              readonly value: string;
-            }>;
-          };
-          readonly status: number;
-          readonly transferSize: number;
-        };
         readonly until: any;
+        readonly " $fragmentSpreads": FragmentRefs<"NetworkEventDetailPanelFragment" | "RequestSliceFragment">;
       } | {
         // This will never be '%other', but we need some
         // value in case none of the concrete values match.
@@ -92,63 +49,31 @@ v1 = {
   "kind": "ScalarField",
   "name": "__typename",
   "storageKey": null
-},
-v2 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "data",
-  "storageKey": null
-},
-v3 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "mimeType",
-  "storageKey": null
-},
-v4 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "value",
-  "storageKey": null
-},
-v5 = [
-  (v4/*: any*/),
-  {
-    "alias": null,
-    "args": null,
-    "kind": "ScalarField",
-    "name": "key",
-    "storageKey": null
-  }
-],
-v6 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "HttpHeaders",
-  "kind": "LinkedField",
-  "name": "headers",
-  "plural": false,
-  "selections": [
-    {
-      "alias": null,
-      "args": null,
-      "concreteType": "KeyValuePair",
-      "kind": "LinkedField",
-      "name": "values",
-      "plural": true,
-      "selections": (v5/*: any*/),
-      "storageKey": null
-    }
-  ],
-  "storageKey": null
 };
 return {
-  "argumentDefinitions": [],
+  "argumentDefinitions": [
+    {
+      "defaultValue": null,
+      "kind": "LocalArgument",
+      "name": "resourceType"
+    },
+    {
+      "defaultValue": null,
+      "kind": "LocalArgument",
+      "name": "urlSearch"
+    }
+  ],
   "kind": "Fragment",
-  "metadata": null,
+  "metadata": {
+    "refetch": {
+      "connection": null,
+      "fragmentPathInResult": [
+        "node"
+      ],
+      "operation": require('./NetworkPanelFragmentRefetchQuery.graphql'),
+      "identifierField": "id"
+    }
+  },
   "name": "NetworkPanelFragment",
   "selections": [
     (v0/*: any*/),
@@ -156,11 +81,31 @@ return {
       "alias": "searchedNetworkEvents",
       "args": [
         {
-          "kind": "Literal",
-          "name": "filter",
-          "value": {
-            "type": "NETWORK"
-          }
+          "fields": [
+            {
+              "fields": [
+                {
+                  "kind": "Variable",
+                  "name": "resourceType",
+                  "variableName": "resourceType"
+                },
+                {
+                  "kind": "Variable",
+                  "name": "urlSearch",
+                  "variableName": "urlSearch"
+                }
+              ],
+              "kind": "ObjectValue",
+              "name": "networkFilter"
+            },
+            {
+              "kind": "Literal",
+              "name": "type",
+              "value": "NETWORK"
+            }
+          ],
+          "kind": "ObjectValue",
+          "name": "filter"
         }
       ],
       "concreteType": "TestExecutionEventConnection",
@@ -194,13 +139,6 @@ return {
                       "alias": null,
                       "args": null,
                       "kind": "ScalarField",
-                      "name": "resourceType",
-                      "storageKey": null
-                    },
-                    {
-                      "alias": null,
-                      "args": null,
-                      "kind": "ScalarField",
                       "name": "at",
                       "storageKey": null
                     },
@@ -212,154 +150,14 @@ return {
                       "storageKey": null
                     },
                     {
-                      "alias": null,
                       "args": null,
-                      "concreteType": "HttpNetworkEventInitiator",
-                      "kind": "LinkedField",
-                      "name": "initiator",
-                      "plural": false,
-                      "selections": [
-                        {
-                          "alias": null,
-                          "args": null,
-                          "kind": "ScalarField",
-                          "name": "origin",
-                          "storageKey": null
-                        },
-                        {
-                          "alias": null,
-                          "args": null,
-                          "kind": "ScalarField",
-                          "name": "lineNumber",
-                          "storageKey": null
-                        }
-                      ],
-                      "storageKey": null
+                      "kind": "FragmentSpread",
+                      "name": "RequestSliceFragment"
                     },
                     {
-                      "alias": null,
                       "args": null,
-                      "concreteType": "HttpNetworkRequest",
-                      "kind": "LinkedField",
-                      "name": "request",
-                      "plural": false,
-                      "selections": [
-                        {
-                          "alias": null,
-                          "args": null,
-                          "kind": "ScalarField",
-                          "name": "method",
-                          "storageKey": null
-                        },
-                        {
-                          "alias": null,
-                          "args": null,
-                          "concreteType": "HttpRequestBody",
-                          "kind": "LinkedField",
-                          "name": "body",
-                          "plural": false,
-                          "selections": [
-                            (v2/*: any*/),
-                            (v3/*: any*/)
-                          ],
-                          "storageKey": null
-                        },
-                        {
-                          "alias": null,
-                          "args": null,
-                          "concreteType": "Cookie",
-                          "kind": "LinkedField",
-                          "name": "cookies",
-                          "plural": true,
-                          "selections": [
-                            {
-                              "alias": null,
-                              "args": null,
-                              "kind": "ScalarField",
-                              "name": "name",
-                              "storageKey": null
-                            },
-                            (v4/*: any*/)
-                          ],
-                          "storageKey": null
-                        },
-                        (v6/*: any*/),
-                        {
-                          "alias": null,
-                          "args": null,
-                          "concreteType": "KeyValuePair",
-                          "kind": "LinkedField",
-                          "name": "queryString",
-                          "plural": true,
-                          "selections": (v5/*: any*/),
-                          "storageKey": null
-                        },
-                        {
-                          "alias": null,
-                          "args": null,
-                          "concreteType": "HttpNetworkRequestUrl",
-                          "kind": "LinkedField",
-                          "name": "url",
-                          "plural": false,
-                          "selections": [
-                            {
-                              "alias": null,
-                              "args": null,
-                              "kind": "ScalarField",
-                              "name": "url",
-                              "storageKey": null
-                            }
-                          ],
-                          "storageKey": null
-                        }
-                      ],
-                      "storageKey": null
-                    },
-                    {
-                      "alias": null,
-                      "args": null,
-                      "concreteType": "HttpNetworkResponse",
-                      "kind": "LinkedField",
-                      "name": "response",
-                      "plural": false,
-                      "selections": [
-                        {
-                          "alias": null,
-                          "args": null,
-                          "kind": "ScalarField",
-                          "name": "status",
-                          "storageKey": null
-                        },
-                        {
-                          "alias": null,
-                          "args": null,
-                          "kind": "ScalarField",
-                          "name": "transferSize",
-                          "storageKey": null
-                        },
-                        {
-                          "alias": null,
-                          "args": null,
-                          "concreteType": "HttpResponseBody",
-                          "kind": "LinkedField",
-                          "name": "body",
-                          "plural": false,
-                          "selections": [
-                            (v3/*: any*/),
-                            (v2/*: any*/),
-                            {
-                              "alias": null,
-                              "args": null,
-                              "kind": "ScalarField",
-                              "name": "size",
-                              "storageKey": null
-                            }
-                          ],
-                          "storageKey": null
-                        },
-                        (v6/*: any*/)
-                      ],
-                      "storageKey": null
+                      "kind": "FragmentSpread",
+                      "name": "NetworkEventDetailPanelFragment"
                     }
                   ],
                   "type": "HttpNetworkEvent",
@@ -372,7 +170,7 @@ return {
           "storageKey": null
         }
       ],
-      "storageKey": "events(filter:{\"type\":\"NETWORK\"})"
+      "storageKey": null
     }
   ],
   "type": "TestExecution",
@@ -380,6 +178,6 @@ return {
 };
 })();
 
-(node as any).hash = "56844d617872095c1a0b6f742df249d0";
+(node as any).hash = "cb5428c4bdf45d48a04c845b76bc6a12";
 
 export default node;

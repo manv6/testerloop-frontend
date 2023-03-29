@@ -7,7 +7,9 @@ import { styled } from '@mui/material';
 import NetworkProgress from '../NetworkProgress';
 import { ProgressFilterType } from '../../NetworkPanel';
 import entryStyles from 'src/components/common/styles/entryStyles';
-import { NetworkPanelFragment$data } from 'src/components/DevTools/Network/__generated__/NetworkPanelFragment.graphql.js';
+import RequestSliceFragment from './RequestSliceFragment';
+import { useFragment } from 'react-relay';
+import { RequestSliceFragment$key } from './__generated__/RequestSliceFragment.graphql';
 
 interface StyledEntryProps {
     isSelected?: boolean;
@@ -38,15 +40,10 @@ const StyledEntry = styled('tr')<StyledEntryProps>((props) => {
     };
 });
 
-type EventNode =
-    NetworkPanelFragment$data['searchedNetworkEvents']['edges'][0]['node'] & {
-        __typename: 'HttpNetworkEvent';
-    };
-
 type Props = {
     idx: number;
-    event: EventNode;
-    selectedEvent?: EventNode;
+    event: RequestSliceFragment$key;
+    selectedEventId?: string;
     setSelectedEventIdx: (idx: number) => void;
     selectedEventIdx: number | null;
     isLastStartedEvent: boolean;
@@ -60,8 +57,10 @@ type RequestSliceWithRefProps = Props & {
 // eslint-disable-next-line react/display-name
 const RequestSlice = forwardRef<HTMLTableRowElement, RequestSliceWithRefProps>(
     (props, ref) => {
-        const eventTimeAt = new Date(props.event.at);
-        const eventTimeUntil = new Date(props.event.until);
+        const data = useFragment(RequestSliceFragment, props.event);
+
+        const eventTimeAt = new Date(data.at);
+        const eventTimeUntil = new Date(data.until);
         const { startTime, endTime, currentTime, setHoverTimeFraction } =
             useTimeline();
 
@@ -91,8 +90,8 @@ const RequestSlice = forwardRef<HTMLTableRowElement, RequestSliceWithRefProps>(
 
         return (
             <StyledEntry
-                isClicked={props.selectedEvent?.id === props.event.id}
-                isError={props.event.response.status >= 400}
+                isClicked={props.selectedEventId === data.id}
+                isError={data.response.status >= 400}
                 isSelected={props.isLastStartedEvent}
                 isPreviousToClicked={props.idx + 1 === props.selectedEventIdx}
                 isPreviousToSelected={
@@ -116,35 +115,33 @@ const RequestSlice = forwardRef<HTMLTableRowElement, RequestSliceWithRefProps>(
                     <NetworkProgress progress={progress} />
                 </td>
                 <td className={styles.td}>
-                    <span>{props.event.response.status}</span>
+                    <span>{data.response.status}</span>
                 </td>
                 <td className={styles.td}>
-                    <span>{props.event.request.method}</span>
+                    <span>{data.request.method}</span>
                 </td>
                 <td className={cx(styles.td, styles.urlColumn)}>
-                    <span>
-                        {truncateValue(props.event.request.url.url, 60)}
-                    </span>
+                    <span>{truncateValue(data.request.url.url, 60)}</span>
                 </td>
                 <td className={styles.td}>
                     <span>
                         {truncateValue(
-                            (props.event.initiator.origin || '') +
-                                (props.event.initiator.lineNumber
-                                    ? `:${props.event.initiator.lineNumber}`
+                            (data.initiator.origin || '') +
+                                (data.initiator.lineNumber
+                                    ? `:${data.initiator.lineNumber}`
                                     : ''),
                             40
                         )}
                     </span>
                 </td>
                 <td className={styles.td}>
-                    <span>{props.event.response.body.mimeType}</span>
+                    <span>{data.response.body.mimeType}</span>
                 </td>
                 <td className={styles.td}>
-                    <span>{props.event.response.transferSize}</span>
+                    <span>{data.response.transferSize}</span>
                 </td>
                 <td className={styles.td}>
-                    <span>{props.event.response.body.size}</span>
+                    <span>{data.response.body.size}</span>
                 </td>
                 <td className={cx(styles.td, styles.waterfall)}>
                     <div

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<40b0e74df45f0558adce069894113dff>>
+ * @generated SignedSource<<0bdacc915352220db1d0597582e25ce5>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -164,14 +164,14 @@ v17 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "data",
+  "name": "mimeType",
   "storageKey": null
 },
 v18 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "mimeType",
+  "name": "data",
   "storageKey": null
 },
 v19 = {
@@ -201,13 +201,22 @@ v21 = {
   "selections": [
     {
       "alias": null,
-      "args": null,
+      "args": [
+        {
+          "kind": "Literal",
+          "name": "order",
+          "value": {
+            "by": "ALPHABETICAL",
+            "direction": "ASCENDING"
+          }
+        }
+      ],
       "concreteType": "KeyValuePair",
       "kind": "LinkedField",
       "name": "values",
       "plural": true,
       "selections": (v20/*: any*/),
-      "storageKey": null
+      "storageKey": "values(order:{\"by\":\"ALPHABETICAL\",\"direction\":\"ASCENDING\"})"
     }
   ],
   "storageKey": null
@@ -490,7 +499,35 @@ return {
           },
           {
             "alias": "searchedNetworkEvents",
-            "args": (v11/*: any*/),
+            "args": [
+              {
+                "fields": [
+                  {
+                    "fields": [
+                      {
+                        "kind": "Literal",
+                        "name": "resourceType",
+                        "value": null
+                      },
+                      {
+                        "kind": "Literal",
+                        "name": "urlSearch",
+                        "value": null
+                      }
+                    ],
+                    "kind": "ObjectValue",
+                    "name": "networkFilter"
+                  },
+                  {
+                    "kind": "Literal",
+                    "name": "type",
+                    "value": "NETWORK"
+                  }
+                ],
+                "kind": "ObjectValue",
+                "name": "filter"
+              }
+            ],
             "concreteType": "TestExecutionEventConnection",
             "kind": "LinkedField",
             "name": "events",
@@ -518,6 +555,8 @@ return {
                         "kind": "InlineFragment",
                         "selections": [
                           (v2/*: any*/),
+                          (v6/*: any*/),
+                          (v16/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -525,8 +564,6 @@ return {
                             "name": "resourceType",
                             "storageKey": null
                           },
-                          (v6/*: any*/),
-                          (v16/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -577,6 +614,17 @@ return {
                               {
                                 "alias": null,
                                 "args": null,
+                                "concreteType": "KeyValuePair",
+                                "kind": "LinkedField",
+                                "name": "queryString",
+                                "plural": true,
+                                "selections": (v20/*: any*/),
+                                "storageKey": null
+                              },
+                              (v15/*: any*/),
+                              {
+                                "alias": null,
+                                "args": null,
                                 "concreteType": "Cookie",
                                 "kind": "LinkedField",
                                 "name": "cookies",
@@ -593,18 +641,7 @@ return {
                                 ],
                                 "storageKey": null
                               },
-                              (v21/*: any*/),
-                              {
-                                "alias": null,
-                                "args": null,
-                                "concreteType": "KeyValuePair",
-                                "kind": "LinkedField",
-                                "name": "queryString",
-                                "plural": true,
-                                "selections": (v20/*: any*/),
-                                "storageKey": null
-                              },
-                              (v15/*: any*/)
+                              (v21/*: any*/)
                             ],
                             "storageKey": null
                           },
@@ -632,7 +669,6 @@ return {
                                 "name": "body",
                                 "plural": false,
                                 "selections": [
-                                  (v18/*: any*/),
                                   (v17/*: any*/),
                                   {
                                     "alias": null,
@@ -640,7 +676,8 @@ return {
                                     "kind": "ScalarField",
                                     "name": "size",
                                     "storageKey": null
-                                  }
+                                  },
+                                  (v18/*: any*/)
                                 ],
                                 "storageKey": null
                               },
@@ -659,7 +696,7 @@ return {
                 "storageKey": null
               }
             ],
-            "storageKey": "events(filter:{\"type\":\"NETWORK\"})"
+            "storageKey": "events(filter:{\"networkFilter\":{\"resourceType\":null,\"urlSearch\":null},\"type\":\"NETWORK\"})"
           },
           {
             "alias": null,
@@ -785,12 +822,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "6cd92c24db9c2922154d0810a945fe56",
+    "cacheID": "3233e9783ad5efad9387236b62bc92b7",
     "id": null,
     "metadata": {},
     "name": "AppQuery",
     "operationKind": "query",
-    "text": "query AppQuery(\n  $testExecutionId: ID!\n) {\n  testExecution(id: $testExecutionId) {\n    ...ConsolePanelFragment\n    ...SeekerFragment\n    ...NetworkPanelFragment\n    ...SummaryFragment\n    ...StepsFragment\n    id\n  }\n}\n\nfragment ConsolePanelFragment on TestExecution {\n  id\n  searchedEvents: events(filter: {type: CONSOLE, consoleFilter: {}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on ConsoleLogEvent {\n          at\n          ...LogEntryFragment\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n  ...LogFiltersFragment_qvNWU\n}\n\nfragment LogEntryFragment on ConsoleLogEvent {\n  at\n  message\n  logLevel\n}\n\nfragment LogFiltersFragment_qvNWU on TestExecution {\n  warnings: events(filter: {type: CONSOLE, consoleFilter: {logLevel: WARN}}) {\n    totalCount\n  }\n  errors: events(filter: {type: CONSOLE, consoleFilter: {logLevel: ERROR}}) {\n    totalCount\n  }\n  logs: events(filter: {type: CONSOLE, consoleFilter: {logLevel: LOG}}) {\n    totalCount\n  }\n  id\n}\n\nfragment NetworkPanelFragment on TestExecution {\n  id\n  searchedNetworkEvents: events(filter: {type: NETWORK}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          __typename\n          id\n          resourceType\n          at\n          until\n          initiator {\n            origin\n            lineNumber\n          }\n          request {\n            method\n            body {\n              data\n              mimeType\n            }\n            cookies {\n              name\n              value\n            }\n            headers {\n              values {\n                value\n                key\n              }\n            }\n            queryString {\n              value\n              key\n            }\n            url {\n              url\n            }\n          }\n          response {\n            status\n            transferSize\n            body {\n              mimeType\n              data\n              size\n            }\n            headers {\n              values {\n                value\n                key\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment SeekerFragment on TestExecution {\n  id\n  seekerNetworkEvents: events(filter: {type: NETWORK}) {\n    edges {\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          id\n          response {\n            status\n          }\n          request {\n            method\n            url {\n              url\n            }\n          }\n          at\n          until\n        }\n      }\n    }\n  }\n}\n\nfragment StepsFragment on TestExecution {\n  id\n}\n\nfragment SummaryFragment on TestExecution {\n  id\n  events(filter: {type: CONSOLE}) {\n    edges {\n      __typename\n      node {\n        __typename\n        at\n        ... on ConsoleLogEvent {\n          at\n          message\n          logLevel\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n  summaryConsoleErrors: events(filter: {type: CONSOLE, consoleFilter: {logLevel: ERROR}}) {\n    totalCount\n  }\n  summaryNetworkEvents: events(filter: {type: NETWORK}) {\n    edges {\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          response {\n            status\n          }\n          id\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query AppQuery(\n  $testExecutionId: ID!\n) {\n  testExecution(id: $testExecutionId) {\n    ...ConsolePanelFragment\n    ...SeekerFragment\n    ...NetworkPanelFragment\n    ...SummaryFragment\n    ...StepsFragment\n    id\n  }\n}\n\nfragment ConsolePanelFragment on TestExecution {\n  id\n  searchedEvents: events(filter: {type: CONSOLE, consoleFilter: {}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on ConsoleLogEvent {\n          at\n          ...LogEntryFragment\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n  ...LogFiltersFragment_qvNWU\n}\n\nfragment LogEntryFragment on ConsoleLogEvent {\n  at\n  message\n  logLevel\n}\n\nfragment LogFiltersFragment_qvNWU on TestExecution {\n  warnings: events(filter: {type: CONSOLE, consoleFilter: {logLevel: WARN}}) {\n    totalCount\n  }\n  errors: events(filter: {type: CONSOLE, consoleFilter: {logLevel: ERROR}}) {\n    totalCount\n  }\n  logs: events(filter: {type: CONSOLE, consoleFilter: {logLevel: LOG}}) {\n    totalCount\n  }\n  id\n}\n\nfragment NetworkEventDetailPanelFragment on HttpNetworkEvent {\n  __typename\n  id\n  resourceType\n  at\n  until\n  initiator {\n    origin\n    lineNumber\n  }\n  request {\n    method\n    body {\n      data\n      mimeType\n    }\n    cookies {\n      name\n      value\n    }\n    headers {\n      values(order: {by: ALPHABETICAL, direction: ASCENDING}) {\n        value\n        key\n      }\n    }\n    queryString {\n      value\n      key\n    }\n    url {\n      url\n    }\n  }\n  response {\n    status\n    transferSize\n    body {\n      mimeType\n      data\n      size\n    }\n    headers {\n      values(order: {by: ALPHABETICAL, direction: ASCENDING}) {\n        value\n        key\n      }\n    }\n  }\n}\n\nfragment NetworkPanelFragment on TestExecution {\n  id\n  searchedNetworkEvents: events(filter: {type: NETWORK, networkFilter: {}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          __typename\n          id\n          at\n          until\n          ...RequestSliceFragment\n          ...NetworkEventDetailPanelFragment\n        }\n      }\n    }\n  }\n}\n\nfragment RequestSliceFragment on HttpNetworkEvent {\n  __typename\n  id\n  resourceType\n  at\n  until\n  initiator {\n    origin\n    lineNumber\n  }\n  request {\n    method\n    body {\n      mimeType\n    }\n    queryString {\n      value\n      key\n    }\n    url {\n      url\n    }\n  }\n  response {\n    status\n    transferSize\n    body {\n      mimeType\n      size\n    }\n  }\n}\n\nfragment SeekerFragment on TestExecution {\n  id\n  seekerNetworkEvents: events(filter: {type: NETWORK}) {\n    edges {\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          id\n          response {\n            status\n          }\n          request {\n            method\n            url {\n              url\n            }\n          }\n          at\n          until\n        }\n      }\n    }\n  }\n}\n\nfragment StepsFragment on TestExecution {\n  id\n}\n\nfragment SummaryFragment on TestExecution {\n  id\n  events(filter: {type: CONSOLE}) {\n    edges {\n      __typename\n      node {\n        __typename\n        at\n        ... on ConsoleLogEvent {\n          at\n          message\n          logLevel\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n  summaryConsoleErrors: events(filter: {type: CONSOLE, consoleFilter: {logLevel: ERROR}}) {\n    totalCount\n  }\n  summaryNetworkEvents: events(filter: {type: NETWORK}) {\n    edges {\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          response {\n            status\n          }\n          id\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();

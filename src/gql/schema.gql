@@ -60,9 +60,22 @@ interface HttpBody {
   size: Int!
 }
 
+enum HttpHeaderOrderBy {
+  """The headers will be ordered alphabetically in a case-insensitive way"""
+  ALPHABETICAL
+
+  """The headers will be ordered as they were transmitted over the wire"""
+  WIRE
+}
+
+input HttpHeaderOrderInput {
+  by: HttpHeaderOrderBy!
+  direction: OrderDirection!
+}
+
 type HttpHeaders {
   size: Int!
-  values: [KeyValuePair!]!
+  values(order: HttpHeaderOrderInput!): [KeyValuePair!]!
 }
 
 type HttpNetworkEvent implements Event & IntervalEvent & NetworkEvent & TestExecutionEvent {
@@ -80,6 +93,16 @@ type HttpNetworkEvent implements Event & IntervalEvent & NetworkEvent & TestExec
 type HttpNetworkEventInitiator {
   lineNumber: Int
   origin: String
+}
+
+enum HttpNetworkEventResourceType {
+  DOCUMENT
+  FONT
+  IMAGE
+  OTHER
+  SCRIPT
+  STYLESHEET
+  XHR
 }
 
 type HttpNetworkRequest {
@@ -158,6 +181,17 @@ interface NetworkEvent implements Event & IntervalEvent {
   until: DateTime!
 }
 
+input NetworkEventFilterInput {
+  resourceType: [HttpNetworkEventResourceType!]
+  status: NetworkEventResponseStatusFilterInput
+  urlSearch: String
+}
+
+input NetworkEventResponseStatusFilterInput {
+  gte: Int
+  lte: Int
+}
+
 type NetworkEventTiming implements Event & IntervalEvent {
   at: DateTime!
   until: DateTime!
@@ -170,6 +204,11 @@ See https://graphql.org/learn/global-object-identification/
 """
 interface Node {
   id: ID!
+}
+
+enum OrderDirection {
+  ASCENDING
+  DESCENDING
 }
 
 """
@@ -229,6 +268,7 @@ type TestExecutionEventEdge {
 
 input TestExecutionEventFilterInput {
   consoleFilter: ConsoleEventFilterInput
+  networkFilter: NetworkEventFilterInput
   type: [TestExecutionEventType!]
 }
 
