@@ -25,14 +25,18 @@ export const formatSteps = (steps: TimelineControlsFragment$data['steps']) =>
         );
 
 export type FormattedNetworkEvents = ReturnType<typeof formatNetworkEvents>;
+export const formatIntervalEvent = <T extends { at: string; until: string }>(
+    data: T
+): Omit<T, 'at' | 'until'> & { at: Date; until: Date } => {
+    return {
+        ...data,
+        at: new Date(data.at),
+        until: new Date(data.until),
+    };
+};
+
 export const formatNetworkEvents = (data: NetworkPanelFragment$data) =>
     data.searchedNetworkEvents.edges
         .map(({ node }) => node)
         .filter(isOfType('HttpNetworkEvent'))
-        .map((evt) => {
-            const time = {
-                at: new Date(evt.at),
-                until: new Date(evt.until),
-            };
-            return { ...evt, ...time };
-        });
+        .map(formatIntervalEvent);
