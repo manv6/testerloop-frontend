@@ -14,8 +14,6 @@ import { Panel, Tag, Divider, ExpandButton } from 'src/components/common';
 import cx from 'classnames';
 import { styled } from '@mui/material';
 import {
-    RerunButton,
-    CompareButton,
     DetailColumn,
     ChromeIcon,
     FrameworkErrorIcon,
@@ -107,10 +105,6 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
                 <div className={styles.pageTitle}>
                     <h1>Scenario: {title}</h1>
                     <Tag text="Failed" />
-                </div>
-                <div className={styles.buttons}>
-                    <CompareButton />
-                    <RerunButton />
                 </div>
             </div>
             {isExpanded && (
