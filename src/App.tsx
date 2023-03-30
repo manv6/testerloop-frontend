@@ -44,10 +44,10 @@ const App: React.FC = () => {
     return (
         <StyledApp className={styles.app}>
             <TimelineProvider startTime={startTime} endTime={endTime}>
-                <Summary fragmentKey={queryData.testExecution} />
+                {/* eslint-disable @typescript-eslint/no-non-null-assertion */}
+                <Summary fragmentKey={queryData.testExecution!} />
                 <div className={styles.appContent}>
                     <FrameworkError />
-                    {/* eslint-disable @typescript-eslint/no-non-null-assertion */}
                     <TimelineControls fragmentKey={queryData.testExecution!} />
                     <Expandable.Parent className={styles.expandableParent}>
                         <Steps

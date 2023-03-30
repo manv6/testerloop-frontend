@@ -1,6 +1,4 @@
-// TODO: Remove this check once temp data is removed!!
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import styles from './Summary.module.scss';
 import cicd from 'src/data/cicd';
 import results from 'src/data/results';
@@ -17,14 +15,13 @@ import {
     DetailColumn,
     ChromeIcon,
     FrameworkErrorIcon,
-    NetworkErrorIcon,
-    WarnIcon,
 } from './components';
 import splitCamelCase from 'src/utils/splitCamelCase';
-import { isOfType } from 'src/utils/isOfType';
+import NetworkErrorCount from './components/NetworkErrorCount';
+import ConsoleErrorCount from './components/ConsoleErrorCount';
 
 type Props = {
-    fragmentKey: SummaryFragment$key | null;
+    fragmentKey: SummaryFragment$key;
     className?: string;
 };
 
@@ -50,26 +47,8 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
                         }
                     }
                 }
-                summaryConsoleErrors: events(
-                    filter: {
-                        type: CONSOLE
-                        consoleFilter: { logLevel: ERROR }
-                    }
-                ) {
-                    totalCount
-                }
-                summaryNetworkEvents: events(filter: { type: NETWORK }) {
-                    edges {
-                        node {
-                            __typename
-                            ... on HttpNetworkEvent {
-                                response {
-                                    status
-                                }
-                            }
-                        }
-                    }
-                }
+                ...ConsoleErrorCountFragment
+                ...NetworkErrorCountFragment
             }
         `,
         fragmentKey
@@ -83,23 +62,9 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
     const commitHash = cicd.shortHash;
     const commitUrl = [cicd.gitUrl, 'commit', cicd.hash].join('/');
 
-    // const branch = cicd.GITHUB_REF_NAME;
     const engineer = cicd.GITHUB_TRIGGERING_ACTOR;
     const engineerUrl = [cicd.GITHUB_SERVER_URL, engineer].join('/');
     const endTime = results.endedTestsAt;
-
-    const logErrorCount = summaryData?.summaryConsoleErrors.totalCount;
-
-    const networkErrorCount = useMemo(
-        () =>
-            summaryData?.summaryNetworkEvents.edges
-                .map(({ node }) => node)
-                .filter(isOfType('HttpNetworkEvent'))
-                .filter(
-                    (evt) => evt.response.status && evt.response.status >= 400
-                ).length,
-        [summaryData]
-    );
 
     const errorObj = results.runs[0].tests[0].attempts[0];
     const frameworkErrorName = errorObj.error.name;
@@ -181,15 +146,9 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
                                 </li>
                             )}
                             <Divider className={styles.divider} />
-                            <li className={styles.networkError}>
-                                <NetworkErrorIcon />
-                                <span>{networkErrorCount} Network errors</span>
-                            </li>
+                            <NetworkErrorCount fragmentKey={summaryData} />
                             <Divider className={styles.divider} />
-                            <li className={styles.consoleError}>
-                                <WarnIcon />
-                                <span>{logErrorCount} Console errors</span>
-                            </li>
+                            <ConsoleErrorCount fragmentKey={summaryData} />
                         </ul>
                     </div>
                 </div>

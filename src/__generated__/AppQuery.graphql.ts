@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<cd20e229720e404c7453ab6c2ceacdec>>
+ * @generated SignedSource<<51bf7a635be9fb2cd3857320c2c41f8b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -100,42 +100,21 @@ v10 = [
     "storageKey": null
   }
 ],
-v11 = [
-  {
-    "kind": "Literal",
-    "name": "filter",
-    "value": {
-      "type": "NETWORK"
-    }
-  }
-],
-v12 = {
+v11 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "status",
   "storageKey": null
 },
-v13 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "HttpNetworkResponse",
-  "kind": "LinkedField",
-  "name": "response",
-  "plural": false,
-  "selections": [
-    (v12/*: any*/)
-  ],
-  "storageKey": null
-},
-v14 = {
+v12 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "method",
   "storageKey": null
 },
-v15 = {
+v13 = {
   "alias": null,
   "args": null,
   "concreteType": "HttpNetworkRequestUrl",
@@ -153,28 +132,28 @@ v15 = {
   ],
   "storageKey": null
 },
-v16 = {
+v14 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "until",
   "storageKey": null
 },
-v17 = {
+v15 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "mimeType",
   "storageKey": null
 },
-v18 = {
+v16 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "data",
   "storageKey": null
 },
-v19 = [
+v17 = [
   {
     "alias": null,
     "args": null,
@@ -190,7 +169,7 @@ v19 = [
     "storageKey": null
   }
 ],
-v20 = {
+v18 = {
   "alias": null,
   "args": null,
   "concreteType": "HttpHeaders",
@@ -214,7 +193,7 @@ v20 = {
       "kind": "LinkedField",
       "name": "values",
       "plural": true,
-      "selections": (v19/*: any*/),
+      "selections": (v17/*: any*/),
       "storageKey": "values(order:{\"by\":\"ALPHABETICAL\",\"direction\":\"ASCENDING\"})"
     }
   ],
@@ -440,7 +419,15 @@ return {
           },
           {
             "alias": "seekerNetworkEvents",
-            "args": (v11/*: any*/),
+            "args": [
+              {
+                "kind": "Literal",
+                "name": "filter",
+                "value": {
+                  "type": "NETWORK"
+                }
+              }
+            ],
             "concreteType": "TestExecutionEventConnection",
             "kind": "LinkedField",
             "name": "events",
@@ -467,7 +454,18 @@ return {
                         "kind": "InlineFragment",
                         "selections": [
                           (v2/*: any*/),
-                          (v13/*: any*/),
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "HttpNetworkResponse",
+                            "kind": "LinkedField",
+                            "name": "response",
+                            "plural": false,
+                            "selections": [
+                              (v11/*: any*/)
+                            ],
+                            "storageKey": null
+                          },
                           {
                             "alias": null,
                             "args": null,
@@ -476,13 +474,13 @@ return {
                             "name": "request",
                             "plural": false,
                             "selections": [
-                              (v14/*: any*/),
-                              (v15/*: any*/)
+                              (v12/*: any*/),
+                              (v13/*: any*/)
                             ],
                             "storageKey": null
                           },
                           (v6/*: any*/),
-                          (v16/*: any*/)
+                          (v14/*: any*/)
                         ],
                         "type": "HttpNetworkEvent",
                         "abstractKey": null
@@ -555,7 +553,7 @@ return {
                         "selections": [
                           (v2/*: any*/),
                           (v6/*: any*/),
-                          (v16/*: any*/),
+                          (v14/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -596,7 +594,7 @@ return {
                             "name": "request",
                             "plural": false,
                             "selections": [
-                              (v14/*: any*/),
+                              (v12/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -605,8 +603,8 @@ return {
                                 "name": "body",
                                 "plural": false,
                                 "selections": [
-                                  (v17/*: any*/),
-                                  (v18/*: any*/)
+                                  (v15/*: any*/),
+                                  (v16/*: any*/)
                                 ],
                                 "storageKey": null
                               },
@@ -617,11 +615,11 @@ return {
                                 "kind": "LinkedField",
                                 "name": "queryString",
                                 "plural": true,
-                                "selections": (v19/*: any*/),
+                                "selections": (v17/*: any*/),
                                 "storageKey": null
                               },
-                              (v15/*: any*/),
-                              (v20/*: any*/)
+                              (v13/*: any*/),
+                              (v18/*: any*/)
                             ],
                             "storageKey": null
                           },
@@ -633,7 +631,7 @@ return {
                             "name": "response",
                             "plural": false,
                             "selections": [
-                              (v12/*: any*/),
+                              (v11/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -649,7 +647,7 @@ return {
                                 "name": "body",
                                 "plural": false,
                                 "selections": [
-                                  (v17/*: any*/),
+                                  (v15/*: any*/),
                                   {
                                     "alias": null,
                                     "args": null,
@@ -657,11 +655,11 @@ return {
                                     "name": "size",
                                     "storageKey": null
                                   },
-                                  (v18/*: any*/)
+                                  (v16/*: any*/)
                                 ],
                                 "storageKey": null
                               },
-                              (v20/*: any*/)
+                              (v18/*: any*/)
                             ],
                             "storageKey": null
                           }
@@ -754,47 +752,27 @@ return {
             "storageKey": "events(filter:{\"consoleFilter\":{\"logLevel\":\"ERROR\"},\"type\":\"CONSOLE\"})"
           },
           {
-            "alias": "summaryNetworkEvents",
-            "args": (v11/*: any*/),
+            "alias": "summaryNetworkErrors",
+            "args": [
+              {
+                "kind": "Literal",
+                "name": "filter",
+                "value": {
+                  "networkFilter": {
+                    "status": {
+                      "gte": 400
+                    }
+                  },
+                  "type": "NETWORK"
+                }
+              }
+            ],
             "concreteType": "TestExecutionEventConnection",
             "kind": "LinkedField",
             "name": "events",
             "plural": false,
-            "selections": [
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "TestExecutionEventEdge",
-                "kind": "LinkedField",
-                "name": "edges",
-                "plural": true,
-                "selections": [
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": null,
-                    "kind": "LinkedField",
-                    "name": "node",
-                    "plural": false,
-                    "selections": [
-                      (v5/*: any*/),
-                      {
-                        "kind": "InlineFragment",
-                        "selections": [
-                          (v13/*: any*/),
-                          (v2/*: any*/)
-                        ],
-                        "type": "HttpNetworkEvent",
-                        "abstractKey": null
-                      }
-                    ],
-                    "storageKey": null
-                  }
-                ],
-                "storageKey": null
-              }
-            ],
-            "storageKey": "events(filter:{\"type\":\"NETWORK\"})"
+            "selections": (v10/*: any*/),
+            "storageKey": "events(filter:{\"networkFilter\":{\"status\":{\"gte\":400}},\"type\":\"NETWORK\"})"
           }
         ],
         "storageKey": null
@@ -802,12 +780,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "b3896ef3371817b54e4b6aa8528eaff4",
+    "cacheID": "5e47088038e990d91a9ccea8a6e1c558",
     "id": null,
     "metadata": {},
     "name": "AppQuery",
     "operationKind": "query",
-    "text": "query AppQuery(\n  $testExecutionId: ID!\n) {\n  testExecution(id: $testExecutionId) {\n    ...ConsolePanelFragment\n    ...SeekerFragment\n    ...NetworkPanelFragment\n    ...SummaryFragment\n    ...StepsFragment\n    id\n  }\n}\n\nfragment ConsolePanelFragment on TestExecution {\n  id\n  searchedEvents: events(filter: {type: CONSOLE, consoleFilter: {}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on ConsoleLogEvent {\n          at\n          ...LogEntryFragment\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n  ...LogFiltersFragment_qvNWU\n}\n\nfragment LogEntryFragment on ConsoleLogEvent {\n  at\n  message\n  logLevel\n}\n\nfragment LogFiltersFragment_qvNWU on TestExecution {\n  warnings: events(filter: {type: CONSOLE, consoleFilter: {logLevel: WARN}}) {\n    totalCount\n  }\n  errors: events(filter: {type: CONSOLE, consoleFilter: {logLevel: ERROR}}) {\n    totalCount\n  }\n  logs: events(filter: {type: CONSOLE, consoleFilter: {logLevel: LOG}}) {\n    totalCount\n  }\n  id\n}\n\nfragment NetworkEventDetailPanelFragment on HttpNetworkEvent {\n  __typename\n  id\n  resourceType\n  at\n  until\n  initiator {\n    origin\n    lineNumber\n  }\n  ...RequestTabFragment\n  ...ResponseTabFragment\n}\n\nfragment NetworkPanelFragment on TestExecution {\n  id\n  searchedNetworkEvents: events(filter: {type: NETWORK, networkFilter: {}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          __typename\n          id\n          at\n          until\n          ...NetworkSliceFragment\n          ...NetworkEventDetailPanelFragment\n        }\n      }\n    }\n  }\n}\n\nfragment NetworkSliceFragment on HttpNetworkEvent {\n  __typename\n  id\n  resourceType\n  at\n  until\n  initiator {\n    origin\n    lineNumber\n  }\n  request {\n    method\n    body {\n      mimeType\n    }\n    queryString {\n      value\n      key\n    }\n    url {\n      url\n    }\n  }\n  response {\n    status\n    transferSize\n    body {\n      mimeType\n      size\n    }\n  }\n}\n\nfragment QueryParamsFragment on HttpNetworkRequest {\n  queryString {\n    value\n    key\n  }\n}\n\nfragment RequestDataFragment on HttpNetworkRequest {\n  body {\n    data\n    mimeType\n  }\n}\n\nfragment RequestHeadersFragment on HttpNetworkRequest {\n  headers {\n    values(order: {by: ALPHABETICAL, direction: ASCENDING}) {\n      value\n      key\n    }\n  }\n}\n\nfragment RequestTabFragment on HttpNetworkEvent {\n  request {\n    ...RequestHeadersFragment\n    ...RequestDataFragment\n    ...QueryParamsFragment\n    ...RequestToUrlFragment\n  }\n}\n\nfragment RequestToUrlFragment on HttpNetworkRequest {\n  url {\n    url\n  }\n}\n\nfragment ResponseDataFragment on HttpNetworkResponse {\n  body {\n    mimeType\n    data\n    size\n  }\n}\n\nfragment ResponseHeadersFragment on HttpNetworkResponse {\n  headers {\n    values(order: {by: ALPHABETICAL, direction: ASCENDING}) {\n      value\n      key\n    }\n  }\n}\n\nfragment ResponseTabFragment on HttpNetworkEvent {\n  response {\n    ...ResponseDataFragment\n    ...ResponseHeadersFragment\n  }\n}\n\nfragment SeekerFragment on TestExecution {\n  id\n  seekerNetworkEvents: events(filter: {type: NETWORK}) {\n    edges {\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          id\n          response {\n            status\n          }\n          request {\n            method\n            url {\n              url\n            }\n          }\n          at\n          until\n        }\n      }\n    }\n  }\n}\n\nfragment StepsFragment on TestExecution {\n  id\n}\n\nfragment SummaryFragment on TestExecution {\n  id\n  events(filter: {type: CONSOLE}) {\n    edges {\n      __typename\n      node {\n        __typename\n        at\n        ... on ConsoleLogEvent {\n          at\n          message\n          logLevel\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n  summaryConsoleErrors: events(filter: {type: CONSOLE, consoleFilter: {logLevel: ERROR}}) {\n    totalCount\n  }\n  summaryNetworkEvents: events(filter: {type: NETWORK}) {\n    edges {\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          response {\n            status\n          }\n          id\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query AppQuery(\n  $testExecutionId: ID!\n) {\n  testExecution(id: $testExecutionId) {\n    ...ConsolePanelFragment\n    ...SeekerFragment\n    ...NetworkPanelFragment\n    ...SummaryFragment\n    ...StepsFragment\n    id\n  }\n}\n\nfragment ConsoleErrorCountFragment on TestExecution {\n  summaryConsoleErrors: events(filter: {type: CONSOLE, consoleFilter: {logLevel: ERROR}}) {\n    totalCount\n  }\n}\n\nfragment ConsolePanelFragment on TestExecution {\n  id\n  searchedEvents: events(filter: {type: CONSOLE, consoleFilter: {}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on ConsoleLogEvent {\n          at\n          ...LogEntryFragment\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n  ...LogFiltersFragment_qvNWU\n}\n\nfragment LogEntryFragment on ConsoleLogEvent {\n  at\n  message\n  logLevel\n}\n\nfragment LogFiltersFragment_qvNWU on TestExecution {\n  warnings: events(filter: {type: CONSOLE, consoleFilter: {logLevel: WARN}}) {\n    totalCount\n  }\n  errors: events(filter: {type: CONSOLE, consoleFilter: {logLevel: ERROR}}) {\n    totalCount\n  }\n  logs: events(filter: {type: CONSOLE, consoleFilter: {logLevel: LOG}}) {\n    totalCount\n  }\n  id\n}\n\nfragment NetworkErrorCountFragment on TestExecution {\n  summaryNetworkErrors: events(filter: {type: NETWORK, networkFilter: {status: {gte: 400}}}) {\n    totalCount\n  }\n}\n\nfragment NetworkEventDetailPanelFragment on HttpNetworkEvent {\n  __typename\n  id\n  resourceType\n  at\n  until\n  initiator {\n    origin\n    lineNumber\n  }\n  ...RequestTabFragment\n  ...ResponseTabFragment\n}\n\nfragment NetworkPanelFragment on TestExecution {\n  id\n  searchedNetworkEvents: events(filter: {type: NETWORK, networkFilter: {}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          __typename\n          id\n          at\n          until\n          ...NetworkSliceFragment\n          ...NetworkEventDetailPanelFragment\n        }\n      }\n    }\n  }\n}\n\nfragment NetworkSliceFragment on HttpNetworkEvent {\n  __typename\n  id\n  resourceType\n  at\n  until\n  initiator {\n    origin\n    lineNumber\n  }\n  request {\n    method\n    body {\n      mimeType\n    }\n    queryString {\n      value\n      key\n    }\n    url {\n      url\n    }\n  }\n  response {\n    status\n    transferSize\n    body {\n      mimeType\n      size\n    }\n  }\n}\n\nfragment QueryParamsFragment on HttpNetworkRequest {\n  queryString {\n    value\n    key\n  }\n}\n\nfragment RequestDataFragment on HttpNetworkRequest {\n  body {\n    data\n    mimeType\n  }\n}\n\nfragment RequestHeadersFragment on HttpNetworkRequest {\n  headers {\n    values(order: {by: ALPHABETICAL, direction: ASCENDING}) {\n      value\n      key\n    }\n  }\n}\n\nfragment RequestTabFragment on HttpNetworkEvent {\n  request {\n    ...RequestHeadersFragment\n    ...RequestDataFragment\n    ...QueryParamsFragment\n    ...RequestToUrlFragment\n  }\n}\n\nfragment RequestToUrlFragment on HttpNetworkRequest {\n  url {\n    url\n  }\n}\n\nfragment ResponseDataFragment on HttpNetworkResponse {\n  body {\n    mimeType\n    data\n    size\n  }\n}\n\nfragment ResponseHeadersFragment on HttpNetworkResponse {\n  headers {\n    values(order: {by: ALPHABETICAL, direction: ASCENDING}) {\n      value\n      key\n    }\n  }\n}\n\nfragment ResponseTabFragment on HttpNetworkEvent {\n  response {\n    ...ResponseDataFragment\n    ...ResponseHeadersFragment\n  }\n}\n\nfragment SeekerFragment on TestExecution {\n  id\n  seekerNetworkEvents: events(filter: {type: NETWORK}) {\n    edges {\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          id\n          response {\n            status\n          }\n          request {\n            method\n            url {\n              url\n            }\n          }\n          at\n          until\n        }\n      }\n    }\n  }\n}\n\nfragment StepsFragment on TestExecution {\n  id\n}\n\nfragment SummaryFragment on TestExecution {\n  id\n  events(filter: {type: CONSOLE}) {\n    edges {\n      __typename\n      node {\n        __typename\n        at\n        ... on ConsoleLogEvent {\n          at\n          message\n          logLevel\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n  ...ConsoleErrorCountFragment\n  ...NetworkErrorCountFragment\n}\n"
   }
 };
 })();
