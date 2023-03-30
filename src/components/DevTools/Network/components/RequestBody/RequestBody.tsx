@@ -3,10 +3,10 @@ import { useMemo } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import KeyValueTable from '../KeyValueTable';
-import { RequestTabFragment$data } from '../RequestTab/__generated__/RequestTabFragment.graphql';
+import { RequestDataFragment$data } from '../RequestData/__generated__/RequestDataFragment.graphql';
 
 type RequestBodyProps = {
-    body: RequestTabFragment$data['request']['body'];
+    body: RequestDataFragment$data['body'];
 };
 
 const RequestBody: React.FC<RequestBodyProps> = ({ body }) => {

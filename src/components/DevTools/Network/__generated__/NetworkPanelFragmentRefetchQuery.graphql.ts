@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b164773079d89b4f7bf2353a61fefe85>>
+ * @generated SignedSource<<23babfed36637eb2d3c124d5e7d21b13>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -89,15 +89,14 @@ v8 = {
   "name": "data",
   "storageKey": null
 },
-v9 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "value",
-  "storageKey": null
-},
-v10 = [
-  (v9/*: any*/),
+v9 = [
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "value",
+    "storageKey": null
+  },
   {
     "alias": null,
     "args": null,
@@ -106,7 +105,7 @@ v10 = [
     "storageKey": null
   }
 ],
-v11 = {
+v10 = {
   "alias": null,
   "args": null,
   "concreteType": "HttpHeaders",
@@ -130,7 +129,7 @@ v11 = {
       "kind": "LinkedField",
       "name": "values",
       "plural": true,
-      "selections": (v10/*: any*/),
+      "selections": (v9/*: any*/),
       "storageKey": "values(order:{\"by\":\"ALPHABETICAL\",\"direction\":\"ASCENDING\"})"
     }
   ],
@@ -318,7 +317,7 @@ return {
                                     "kind": "LinkedField",
                                     "name": "queryString",
                                     "plural": true,
-                                    "selections": (v10/*: any*/),
+                                    "selections": (v9/*: any*/),
                                     "storageKey": null
                                   },
                                   {
@@ -339,26 +338,7 @@ return {
                                     ],
                                     "storageKey": null
                                   },
-                                  {
-                                    "alias": null,
-                                    "args": null,
-                                    "concreteType": "Cookie",
-                                    "kind": "LinkedField",
-                                    "name": "cookies",
-                                    "plural": true,
-                                    "selections": [
-                                      {
-                                        "alias": null,
-                                        "args": null,
-                                        "kind": "ScalarField",
-                                        "name": "name",
-                                        "storageKey": null
-                                      },
-                                      (v9/*: any*/)
-                                    ],
-                                    "storageKey": null
-                                  },
-                                  (v11/*: any*/)
+                                  (v10/*: any*/)
                                 ],
                                 "storageKey": null
                               },
@@ -404,7 +384,7 @@ return {
                                     ],
                                     "storageKey": null
                                   },
-                                  (v11/*: any*/)
+                                  (v10/*: any*/)
                                 ],
                                 "storageKey": null
                               }
@@ -431,12 +411,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "fea37005d5bdda130c295699c4b60223",
+    "cacheID": "d0e8024142f24eac1fca0835c75d27b3",
     "id": null,
     "metadata": {},
     "name": "NetworkPanelFragmentRefetchQuery",
     "operationKind": "query",
-    "text": "query NetworkPanelFragmentRefetchQuery(\n  $resourceType: [HttpNetworkEventResourceType!] = null\n  $urlSearch: String = null\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...NetworkPanelFragment_3ybCIS\n    id\n  }\n}\n\nfragment NetworkEventDetailPanelFragment on HttpNetworkEvent {\n  __typename\n  id\n  resourceType\n  at\n  until\n  initiator {\n    origin\n    lineNumber\n  }\n  ...RequestTabFragment\n  ...ResponseTabFragment\n}\n\nfragment NetworkPanelFragment_3ybCIS on TestExecution {\n  id\n  searchedNetworkEvents: events(filter: {type: NETWORK, networkFilter: {urlSearch: $urlSearch, resourceType: $resourceType}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          __typename\n          id\n          at\n          until\n          ...RequestSliceFragment\n          ...NetworkEventDetailPanelFragment\n        }\n      }\n    }\n  }\n}\n\nfragment RequestSliceFragment on HttpNetworkEvent {\n  __typename\n  id\n  resourceType\n  at\n  until\n  initiator {\n    origin\n    lineNumber\n  }\n  request {\n    method\n    body {\n      mimeType\n    }\n    queryString {\n      value\n      key\n    }\n    url {\n      url\n    }\n  }\n  response {\n    status\n    transferSize\n    body {\n      mimeType\n      size\n    }\n  }\n}\n\nfragment RequestTabFragment on HttpNetworkEvent {\n  request {\n    method\n    body {\n      data\n      mimeType\n    }\n    cookies {\n      name\n      value\n    }\n    headers {\n      values(order: {by: ALPHABETICAL, direction: ASCENDING}) {\n        value\n        key\n      }\n    }\n    queryString {\n      value\n      key\n    }\n    url {\n      url\n    }\n  }\n}\n\nfragment ResponseTabFragment on HttpNetworkEvent {\n  response {\n    status\n    transferSize\n    body {\n      mimeType\n      data\n      size\n    }\n    headers {\n      values(order: {by: ALPHABETICAL, direction: ASCENDING}) {\n        value\n        key\n      }\n    }\n  }\n}\n"
+    "text": "query NetworkPanelFragmentRefetchQuery(\n  $resourceType: [HttpNetworkEventResourceType!] = null\n  $urlSearch: String = null\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...NetworkPanelFragment_3ybCIS\n    id\n  }\n}\n\nfragment NetworkEventDetailPanelFragment on HttpNetworkEvent {\n  __typename\n  id\n  resourceType\n  at\n  until\n  initiator {\n    origin\n    lineNumber\n  }\n  ...RequestTabFragment\n  ...ResponseTabFragment\n}\n\nfragment NetworkPanelFragment_3ybCIS on TestExecution {\n  id\n  searchedNetworkEvents: events(filter: {type: NETWORK, networkFilter: {urlSearch: $urlSearch, resourceType: $resourceType}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          __typename\n          id\n          at\n          until\n          ...RequestSliceFragment\n          ...NetworkEventDetailPanelFragment\n        }\n      }\n    }\n  }\n}\n\nfragment QueryParamsFragment on HttpNetworkRequest {\n  queryString {\n    value\n    key\n  }\n}\n\nfragment RequestDataFragment on HttpNetworkRequest {\n  body {\n    data\n    mimeType\n  }\n}\n\nfragment RequestHeadersFragment on HttpNetworkRequest {\n  headers {\n    values(order: {by: ALPHABETICAL, direction: ASCENDING}) {\n      value\n      key\n    }\n  }\n}\n\nfragment RequestSliceFragment on HttpNetworkEvent {\n  __typename\n  id\n  resourceType\n  at\n  until\n  initiator {\n    origin\n    lineNumber\n  }\n  request {\n    method\n    body {\n      mimeType\n    }\n    queryString {\n      value\n      key\n    }\n    url {\n      url\n    }\n  }\n  response {\n    status\n    transferSize\n    body {\n      mimeType\n      size\n    }\n  }\n}\n\nfragment RequestTabFragment on HttpNetworkEvent {\n  request {\n    ...RequestHeadersFragment\n    ...RequestDataFragment\n    ...QueryParamsFragment\n    ...RequestToUrlFragment\n  }\n}\n\nfragment RequestToUrlFragment on HttpNetworkRequest {\n  url {\n    url\n  }\n}\n\nfragment ResponseTabFragment on HttpNetworkEvent {\n  response {\n    status\n    transferSize\n    body {\n      mimeType\n      data\n      size\n    }\n    headers {\n      values(order: {by: ALPHABETICAL, direction: ASCENDING}) {\n        value\n        key\n      }\n    }\n  }\n}\n"
   }
 };
 })();
