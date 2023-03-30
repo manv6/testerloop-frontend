@@ -9,7 +9,6 @@ import styles from './Seeker.module.scss';
 import { styled, Tooltip } from '@mui/material';
 import MarkerTooltip from '../MarkerTooltip';
 import fractionToPercentage from 'src/utils/fractionToPercentage';
-import { SeekerFragment$key } from './__generated__/SeekerFragment.graphql';
 
 const StyledFill = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.base[100],
@@ -44,10 +43,9 @@ const StyledMarker = styled('div')<StyledMarkerProps>(({ size }) => ({
 
 type Props = {
     getMarker: (ev: EventType) => JSX.Element;
-    fragmentKey: SeekerFragment$key | null;
 };
 
-const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
+const Seeker: React.FC<Props> = ({ getMarker }) => {
     const data = {
         networkEvents: networkEventData.log.entries,
         steps: stepsData,

@@ -48,7 +48,7 @@ const App: React.FC = () => {
                 <Summary fragmentKey={queryData.testExecution!} />
                 <div className={styles.appContent}>
                     <FrameworkError />
-                    <TimelineControls fragmentKey={queryData.testExecution!} />
+                    <TimelineControls />
                     <Expandable.Parent className={styles.expandableParent}>
                         <Steps
                             className={styles.steps}
