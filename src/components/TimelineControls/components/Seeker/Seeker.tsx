@@ -2,15 +2,13 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { EventType, TIMELINE_SVG_PX_WIDTH } from 'src/constants';
 import { useTimeline } from 'src/hooks/timeline';
 import { datesToElapsedTime, datesToFraction } from 'src/utils/date';
+import networkEventData from 'src/data/networkEvents';
 import stepsData from 'src/data/steps';
 import * as formatter from 'src/utils/formatters';
 import styles from './Seeker.module.scss';
 import { styled, Tooltip } from '@mui/material';
 import MarkerTooltip from '../MarkerTooltip';
 import fractionToPercentage from 'src/utils/fractionToPercentage';
-import graphql from 'babel-plugin-relay/macro';
-import { useFragment } from 'react-relay';
-import { isOfType } from 'src/utils/isOfType';
 import { SeekerFragment$key } from './__generated__/SeekerFragment.graphql';
 
 const StyledFill = styled('div')(({ theme }) => ({
@@ -50,36 +48,8 @@ type Props = {
 };
 
 const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
-    const timelineData = useFragment(
-        graphql`
-            fragment SeekerFragment on TestExecution {
-                id
-                seekerNetworkEvents: events(filter: { type: NETWORK }) {
-                    edges {
-                        node {
-                            __typename
-                            ... on HttpNetworkEvent {
-                                id
-                                response {
-                                    status
-                                }
-                                request {
-                                    method
-                                    url {
-                                        url
-                                    }
-                                }
-                                at
-                                until
-                            }
-                        }
-                    }
-                }
-            }
-        `,
-        fragmentKey
-    );
     const data = {
+        networkEvents: networkEventData.log.entries,
         steps: stepsData,
     } as any; // eslint-disable-line
     const {
@@ -99,6 +69,10 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
     const steps = useMemo(
         () => formatter.formatSteps(data.steps),
         [data.steps]
+    );
+    const networkEvents = useMemo(
+        () => formatter.formatMockNetworkEvents(data.networkEvents),
+        [data.networkEvents]
     );
 
     // Define step markers
@@ -125,25 +99,6 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
         [steps, startTime, endTime]
     );
 
-    const networkEvents = useMemo(
-        () =>
-            timelineData?.seekerNetworkEvents.edges
-                .map(({ node }) => node)
-                .filter(isOfType('HttpNetworkEvent'))
-                .map(({ at, until, request, response, ...rest }) => {
-                    return {
-                        ...rest,
-                        request,
-                        response,
-                        at: new Date(at),
-                        until: new Date(until),
-                        name: `${request.method} ${response.status}`,
-                        message: request.url.url,
-                    };
-                }) || [],
-        [timelineData]
-    );
-
     const failedNetworkMarkers = useMemo(
         () =>
             networkEvents
@@ -155,12 +110,14 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
                     ...evt,
                     id: evt.id,
                     type: EventType.NETWORK_ERROR,
-                    start: evt.until,
+                    start: evt.startedDateTime,
                     startFraction: datesToFraction(
                         startTime,
                         endTime,
-                        evt.until
+                        evt.endedDateTime
                     ),
+                    name: `${evt.request.method} ${evt.response.status}`,
+                    message: evt.request.url,
                 })),
         [networkEvents, startTime, endTime]
     );
@@ -173,12 +130,14 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
                     ...evt,
                     id: evt.id,
                     type: EventType.NETWORK_SUCCESS,
-                    start: evt.until,
+                    start: evt.startedDateTime,
                     startFraction: datesToFraction(
                         startTime,
                         endTime,
-                        evt.until
+                        evt.endedDateTime
                     ),
+                    name: `${evt.request.method} ${evt.response.status}`,
+                    message: evt.request.url,
                 })),
         [networkEvents, startTime, endTime]
     );
