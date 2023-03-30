@@ -1,7 +1,7 @@
 import React from 'react';
 import { useFragment } from 'react-relay';
 import { Accordion, Divider } from 'src/components/common';
-import KeyValueTable from '../KeyValueTable';
+import KeyValueTable from '../../KeyValueTable';
 import QueryParamsFragment from './QueryParamsFragment';
 import { QueryParamsFragment$key } from './__generated__/QueryParamsFragment.graphql';
 

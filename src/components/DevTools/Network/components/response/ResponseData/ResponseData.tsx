@@ -1,28 +1,26 @@
-import React from 'react';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
+import { Accordion, Divider } from 'src/components/common';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { Accordion, Divider } from 'src/components/common';
-import KeyValueTable from '../KeyValueTable';
-import styles from './ResponseTab.module.scss';
-import { ResponseTabFragment$key } from './__generated__/ResponseTabFragment.graphql';
-import ResponseTabFragment from './ResponseTabFragment';
+import styles from './ResponseData.module.scss';
+import { ResponseDataFragment$key } from './__generated__/ResponseDataFragment.graphql';
 import { useFragment } from 'react-relay';
+import ResponseDataFragment from './ResponseDataFragment';
 
-type ResponseTabProps = {
-    fragmentKey: ResponseTabFragment$key;
+type Props = {
+    fragmentKey: ResponseDataFragment$key;
 };
 
-const ResponseTab: React.FC<ResponseTabProps> = ({ fragmentKey }) => {
-    const data = useFragment(ResponseTabFragment, fragmentKey);
+const ResponseData: React.FC<Props> = ({ fragmentKey }) => {
+    const data = useFragment(ResponseDataFragment, fragmentKey);
 
     const snippet = useMemo(() => {
         const responseDataExcludedMimeTypes = [
             'application/font-woff2',
             'application/octet-stream',
         ];
-        const mimeType = data.response.body.mimeType;
-        const responsePayload = data.response.body.data;
+        const mimeType = data.body.mimeType;
+        const responsePayload = data.body.data;
 
         if (
             !responsePayload ||
@@ -46,9 +44,9 @@ const ResponseTab: React.FC<ResponseTabProps> = ({ fragmentKey }) => {
     }, [data]);
 
     return (
-        <div>
+        <>
             <Accordion title={<div>Mime Type</div>}>
-                {data.response.body.mimeType}
+                {data.body.mimeType}
             </Accordion>
             <Divider />
             {snippet && (
@@ -64,15 +62,8 @@ const ResponseTab: React.FC<ResponseTabProps> = ({ fragmentKey }) => {
                     <Divider />
                 </>
             )}
-            <Accordion title={<div>Response Headers</div>}>
-                <KeyValueTable
-                    key="responseHeader"
-                    valuePairs={data.response.headers.values}
-                />
-            </Accordion>
-            <Divider />
-        </div>
+        </>
     );
 };
 
-export default ResponseTab;
+export default ResponseData;

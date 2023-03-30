@@ -1,7 +1,7 @@
 import graphql from 'babel-plugin-relay/macro';
 
-const RequestSliceFragment = graphql`
-    fragment RequestSliceFragment on HttpNetworkEvent {
+const NetworkSliceFragment = graphql`
+    fragment NetworkSliceFragment on HttpNetworkEvent {
         __typename
         id
         resourceType
@@ -35,4 +35,4 @@ const RequestSliceFragment = graphql`
     }
 `;
 
-export default RequestSliceFragment;
+export default NetworkSliceFragment;

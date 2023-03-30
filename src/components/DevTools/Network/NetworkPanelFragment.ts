@@ -28,7 +28,7 @@ const NetworkPanelFragment = graphql`
                         id
                         at
                         until
-                        ...RequestSliceFragment
+                        ...NetworkSliceFragment
                         ...NetworkEventDetailPanelFragment
                     }
                 }

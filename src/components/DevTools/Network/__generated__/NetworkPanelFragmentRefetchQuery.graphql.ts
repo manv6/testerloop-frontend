@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<23babfed36637eb2d3c124d5e7d21b13>>
+ * @generated SignedSource<<4cc4dfee73caf74a357aa97de5b9825a>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -411,16 +411,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "d0e8024142f24eac1fca0835c75d27b3",
+    "cacheID": "fb4ffbec20eaf6a2b464e90e3fed7d47",
     "id": null,
     "metadata": {},
     "name": "NetworkPanelFragmentRefetchQuery",
     "operationKind": "query",
-    "text": "query NetworkPanelFragmentRefetchQuery(\n  $resourceType: [HttpNetworkEventResourceType!] = null\n  $urlSearch: String = null\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...NetworkPanelFragment_3ybCIS\n    id\n  }\n}\n\nfragment NetworkEventDetailPanelFragment on HttpNetworkEvent {\n  __typename\n  id\n  resourceType\n  at\n  until\n  initiator {\n    origin\n    lineNumber\n  }\n  ...RequestTabFragment\n  ...ResponseTabFragment\n}\n\nfragment NetworkPanelFragment_3ybCIS on TestExecution {\n  id\n  searchedNetworkEvents: events(filter: {type: NETWORK, networkFilter: {urlSearch: $urlSearch, resourceType: $resourceType}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          __typename\n          id\n          at\n          until\n          ...RequestSliceFragment\n          ...NetworkEventDetailPanelFragment\n        }\n      }\n    }\n  }\n}\n\nfragment QueryParamsFragment on HttpNetworkRequest {\n  queryString {\n    value\n    key\n  }\n}\n\nfragment RequestDataFragment on HttpNetworkRequest {\n  body {\n    data\n    mimeType\n  }\n}\n\nfragment RequestHeadersFragment on HttpNetworkRequest {\n  headers {\n    values(order: {by: ALPHABETICAL, direction: ASCENDING}) {\n      value\n      key\n    }\n  }\n}\n\nfragment RequestSliceFragment on HttpNetworkEvent {\n  __typename\n  id\n  resourceType\n  at\n  until\n  initiator {\n    origin\n    lineNumber\n  }\n  request {\n    method\n    body {\n      mimeType\n    }\n    queryString {\n      value\n      key\n    }\n    url {\n      url\n    }\n  }\n  response {\n    status\n    transferSize\n    body {\n      mimeType\n      size\n    }\n  }\n}\n\nfragment RequestTabFragment on HttpNetworkEvent {\n  request {\n    ...RequestHeadersFragment\n    ...RequestDataFragment\n    ...QueryParamsFragment\n    ...RequestToUrlFragment\n  }\n}\n\nfragment RequestToUrlFragment on HttpNetworkRequest {\n  url {\n    url\n  }\n}\n\nfragment ResponseTabFragment on HttpNetworkEvent {\n  response {\n    status\n    transferSize\n    body {\n      mimeType\n      data\n      size\n    }\n    headers {\n      values(order: {by: ALPHABETICAL, direction: ASCENDING}) {\n        value\n        key\n      }\n    }\n  }\n}\n"
+    "text": "query NetworkPanelFragmentRefetchQuery(\n  $resourceType: [HttpNetworkEventResourceType!] = null\n  $urlSearch: String = null\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...NetworkPanelFragment_3ybCIS\n    id\n  }\n}\n\nfragment NetworkEventDetailPanelFragment on HttpNetworkEvent {\n  __typename\n  id\n  resourceType\n  at\n  until\n  initiator {\n    origin\n    lineNumber\n  }\n  ...RequestTabFragment\n  ...ResponseTabFragment\n}\n\nfragment NetworkPanelFragment_3ybCIS on TestExecution {\n  id\n  searchedNetworkEvents: events(filter: {type: NETWORK, networkFilter: {urlSearch: $urlSearch, resourceType: $resourceType}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          __typename\n          id\n          at\n          until\n          ...NetworkSliceFragment\n          ...NetworkEventDetailPanelFragment\n        }\n      }\n    }\n  }\n}\n\nfragment NetworkSliceFragment on HttpNetworkEvent {\n  __typename\n  id\n  resourceType\n  at\n  until\n  initiator {\n    origin\n    lineNumber\n  }\n  request {\n    method\n    body {\n      mimeType\n    }\n    queryString {\n      value\n      key\n    }\n    url {\n      url\n    }\n  }\n  response {\n    status\n    transferSize\n    body {\n      mimeType\n      size\n    }\n  }\n}\n\nfragment QueryParamsFragment on HttpNetworkRequest {\n  queryString {\n    value\n    key\n  }\n}\n\nfragment RequestDataFragment on HttpNetworkRequest {\n  body {\n    data\n    mimeType\n  }\n}\n\nfragment RequestHeadersFragment on HttpNetworkRequest {\n  headers {\n    values(order: {by: ALPHABETICAL, direction: ASCENDING}) {\n      value\n      key\n    }\n  }\n}\n\nfragment RequestTabFragment on HttpNetworkEvent {\n  request {\n    ...RequestHeadersFragment\n    ...RequestDataFragment\n    ...QueryParamsFragment\n    ...RequestToUrlFragment\n  }\n}\n\nfragment RequestToUrlFragment on HttpNetworkRequest {\n  url {\n    url\n  }\n}\n\nfragment ResponseDataFragment on HttpNetworkResponse {\n  body {\n    mimeType\n    data\n    size\n  }\n}\n\nfragment ResponseHeadersFragment on HttpNetworkResponse {\n  headers {\n    values(order: {by: ALPHABETICAL, direction: ASCENDING}) {\n      value\n      key\n    }\n  }\n}\n\nfragment ResponseTabFragment on HttpNetworkEvent {\n  response {\n    ...ResponseDataFragment\n    ...ResponseHeadersFragment\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "cb5428c4bdf45d48a04c845b76bc6a12";
+(node as any).hash = "f9bdb634d0af0d8626253b453eafd012";
 
 export default node;

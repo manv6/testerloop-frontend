@@ -1,9 +1,11 @@
 import React from 'react';
 import { useFragment } from 'react-relay';
-import QueryParams from '../QueryParams/QueryParams';
-import RequestData from '../RequestData';
-import RequestHeaders from '../RequestHeaders';
-import RequestToUrl from '../RequestToUrl';
+import {
+    RequestData,
+    RequestHeaders,
+    RequestToUrl,
+    QueryParams,
+} from '../../request';
 import RequestTabFragment from './RequestTabFragment';
 import { RequestTabFragment$key } from './__generated__/RequestTabFragment.graphql';
 

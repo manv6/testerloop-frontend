@@ -2,7 +2,7 @@ import React from 'react';
 import { useMemo } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import KeyValueTable from '../KeyValueTable';
+import KeyValueTable from '../../KeyValueTable';
 import { RequestDataFragment$data } from '../RequestData/__generated__/RequestDataFragment.graphql';
 
 type RequestBodyProps = {

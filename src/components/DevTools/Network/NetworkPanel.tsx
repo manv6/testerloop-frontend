@@ -9,7 +9,7 @@ import React, {
 import { useRefetchableFragment } from 'react-relay';
 
 import type { NetworkPanelFragment$key } from './__generated__/NetworkPanelFragment.graphql';
-import { RequestSlice, NetworkEventDetailPanel } from './components/';
+import { NetworkSlice, NetworkEventDetailPanel } from './components/';
 import styles from './Network.module.scss';
 import { useTimeline } from 'src/hooks/timeline';
 import { Button, TextInput } from 'src/components/common';
@@ -367,7 +367,7 @@ export const NetworkPanel: React.FC<Props> = ({ fragmentKey }) => {
                         </thead>
                         <tbody>
                             {filteredEvents.map((networkEvent, i) => (
-                                <RequestSlice
+                                <NetworkSlice
                                     idx={i}
                                     ref={
                                         lastStartedNetworkEvent?.id ===

@@ -7,8 +7,8 @@ import { TabLabel } from '../../NetworkPanel';
 import { useFragment } from 'react-relay';
 import NetworkEventDetailPanelFragment from './NetworkEventDetailPanelFragment';
 import { NetworkEventDetailPanelFragment$key } from './__generated__/NetworkEventDetailPanelFragment.graphql';
-import RequestTab from '../RequestTab';
-import ResponseTab from '../ResponseTab';
+import RequestTab from '../tabs/RequestTab';
+import ResponseTab from '../tabs/ResponseTab';
 
 type NetworkEventDetailPanelProps = {
     selectedEvent: NetworkEventDetailPanelFragment$key;

@@ -2,14 +2,14 @@ import React, { forwardRef } from 'react';
 import cx from 'classnames';
 import { useTimeline } from 'src/hooks/timeline';
 import { datesToFraction } from 'src/utils/date';
-import styles from './RequestSlice.module.scss';
+import styles from './NetworkSlice.module.scss';
 import { styled } from '@mui/material';
 import NetworkProgress from '../NetworkProgress';
 import { ProgressFilterType } from '../../NetworkPanel';
 import entryStyles from 'src/components/common/styles/entryStyles';
-import RequestSliceFragment from './RequestSliceFragment';
+import RequestSliceFragment from './NetworkSliceFragment';
 import { useFragment } from 'react-relay';
-import { RequestSliceFragment$key } from './__generated__/RequestSliceFragment.graphql';
+import { NetworkSliceFragment$key } from './__generated__/NetworkSliceFragment.graphql';
 
 interface StyledEntryProps {
     isSelected?: boolean;
@@ -42,7 +42,7 @@ const StyledEntry = styled('tr')<StyledEntryProps>((props) => {
 
 type Props = {
     idx: number;
-    event: RequestSliceFragment$key;
+    event: NetworkSliceFragment$key;
     selectedEventId?: string;
     setSelectedEventIdx: (idx: number) => void;
     selectedEventIdx: number | null;
