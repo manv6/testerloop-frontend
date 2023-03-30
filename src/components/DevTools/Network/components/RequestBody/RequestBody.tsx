@@ -3,16 +3,16 @@ import { useMemo } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import KeyValueTable from '../KeyValueTable';
-import { NetworkEventDetailPanelFragment$data } from '../NetworkEventDetailPanel/__generated__/NetworkEventDetailPanelFragment.graphql';
+import { RequestTabFragment$data } from '../RequestTab/__generated__/RequestTabFragment.graphql';
 
 type RequestBodyProps = {
-    selectedEvent: NetworkEventDetailPanelFragment$data;
+    body: RequestTabFragment$data['request']['body'];
 };
 
-const RequestBody: React.FC<RequestBodyProps> = ({ selectedEvent }) => {
+const RequestBody: React.FC<RequestBodyProps> = ({ body }) => {
     const snippet = useMemo(() => {
-        const mimeType = selectedEvent.request.body?.mimeType;
-        const data = selectedEvent.request.body?.data;
+        const mimeType = body?.mimeType;
+        const data = body?.data;
 
         if (!data) {
             return;
@@ -43,7 +43,7 @@ const RequestBody: React.FC<RequestBodyProps> = ({ selectedEvent }) => {
             );
         }
         return <div>{data}</div>;
-    }, [selectedEvent]);
+    }, [body?.data, body?.mimeType]);
 
     return <div>{snippet}</div>;
 };

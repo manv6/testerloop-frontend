@@ -38,12 +38,12 @@ const NetworkEventDetailPanel: React.FC<NetworkEventDetailPanelProps> = ({
         {
             tabLabel: TabLabel.REQUEST,
             title: 'Request',
-            children: <RequestTab selectedEvent={data} />,
+            children: <RequestTab fragmentKey={data} />,
         },
         {
             tabLabel: TabLabel.RESPONSE,
             title: 'Response',
-            children: <ResponseTab selectedEvent={data} />,
+            children: <ResponseTab fragmentKey={data} />,
         },
     ];
 

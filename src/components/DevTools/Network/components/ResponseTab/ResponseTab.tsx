@@ -1,24 +1,28 @@
 import React from 'react';
 import { useMemo } from 'react';
-import { NetworkEventDetailPanelFragment$data } from '../NetworkEventDetailPanel/__generated__/NetworkEventDetailPanelFragment.graphql';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { Accordion, Divider } from 'src/components/common';
 import KeyValueTable from '../KeyValueTable';
 import styles from './ResponseTab.module.scss';
+import { ResponseTabFragment$key } from './__generated__/ResponseTabFragment.graphql';
+import ResponseTabFragment from './ResponseTabFragment';
+import { useFragment } from 'react-relay';
 
 type ResponseTabProps = {
-    selectedEvent: NetworkEventDetailPanelFragment$data;
+    fragmentKey: ResponseTabFragment$key;
 };
 
-const ResponseTab: React.FC<ResponseTabProps> = ({ selectedEvent }) => {
+const ResponseTab: React.FC<ResponseTabProps> = ({ fragmentKey }) => {
+    const data = useFragment(ResponseTabFragment, fragmentKey);
+
     const snippet = useMemo(() => {
         const responseDataExcludedMimeTypes = [
             'application/font-woff2',
             'application/octet-stream',
         ];
-        const mimeType = selectedEvent.response.body.mimeType;
-        const responsePayload = selectedEvent.response.body.data;
+        const mimeType = data.response.body.mimeType;
+        const responsePayload = data.response.body.data;
 
         if (
             !responsePayload ||
@@ -39,12 +43,12 @@ const ResponseTab: React.FC<ResponseTabProps> = ({ selectedEvent }) => {
             );
         }
         return <div>{responsePayload}</div>;
-    }, [selectedEvent]);
+    }, [data]);
 
     return (
         <div>
             <Accordion title={<div>Mime Type</div>}>
-                {selectedEvent.response.body.mimeType}
+                {data.response.body.mimeType}
             </Accordion>
             <Divider />
             {snippet && (
@@ -63,7 +67,7 @@ const ResponseTab: React.FC<ResponseTabProps> = ({ selectedEvent }) => {
             <Accordion title={<div>Response Headers</div>}>
                 <KeyValueTable
                     key="responseHeader"
-                    valuePairs={selectedEvent.response.headers.values}
+                    valuePairs={data.response.headers.values}
                 />
             </Accordion>
             <Divider />
