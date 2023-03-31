@@ -4,50 +4,55 @@ import styles from './NetworkEventDetailPanel.module.scss';
 import { styled } from '@mui/material';
 import { CollapseIcon } from 'src/components/Expandable/components';
 import { TabLabel } from '../../NetworkPanel';
-import { useFragment } from 'react-relay';
-import NetworkEventDetailPanelFragment from './NetworkEventDetailPanelFragment';
-import { NetworkEventDetailPanelFragment$key } from './__generated__/NetworkEventDetailPanelFragment.graphql';
+import { useLazyLoadQuery } from 'react-relay';
 import { RequestTab, ResponseTab } from '../tabs';
+import NetworkEventDetailPanelQuery from './NetworkEventDetailPanelQuery';
+import { NetworkEventDetailPanelQuery as NetworkEventDetailPanelQueryType } from './__generated__/NetworkEventDetailPanelQuery.graphql';
+import NetworkEventDetailPanelWrapper from '../NetworkEventDetailPanelWrapper';
 
 type NetworkEventDetailPanelProps = {
-    selectedEvent: NetworkEventDetailPanelFragment$key;
+    selectedEventId: string;
     activeTab: number | null;
     onSelectTab: (value: number) => void;
     onDetailPanelClose: () => void;
 };
-
-const StyledDetails = styled('div')(({ theme }) => ({
-    borderLeft: `1px solid ${theme.palette.base[300]}`,
-    backgroundColor: theme.palette.base[400],
-}));
 
 const StyledTabs = styled('div')(({ theme }) => ({
     borderBottom: `1px solid ${theme.palette.base[300]}`,
 }));
 
 const NetworkEventDetailPanel: React.FC<NetworkEventDetailPanelProps> = ({
-    selectedEvent,
+    selectedEventId,
     activeTab,
     onSelectTab,
     onDetailPanelClose,
 }) => {
-    const data = useFragment(NetworkEventDetailPanelFragment, selectedEvent);
+    const data = useLazyLoadQuery<NetworkEventDetailPanelQueryType>(
+        NetworkEventDetailPanelQuery,
+        {
+            httpNetworkEventId: selectedEventId,
+        }
+    );
+
+    if (!data.httpNetworkEvent) {
+        return null;
+    }
 
     const tabChildren = [
         {
             tabLabel: TabLabel.REQUEST,
             title: 'Request',
-            children: <RequestTab fragmentKey={data} />,
+            children: <RequestTab fragmentKey={data.httpNetworkEvent} />,
         },
         {
             tabLabel: TabLabel.RESPONSE,
             title: 'Response',
-            children: <ResponseTab fragmentKey={data} />,
+            children: <ResponseTab fragmentKey={data.httpNetworkEvent} />,
         },
     ];
 
     return (
-        <StyledDetails key="details" className={styles.networkDetailPanel}>
+        <NetworkEventDetailPanelWrapper key="details">
             <div className={styles.networkDetailPanelContent}>
                 <StyledTabs className={styles.tabs}>
                     <Tabs
@@ -69,7 +74,7 @@ const NetworkEventDetailPanel: React.FC<NetworkEventDetailPanelProps> = ({
                     return <div key={i}>{children}</div>;
                 })}
             </div>
-        </StyledDetails>
+        </NetworkEventDetailPanelWrapper>
     );
 };
 

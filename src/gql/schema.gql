@@ -226,6 +226,7 @@ type PageInfo {
 }
 
 type Query {
+  httpNetworkEvent(id: ID!): HttpNetworkEvent
   node(id: ID!): Node
   test: Boolean!
   testExecution(id: ID!): TestExecution

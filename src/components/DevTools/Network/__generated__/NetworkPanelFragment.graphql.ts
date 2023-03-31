@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<0bb2de560c81361844a021a424832ce3>>
+ * @generated SignedSource<<c5afc4f77afef1a03f7c851d47572d31>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -20,7 +20,7 @@ export type NetworkPanelFragment$data = {
         readonly at: any;
         readonly id: string;
         readonly until: any;
-        readonly " $fragmentSpreads": FragmentRefs<"NetworkEventDetailPanelFragment" | "NetworkSliceFragment">;
+        readonly " $fragmentSpreads": FragmentRefs<"NetworkSliceFragment">;
       } | {
         // This will never be '%other', but we need some
         // value in case none of the concrete values match.
@@ -153,11 +153,6 @@ return {
                       "args": null,
                       "kind": "FragmentSpread",
                       "name": "NetworkSliceFragment"
-                    },
-                    {
-                      "args": null,
-                      "kind": "FragmentSpread",
-                      "name": "NetworkEventDetailPanelFragment"
                     }
                   ],
                   "type": "HttpNetworkEvent",
@@ -178,6 +173,6 @@ return {
 };
 })();
 
-(node as any).hash = "f9bdb634d0af0d8626253b453eafd012";
+(node as any).hash = "66cbd31b170ca53542866eb4fc621c78";
 
 export default node;

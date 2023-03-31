@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ce151725db5d30216233d1b95761625d>>
+ * @generated SignedSource<<1ac3da9eb033a437dfffdaafccf045b0>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -19,14 +19,7 @@ export type NetworkSliceFragment$data = {
     readonly origin: string | null;
   };
   readonly request: {
-    readonly body: {
-      readonly mimeType: string;
-    } | null;
     readonly method: string;
-    readonly queryString: ReadonlyArray<{
-      readonly key: string;
-      readonly value: string;
-    }>;
     readonly url: {
       readonly url: string;
     };
@@ -48,15 +41,7 @@ export type NetworkSliceFragment$key = {
   readonly " $fragmentSpreads": FragmentRefs<"NetworkSliceFragment">;
 };
 
-const node: ReaderFragment = (function(){
-var v0 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "mimeType",
-  "storageKey": null
-};
-return {
+const node: ReaderFragment = {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
@@ -140,43 +125,6 @@ return {
         {
           "alias": null,
           "args": null,
-          "concreteType": "HttpRequestBody",
-          "kind": "LinkedField",
-          "name": "body",
-          "plural": false,
-          "selections": [
-            (v0/*: any*/)
-          ],
-          "storageKey": null
-        },
-        {
-          "alias": null,
-          "args": null,
-          "concreteType": "KeyValuePair",
-          "kind": "LinkedField",
-          "name": "queryString",
-          "plural": true,
-          "selections": [
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "value",
-              "storageKey": null
-            },
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "key",
-              "storageKey": null
-            }
-          ],
-          "storageKey": null
-        },
-        {
-          "alias": null,
-          "args": null,
           "concreteType": "HttpNetworkRequestUrl",
           "kind": "LinkedField",
           "name": "url",
@@ -225,7 +173,13 @@ return {
           "name": "body",
           "plural": false,
           "selections": [
-            (v0/*: any*/),
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "mimeType",
+              "storageKey": null
+            },
             {
               "alias": null,
               "args": null,
@@ -243,8 +197,7 @@ return {
   "type": "HttpNetworkEvent",
   "abstractKey": null
 };
-})();
 
-(node as any).hash = "6191ad17fd9cd60ddcc1b50733db0a05";
+(node as any).hash = "92b02f18edf93e9229a9d34dbcdff027";
 
 export default node;

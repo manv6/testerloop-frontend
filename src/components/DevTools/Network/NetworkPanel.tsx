@@ -19,6 +19,7 @@ import { HeaderWithFilter } from 'src/components/common';
 import { styled } from '@mui/material';
 import useScrollToChild from 'src/hooks/scrollTo';
 import NetworkPanelFragment from './NetworkPanelFragment';
+import NetworkEventDetailPanelWrapper from './components/NetworkEventDetailPanelWrapper';
 
 enum ResourceTypeFilterType {
     HTML = 'html',
@@ -244,6 +245,17 @@ export const NetworkPanel: React.FC<Props> = ({ fragmentKey }) => {
         dependencies: [lastStartedNetworkEvent?.id],
     });
 
+    const fallback = useMemo(
+        () => (
+            <NetworkEventDetailPanelWrapper
+                className={styles.eventPanelLoading}
+            >
+                Loading...
+            </NetworkEventDetailPanelWrapper>
+        ),
+        []
+    );
+
     return (
         <Expandable.Child
             className={styles.expandableNetwork}
@@ -394,12 +406,14 @@ export const NetworkPanel: React.FC<Props> = ({ fragmentKey }) => {
                 </div>
             </div>
             {selectedEvent && (
-                <NetworkEventDetailPanel
-                    selectedEvent={selectedEvent}
-                    activeTab={activeTab}
-                    onSelectTab={(value: number) => setActiveTab(value)}
-                    onDetailPanelClose={onDetailPanelClose}
-                />
+                <React.Suspense fallback={fallback}>
+                    <NetworkEventDetailPanel
+                        selectedEventId={selectedEvent.id}
+                        activeTab={activeTab}
+                        onSelectTab={(value: number) => setActiveTab(value)}
+                        onDetailPanelClose={onDetailPanelClose}
+                    />
+                </React.Suspense>
             )}
         </Expandable.Child>
     );
