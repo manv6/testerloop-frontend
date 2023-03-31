@@ -58,12 +58,9 @@ type NetworkSliceWithRefProps = Props & {
 // eslint-disable-next-line react/display-name
 const NetworkSlice = forwardRef<HTMLTableRowElement, NetworkSliceWithRefProps>(
     (props, ref) => {
-        const data = useFragment(NetworkSliceFragment, props.event);
+        const rawData = useFragment(NetworkSliceFragment, props.event);
 
-        const { at: eventTimeAt, until: eventTimeUntil } = useMemo(
-            () => formatIntervalEvent({ at: data.at, until: data.until }),
-            [data.at, data.until]
-        );
+        const data = useMemo(() => formatIntervalEvent(rawData), [rawData]);
         const { startTime, endTime, currentTime, setHoverTimeFraction } =
             useTimeline();
 
@@ -74,20 +71,20 @@ const NetworkSlice = forwardRef<HTMLTableRowElement, NetworkSliceWithRefProps>(
         };
 
         const waterfallStartPositionPercentage =
-            100 * datesToFraction(startTime, endTime, eventTimeAt);
+            100 * datesToFraction(startTime, endTime, data.at);
 
         const waterfallWidthPercentage =
             100 *
-            (datesToFraction(startTime, endTime, eventTimeUntil) -
-                datesToFraction(startTime, endTime, eventTimeAt));
+            (datesToFraction(startTime, endTime, data.until) -
+                datesToFraction(startTime, endTime, data.at));
 
         const currentTimePercentage =
             100 * datesToFraction(startTime, endTime, currentTime);
 
         let progress = ProgressFilterType.NOT_STARTED;
-        if (eventTimeUntil <= currentTime) {
+        if (data.until <= currentTime) {
             progress = ProgressFilterType.COMPLETED;
-        } else if (eventTimeAt <= currentTime) {
+        } else if (data.at <= currentTime) {
             progress = ProgressFilterType.IN_PROGRESS;
         }
 

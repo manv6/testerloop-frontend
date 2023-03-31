@@ -35,7 +35,7 @@ const NetworkEventDetailPanel: React.FC<NetworkEventDetailPanelProps> = ({
     );
 
     if (!data.httpNetworkEvent) {
-        return null;
+        return <div>No data</div>;
     }
 
     const tabChildren = [

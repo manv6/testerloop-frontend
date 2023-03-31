@@ -9,7 +9,11 @@ import React, {
 import { useRefetchableFragment } from 'react-relay';
 
 import type { NetworkPanelFragment$key } from './__generated__/NetworkPanelFragment.graphql';
-import { NetworkSlice, NetworkEventDetailPanel } from './components/';
+import {
+    NetworkSlice,
+    NetworkEventDetailPanel,
+    NetworkEventDetailPanelWrapper,
+} from './components/';
 import styles from './Network.module.scss';
 import { useTimeline } from 'src/hooks/timeline';
 import { Button, TextInput } from 'src/components/common';
@@ -19,7 +23,7 @@ import { HeaderWithFilter } from 'src/components/common';
 import { styled } from '@mui/material';
 import useScrollToChild from 'src/hooks/scrollTo';
 import NetworkPanelFragment from './NetworkPanelFragment';
-import NetworkEventDetailPanelWrapper from './components/NetworkEventDetailPanelWrapper';
+import { useDebounce } from 'use-debounce';
 
 enum ResourceTypeFilterType {
     HTML = 'html',
@@ -30,6 +34,16 @@ enum ResourceTypeFilterType {
     FONT = 'font',
     OTHER = 'other',
 }
+
+const resourceTypeMap = {
+    [ResourceTypeFilterType.HTML]: 'document',
+    [ResourceTypeFilterType.XHR]: 'xhr',
+    [ResourceTypeFilterType.JS]: 'script',
+    [ResourceTypeFilterType.CSS]: 'stylesheet',
+    [ResourceTypeFilterType.IMAGE]: 'image',
+    [ResourceTypeFilterType.FONT]: 'font',
+    [ResourceTypeFilterType.OTHER]: 'other',
+};
 
 export enum TabLabel {
     REQUEST = 'request',
@@ -125,6 +139,9 @@ export const NetworkPanel: React.FC<Props> = ({ fragmentKey }) => {
         null
     );
     const [filterTerm, setFilterTerm] = useState<string>('');
+    const debouncedResult = useDebounce(filterTerm, 200);
+    const debouncedTerm = debouncedResult[0];
+
     const [activeTab, setActiveTab] = useState<number | null>(0);
     const [selectedProgressFilters, setSelectedProgressFilters] = useState<
         Set<ProgressFilterType>
@@ -134,15 +151,17 @@ export const NetworkPanel: React.FC<Props> = ({ fragmentKey }) => {
     const { currentTime } = useTimeline();
 
     useEffect(() => {
-        if (!filterTerm && !selectedResourceTypeFilters.size) {
-            return;
-        }
-        const resourceType = Array.from(selectedResourceTypeFilters);
+        const resourceType = Array.from(selectedResourceTypeFilters).map((r) =>
+            resourceTypeMap[r].toUpperCase()
+        );
 
         startTransition(() => {
-            refetch({ urlSearch: filterTerm, resourceType });
+            refetch({
+                urlSearch: debouncedTerm,
+                ...(resourceType.length ? { resourceType } : {}),
+            });
         });
-    }, [filterTerm, refetch, selectedResourceTypeFilters]);
+    }, [debouncedTerm, refetch, selectedResourceTypeFilters]);
 
     const filteredEvents = useMemo(
         () =>
