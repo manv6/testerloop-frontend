@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useMemo } from 'react';
 import cx from 'classnames';
 import { useTimeline } from 'src/hooks/timeline';
 import { datesToFraction } from 'src/utils/date';
@@ -7,9 +7,10 @@ import { styled } from '@mui/material';
 import NetworkProgress from '../NetworkProgress';
 import { ProgressFilterType } from '../../NetworkPanel';
 import entryStyles from 'src/components/common/styles/entryStyles';
-import RequestSliceFragment from './NetworkSliceFragment';
 import { useFragment } from 'react-relay';
 import { NetworkSliceFragment$key } from './__generated__/NetworkSliceFragment.graphql';
+import { formatIntervalEvent } from 'src/utils/formatters';
+import NetworkSliceFragment from './NetworkSliceFragment';
 
 interface StyledEntryProps {
     isSelected?: boolean;
@@ -50,17 +51,19 @@ type Props = {
     lastStartedNetworkEventIdx: number;
 };
 
-type RequestSliceWithRefProps = Props & {
+type NetworkSliceWithRefProps = Props & {
     ref: React.Ref<HTMLTableRowElement>;
 };
 
 // eslint-disable-next-line react/display-name
-const RequestSlice = forwardRef<HTMLTableRowElement, RequestSliceWithRefProps>(
+const NetworkSlice = forwardRef<HTMLTableRowElement, NetworkSliceWithRefProps>(
     (props, ref) => {
-        const data = useFragment(RequestSliceFragment, props.event);
+        const data = useFragment(NetworkSliceFragment, props.event);
 
-        const eventTimeAt = new Date(data.at);
-        const eventTimeUntil = new Date(data.until);
+        const { at: eventTimeAt, until: eventTimeUntil } = useMemo(
+            () => formatIntervalEvent({ at: data.at, until: data.until }),
+            [data.at, data.until]
+        );
         const { startTime, endTime, currentTime, setHoverTimeFraction } =
             useTimeline();
 
@@ -161,4 +164,4 @@ const RequestSlice = forwardRef<HTMLTableRowElement, RequestSliceWithRefProps>(
     }
 );
 
-export default RequestSlice;
+export default NetworkSlice;

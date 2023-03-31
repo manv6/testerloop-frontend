@@ -13,13 +13,6 @@ const NetworkSliceFragment = graphql`
         }
         request {
             method
-            body {
-                mimeType
-            }
-            queryString {
-                value
-                key
-            }
             url {
                 url
             }
