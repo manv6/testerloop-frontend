@@ -9,11 +9,7 @@ import graphql from 'babel-plugin-relay/macro';
 import { Panel, Tag, Divider, ExpandButton } from 'src/components/common';
 import cx from 'classnames';
 import { styled } from '@mui/material';
-import {
-    DetailColumn,
-    ChromeIcon,
-    FrameworkErrorIcon,
-} from './components';
+import { DetailColumn, ChromeIcon, FrameworkErrorIcon } from './components';
 import splitCamelCase from 'src/utils/splitCamelCase';
 import NetworkErrorCount from './components/NetworkErrorCount';
 import ConsoleErrorCount from './components/ConsoleErrorCount';
