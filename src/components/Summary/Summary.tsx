@@ -102,7 +102,7 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
                                 {commitHash}
                             </StyledLink>
                         </DetailColumn>
-                        <DetailColumn title="Time">
+                        <DetailColumn title="Execution time">
                             <div className={styles.columnContent}>
                                 {failedAt}
                             </div>
