@@ -1,13 +1,16 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useMemo } from 'react';
 import cx from 'classnames';
 import { useTimeline } from 'src/hooks/timeline';
 import { datesToFraction } from 'src/utils/date';
-import styles from './RequestSlice.module.scss';
-import { FormattedNetworkEvents } from 'src/utils/formatters';
+import styles from './NetworkSlice.module.scss';
 import { styled } from '@mui/material';
 import NetworkProgress from '../NetworkProgress';
 import { ProgressFilterType } from '../../NetworkPanel';
 import entryStyles from 'src/components/common/styles/entryStyles';
+import { useFragment } from 'react-relay';
+import { NetworkSliceFragment$key } from './__generated__/NetworkSliceFragment.graphql';
+import { formatIntervalEvent } from 'src/utils/formatters';
+import NetworkSliceFragment from './NetworkSliceFragment';
 
 interface StyledEntryProps {
     isSelected?: boolean;
@@ -40,21 +43,24 @@ const StyledEntry = styled('tr')<StyledEntryProps>((props) => {
 
 type Props = {
     idx: number;
-    event: FormattedNetworkEvents[0];
-    selectedEvent?: FormattedNetworkEvents[0];
-    selectedEventIdx: number | null;
+    event: NetworkSliceFragment$key;
+    selectedEventId?: string;
     setSelectedEventIdx: (idx: number) => void;
+    selectedEventIdx: number | null;
     isLastStartedEvent: boolean;
     lastStartedNetworkEventIdx: number;
 };
 
-type RequestSliceWithRefProps = Props & {
+type NetworkSliceWithRefProps = Props & {
     ref: React.Ref<HTMLTableRowElement>;
 };
 
 // eslint-disable-next-line react/display-name
-const RequestSlice = forwardRef<HTMLTableRowElement, RequestSliceWithRefProps>(
+const NetworkSlice = forwardRef<HTMLTableRowElement, NetworkSliceWithRefProps>(
     (props, ref) => {
+        const rawData = useFragment(NetworkSliceFragment, props.event);
+
+        const data = useMemo(() => formatIntervalEvent(rawData), [rawData]);
         const { startTime, endTime, currentTime, setHoverTimeFraction } =
             useTimeline();
 
@@ -65,32 +71,27 @@ const RequestSlice = forwardRef<HTMLTableRowElement, RequestSliceWithRefProps>(
         };
 
         const waterfallStartPositionPercentage =
-            100 *
-            datesToFraction(startTime, endTime, props.event.startedDateTime);
+            100 * datesToFraction(startTime, endTime, data.at);
 
         const waterfallWidthPercentage =
             100 *
-            (datesToFraction(startTime, endTime, props.event.endedDateTime) -
-                datesToFraction(
-                    startTime,
-                    endTime,
-                    props.event.startedDateTime
-                ));
+            (datesToFraction(startTime, endTime, data.until) -
+                datesToFraction(startTime, endTime, data.at));
 
         const currentTimePercentage =
             100 * datesToFraction(startTime, endTime, currentTime);
 
         let progress = ProgressFilterType.NOT_STARTED;
-        if (props.event.endedDateTime <= currentTime) {
+        if (data.until <= currentTime) {
             progress = ProgressFilterType.COMPLETED;
-        } else if (props.event.startedDateTime <= currentTime) {
+        } else if (data.at <= currentTime) {
             progress = ProgressFilterType.IN_PROGRESS;
         }
 
         return (
             <StyledEntry
-                isClicked={props.selectedEvent?.id === props.event.id}
-                isError={props.event.response.status >= 400}
+                isClicked={props.selectedEventId === data.id}
+                isError={data.response.status >= 400}
                 isSelected={props.isLastStartedEvent}
                 isPreviousToClicked={props.idx + 1 === props.selectedEventIdx}
                 isPreviousToSelected={
@@ -114,33 +115,33 @@ const RequestSlice = forwardRef<HTMLTableRowElement, RequestSliceWithRefProps>(
                     <NetworkProgress progress={progress} />
                 </td>
                 <td className={styles.td}>
-                    <span>{props.event.response.status}</span>
+                    <span>{data.response.status}</span>
                 </td>
                 <td className={styles.td}>
-                    <span>{props.event.request.method}</span>
+                    <span>{data.request.method}</span>
                 </td>
                 <td className={cx(styles.td, styles.urlColumn)}>
-                    <span>{truncateValue(props.event.request.url, 60)}</span>
+                    <span>{truncateValue(data.request.url.url, 60)}</span>
                 </td>
                 <td className={styles.td}>
                     <span>
                         {truncateValue(
-                            (props.event._initiator || '') +
-                                (props.event._initiator_line
-                                    ? `:${props.event._initiator_line}`
+                            (data.initiator.origin || '') +
+                                (data.initiator.lineNumber
+                                    ? `:${data.initiator.lineNumber}`
                                     : ''),
                             40
                         )}
                     </span>
                 </td>
                 <td className={styles.td}>
-                    <span>{props.event.response.content.mimeType}</span>
+                    <span>{data.response.body.mimeType}</span>
                 </td>
                 <td className={styles.td}>
-                    <span>{props.event.response._transferSize}</span>
+                    <span>{data.response.transferSize}</span>
                 </td>
                 <td className={styles.td}>
-                    <span>{props.event.response.bodySize}</span>
+                    <span>{data.response.body.size}</span>
                 </td>
                 <td className={cx(styles.td, styles.waterfall)}>
                     <div
@@ -160,4 +161,4 @@ const RequestSlice = forwardRef<HTMLTableRowElement, RequestSliceWithRefProps>(
     }
 );
 
-export default RequestSlice;
+export default NetworkSlice;

@@ -69,7 +69,7 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
         [data.steps]
     );
     const networkEvents = useMemo(
-        () => formatter.formatNetworkEvents(data.networkEvents),
+        () => formatter.formatMockNetworkEvents(data.networkEvents),
         [data.networkEvents]
     );
 
@@ -105,9 +105,10 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
                     return status.startsWith('4') || status.startsWith('5');
                 })
                 .map((evt) => ({
-                    id: evt._requestId,
+                    ...evt,
+                    id: evt.id,
                     type: EventType.NETWORK_ERROR,
-                    start: evt.endedDateTime,
+                    start: evt.startedDateTime,
                     startFraction: datesToFraction(
                         startTime,
                         endTime,
@@ -124,9 +125,10 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
             networkEvents
                 .filter((evt) => evt.response.status.toString().startsWith('2'))
                 .map((evt) => ({
-                    id: evt._requestId,
+                    ...evt,
+                    id: evt.id,
                     type: EventType.NETWORK_SUCCESS,
-                    start: evt.endedDateTime,
+                    start: evt.startedDateTime,
                     startFraction: datesToFraction(
                         startTime,
                         endTime,
@@ -360,7 +362,7 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
                                             : marker.name
                                     }
                                     message={
-                                        marker.message.length > 100
+                                        marker?.message?.length > 100
                                             ? marker.message.slice(0, 100) +
                                               '...'
                                             : marker.message

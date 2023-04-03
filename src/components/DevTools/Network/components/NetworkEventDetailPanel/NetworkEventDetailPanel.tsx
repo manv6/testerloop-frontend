@@ -1,228 +1,58 @@
-import React, { useMemo } from 'react';
-import { Tabs, Accordion, Divider, Button } from 'src/components/common';
-
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-
-import { NameValueTable } from 'src/components/DevTools/Network/components';
+import React from 'react';
+import { Tabs, Button } from 'src/components/common';
 import styles from './NetworkEventDetailPanel.module.scss';
-import { FormattedNetworkEvents } from 'src/utils/formatters';
 import { styled } from '@mui/material';
 import { CollapseIcon } from 'src/components/Expandable/components';
 import { TabLabel } from '../../NetworkPanel';
-
-const sortByName = (
-    array: ReadonlyArray<{
-        readonly name: string;
-        readonly value: string;
-    }>
-) =>
-    [...array].sort((a, b) =>
-        a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
-    );
-
-type PostDataProps = {
-    selectedEvent: FormattedNetworkEvents[0];
-};
-
-const PostData: React.FC<PostDataProps> = ({ selectedEvent }) => {
-    const snippet = useMemo(() => {
-        const mimeType = selectedEvent.request.postData?.mimeType;
-        const postData = selectedEvent.request.postData?.text;
-
-        if (!postData) {
-            return;
-        }
-        if (mimeType?.includes('application/json')) {
-            return (
-                <SyntaxHighlighter
-                    language="json"
-                    style={vscDarkPlus}
-                    wrapLongLines={true}
-                >
-                    {JSON.stringify(JSON.parse(postData), null, 2)}
-                </SyntaxHighlighter>
-            );
-        }
-        if (mimeType?.includes('application/x-www-form-urlencoded')) {
-            const valuePairs = Array.from(
-                new URLSearchParams(postData).entries()
-            ).map(([key, value]) => {
-                return { name: key, value };
-            });
-            return (
-                <NameValueTable
-                    valuePairs={valuePairs}
-                    nameLabel="key"
-                    valueLabel="value"
-                />
-            );
-        }
-        return <div>{postData}</div>;
-    }, [selectedEvent]);
-
-    return <div>{snippet}</div>;
-};
-
-type ResponseDataTabProps = {
-    selectedEvent: FormattedNetworkEvents[0];
-};
-
-const ResponseDataTab: React.FC<ResponseDataTabProps> = ({ selectedEvent }) => {
-    const snippet = useMemo(() => {
-        const responseDataExcludedMimeTypes = [
-            'application/font-woff2',
-            'application/octet-stream',
-        ];
-        const mimeType = selectedEvent.response.content.mimeType;
-        const responsePayload = selectedEvent.response.content.text;
-
-        if (
-            !responsePayload ||
-            responseDataExcludedMimeTypes.includes(mimeType)
-        ) {
-            return null;
-        }
-
-        if (mimeType === 'application/json') {
-            return (
-                <SyntaxHighlighter
-                    language="json"
-                    style={vscDarkPlus}
-                    wrapLongLines={true}
-                >
-                    {JSON.stringify(JSON.parse(responsePayload), null, 2)}
-                </SyntaxHighlighter>
-            );
-        }
-        return <div>{responsePayload}</div>;
-    }, [selectedEvent]);
-
-    const orderedHeaders = useMemo(
-        () => sortByName(selectedEvent.response.headers),
-        [selectedEvent.response.headers]
-    );
-
-    return (
-        <div>
-            <Accordion title={<div>Mime Type</div>}>
-                {selectedEvent.response.content.mimeType}
-            </Accordion>
-            <Divider />
-            {snippet && (
-                <>
-                    <Accordion
-                        accordionProps={{ defaultExpanded: true }}
-                        title={<div>Payload</div>}
-                    >
-                        <div className={styles.responseContentTextWrapper}>
-                            {snippet}
-                        </div>
-                    </Accordion>
-                    <Divider />
-                </>
-            )}
-            <Accordion title={<div>Response Headers</div>}>
-                <NameValueTable
-                    key="responseHeader"
-                    valuePairs={orderedHeaders}
-                />
-            </Accordion>
-            <Divider />
-        </div>
-    );
-};
-
-type RequestTabProps = {
-    selectedEvent: FormattedNetworkEvents[0];
-};
-
-const RequestTab: React.FC<RequestTabProps> = ({ selectedEvent }) => {
-    const orderedHeaders = useMemo(
-        () => sortByName(selectedEvent.request.headers),
-        [selectedEvent.request.headers]
-    );
-
-    return (
-        <div>
-            <Accordion
-                accordionProps={{ defaultExpanded: true }}
-                title={<div>Request to</div>}
-            >
-                {selectedEvent.request.url}
-            </Accordion>
-            <Divider />
-            {selectedEvent.request.queryString.length ? (
-                <>
-                    <Accordion title={<div>Query params</div>}>
-                        <NameValueTable
-                            key="queryParams"
-                            valuePairs={selectedEvent.request.queryString}
-                        />
-                    </Accordion>
-                    <Divider />
-                </>
-            ) : null}
-            {selectedEvent.request.postData && (
-                <>
-                    <Accordion title={<div>Mime Type</div>}>
-                        {selectedEvent.request.postData.mimeType}
-                    </Accordion>
-                    <Divider />
-                    <Accordion title={<div>Payload</div>}>
-                        <PostData selectedEvent={selectedEvent} />
-                    </Accordion>
-                    <Divider />
-                </>
-            )}
-            <Accordion title={<div>Request Headers</div>}>
-                <NameValueTable
-                    key="requestHeader"
-                    valuePairs={orderedHeaders}
-                />
-            </Accordion>
-            <Divider />
-        </div>
-    );
-};
+import { useLazyLoadQuery } from 'react-relay';
+import { RequestTab, ResponseTab } from '../tabs';
+import NetworkEventDetailPanelQuery from './NetworkEventDetailPanelQuery';
+import { NetworkEventDetailPanelQuery as NetworkEventDetailPanelQueryType } from './__generated__/NetworkEventDetailPanelQuery.graphql';
+import NetworkEventDetailPanelWrapper from '../NetworkEventDetailPanelWrapper';
 
 type NetworkEventDetailPanelProps = {
-    selectedEvent: FormattedNetworkEvents[0];
+    selectedEventId: string;
     activeTab: number | null;
     onSelectTab: (value: number) => void;
     onDetailPanelClose: () => void;
 };
-
-const StyledDetails = styled('div')(({ theme }) => ({
-    borderLeft: `1px solid ${theme.palette.base[300]}`,
-    backgroundColor: theme.palette.base[400],
-}));
 
 const StyledTabs = styled('div')(({ theme }) => ({
     borderBottom: `1px solid ${theme.palette.base[300]}`,
 }));
 
 const NetworkEventDetailPanel: React.FC<NetworkEventDetailPanelProps> = ({
-    selectedEvent,
+    selectedEventId,
     activeTab,
     onSelectTab,
     onDetailPanelClose,
 }) => {
+    const data = useLazyLoadQuery<NetworkEventDetailPanelQueryType>(
+        NetworkEventDetailPanelQuery,
+        {
+            httpNetworkEventId: selectedEventId,
+        }
+    );
+
+    if (!data.httpNetworkEvent) {
+        return <div>No data</div>;
+    }
+
     const tabChildren = [
         {
             tabLabel: TabLabel.REQUEST,
             title: 'Request',
-            children: <RequestTab selectedEvent={selectedEvent} />,
+            children: <RequestTab fragmentKey={data.httpNetworkEvent} />,
         },
         {
             tabLabel: TabLabel.RESPONSE,
             title: 'Response',
-            children: <ResponseDataTab selectedEvent={selectedEvent} />,
+            children: <ResponseTab fragmentKey={data.httpNetworkEvent} />,
         },
     ];
 
     return (
-        <StyledDetails key="details" className={styles.networkDetailPanel}>
+        <NetworkEventDetailPanelWrapper key="details">
             <div className={styles.networkDetailPanelContent}>
                 <StyledTabs className={styles.tabs}>
                     <Tabs
@@ -244,7 +74,7 @@ const NetworkEventDetailPanel: React.FC<NetworkEventDetailPanelProps> = ({
                     return <div key={i}>{children}</div>;
                 })}
             </div>
-        </StyledDetails>
+        </NetworkEventDetailPanelWrapper>
     );
 };
 

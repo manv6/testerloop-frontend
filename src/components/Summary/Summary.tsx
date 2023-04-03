@@ -1,29 +1,21 @@
-// TODO: Remove this check once temp data is removed!!
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import styles from './Summary.module.scss';
 import cicd from 'src/data/cicd';
 import results from 'src/data/results';
 import { formatDate } from 'src/utils/date';
-import * as formatter from 'src/utils/formatters';
-import networkEventData from 'src/data/networkEvents';
 import { useFragment } from 'react-relay';
 import { SummaryFragment$key } from './__generated__/SummaryFragment.graphql';
 import graphql from 'babel-plugin-relay/macro';
 import { Panel, Tag, Divider, ExpandButton } from 'src/components/common';
 import cx from 'classnames';
 import { styled } from '@mui/material';
-import {
-    DetailColumn,
-    ChromeIcon,
-    FrameworkErrorIcon,
-    NetworkErrorIcon,
-    WarnIcon,
-} from './components';
+import { DetailColumn, ChromeIcon, FrameworkErrorIcon } from './components';
 import splitCamelCase from 'src/utils/splitCamelCase';
+import NetworkErrorCount from './components/NetworkErrorCount';
+import ConsoleErrorCount from './components/ConsoleErrorCount';
 
 type Props = {
-    fragmentKey: SummaryFragment$key | null;
+    fragmentKey: SummaryFragment$key;
     className?: string;
 };
 
@@ -32,7 +24,7 @@ const StyledLink = styled('a')(({ theme }) => ({
 }));
 
 const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
-    const consoleData = useFragment(
+    const summaryData = useFragment(
         graphql`
             fragment SummaryFragment on TestExecution {
                 id
@@ -49,23 +41,11 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
                         }
                     }
                 }
-                summaryConsoleErrors: events(
-                    filter: {
-                        type: CONSOLE
-                        consoleFilter: { logLevel: ERROR }
-                    }
-                ) {
-                    totalCount
-                }
+                ...ConsoleErrorCountFragment
+                ...NetworkErrorCountFragment
             }
         `,
         fragmentKey
-    );
-
-    const data = { networkEvents: networkEventData.log.entries } as any; // eslint-disable-line
-    const networkEvents = useMemo(
-        () => formatter.formatNetworkEvents(data.networkEvents),
-        [data.networkEvents]
     );
 
     const [isExpanded, setIsExpanded] = useState(false);
@@ -79,19 +59,6 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
     const engineer = cicd.GITHUB_TRIGGERING_ACTOR;
     const engineerUrl = [cicd.GITHUB_SERVER_URL, engineer].join('/');
     const endTime = results.endedTestsAt;
-
-    const logErrorCount = consoleData?.summaryConsoleErrors.totalCount;
-
-    const networkErrorCount = useMemo(
-        () =>
-            networkEvents.reduce((acc, curr) => {
-                const status = curr.response.status.toString();
-                const isError =
-                    status.startsWith('4') || status.startsWith('5');
-                return isError ? ++acc : acc;
-            }, 0),
-        []
-    );
 
     const errorObj = results.runs[0].tests[0].attempts[0];
     const frameworkErrorName = errorObj.error.name;
@@ -169,15 +136,9 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
                                 </li>
                             )}
                             <Divider className={styles.divider} />
-                            <li className={styles.networkError}>
-                                <NetworkErrorIcon />
-                                <span>{networkErrorCount} Network errors</span>
-                            </li>
+                            <NetworkErrorCount fragmentKey={summaryData} />
                             <Divider className={styles.divider} />
-                            <li className={styles.consoleError}>
-                                <WarnIcon />
-                                <span>{logErrorCount} Console errors</span>
-                            </li>
+                            <ConsoleErrorCount fragmentKey={summaryData} />
                         </ul>
                     </div>
                 </div>

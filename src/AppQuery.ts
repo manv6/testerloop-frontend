@@ -4,7 +4,6 @@ const AppQuery = graphql`
     query AppQuery($testExecutionId: ID!) {
         testExecution(id: $testExecutionId) {
             ...ConsolePanelFragment
-            ...TimelineControlsFragment
             ...NetworkPanelFragment
             ...SummaryFragment
             ...StepsFragment

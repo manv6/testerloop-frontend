@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7009e4b1f5bbc99fae0ab6e1d6a7a704>>
+ * @generated SignedSource<<ab8e70564f88b8f390c9a5710c1ca2e7>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -23,9 +23,7 @@ export type SummaryFragment$data = {
     }>;
   };
   readonly id: string;
-  readonly summaryConsoleErrors: {
-    readonly totalCount: number;
-  };
+  readonly " $fragmentSpreads": FragmentRefs<"ConsoleErrorCountFragment" | "NetworkErrorCountFragment">;
   readonly " $fragmentType": "SummaryFragment";
 };
 export type SummaryFragment$key = {
@@ -123,39 +121,20 @@ const node: ReaderFragment = {
       "storageKey": "events(filter:{\"type\":\"CONSOLE\"})"
     },
     {
-      "alias": "summaryConsoleErrors",
-      "args": [
-        {
-          "kind": "Literal",
-          "name": "filter",
-          "value": {
-            "consoleFilter": {
-              "logLevel": "ERROR"
-            },
-            "type": "CONSOLE"
-          }
-        }
-      ],
-      "concreteType": "TestExecutionEventConnection",
-      "kind": "LinkedField",
-      "name": "events",
-      "plural": false,
-      "selections": [
-        {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "totalCount",
-          "storageKey": null
-        }
-      ],
-      "storageKey": "events(filter:{\"consoleFilter\":{\"logLevel\":\"ERROR\"},\"type\":\"CONSOLE\"})"
+      "args": null,
+      "kind": "FragmentSpread",
+      "name": "ConsoleErrorCountFragment"
+    },
+    {
+      "args": null,
+      "kind": "FragmentSpread",
+      "name": "NetworkErrorCountFragment"
     }
   ],
   "type": "TestExecution",
   "abstractKey": null
 };
 
-(node as any).hash = "a96e411c74c73dd62a35e85d7970676d";
+(node as any).hash = "541f1391e518cbd9d133268e8e87f4c6";
 
 export default node;
