@@ -138,7 +138,7 @@ export const NetworkPanel: React.FC<Props> = ({ fragmentKey }) => {
     const [selectedEventIdx, setSelectedEventIdx] = useState<null | number>(
         null
     );
-    const [filterTerm, setFilterTerm] = useState<string>('');
+    const [filterTerm, setFilterTerm] = useState<string | null>(null);
     const debouncedResult = useDebounce(filterTerm, 200);
     const debouncedTerm = debouncedResult[0];
 
@@ -147,18 +147,23 @@ export const NetworkPanel: React.FC<Props> = ({ fragmentKey }) => {
         Set<ProgressFilterType>
     >(new Set(Object.values(ProgressFilterType)));
     const [selectedResourceTypeFilters, setSelectedResourceTypeFilters] =
-        useState<Set<ResourceTypeFilterType>>(new Set());
+        useState<Set<ResourceTypeFilterType> | null>(null);
     const { currentTime } = useTimeline();
 
     useEffect(() => {
-        const resourceType = Array.from(selectedResourceTypeFilters).map((r) =>
-            resourceTypeMap[r].toUpperCase()
-        );
+        if (debouncedTerm === null && selectedResourceTypeFilters === null) {
+            return;
+        }
+        const resourceType = selectedResourceTypeFilters?.size
+            ? Array.from(selectedResourceTypeFilters).map((r) =>
+                  resourceTypeMap[r].toUpperCase()
+              )
+            : null;
 
         startTransition(() => {
             refetch({
                 urlSearch: debouncedTerm,
-                ...(resourceType.length ? { resourceType } : {}),
+                resourceType,
             });
         });
     }, [debouncedTerm, refetch, selectedResourceTypeFilters]);
@@ -287,7 +292,7 @@ export const NetworkPanel: React.FC<Props> = ({ fragmentKey }) => {
                         <div>
                             <label className={styles.labelWrapper}>
                                 <TextInput
-                                    inputProps={{ value: filterTerm }}
+                                    inputProps={{ value: filterTerm ?? '' }}
                                     variant="outlined"
                                     onChange={filterTermInputOnChange}
                                     placeholder="Filter"
@@ -332,7 +337,7 @@ export const NetworkPanel: React.FC<Props> = ({ fragmentKey }) => {
                                         onChangeResourceTypeAllFilter();
                                     }}
                                     active={
-                                        !selectedResourceTypeFilters.size
+                                        !selectedResourceTypeFilters?.size
                                             ? 1
                                             : 0
                                     }
@@ -351,7 +356,7 @@ export const NetworkPanel: React.FC<Props> = ({ fragmentKey }) => {
                                                 );
                                             }}
                                             active={
-                                                selectedResourceTypeFilters.has(
+                                                selectedResourceTypeFilters?.has(
                                                     value
                                                 )
                                                     ? 1
