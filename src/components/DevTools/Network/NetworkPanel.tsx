@@ -2,20 +2,28 @@ import React, {
     useCallback,
     useEffect,
     useMemo,
-    useRef,
     useState,
+    useRef,
+    startTransition,
 } from 'react';
+import { useRefetchableFragment } from 'react-relay';
 
-import { RequestSlice, NetworkEventDetailPanel } from './components/';
+import type { NetworkPanelFragment$key } from './__generated__/NetworkPanelFragment.graphql';
+import {
+    NetworkSlice,
+    NetworkEventDetailPanel,
+    NetworkEventDetailPanelWrapper,
+} from './components/';
 import styles from './Network.module.scss';
 import { useTimeline } from 'src/hooks/timeline';
 import { Button, TextInput } from 'src/components/common';
 import * as formatter from 'src/utils/formatters';
-import networkEventData from 'src/data/networkEvents';
 import * as Expandable from 'src/components/Expandable';
 import { HeaderWithFilter } from 'src/components/common';
 import { styled } from '@mui/material';
 import useScrollToChild from 'src/hooks/scrollTo';
+import NetworkPanelFragment from './NetworkPanelFragment';
+import { useDebounce } from 'use-debounce';
 
 enum ResourceTypeFilterType {
     HTML = 'html',
@@ -27,36 +35,20 @@ enum ResourceTypeFilterType {
     OTHER = 'other',
 }
 
+const resourceTypeMap = {
+    [ResourceTypeFilterType.HTML]: 'document',
+    [ResourceTypeFilterType.XHR]: 'xhr',
+    [ResourceTypeFilterType.JS]: 'script',
+    [ResourceTypeFilterType.CSS]: 'stylesheet',
+    [ResourceTypeFilterType.IMAGE]: 'image',
+    [ResourceTypeFilterType.FONT]: 'font',
+    [ResourceTypeFilterType.OTHER]: 'other',
+};
+
 export enum TabLabel {
     REQUEST = 'request',
     RESPONSE = 'response',
 }
-
-const filterByResourceTypePredicate = (
-    event: formatter.FormattedNetworkEvents[0],
-    selectedOptions: Set<ResourceTypeFilterType>
-) => {
-    const resourceType = event._resourceType;
-
-    const resourceTypeLookup = {
-        [ResourceTypeFilterType.HTML]: 'document',
-        [ResourceTypeFilterType.XHR]: 'xhr',
-        [ResourceTypeFilterType.JS]: 'script',
-        [ResourceTypeFilterType.CSS]: 'stylesheet',
-        [ResourceTypeFilterType.IMAGE]: 'image',
-        [ResourceTypeFilterType.FONT]: 'font',
-        [ResourceTypeFilterType.OTHER]: 'other',
-    };
-
-    if (!selectedOptions.size) {
-        return true;
-    }
-
-    return Array.from(selectedOptions).some(
-        (resourceTypeFilter) =>
-            resourceTypeLookup[resourceTypeFilter] === resourceType
-    );
-};
 
 export enum ProgressFilterType {
     NOT_STARTED = 'Not Started',
@@ -116,14 +108,11 @@ const filterByProgressPredicate = (
     return Array.from(selectedOptions).some((filter) => {
         switch (filter) {
             case ProgressFilterType.COMPLETED:
-                return event.endedDateTime <= currentTime;
+                return event.until <= currentTime;
             case ProgressFilterType.IN_PROGRESS:
-                return (
-                    event.startedDateTime <= currentTime &&
-                    currentTime < event.endedDateTime
-                );
+                return event.at <= currentTime && currentTime < event.until;
             case ProgressFilterType.NOT_STARTED:
-                return currentTime < event.startedDateTime;
+                return currentTime < event.at;
             default:
                 return false;
         }
@@ -131,15 +120,18 @@ const filterByProgressPredicate = (
 };
 
 type Props = {
-    // TODO: Update this with fragment key type
-    fragmentKey: any; // eslint-disable-line
+    fragmentKey: NetworkPanelFragment$key;
 };
 
-export const NetworkPanel: React.FC<Props> = () => {
-    const data = { networkEvents: networkEventData.log.entries } as any; // eslint-disable-line
+export const NetworkPanel: React.FC<Props> = ({ fragmentKey }) => {
+    const [data, refetch] = useRefetchableFragment(
+        NetworkPanelFragment,
+        fragmentKey
+    );
+
     const networkEvents = useMemo(
-        () => formatter.formatNetworkEvents(data.networkEvents),
-        [data.networkEvents]
+        () => formatter.formatNetworkEvents(data),
+        [data]
     );
 
     const [showFilters, setShowFilters] = useState(true);
@@ -147,6 +139,9 @@ export const NetworkPanel: React.FC<Props> = () => {
         null
     );
     const [filterTerm, setFilterTerm] = useState<string>('');
+    const debouncedResult = useDebounce(filterTerm, 200);
+    const debouncedTerm = debouncedResult[0];
+
     const [activeTab, setActiveTab] = useState<number | null>(0);
     const [selectedProgressFilters, setSelectedProgressFilters] = useState<
         Set<ProgressFilterType>
@@ -155,34 +150,29 @@ export const NetworkPanel: React.FC<Props> = () => {
         useState<Set<ResourceTypeFilterType>>(new Set());
     const { currentTime } = useTimeline();
 
+    useEffect(() => {
+        const resourceType = Array.from(selectedResourceTypeFilters).map((r) =>
+            resourceTypeMap[r].toUpperCase()
+        );
+
+        startTransition(() => {
+            refetch({
+                urlSearch: debouncedTerm,
+                ...(resourceType.length ? { resourceType } : {}),
+            });
+        });
+    }, [debouncedTerm, refetch, selectedResourceTypeFilters]);
+
     const filteredEvents = useMemo(
         () =>
-            networkEvents
-                .filter((networkEvent) =>
-                    filterTerm
-                        ? networkEvent.request.url.includes(filterTerm)
-                        : true
+            networkEvents.filter((event) =>
+                filterByProgressPredicate(
+                    event,
+                    selectedProgressFilters,
+                    currentTime
                 )
-                .filter((event) =>
-                    filterByProgressPredicate(
-                        event,
-                        selectedProgressFilters,
-                        currentTime
-                    )
-                )
-                .filter((event) =>
-                    filterByResourceTypePredicate(
-                        event,
-                        selectedResourceTypeFilters
-                    )
-                ),
-        [
-            networkEvents,
-            filterTerm,
-            currentTime,
-            selectedProgressFilters,
-            selectedResourceTypeFilters,
-        ]
+            ),
+        [networkEvents, currentTime, selectedProgressFilters]
     );
 
     const selectedEvent =
@@ -246,7 +236,7 @@ export const NetworkPanel: React.FC<Props> = () => {
             if (acc !== -1) {
                 return acc;
             }
-            return currentTime > event.startedDateTime ? index : acc;
+            return currentTime > event.at ? index : acc;
         }, -1);
     }, [currentTime, networkEvents]);
 
@@ -273,6 +263,17 @@ export const NetworkPanel: React.FC<Props> = () => {
         containerRef,
         dependencies: [lastStartedNetworkEvent?.id],
     });
+
+    const fallback = useMemo(
+        () => (
+            <NetworkEventDetailPanelWrapper
+                className={styles.eventPanelLoading}
+            >
+                Loading...
+            </NetworkEventDetailPanelWrapper>
+        ),
+        []
+    );
 
     return (
         <Expandable.Child
@@ -397,7 +398,7 @@ export const NetworkPanel: React.FC<Props> = () => {
                         </thead>
                         <tbody>
                             {filteredEvents.map((networkEvent, i) => (
-                                <RequestSlice
+                                <NetworkSlice
                                     idx={i}
                                     ref={
                                         lastStartedNetworkEvent?.id ===
@@ -409,7 +410,7 @@ export const NetworkPanel: React.FC<Props> = () => {
                                     event={networkEvent}
                                     setSelectedEventIdx={setSelectedEventIdx}
                                     selectedEventIdx={selectedEventIdx}
-                                    selectedEvent={selectedEvent}
+                                    selectedEventId={selectedEvent?.id}
                                     lastStartedNetworkEventIdx={
                                         lastStartedNetworkEventIdx
                                     }
@@ -424,12 +425,14 @@ export const NetworkPanel: React.FC<Props> = () => {
                 </div>
             </div>
             {selectedEvent && (
-                <NetworkEventDetailPanel
-                    selectedEvent={selectedEvent}
-                    activeTab={activeTab}
-                    onSelectTab={(value) => setActiveTab(value)}
-                    onDetailPanelClose={onDetailPanelClose}
-                />
+                <React.Suspense fallback={fallback}>
+                    <NetworkEventDetailPanel
+                        selectedEventId={selectedEvent.id}
+                        activeTab={activeTab}
+                        onSelectTab={(value: number) => setActiveTab(value)}
+                        onDetailPanelClose={onDetailPanelClose}
+                    />
+                </React.Suspense>
             )}
         </Expandable.Child>
     );
