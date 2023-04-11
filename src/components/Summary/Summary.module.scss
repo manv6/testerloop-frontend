@@ -16,19 +16,6 @@
     margin: 16px 0;
 }
 
-.envDetails {
-    display: flex;
-}
-
-.columnContent {
-    display: flex;
-    align-items: center;
-
-    svg {
-        margin-right: 4px;
-    }
-}
-
 .errorsContainer {
     ul {
         display: flex;
@@ -59,16 +46,4 @@
     h1 {
         margin-right: 8px;
     }
-}
-
-.avatar {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    margin-right: 4px;
-}
-
-.engineerLink {
-    display: flex;
-    align-items: center;
 }

@@ -2,6 +2,16 @@ directive @defer(if: Boolean! = true, label: String) on FRAGMENT_SPREAD | INLINE
 
 directive @stream(if: Boolean! = true, initialCount: Int = 0, label: String) on FIELD
 
+union BrowserVersion = ChromiumVersion
+
+"""See https://www.chromium.org/developers/version-numbers/"""
+type ChromiumVersion {
+  build: Int!
+  major: Int!
+  minor: Int!
+  patch: Int!
+}
+
 interface ConsoleEvent implements Event & TestExecutionEvent {
   at: DateTime!
   testExecution: TestExecution!
@@ -51,6 +61,77 @@ scalar DateTime
 
 interface Event {
   at: DateTime!
+}
+
+interface GitActor {
+  email: String!
+  name: String!
+}
+
+interface GitBranch {
+  name: String!
+}
+
+enum GitCommitIdType {
+  LONG
+  SHORT
+}
+
+type GitHubActor implements GitActor {
+  email: String!
+  name: String!
+  user: GitHubUser
+}
+
+type GitHubBranch implements GitBranch {
+  name: String!
+  url: URL!
+}
+
+type GitHubOrganization {
+  name: String!
+  slug: String
+  url: URL!
+}
+
+type GitHubRepository implements GitRepository & SourceCodeManagementRepository {
+  _unused: Boolean!
+  name: String!
+  owner: GitHubRepositoryOwner!
+  url: URL!
+}
+
+type GitHubRepositoryOwner {
+  name: String!
+  url: URL!
+}
+
+type GitHubRevision implements GitRevision & SourceCodeManagementRevision {
+  author: GitHubActor!
+  branch: GitHubBranch
+  commitId(type: GitCommitIdType! = LONG): String!
+  committer: GitHubActor!
+  repository: GitHubRepository!
+  url: URL!
+}
+
+type GitHubUser {
+  avatar: URL
+  name: String!
+  url: URL!
+  username: String!
+}
+
+interface GitRepository implements SourceCodeManagementRepository {
+  _unused: Boolean!
+}
+
+interface GitRevision implements SourceCodeManagementRevision {
+  author: GitActor!
+  branch: GitBranch
+  commitId(type: GitCommitIdType! = LONG): String!
+  committer: GitActor!
+  repository: GitRepository!
 }
 
 interface HttpBody {
@@ -232,11 +313,25 @@ type Query {
   testExecution(id: ID!): TestExecution
 }
 
+interface SourceCodeManagementRepository {
+  _unused: Boolean!
+}
+
+interface SourceCodeManagementRevision {
+  repository: SourceCodeManagementRepository!
+}
+
 type TestExecution implements Event & IntervalEvent & Node {
   at: DateTime!
+  environment: TestExecutionEnvironment!
   events(after: Cursor, filter: TestExecutionEventFilterInput, first: Int): TestExecutionEventConnection!
   id: ID!
+  testRun: TestRun!
   until: DateTime!
+}
+
+type TestExecutionEnvironment {
+  browser: BrowserVersion!
 }
 
 interface TestExecutionEvent implements Event {
@@ -277,3 +372,12 @@ enum TestExecutionEventType {
   CONSOLE
   NETWORK
 }
+
+type TestRun implements Node {
+  id: ID!
+
+  """This field may be null if the data was not provided for collection."""
+  testCodeRevision: SourceCodeManagementRevision
+}
+
+scalar URL
