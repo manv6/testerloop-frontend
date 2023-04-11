@@ -31,43 +31,55 @@ const EnvironmentDetails: React.FC<Props> = ({ fragmentKey }) => {
                 </div>
             </DetailColumn>
             <DetailColumn title="Branch">
-                <StyledLink
-                    className={styles.columnContent}
-                    target="_blank"
-                    rel="noreferrer"
-                    href={testCodeRevision?.branch?.url}
-                >
-                    {testCodeRevision?.branch?.name}
-                </StyledLink>
+                {testCodeRevision?.branch ? (
+                    <StyledLink
+                        className={styles.columnContent}
+                        target="_blank"
+                        rel="noreferrer"
+                        href={testCodeRevision.branch.url}
+                    >
+                        {testCodeRevision.branch.name}
+                    </StyledLink>
+                ) : (
+                    '-'
+                )}
             </DetailColumn>
             <DetailColumn title="Commit">
-                <StyledLink
-                    className={styles.columnContent}
-                    target="_blank"
-                    rel="noreferrer"
-                    href={testCodeRevision?.url}
-                >
-                    {testCodeRevision?.commitId}
-                </StyledLink>
+                {testCodeRevision ? (
+                    <StyledLink
+                        className={styles.columnContent}
+                        target="_blank"
+                        rel="noreferrer"
+                        href={testCodeRevision.url}
+                    >
+                        {testCodeRevision.commitId}
+                    </StyledLink>
+                ) : (
+                    '-'
+                )}
             </DetailColumn>
             <DetailColumn title="Execution time">
                 <div className={styles.columnContent}>{failedAt}</div>
             </DetailColumn>
             <DetailColumn title="By">
                 <div className={styles.columnContent}>
-                    <StyledLink
-                        href={testCodeRevision?.author?.user?.url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className={styles.engineerLink}
-                    >
-                        <img
-                            src={testCodeRevision?.author?.user?.avatar}
-                            alt="avatar"
-                            className={styles.avatar}
-                        />
-                        {testCodeRevision?.author?.user?.name}
-                    </StyledLink>{' '}
+                    {testCodeRevision?.author?.user ? (
+                        <StyledLink
+                            href={testCodeRevision.author.user.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className={styles.engineerLink}
+                        >
+                            <img
+                                src={testCodeRevision.author.user.avatar}
+                                alt="avatar"
+                                className={styles.avatar}
+                            />
+                            {testCodeRevision.author.user.name}
+                        </StyledLink>
+                    ) : (
+                        '-'
+                    )}
                 </div>
             </DetailColumn>
         </div>
