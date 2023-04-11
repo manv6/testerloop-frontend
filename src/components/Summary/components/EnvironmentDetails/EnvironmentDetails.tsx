@@ -20,9 +20,6 @@ const EnvironmentDetails: React.FC<Props> = ({ fragmentKey }) => {
     const data = useFragment(EnvironmentDetailsFragment, fragmentKey);
     const testCodeRevision = data.summaryEnvironmentDetails.testCodeRevision;
 
-    const endTime = data.until;
-    const failedAt = formatDate(endTime);
-
     return (
         <div className={styles.envDetails}>
             <DetailColumn title="Browser">
@@ -59,7 +56,9 @@ const EnvironmentDetails: React.FC<Props> = ({ fragmentKey }) => {
                 )}
             </DetailColumn>
             <DetailColumn title="Execution time">
-                <div className={styles.columnContent}>{failedAt}</div>
+                <div className={styles.columnContent}>
+                    {formatDate(data.at)}
+                </div>
             </DetailColumn>
             <DetailColumn title="By">
                 <div className={styles.columnContent}>

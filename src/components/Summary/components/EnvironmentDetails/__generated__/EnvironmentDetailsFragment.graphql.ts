@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<9e853677dd0704ebb7065dddaa187988>>
+ * @generated SignedSource<<bbad8b553e3301ee75c26043ac9616be>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,6 +11,7 @@
 import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type EnvironmentDetailsFragment$data = {
+  readonly at: any;
   readonly summaryEnvironmentDetails: {
     readonly id: string;
     readonly testCodeRevision: {
@@ -30,7 +31,6 @@ export type EnvironmentDetailsFragment$data = {
       readonly url?: any;
     } | null;
   };
-  readonly until: any;
   readonly " $fragmentType": "EnvironmentDetailsFragment";
 };
 export type EnvironmentDetailsFragment$key = {
@@ -63,7 +63,7 @@ return {
       "alias": null,
       "args": null,
       "kind": "ScalarField",
-      "name": "until",
+      "name": "at",
       "storageKey": null
     },
     {
@@ -173,6 +173,6 @@ return {
 };
 })();
 
-(node as any).hash = "fe88b135cfb338cb5943ea6618881afc";
+(node as any).hash = "0203ecd2d78131d09a89dfa6f5ad176b";
 
 export default node;

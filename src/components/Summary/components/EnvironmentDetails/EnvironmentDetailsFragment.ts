@@ -2,7 +2,7 @@ import graphql from 'babel-plugin-relay/macro';
 
 const EnvironmentDetailsFragment = graphql`
     fragment EnvironmentDetailsFragment on TestExecution {
-        until
+        at
         summaryEnvironmentDetails: testRun {
             id
             testCodeRevision {
