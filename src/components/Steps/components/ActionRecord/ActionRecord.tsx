@@ -1,22 +1,28 @@
 import React from 'react';
 import cx from 'classnames';
 import { useTimeline } from 'src/hooks/timeline';
-import { Step } from '../../Steps';
 import styles from './ActionRecord.module.scss';
 import { Accordion, StepPrefix } from 'src/components/common';
 import { EventType } from 'src/constants';
 import { styled } from '@mui/material';
-import results from 'src/data/results';
 import getFrameworkErrorInfo from 'src/utils/getFrameworkErrorInfo';
+import { ActionRecordFragment$key } from './__generated__/ActionRecordFragment.graphql';
+import ActionRecordFragment from './ActionRecordFragment';
+import { useFragment } from 'react-relay';
 
 interface Props {
-    action: Step;
+    action: ActionRecordFragment$key;
     isActionSelected: boolean;
     isActionHovered: boolean;
 }
 
 interface StyledActionProps {
     isSelected: boolean;
+}
+
+enum CommandEventStatus {
+    FAILED = 'FAILED',
+    SUCCESS = 'SUCCESS',
 }
 
 const StyledLink = styled('a')(({ theme }) => ({
@@ -46,28 +52,28 @@ const StyledAction = styled('div')<StyledActionProps>(
 );
 
 const ActionRecord: React.FC<Props> = ({
-    action: { options },
+    action,
     isActionSelected,
     isActionHovered,
 }) => {
+    const data = useFragment(ActionRecordFragment, action);
     const { seek } = useTimeline();
     const { url, text: urlText } = getFrameworkErrorInfo();
 
     const navigateInTimeline = () => {
-        seek(options.wallClockStartedAt);
+        seek(new Date(data.at));
     };
 
-    const errorObj = results.runs[0].tests[0].attempts[0];
-    const error = errorObj.error;
+    const hasFailed = data.status === CommandEventStatus.FAILED;
 
     return (
         <StyledAction
-            key={options.id}
+            key={data.id}
             onClick={navigateInTimeline}
             isSelected={isActionSelected}
             className={cx(
                 styles.actionRecord,
-                options.state === 'failed' ? styles.error : styles.success,
+                hasFailed ? styles.error : styles.success,
                 {
                     [styles.selected]: isActionSelected,
                     [styles.hovered]: isActionHovered,
@@ -75,21 +81,17 @@ const ActionRecord: React.FC<Props> = ({
             )}
         >
             <StepPrefix
-                type={
-                    options.state === 'failed'
-                        ? EventType.CYPRESS_ERROR
-                        : EventType.STEP
-                }
+                type={hasFailed ? EventType.CYPRESS_ERROR : EventType.STEP}
                 isAction={true}
-                hasFailed={options.state === 'failed'}
+                hasFailed={hasFailed}
                 className={styles.expandedActionName}
             >
-                {options.name}
+                {data.name}
             </StepPrefix>
             <span className={styles.expandedActionMessage}>
-                {options.message}
+                {data.description}
             </span>
-            {options.state === 'failed' && (
+            {hasFailed && (
                 <>
                     <div className={styles.errorUrl}>
                         <StyledLink href={url} target="_blank" rel="noreferrer">
@@ -103,7 +105,7 @@ const ActionRecord: React.FC<Props> = ({
                         detailsClassName={styles.accordionDetails}
                         title={<div>View stack trace</div>}
                     >
-                        {error.stack}
+                        {data.error?.stackTrace}
                     </Accordion>
                 </>
             )}

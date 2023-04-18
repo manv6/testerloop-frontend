@@ -1,21 +1,22 @@
 import { styled } from '@mui/material';
 import cx from 'classnames';
 import React from 'react';
+import { useFragment } from 'react-relay';
 import { StepPrefix, ChevronIcon } from 'src/components/common';
 import { EventType } from 'src/constants';
 import { useTimeline } from 'src/hooks/timeline';
-import { Step } from '../../Steps';
+import getMostRecentIdx from 'src/utils/getMostRecentIdx';
 import ActionRecord from '../ActionRecord';
 import styles from './StepRecord.module.scss';
+import StepRecordFragment from './StepRecordFragment';
+import { StepRecordFragment$key } from './__generated__/StepRecordFragment.graphql';
 
 interface Props {
-    step: Step;
-    actions: Step[];
+    step: StepRecordFragment$key;
     isStepSelected: boolean;
     isStepHovered: boolean;
     isPreviousToSelected: boolean;
-    selectedActionIdx: number | null;
-    hoveredActionIdx: number | null;
+    selectedStepIdx: number | null;
 }
 
 interface StyledStepHeaderProps {
@@ -44,30 +45,42 @@ const StyledStepHeader = styled('tr')<StyledStepHeaderProps>(
 const StepRecord: React.FC<Props> = ({
     isPreviousToSelected,
     step,
-    actions,
     isStepSelected,
     isStepHovered,
-    selectedActionIdx,
-    hoveredActionIdx,
+    selectedStepIdx,
 }) => {
-    const { options } = step;
+    const data = useFragment(StepRecordFragment, step);
     const { seek } = useTimeline();
 
-    const hasFailedActions = actions.some(
-        (action) => action.options.state === 'failed'
-    );
-    const hasFailed = options.state === 'failed' || hasFailedActions;
+    const { currentTime, hoverTime } = useTimeline();
+
+    const currentTimestamp = currentTime.getTime();
+    const hoverTimestamp = hoverTime?.getTime();
+
+    const actions = data.commandChains.edges
+        .map(({ node }) => node.commands.edges)
+        .flat();
+
+    const selectedActionIdx =
+        selectedStepIdx !== -1
+            ? getMostRecentIdx(actions, currentTimestamp)
+            : null;
+
+    const hoveredActionIdx =
+        hoverTimestamp && selectedStepIdx !== -1
+            ? getMostRecentIdx(actions, hoverTimestamp)
+            : null;
 
     return (
         <>
             <StyledStepHeader
-                key={`${options.id}`}
+                key={`${data.id}`}
                 isPreviousToSelected={isPreviousToSelected}
                 isSelected={isStepSelected}
                 onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    seek(step.options.wallClockStartedAt);
+                    seek(new Date(data.at));
                 }}
                 className={cx(styles.stepHeader, {
                     [styles.selected]: isStepSelected,
@@ -77,23 +90,24 @@ const StepRecord: React.FC<Props> = ({
                 <td className={styles.stepName}>
                     <StepPrefix
                         type={
-                            hasFailed ? EventType.CYPRESS_ERROR : EventType.STEP
+                            data.hasFailed
+                                ? EventType.CYPRESS_ERROR
+                                : EventType.STEP
                         }
-                        hasFailed={hasFailed}
+                        hasFailed={data.hasFailed}
                         className={styles.stepPrefix}
                     >
-                        {options.name.toUpperCase()}
+                        {data.definition.keyword.toUpperCase()}
                     </StepPrefix>
                 </td>
 
                 <td
                     className={cx(
                         styles.stepContent,
-                        hasFailed ? styles.error : styles.success
+                        data.hasFailed ? styles.error : styles.success
                     )}
                 >
-                    {/* TODO: No need to slice, just for now to dismiss `**` in all steps */}
-                    {options.message.replaceAll('*', '')}
+                    {data.definition.description.replaceAll('*', '')}
                 </td>
 
                 <td className={styles.stepAccordionIcon}>
@@ -103,10 +117,10 @@ const StepRecord: React.FC<Props> = ({
             {isStepSelected && (
                 <tr className={styles.expandedPanel}>
                     <td colSpan={4}>
-                        {actions.map((action, idx) => (
+                        {actions.map(({ node }, idx) => (
                             <ActionRecord
-                                key={action.options.id}
-                                action={action}
+                                key={idx}
+                                action={node}
                                 isActionSelected={selectedActionIdx === idx}
                                 isActionHovered={hoveredActionIdx === idx}
                             />

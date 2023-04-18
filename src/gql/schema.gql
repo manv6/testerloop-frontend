@@ -12,6 +12,61 @@ type ChromiumVersion {
   patch: Int!
 }
 
+type CommandChainEvent implements Event & IntervalEvent & TestExecutionEvent {
+  at: DateTime!
+  commands: CommandEventConnection!
+  testExecution: TestExecution!
+  until: DateTime!
+}
+
+type CommandChainEventConnection {
+  edges: [CommandChainEventEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type CommandChainEventEdge {
+  cursor: Cursor!
+  node: CommandChainEvent!
+}
+
+type CommandEvent implements Event & IntervalEvent & Node & TestExecutionEvent {
+  at: DateTime!
+  description: String!
+  error: CommandEventError
+  id: ID!
+  name: String!
+  status: CommandEventStatus!
+  testExecution: TestExecution!
+  until: DateTime!
+}
+
+type CommandEventConnection {
+  edges: [CommandEventEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type CommandEventEdge {
+  cursor: Cursor!
+  node: CommandEvent!
+}
+
+type CommandEventError {
+  message: String!
+  stackTrace: String!
+  type: String!
+}
+
+input CommandEventFilterInput {
+  status: [CommandEventStatus!]
+}
+
+enum CommandEventStatus {
+  FAILED
+  SUCCESS
+}
+
 interface ConsoleEvent implements Event & TestExecutionEvent {
   at: DateTime!
   testExecution: TestExecution!
@@ -61,6 +116,14 @@ scalar DateTime
 
 interface Event {
   at: DateTime!
+}
+
+enum GherkinStepKeyword {
+  AND
+  BUT
+  GIVEN
+  THEN
+  WHEN
 }
 
 interface GitActor {
@@ -313,12 +376,50 @@ type Query {
   testExecution(id: ID!): TestExecution
 }
 
+type ScenarioDefinition {
+  description: String!
+}
+
+type ScenarioEvent implements Event & IntervalEvent & TestExecutionEvent {
+  at: DateTime!
+  definition: ScenarioDefinition!
+  steps: StepEventConnection!
+  testExecution: TestExecution!
+  until: DateTime!
+}
+
 interface SourceCodeManagementRepository {
   _unused: Boolean!
 }
 
 interface SourceCodeManagementRevision {
   repository: SourceCodeManagementRepository!
+}
+
+type StepDefinition {
+  description: String!
+  keyword: GherkinStepKeyword!
+}
+
+type StepEvent implements Event & IntervalEvent & Node & TestExecutionEvent {
+  at: DateTime!
+  commandChains: CommandChainEventConnection!
+  definition: StepDefinition!
+  hasFailed: Boolean!
+  id: ID!
+  testExecution: TestExecution!
+  until: DateTime!
+}
+
+type StepEventConnection {
+  edges: [StepEventEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type StepEventEdge {
+  cursor: Cursor!
+  node: StepEvent!
 }
 
 type TestExecution implements Event & IntervalEvent & Node {
@@ -363,14 +464,32 @@ type TestExecutionEventEdge {
 }
 
 input TestExecutionEventFilterInput {
+  commandFilter: CommandEventFilterInput
   consoleFilter: ConsoleEventFilterInput
   networkFilter: NetworkEventFilterInput
   type: [TestExecutionEventType!]
 }
 
 enum TestExecutionEventType {
+  """
+  Returns all commands executed in the `TestExecution` flattened outside of the test layout.
+  """
+  COMMAND
   CONSOLE
   NETWORK
+
+  """
+  Returns all of the steps of the `TestExecution`, flattened outside of their containing `BackgroundEvent` or `ScenarioEvent`.
+  """
+  STEP
+
+  """
+  Returns the top-level parts of the `TestExecution`
+  
+  For BDD this will be `BackgroundEvent` & `ScenarioEvent`.
+  For other tests, this can include `Before All`/`Before Each`/`Test`/`After Each`/`After All` parts
+  """
+  TEST_PART
 }
 
 type TestRun implements Node {
