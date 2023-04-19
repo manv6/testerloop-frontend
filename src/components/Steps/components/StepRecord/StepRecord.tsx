@@ -24,11 +24,6 @@ interface StyledStepHeaderProps {
     isPreviousToSelected: boolean;
 }
 
-export enum CommandEventStatus {
-    FAILED = 'FAILED',
-    SUCCESS = 'SUCCESS',
-}
-
 const StyledStepHeader = styled('tr')<StyledStepHeaderProps>(
     ({ theme, isSelected, isPreviousToSelected }) => {
         let backgroundColor = theme.palette.base[400];
@@ -76,7 +71,7 @@ const StepRecord: React.FC<Props> = ({
             ? getMostRecentIdx(actions, hoverTimestamp)
             : null;
 
-    const hasFailed = !!(data.status === CommandEventStatus.FAILED);
+    const hasFailed = data.status === 'FAILED';
 
     return (
         <>

@@ -9,7 +9,6 @@ import getFrameworkErrorInfo from 'src/utils/getFrameworkErrorInfo';
 import { ActionRecordFragment$key } from './__generated__/ActionRecordFragment.graphql';
 import ActionRecordFragment from './ActionRecordFragment';
 import { useFragment } from 'react-relay';
-import { CommandEventStatus } from '../StepRecord/StepRecord';
 
 interface Props {
     action: ActionRecordFragment$key;
@@ -60,7 +59,7 @@ const ActionRecord: React.FC<Props> = ({
         seek(new Date(data.at));
     };
 
-    const hasFailed = data.status === CommandEventStatus.FAILED;
+    const hasFailed = data.status === 'FAILED';
 
     return (
         <StyledAction
