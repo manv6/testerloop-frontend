@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<8605725fa87d86d145d1ccc50ac71262>>
+ * @generated SignedSource<<4f60d3bd75c717153c5e43a8d25938f9>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -311,6 +311,14 @@ return {
                             ],
                             "type": "HttpNetworkEvent",
                             "abstractKey": null
+                          },
+                          {
+                            "kind": "InlineFragment",
+                            "selections": [
+                              (v6/*: any*/)
+                            ],
+                            "type": "Node",
+                            "abstractKey": "__isNode"
                           }
                         ],
                         "storageKey": null
@@ -331,12 +339,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "4914f5bb500cfcf67049e64d3db56842",
+    "cacheID": "ceda7400ca9a8101f7cfcc6569ff070f",
     "id": null,
     "metadata": {},
     "name": "NetworkPanelFragmentRefetchQuery",
     "operationKind": "query",
-    "text": "query NetworkPanelFragmentRefetchQuery(\n  $resourceType: [HttpNetworkEventResourceType!] = null\n  $urlSearch: String = null\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...NetworkPanelFragment_3ybCIS\n    id\n  }\n}\n\nfragment NetworkPanelFragment_3ybCIS on TestExecution {\n  id\n  searchedNetworkEvents: events(filter: {type: NETWORK, networkFilter: {urlSearch: $urlSearch, resourceType: $resourceType}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          __typename\n          id\n          at\n          until\n          ...NetworkSliceFragment\n        }\n      }\n    }\n  }\n}\n\nfragment NetworkSliceFragment on HttpNetworkEvent {\n  __typename\n  id\n  resourceType\n  at\n  until\n  initiator {\n    origin\n    lineNumber\n  }\n  request {\n    method\n    url {\n      url\n    }\n  }\n  response {\n    status\n    transferSize\n    body {\n      mimeType\n      size\n    }\n  }\n}\n"
+    "text": "query NetworkPanelFragmentRefetchQuery(\n  $resourceType: [HttpNetworkEventResourceType!] = null\n  $urlSearch: String = null\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...NetworkPanelFragment_3ybCIS\n    id\n  }\n}\n\nfragment NetworkPanelFragment_3ybCIS on TestExecution {\n  id\n  searchedNetworkEvents: events(filter: {type: NETWORK, networkFilter: {urlSearch: $urlSearch, resourceType: $resourceType}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          __typename\n          id\n          at\n          until\n          ...NetworkSliceFragment\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n    }\n  }\n}\n\nfragment NetworkSliceFragment on HttpNetworkEvent {\n  __typename\n  id\n  resourceType\n  at\n  until\n  initiator {\n    origin\n    lineNumber\n  }\n  request {\n    method\n    url {\n      url\n    }\n  }\n  response {\n    status\n    transferSize\n    body {\n      mimeType\n      size\n    }\n  }\n}\n"
   }
 };
 })();
