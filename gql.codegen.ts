@@ -1,7 +1,7 @@
 import type { CodegenConfig } from '@graphql-codegen/cli';
 
 const config: CodegenConfig = {
-    schema: ['http://localhost:8080'],
+    schema: ['https://otf.overloop.io'],
     generates: {
         'src/gql/schema.gql': {
             plugins: ['schema-ast'],
