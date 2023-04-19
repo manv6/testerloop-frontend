@@ -7,6 +7,9 @@ import snapshots from 'src/data/snapshots';
 import * as Expandable from 'src/components/Expandable';
 import { DomPreviewHeader } from './components';
 import { DEFAULT_DOM_ZOOM, DOM_ZOOM_STEP_PERCENTAGE } from 'src/constants';
+import { DomPreviewFragment$key } from './__generated__/DomPreviewFragment.graphql';
+import DomPreviewFragment from './DomPreviewFragment';
+import { useFragment } from 'react-relay';
 
 export enum DOMTab {
     BEFORE = 'beforeBody',
@@ -18,17 +21,21 @@ interface ElementWithValue extends HTMLElement {
     value: string;
 }
 
-const DomPreview: React.FC = () => {
+type Props = {
+    fragmentKey: DomPreviewFragment$key;
+};
+
+const DomPreview: React.FC<Props> = ({ fragmentKey }) => {
+    const data = useFragment(DomPreviewFragment, fragmentKey);
+    const steps = data.snapshots.edges;
     const { currentTime } = useTimeline();
-    const steps = useMemo(() => formatSteps(stepsData as any), [stepsData]); //eslint-disable-line
+    // const steps = useMemo(() => formatSteps(stepsData as any), [stepsData]); //eslint-disable-line
     const [tab, setTab] = useState(DOMTab.BEFORE);
     const [zoom, setZoom] = useState(DEFAULT_DOM_ZOOM);
 
     const currentSnapshot = useMemo(() => {
         const nextStepIdx = steps.findIndex(
-            ({ options }) =>
-                new Date(options.wallClockStartedAt).getTime() >
-                currentTime.getTime()
+            ({ node }) => new Date(node.at).getTime() > currentTime.getTime()
         );
         const mostRecentIdx =
             (nextStepIdx === -1 ? steps.length : nextStepIdx) - 1;
