@@ -1,9 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTimeline } from 'src/hooks/timeline';
 import styles from './DomPreview.module.scss';
-import { formatSteps } from 'src/utils/formatters';
-import stepsData from 'src/data/steps';
-import snapshots from 'src/data/snapshots';
 import * as Expandable from 'src/components/Expandable';
 import { DomPreviewHeader } from './components';
 import { DEFAULT_DOM_ZOOM, DOM_ZOOM_STEP_PERCENTAGE } from 'src/constants';
@@ -12,8 +9,8 @@ import DomPreviewFragment from './DomPreviewFragment';
 import { useFragment } from 'react-relay';
 
 export enum DOMTab {
-    BEFORE = 'beforeBody',
-    AFTER = 'afterBody',
+    BEFORE = 'previousSnapshot',
+    AFTER = 'nextSnapshot',
 }
 
 interface ElementWithValue extends HTMLElement {
@@ -29,60 +26,80 @@ const DomPreview: React.FC<Props> = ({ fragmentKey }) => {
     const data = useFragment(DomPreviewFragment, fragmentKey);
     const steps = data.snapshots.edges;
     const { currentTime } = useTimeline();
-    // const steps = useMemo(() => formatSteps(stepsData as any), [stepsData]); //eslint-disable-line
     const [tab, setTab] = useState(DOMTab.BEFORE);
     const [zoom, setZoom] = useState(DEFAULT_DOM_ZOOM);
 
+    const flatSteps = useMemo(
+        () =>
+            steps.flatMap((step) => {
+                const { node } = step;
+                const { previousSnapshot, nextSnapshot, at } = node;
+                const commandChains = node.commandChains?.edges ?? [];
+
+                const flattenedCommands = commandChains.flatMap((chain) => {
+                    const commands = chain.node.commands.edges;
+
+                    return commands.map(({ node }) => ({
+                        previousSnapshot: node.previousSnapshot.dom,
+                        nextSnapshot: node.nextSnapshot.dom,
+                        at: node.at,
+                    }));
+                });
+
+                return [
+                    {
+                        previousSnapshot: previousSnapshot?.dom,
+                        nextSnapshot: nextSnapshot?.dom,
+                        at,
+                    },
+                    ...flattenedCommands,
+                ];
+            }),
+        [steps]
+    );
+
     const currentSnapshot = useMemo(() => {
-        const nextStepIdx = steps.findIndex(
-            ({ node }) => new Date(node.at).getTime() > currentTime.getTime()
+        const nextStepIdx = flatSteps.findIndex(
+            (step) => new Date(step.at).getTime() > currentTime.getTime()
         );
         const mostRecentIdx =
-            (nextStepIdx === -1 ? steps.length : nextStepIdx) - 1;
-        const mostRecentStep = steps[mostRecentIdx];
-        const snapshotId = mostRecentStep.options.snapshotID;
-        const snapshot = snapshots.find(
-            (snapshot) => snapshot.snapshotID === snapshotId
-        );
-
-        return snapshot;
-    }, [steps, currentTime]);
+            (nextStepIdx === -1 ? flatSteps.length : nextStepIdx) - 1;
+        return flatSteps[mostRecentIdx];
+    }, [flatSteps, currentTime]);
 
     useEffect(() => {
-        if (currentSnapshot) {
-            const iframe = document.getElementById(
-                'dom-iframe'
-            ) as HTMLIFrameElement;
+        const iframe = document.getElementById(
+            'dom-iframe'
+        ) as HTMLIFrameElement;
 
-            const handleLoad = () => {
-                const window = iframe.contentWindow;
-                const nodeList =
-                    window?.document.querySelectorAll('[data-otf-value]');
-                const elements =
-                    nodeList && (Array.from(nodeList) as ElementWithValue[]);
-                if (elements) {
-                    for (const elem of elements) {
-                        elem.value = elem.getAttribute('data-otf-value') || '';
-                    }
+        const handleLoad = () => {
+            const window = iframe.contentWindow;
+            const nodeList =
+                window?.document.querySelectorAll('[data-otf-value]');
+            const elements =
+                nodeList && (Array.from(nodeList) as ElementWithValue[]);
+            if (elements) {
+                for (const elem of elements) {
+                    elem.value = elem.getAttribute('data-otf-value') || '';
                 }
+            }
 
-                const links = window?.document.getElementsByTagName('a');
-                if (links) {
-                    for (let i = 0; i < links.length; i++) {
-                        links[i].addEventListener('click', (e) => {
-                            e.preventDefault();
-                        });
-                    }
+            const links = window?.document.getElementsByTagName('a');
+            if (links) {
+                for (let i = 0; i < links.length; i++) {
+                    links[i].addEventListener('click', (e) => {
+                        e.preventDefault();
+                    });
                 }
-            };
+            }
+        };
 
-            iframe.addEventListener('load', handleLoad);
+        iframe.addEventListener('load', handleLoad);
 
-            return () => {
-                iframe.removeEventListener('load', handleLoad);
-            };
-        }
-    }, [currentSnapshot]);
+        return () => {
+            iframe.removeEventListener('load', handleLoad);
+        };
+    }, []);
 
     useEffect(() => {
         const iframe = document.getElementById(
@@ -92,7 +109,7 @@ const DomPreview: React.FC<Props> = ({ fragmentKey }) => {
             iframe.contentWindow.postMessage(
                 {
                     type: 'text/html;charset=utf-8',
-                    value: currentSnapshot?.[tab],
+                    value: currentSnapshot[tab],
                 },
                 '*'
             );
