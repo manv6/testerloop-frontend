@@ -64,42 +64,49 @@ const DomPreview: React.FC<Props> = ({ fragmentKey }) => {
         );
         const mostRecentIdx =
             (nextStepIdx === -1 ? flatSteps.length : nextStepIdx) - 1;
-        return flatSteps[mostRecentIdx];
+        // NOTE: TS incorrectly types array indexes as always existing.
+        // as we don't know that is correct, we change the type manually.
+        return (
+            (flatSteps[mostRecentIdx] as (typeof flatSteps)[0] | undefined) ??
+            null
+        );
     }, [flatSteps, currentTime]);
 
     useEffect(() => {
-        const iframe = document.getElementById(
-            'dom-iframe'
-        ) as HTMLIFrameElement;
+        if (currentSnapshot) {
+            const iframe = document.getElementById(
+                'dom-iframe'
+            ) as HTMLIFrameElement;
 
-        const handleLoad = () => {
-            const window = iframe.contentWindow;
-            const nodeList =
-                window?.document.querySelectorAll('[data-otf-value]');
-            const elements =
-                nodeList && (Array.from(nodeList) as ElementWithValue[]);
-            if (elements) {
-                for (const elem of elements) {
-                    elem.value = elem.getAttribute('data-otf-value') || '';
+            const handleLoad = () => {
+                const window = iframe.contentWindow;
+                const nodeList =
+                    window?.document.querySelectorAll('[data-otf-value]');
+                const elements =
+                    nodeList && (Array.from(nodeList) as ElementWithValue[]);
+                if (elements) {
+                    for (const elem of elements) {
+                        elem.value = elem.getAttribute('data-otf-value') || '';
+                    }
                 }
-            }
 
-            const links = window?.document.getElementsByTagName('a');
-            if (links) {
-                for (let i = 0; i < links.length; i++) {
-                    links[i].addEventListener('click', (e) => {
-                        e.preventDefault();
-                    });
+                const links = window?.document.getElementsByTagName('a');
+                if (links) {
+                    for (let i = 0; i < links.length; i++) {
+                        links[i].addEventListener('click', (e) => {
+                            e.preventDefault();
+                        });
+                    }
                 }
-            }
-        };
+            };
 
-        iframe.addEventListener('load', handleLoad);
+            iframe.addEventListener('load', handleLoad);
 
-        return () => {
-            iframe.removeEventListener('load', handleLoad);
-        };
-    }, []);
+            return () => {
+                iframe.removeEventListener('load', handleLoad);
+            };
+        }
+    }, [currentSnapshot]);
 
     useEffect(() => {
         const iframe = document.getElementById(
@@ -109,7 +116,7 @@ const DomPreview: React.FC<Props> = ({ fragmentKey }) => {
             iframe.contentWindow.postMessage(
                 {
                     type: 'text/html;charset=utf-8',
-                    value: currentSnapshot[tab],
+                    value: currentSnapshot?.[tab],
                 },
                 '*'
             );
