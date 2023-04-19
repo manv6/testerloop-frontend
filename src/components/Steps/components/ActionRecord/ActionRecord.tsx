@@ -9,6 +9,7 @@ import getFrameworkErrorInfo from 'src/utils/getFrameworkErrorInfo';
 import { ActionRecordFragment$key } from './__generated__/ActionRecordFragment.graphql';
 import ActionRecordFragment from './ActionRecordFragment';
 import { useFragment } from 'react-relay';
+import { CommandEventStatus } from '../StepRecord/StepRecord';
 
 interface Props {
     action: ActionRecordFragment$key;
@@ -18,11 +19,6 @@ interface Props {
 
 interface StyledActionProps {
     isSelected: boolean;
-}
-
-enum CommandEventStatus {
-    FAILED = 'FAILED',
-    SUCCESS = 'SUCCESS',
 }
 
 const StyledLink = styled('a')(({ theme }) => ({

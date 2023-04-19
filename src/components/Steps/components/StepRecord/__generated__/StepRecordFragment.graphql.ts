@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<cf792581393dcb1ef41977941f1250f2>>
+ * @generated SignedSource<<f620a30ca746f56fb8276c0300365da1>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,6 +9,7 @@
 // @ts-nocheck
 
 import { Fragment, ReaderFragment } from 'relay-runtime';
+export type CommandEventStatus = "FAILED" | "SUCCESS" | "%future added value";
 export type GherkinStepKeyword = "AND" | "BUT" | "GIVEN" | "THEN" | "WHEN" | "%future added value";
 import { FragmentRefs } from "relay-runtime";
 export type StepRecordFragment$data = {
@@ -35,8 +36,8 @@ export type StepRecordFragment$data = {
     readonly description: string;
     readonly keyword: GherkinStepKeyword;
   };
-  readonly hasFailed: boolean;
   readonly id: string;
+  readonly status: CommandEventStatus;
   readonly until: any;
   readonly " $fragmentType": "StepRecordFragment";
 };
@@ -111,7 +112,7 @@ return {
       "alias": null,
       "args": null,
       "kind": "ScalarField",
-      "name": "hasFailed",
+      "name": "status",
       "storageKey": null
     },
     {
@@ -201,6 +202,6 @@ return {
 };
 })();
 
-(node as any).hash = "7bc1b4807b815c57750c24d2602b5f68";
+(node as any).hash = "71fcfda76e5ebeae742bfb2a164e35d1";
 
 export default node;

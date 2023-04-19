@@ -24,6 +24,11 @@ interface StyledStepHeaderProps {
     isPreviousToSelected: boolean;
 }
 
+export enum CommandEventStatus {
+    FAILED = 'FAILED',
+    SUCCESS = 'SUCCESS',
+}
+
 const StyledStepHeader = styled('tr')<StyledStepHeaderProps>(
     ({ theme, isSelected, isPreviousToSelected }) => {
         let backgroundColor = theme.palette.base[400];
@@ -71,6 +76,8 @@ const StepRecord: React.FC<Props> = ({
             ? getMostRecentIdx(actions, hoverTimestamp)
             : null;
 
+    const hasFailed = !!(data.status === CommandEventStatus.FAILED);
+
     return (
         <>
             <StyledStepHeader
@@ -90,11 +97,9 @@ const StepRecord: React.FC<Props> = ({
                 <td className={styles.stepName}>
                     <StepPrefix
                         type={
-                            data.hasFailed
-                                ? EventType.CYPRESS_ERROR
-                                : EventType.STEP
+                            hasFailed ? EventType.CYPRESS_ERROR : EventType.STEP
                         }
-                        hasFailed={data.hasFailed}
+                        hasFailed={hasFailed}
                         className={styles.stepPrefix}
                     >
                         {data.definition.keyword.toUpperCase()}
@@ -104,7 +109,7 @@ const StepRecord: React.FC<Props> = ({
                 <td
                     className={cx(
                         styles.stepContent,
-                        data.hasFailed ? styles.error : styles.success
+                        hasFailed ? styles.error : styles.success
                     )}
                 >
                     {data.definition.description.replaceAll('*', '')}

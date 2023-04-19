@@ -10,7 +10,7 @@ const StepRecordFragment = graphql`
             description
             keyword
         }
-        hasFailed
+        status
         commandChains {
             totalCount
             edges {
