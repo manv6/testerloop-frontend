@@ -36,6 +36,8 @@ type CommandEvent implements Event & IntervalEvent & Node & TestExecutionEvent {
   error: CommandEventError
   id: ID!
   name: String!
+  nextSnapshot: TestExecutionSnapshot!
+  previousSnapshot: TestExecutionSnapshot!
   status: CommandEventStatus!
   testExecution: TestExecution!
   until: DateTime!
@@ -406,6 +408,8 @@ type StepEvent implements Event & IntervalEvent & Node & TestExecutionEvent {
   commandChains: CommandChainEventConnection!
   definition: StepDefinition!
   id: ID!
+  nextSnapshot: TestExecutionSnapshot!
+  previousSnapshot: TestExecutionSnapshot!
   status: CommandEventStatus!
   testExecution: TestExecution!
   until: DateTime!
@@ -490,6 +494,12 @@ enum TestExecutionEventType {
   For other tests, this can include `Before All`/`Before Each`/`Test`/`After Each`/`After All` parts
   """
   TEST_PART
+}
+
+type TestExecutionSnapshot implements Event & InstantaneousEvent & TestExecutionEvent {
+  at: DateTime!
+  dom: String!
+  testExecution: TestExecution!
 }
 
 type TestRun implements Node {

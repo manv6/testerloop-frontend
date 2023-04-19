@@ -1,16 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTimeline } from 'src/hooks/timeline';
 import styles from './DomPreview.module.scss';
-import { formatSteps } from 'src/utils/formatters';
-import stepsData from 'src/data/steps';
-import snapshots from 'src/data/snapshots';
 import * as Expandable from 'src/components/Expandable';
 import { DomPreviewHeader } from './components';
 import { DEFAULT_DOM_ZOOM, DOM_ZOOM_STEP_PERCENTAGE } from 'src/constants';
+import { DomPreviewFragment$key } from './__generated__/DomPreviewFragment.graphql';
+import DomPreviewFragment from './DomPreviewFragment';
+import { useFragment } from 'react-relay';
 
 export enum DOMTab {
-    BEFORE = 'beforeBody',
-    AFTER = 'afterBody',
+    BEFORE = 'previousSnapshot',
+    AFTER = 'nextSnapshot',
 }
 
 interface ElementWithValue extends HTMLElement {
@@ -18,28 +18,59 @@ interface ElementWithValue extends HTMLElement {
     value: string;
 }
 
-const DomPreview: React.FC = () => {
+type Props = {
+    fragmentKey: DomPreviewFragment$key;
+};
+
+const DomPreview: React.FC<Props> = ({ fragmentKey }) => {
+    const data = useFragment(DomPreviewFragment, fragmentKey);
+    const steps = data.snapshots.edges;
     const { currentTime } = useTimeline();
-    const steps = useMemo(() => formatSteps(stepsData as any), [stepsData]); //eslint-disable-line
     const [tab, setTab] = useState(DOMTab.BEFORE);
     const [zoom, setZoom] = useState(DEFAULT_DOM_ZOOM);
 
+    const flatSteps = useMemo(
+        () =>
+            steps.flatMap((step) => {
+                const { node } = step;
+                const { previousSnapshot, nextSnapshot, at } = node;
+                const commandChains = node.commandChains?.edges ?? [];
+
+                const flattenedCommands = commandChains.flatMap((chain) => {
+                    const commands = chain.node.commands.edges;
+
+                    return commands.map(({ node }) => ({
+                        previousSnapshot: node.previousSnapshot.dom,
+                        nextSnapshot: node.nextSnapshot.dom,
+                        at: node.at,
+                    }));
+                });
+
+                return [
+                    {
+                        previousSnapshot: previousSnapshot?.dom,
+                        nextSnapshot: nextSnapshot?.dom,
+                        at,
+                    },
+                    ...flattenedCommands,
+                ];
+            }),
+        [steps]
+    );
+
     const currentSnapshot = useMemo(() => {
-        const nextStepIdx = steps.findIndex(
-            ({ options }) =>
-                new Date(options.wallClockStartedAt).getTime() >
-                currentTime.getTime()
+        const nextStepIdx = flatSteps.findIndex(
+            (step) => new Date(step.at).getTime() > currentTime.getTime()
         );
         const mostRecentIdx =
-            (nextStepIdx === -1 ? steps.length : nextStepIdx) - 1;
-        const mostRecentStep = steps[mostRecentIdx];
-        const snapshotId = mostRecentStep.options.snapshotID;
-        const snapshot = snapshots.find(
-            (snapshot) => snapshot.snapshotID === snapshotId
+            (nextStepIdx === -1 ? flatSteps.length : nextStepIdx) - 1;
+        // NOTE: TS incorrectly types array indexes as always existing.
+        // as we don't know that is correct, we change the type manually.
+        return (
+            (flatSteps[mostRecentIdx] as (typeof flatSteps)[0] | undefined) ??
+            null
         );
-
-        return snapshot;
-    }, [steps, currentTime]);
+    }, [flatSteps, currentTime]);
 
     useEffect(() => {
         if (currentSnapshot) {

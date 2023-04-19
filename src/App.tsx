@@ -54,7 +54,7 @@ const App: React.FC = () => {
                             className={styles.steps}
                             fragmentKey={queryData.testExecution!}
                         />
-                        <DomPreview />
+                        <DomPreview fragmentKey={queryData.testExecution!} />
                         <NetworkPanel fragmentKey={queryData.testExecution!} />
                         <ConsolePanel fragmentKey={queryData.testExecution!} />
                     </Expandable.Parent>

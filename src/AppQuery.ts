@@ -7,6 +7,7 @@ const AppQuery = graphql`
             ...NetworkPanelFragment
             ...SummaryFragment
             ...StepsFragment
+            ...DomPreviewFragment
         }
     }
 `;
