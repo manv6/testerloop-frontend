@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styles from './Summary.module.scss';
-import results from 'src/data/results';
 import { useFragment } from 'react-relay';
 import { SummaryFragment$key } from './__generated__/SummaryFragment.graphql';
 import graphql from 'babel-plugin-relay/macro';
@@ -24,6 +23,23 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
                 ...ConsoleErrorCountFragment
                 ...NetworkErrorCountFragment
                 ...EnvironmentDetailsFragment
+                testRun {
+                    title
+                }
+                commandWithError: events(
+                    filter: { type: COMMAND, commandFilter: { status: FAILED } }
+                ) {
+                    edges {
+                        node {
+                            ... on CommandEvent {
+                                id
+                                error {
+                                    type
+                                }
+                            }
+                        }
+                    }
+                }
             }
         `,
         fragmentKey
@@ -31,9 +47,9 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
 
     const [isExpanded, setIsExpanded] = useState(false);
 
-    const errorObj = results.runs[0].tests[0].attempts[0];
-    const frameworkErrorName = errorObj.error.name;
-    const title = results.runs[0].tests[0].title.slice(-1)[0];
+    const frameworkErrorName =
+        summaryData.commandWithError.edges[0].node.error?.type;
+    const title = summaryData.testRun.title;
 
     return (
         <Panel className={cx(styles.summary, className)}>

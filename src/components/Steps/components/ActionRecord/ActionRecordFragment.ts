@@ -10,6 +10,8 @@ const ActionRecordFragment = graphql`
         description
         error {
             stackTrace
+            url
+            urlText
         }
     }
 `;

@@ -5,7 +5,6 @@ import styles from './ActionRecord.module.scss';
 import { Accordion, StepPrefix } from 'src/components/common';
 import { EventType } from 'src/constants';
 import { styled } from '@mui/material';
-import getFrameworkErrorInfo from 'src/utils/getFrameworkErrorInfo';
 import { ActionRecordFragment$key } from './__generated__/ActionRecordFragment.graphql';
 import ActionRecordFragment from './ActionRecordFragment';
 import { useFragment } from 'react-relay';
@@ -53,13 +52,14 @@ const ActionRecord: React.FC<Props> = ({
 }) => {
     const data = useFragment(ActionRecordFragment, action);
     const { seek } = useTimeline();
-    const { url, text: urlText } = getFrameworkErrorInfo();
 
     const navigateInTimeline = () => {
         seek(new Date(data.at));
     };
 
     const hasFailed = data.status === 'FAILED';
+    const url = data.error?.url;
+    const urlText = data.error?.urlText;
 
     return (
         <StyledAction

@@ -6,19 +6,30 @@ import { ErrorIcon, GoToCodeButton } from './components';
 import cx from 'classnames';
 
 import styles from './FrameworkError.module.scss';
-import getFrameworkErrorInfo from 'src/utils/getFrameworkErrorInfo';
-import results from 'src/data/results';
+import { FrameworkErrorFragment$key } from './__generated__/FrameworkErrorFragment.graphql';
+import FrameworkErrorFragment from './FrameworkErrorFragment';
+import { useFragment } from 'react-relay';
 
 const StyledErrorName = styled('div')(({ theme }) => ({
     color: theme.palette.status.error[400],
 }));
 
-const FrameworkError: React.FC = () => {
-    const [isExpanded, setIsExpanded] = useState(false);
-    const { url, text: tooltipText } = getFrameworkErrorInfo();
+type Props = {
+    fragmentKey: FrameworkErrorFragment$key;
+};
 
-    const errorObj = results.runs[0].tests[0].attempts[0];
-    const error = errorObj.error;
+const FrameworkError: React.FC<Props> = ({ fragmentKey }) => {
+    const data = useFragment(FrameworkErrorFragment, fragmentKey);
+    const [isExpanded, setIsExpanded] = useState(false);
+
+    const error = data.frameworkError.edges[0].node.error;
+
+    if (!error) {
+        return null;
+    }
+
+    const url = error.url;
+    const tooltipText = error.urlText;
 
     return (
         <Panel className={styles.errorPanel}>
@@ -33,13 +44,13 @@ const FrameworkError: React.FC = () => {
                         })}
                     >
                         <StyledErrorName className={styles.errorName}>
-                            {splitCamelCase(error.name)}
+                            {splitCamelCase(error.type)}
                         </StyledErrorName>
                         <div>{error.message}</div>
                         <br />
                         {isExpanded && (
                             <div className={styles.stackMessage}>
-                                {error.stack}
+                                {error.stackTrace}
                             </div>
                         )}
                     </div>

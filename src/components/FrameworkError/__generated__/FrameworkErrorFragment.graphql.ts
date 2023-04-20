@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7cefd356215738651fb547eabf25133b>>
+ * @generated SignedSource<<6d48faffec219797a8506a07febf343a>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,79 +10,36 @@
 
 import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type SummaryFragment$data = {
-  readonly commandWithError: {
+export type FrameworkErrorFragment$data = {
+  readonly frameworkError: {
     readonly edges: ReadonlyArray<{
       readonly node: {
         readonly error?: {
+          readonly message: string;
+          readonly stackTrace: string;
           readonly type: string;
+          readonly url: string;
+          readonly urlText: string;
         } | null;
         readonly id?: string;
       };
     }>;
   };
-  readonly id: string;
-  readonly testRun: {
-    readonly title: string;
-  };
-  readonly " $fragmentSpreads": FragmentRefs<"ConsoleErrorCountFragment" | "EnvironmentDetailsFragment" | "NetworkErrorCountFragment">;
-  readonly " $fragmentType": "SummaryFragment";
+  readonly " $fragmentType": "FrameworkErrorFragment";
 };
-export type SummaryFragment$key = {
-  readonly " $data"?: SummaryFragment$data;
-  readonly " $fragmentSpreads": FragmentRefs<"SummaryFragment">;
+export type FrameworkErrorFragment$key = {
+  readonly " $data"?: FrameworkErrorFragment$data;
+  readonly " $fragmentSpreads": FragmentRefs<"FrameworkErrorFragment">;
 };
 
-const node: ReaderFragment = (function(){
-var v0 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "id",
-  "storageKey": null
-};
-return {
+const node: ReaderFragment = {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
-  "name": "SummaryFragment",
+  "name": "FrameworkErrorFragment",
   "selections": [
-    (v0/*: any*/),
     {
-      "args": null,
-      "kind": "FragmentSpread",
-      "name": "ConsoleErrorCountFragment"
-    },
-    {
-      "args": null,
-      "kind": "FragmentSpread",
-      "name": "NetworkErrorCountFragment"
-    },
-    {
-      "args": null,
-      "kind": "FragmentSpread",
-      "name": "EnvironmentDetailsFragment"
-    },
-    {
-      "alias": null,
-      "args": null,
-      "concreteType": "TestRun",
-      "kind": "LinkedField",
-      "name": "testRun",
-      "plural": false,
-      "selections": [
-        {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "title",
-          "storageKey": null
-        }
-      ],
-      "storageKey": null
-    },
-    {
-      "alias": "commandWithError",
+      "alias": "frameworkError",
       "args": [
         {
           "kind": "Literal",
@@ -119,7 +76,13 @@ return {
                 {
                   "kind": "InlineFragment",
                   "selections": [
-                    (v0/*: any*/),
+                    {
+                      "alias": null,
+                      "args": null,
+                      "kind": "ScalarField",
+                      "name": "id",
+                      "storageKey": null
+                    },
                     {
                       "alias": null,
                       "args": null,
@@ -133,6 +96,34 @@ return {
                           "args": null,
                           "kind": "ScalarField",
                           "name": "type",
+                          "storageKey": null
+                        },
+                        {
+                          "alias": null,
+                          "args": null,
+                          "kind": "ScalarField",
+                          "name": "message",
+                          "storageKey": null
+                        },
+                        {
+                          "alias": null,
+                          "args": null,
+                          "kind": "ScalarField",
+                          "name": "stackTrace",
+                          "storageKey": null
+                        },
+                        {
+                          "alias": null,
+                          "args": null,
+                          "kind": "ScalarField",
+                          "name": "url",
+                          "storageKey": null
+                        },
+                        {
+                          "alias": null,
+                          "args": null,
+                          "kind": "ScalarField",
+                          "name": "urlText",
                           "storageKey": null
                         }
                       ],
@@ -155,8 +146,7 @@ return {
   "type": "TestExecution",
   "abstractKey": null
 };
-})();
 
-(node as any).hash = "468703a885973bd8751c09a156584475";
+(node as any).hash = "3ae8f92b0af4781422522ca3944788dc";
 
 export default node;

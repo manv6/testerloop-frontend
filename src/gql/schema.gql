@@ -58,6 +58,8 @@ type CommandEventError {
   message: String!
   stackTrace: String!
   type: String!
+  url: String!
+  urlText: String!
 }
 
 input CommandEventFilterInput {
@@ -504,9 +506,10 @@ type TestExecutionSnapshot implements Event & InstantaneousEvent & TestExecution
 
 type TestRun implements Node {
   id: ID!
+  testCodeRevision: SourceCodeManagementRevision
 
   """This field may be null if the data was not provided for collection."""
-  testCodeRevision: SourceCodeManagementRevision
+  title: String!
 }
 
 scalar URL

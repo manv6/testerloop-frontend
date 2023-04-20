@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { TimelineProvider } from './hooks/timeline';
 import { TimelineControls } from './components/TimelineControls';
 import { NetworkPanel, ConsolePanel } from './components/DevTools';
@@ -7,9 +7,6 @@ import * as Expandable from './components/Expandable';
 import FrameworkError from './components/FrameworkError';
 import Summary from './components/Summary';
 import styles from './App.module.scss';
-import results from './data/results';
-import * as formatters from './utils/formatters';
-import stepsData from 'src/data/steps';
 import { useLazyLoadQuery } from 'react-relay';
 import AppQuery from './AppQuery';
 import { AppQuery as AppQueryType } from './__generated__/AppQuery.graphql';
@@ -25,12 +22,6 @@ const testExecutionId =
     'VGVzdEV4ZWN1dGlvbi9kN2E2NzRlNS05NzI2LTRjNjItOTI0Yi0wYmI4NDZlOWYyMTMvMDAzNDNhZjQtYWNmMy00NzNiLTk5NzUtMGMyYmQyNmU0N28x';
 
 const App: React.FC = () => {
-    const data = { steps: stepsData } as any; // eslint-disable-line
-    const steps = useMemo(
-        () => formatters.formatSteps(data.steps),
-        [data.steps]
-    );
-
     const queryData = useLazyLoadQuery<AppQueryType>(AppQuery, {
         testExecutionId,
     });
@@ -38,8 +29,10 @@ const App: React.FC = () => {
     // TODO: We likely want to add some "lead" and "lag" time to these dates,
     // so that events that occur at or near the very beginning or end of the
     // timeline can be viewed and scrubbed to easily.
-    const startTime = steps.at(0)!.options.wallClockStartedAt; // eslint-disable-line @typescript-eslint/no-non-null-assertion
-    const endTime = new Date(Date.parse(results.endedTestsAt));
+    const startTime = new Date(
+        queryData.testExecution?.firstStep.edges[0].node.at
+    );
+    const endTime = new Date(queryData.testExecution?.until);
 
     return (
         <StyledApp className={styles.app}>
@@ -47,7 +40,7 @@ const App: React.FC = () => {
                 {/* eslint-disable @typescript-eslint/no-non-null-assertion */}
                 <Summary fragmentKey={queryData.testExecution!} />
                 <div className={styles.appContent}>
-                    <FrameworkError />
+                    <FrameworkError fragmentKey={queryData.testExecution!} />
                     <TimelineControls />
                     <Expandable.Parent className={styles.expandableParent}>
                         <Steps

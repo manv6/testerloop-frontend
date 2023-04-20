@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f90df8fa680b748f88e9a7fb49fef3c3>>
+ * @generated SignedSource<<d6aef4462eea59b067d9c27ab6ed3fc3>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,6 +16,8 @@ export type ActionRecordFragment$data = {
   readonly description: string;
   readonly error: {
     readonly stackTrace: string;
+    readonly url: string;
+    readonly urlText: string;
   } | null;
   readonly id: string;
   readonly name: string;
@@ -90,6 +92,20 @@ const node: ReaderFragment = {
           "kind": "ScalarField",
           "name": "stackTrace",
           "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "url",
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "urlText",
+          "storageKey": null
         }
       ],
       "storageKey": null
@@ -99,6 +115,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "1834494266db4d83f995c12941e30707";
+(node as any).hash = "e777190b396e9d659c2b3d2c151aae2f";
 
 export default node;
