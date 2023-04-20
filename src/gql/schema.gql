@@ -434,6 +434,7 @@ type TestExecution implements Event & IntervalEvent & Node {
   events(after: Cursor, filter: TestExecutionEventFilterInput, first: Int): TestExecutionEventConnection!
   id: ID!
   testRun: TestRun!
+  title: String!
   until: DateTime!
 }
 
@@ -506,10 +507,9 @@ type TestExecutionSnapshot implements Event & InstantaneousEvent & TestExecution
 
 type TestRun implements Node {
   id: ID!
-  testCodeRevision: SourceCodeManagementRevision
 
   """This field may be null if the data was not provided for collection."""
-  title: String!
+  testCodeRevision: SourceCodeManagementRevision
 }
 
 scalar URL

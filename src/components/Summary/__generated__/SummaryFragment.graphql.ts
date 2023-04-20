@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7cefd356215738651fb547eabf25133b>>
+ * @generated SignedSource<<d2d88dcddc40d0c3d851f85a820fd900>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -22,9 +22,7 @@ export type SummaryFragment$data = {
     }>;
   };
   readonly id: string;
-  readonly testRun: {
-    readonly title: string;
-  };
+  readonly title: string;
   readonly " $fragmentSpreads": FragmentRefs<"ConsoleErrorCountFragment" | "EnvironmentDetailsFragment" | "NetworkErrorCountFragment">;
   readonly " $fragmentType": "SummaryFragment";
 };
@@ -49,6 +47,13 @@ return {
   "selections": [
     (v0/*: any*/),
     {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "title",
+      "storageKey": null
+    },
+    {
       "args": null,
       "kind": "FragmentSpread",
       "name": "ConsoleErrorCountFragment"
@@ -62,24 +67,6 @@ return {
       "args": null,
       "kind": "FragmentSpread",
       "name": "EnvironmentDetailsFragment"
-    },
-    {
-      "alias": null,
-      "args": null,
-      "concreteType": "TestRun",
-      "kind": "LinkedField",
-      "name": "testRun",
-      "plural": false,
-      "selections": [
-        {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "title",
-          "storageKey": null
-        }
-      ],
-      "storageKey": null
     },
     {
       "alias": "commandWithError",
@@ -157,6 +144,6 @@ return {
 };
 })();
 
-(node as any).hash = "468703a885973bd8751c09a156584475";
+(node as any).hash = "4e84ec3397994d28c7419df6fc41812a";
 
 export default node;

@@ -20,12 +20,10 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
         graphql`
             fragment SummaryFragment on TestExecution {
                 id
+                title
                 ...ConsoleErrorCountFragment
                 ...NetworkErrorCountFragment
                 ...EnvironmentDetailsFragment
-                testRun {
-                    title
-                }
                 commandWithError: events(
                     filter: { type: COMMAND, commandFilter: { status: FAILED } }
                 ) {
@@ -49,7 +47,7 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
 
     const frameworkErrorName =
         summaryData.commandWithError.edges[0].node.error?.type;
-    const title = summaryData.testRun.title;
+    const title = summaryData.title;
 
     return (
         <Panel className={cx(styles.summary, className)}>
