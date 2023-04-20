@@ -17,6 +17,7 @@ import StepMarker from './components/StepMarker';
 import SuccessNetworkMarker from './components/SuccessNetworkMarker';
 import { styled } from '@mui/material';
 import { Panel } from 'src/components/common';
+import { SeekerFragment$key } from './components/Seeker/__generated__/SeekerFragment.graphql';
 
 const StyledControlSection = styled('div')(({ theme }) => ({
     borderBottom: `1px solid ${theme.palette.base[300]}`,
@@ -26,7 +27,11 @@ const StyledTime = styled('div')(({ theme }) => ({
     color: theme.palette.base[200],
 }));
 
-export const TimelineControls: React.FC = () => {
+type Props = {
+    fragmentKey: SeekerFragment$key;
+};
+
+export const TimelineControls: React.FC<Props> = ({ fragmentKey }) => {
     const { currentTime, startTime, endTime, filters, setFilters } =
         useTimeline();
 
@@ -60,7 +65,7 @@ export const TimelineControls: React.FC = () => {
                     setFilters={setFilters}
                 />
             </StyledControlSection>
-            <Seeker getMarker={getMarker} />
+            <Seeker getMarker={getMarker} fragmentKey={fragmentKey} />
         </Panel>
     );
 };

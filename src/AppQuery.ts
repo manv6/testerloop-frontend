@@ -8,6 +8,7 @@ const AppQuery = graphql`
             ...SummaryFragment
             ...StepsFragment
             ...DomPreviewFragment
+            ...SeekerFragment
         }
     }
 `;
