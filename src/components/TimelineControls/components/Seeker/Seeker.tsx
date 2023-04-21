@@ -9,6 +9,9 @@ import styles from './Seeker.module.scss';
 import { styled, Tooltip } from '@mui/material';
 import MarkerTooltip from '../MarkerTooltip';
 import fractionToPercentage from 'src/utils/fractionToPercentage';
+import { SeekerFragment$key } from './__generated__/SeekerFragment.graphql';
+import SeekerFragment from './SeekerFragment';
+import { useFragment } from 'react-relay';
 
 const StyledFill = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.base[100],
@@ -43,13 +46,16 @@ const StyledMarker = styled('div')<StyledMarkerProps>(({ size }) => ({
 
 type Props = {
     getMarker: (ev: EventType) => JSX.Element;
+    fragmentKey: SeekerFragment$key;
 };
 
-const Seeker: React.FC<Props> = ({ getMarker }) => {
+const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
     const data = {
         networkEvents: networkEventData.log.entries,
         steps: stepsData,
     } as any; // eslint-disable-line
+    const { screenshots } = useFragment(SeekerFragment, fragmentKey);
+
     const {
         currentTimeFraction,
         hoverTimeFraction,
@@ -189,23 +195,20 @@ const Seeker: React.FC<Props> = ({ getMarker }) => {
     }, [cypressErrorMarkers, seekFraction]);
 
     const screenshotsSource = useMemo(() => {
-        const screenshotContext = require.context(
-            'src/data/screenshots',
-            false,
-            /\.png$/
+        return Object.fromEntries(
+            screenshots.edges.map(({ node }) => [
+                new Date(node.at).getTime(),
+                node.url?.url,
+            ])
         );
-        const sources: Record<string, string> = {};
-        screenshotContext.keys().forEach((fileName) => {
-            const name = fileName.includes('/')
-                ? fileName.split('/').pop()?.split('.')[0]
-                : fileName.split('.')[0];
-            if (name) {
-                sources[name] = screenshotContext(fileName);
-            }
-        });
+    }, [screenshots.edges]);
 
-        return sources;
-    }, []);
+    useEffect(() => {
+        // Preload all images so that the UI is responsive and we can support a low expiry time
+        for (const url of Object.values(screenshotsSource)) {
+            new Image().src = url;
+        }
+    }, [screenshotsSource]);
 
     const screenshot = useMemo(() => {
         const hoverTimestamp = hoverTime?.getTime();
