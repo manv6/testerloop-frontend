@@ -13,8 +13,16 @@ const FrameworkErrorFragment = graphql`
                             type
                             message
                             stackTrace
-                            url
-                            urlText
+                            location {
+                                line {
+                                    line
+                                    url
+                                    file {
+                                        path
+                                    }
+                                }
+                                column
+                            }
                         }
                     }
                 }

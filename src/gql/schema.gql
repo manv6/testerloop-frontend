@@ -55,11 +55,10 @@ type CommandEventEdge {
 }
 
 type CommandEventError {
+  location: SourceCodeManagementRevisionFileLineColumn!
   message: String!
   stackTrace: String!
   type: String!
-  url: String!
-  urlText: String!
 }
 
 input CommandEventFilterInput {
@@ -182,6 +181,22 @@ type GitHubRevision implements GitRevision & SourceCodeManagementRevision {
   url: URL!
 }
 
+type GitHubRevisionFile implements GitRevisionFile & SourceCodeManagementRevisionFile {
+  path: String!
+  revision: GitHubRevision!
+}
+
+type GitHubRevisionFileLine implements GitRevisionFileLine & SourceCodeManagementRevisionFileLine {
+  file: GitHubRevisionFile!
+  line: Int!
+  url: URL!
+}
+
+type GitHubRevisionFileLineColumn implements GitRevisionFileLineColumn & SourceCodeManagementRevisionFileLineColumn {
+  column: Int!
+  line: GitHubRevisionFileLine!
+}
+
 type GitHubUser {
   avatar: URL
   name: String!
@@ -199,6 +214,22 @@ interface GitRevision implements SourceCodeManagementRevision {
   commitId(type: GitCommitIdType! = LONG): String!
   committer: GitActor!
   repository: GitRepository!
+}
+
+interface GitRevisionFile implements SourceCodeManagementRevisionFile {
+  path: String!
+  revision: GitRevision!
+}
+
+interface GitRevisionFileLine implements SourceCodeManagementRevisionFileLine {
+  file: GitRevisionFile!
+  line: Int!
+  url: URL!
+}
+
+interface GitRevisionFileLineColumn implements SourceCodeManagementRevisionFileLineColumn {
+  column: Int!
+  line: GitRevisionFileLine!
 }
 
 interface HttpBody {
@@ -392,12 +423,33 @@ type ScenarioEvent implements Event & IntervalEvent & TestExecutionEvent {
   until: DateTime!
 }
 
+type SignedURL {
+  expiresAt: DateTime!
+  url: URL!
+}
+
 interface SourceCodeManagementRepository {
   _unused: Boolean!
 }
 
 interface SourceCodeManagementRevision {
   repository: SourceCodeManagementRepository!
+}
+
+interface SourceCodeManagementRevisionFile {
+  path: String!
+  revision: SourceCodeManagementRevision!
+}
+
+interface SourceCodeManagementRevisionFileLine {
+  file: SourceCodeManagementRevisionFile!
+  line: Int!
+  url: URL!
+}
+
+interface SourceCodeManagementRevisionFileLineColumn {
+  column: Int!
+  line: SourceCodeManagementRevisionFileLine!
 }
 
 type StepDefinition {
@@ -484,6 +536,7 @@ enum TestExecutionEventType {
   COMMAND
   CONSOLE
   NETWORK
+  SCREENSHOT
 
   """
   Returns all of the steps of the `TestExecution`, flattened outside of their containing `BackgroundEvent` or `ScenarioEvent`.
@@ -497,6 +550,15 @@ enum TestExecutionEventType {
   For other tests, this can include `Before All`/`Before Each`/`Test`/`After Each`/`After All` parts
   """
   TEST_PART
+}
+
+type TestExecutionScreenshot implements Event & InstantaneousEvent & Node & TestExecutionEvent {
+  at: DateTime!
+  id: ID!
+  testExecution: TestExecution!
+
+  """Returns a signed URL for fetching this screenshot from S3."""
+  url: SignedURL!
 }
 
 type TestExecutionSnapshot implements Event & InstantaneousEvent & TestExecutionEvent {

@@ -28,8 +28,13 @@ const FrameworkError: React.FC<Props> = ({ fragmentKey }) => {
         return null;
     }
 
-    const url = error.url;
-    const tooltipText = error.urlText;
+    const location = error.location;
+    const url = location.line.url;
+    const tooltipText = [
+        location.line.file.path,
+        location.line.line,
+        location.column,
+    ].join(':');
 
     return (
         <Panel className={styles.errorPanel}>

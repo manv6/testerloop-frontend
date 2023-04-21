@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6d48faffec219797a8506a07febf343a>>
+ * @generated SignedSource<<b5b82a6ed64bf4f948540d9f67e64f44>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,11 +15,19 @@ export type FrameworkErrorFragment$data = {
     readonly edges: ReadonlyArray<{
       readonly node: {
         readonly error?: {
+          readonly location: {
+            readonly column: number;
+            readonly line: {
+              readonly file: {
+                readonly path: string;
+              };
+              readonly line: number;
+              readonly url: any;
+            };
+          };
           readonly message: string;
           readonly stackTrace: string;
           readonly type: string;
-          readonly url: string;
-          readonly urlText: string;
         } | null;
         readonly id?: string;
       };
@@ -115,15 +123,62 @@ const node: ReaderFragment = {
                         {
                           "alias": null,
                           "args": null,
-                          "kind": "ScalarField",
-                          "name": "url",
-                          "storageKey": null
-                        },
-                        {
-                          "alias": null,
-                          "args": null,
-                          "kind": "ScalarField",
-                          "name": "urlText",
+                          "concreteType": null,
+                          "kind": "LinkedField",
+                          "name": "location",
+                          "plural": false,
+                          "selections": [
+                            {
+                              "alias": null,
+                              "args": null,
+                              "concreteType": null,
+                              "kind": "LinkedField",
+                              "name": "line",
+                              "plural": false,
+                              "selections": [
+                                {
+                                  "alias": null,
+                                  "args": null,
+                                  "kind": "ScalarField",
+                                  "name": "line",
+                                  "storageKey": null
+                                },
+                                {
+                                  "alias": null,
+                                  "args": null,
+                                  "kind": "ScalarField",
+                                  "name": "url",
+                                  "storageKey": null
+                                },
+                                {
+                                  "alias": null,
+                                  "args": null,
+                                  "concreteType": null,
+                                  "kind": "LinkedField",
+                                  "name": "file",
+                                  "plural": false,
+                                  "selections": [
+                                    {
+                                      "alias": null,
+                                      "args": null,
+                                      "kind": "ScalarField",
+                                      "name": "path",
+                                      "storageKey": null
+                                    }
+                                  ],
+                                  "storageKey": null
+                                }
+                              ],
+                              "storageKey": null
+                            },
+                            {
+                              "alias": null,
+                              "args": null,
+                              "kind": "ScalarField",
+                              "name": "column",
+                              "storageKey": null
+                            }
+                          ],
                           "storageKey": null
                         }
                       ],
@@ -147,6 +202,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "3ae8f92b0af4781422522ca3944788dc";
+(node as any).hash = "01c7a60743ce6df4e7c632e9fcecbf02";
 
 export default node;

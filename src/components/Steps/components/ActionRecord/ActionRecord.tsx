@@ -58,8 +58,13 @@ const ActionRecord: React.FC<Props> = ({
     };
 
     const hasFailed = data.status === 'FAILED';
-    const url = data.error?.url;
-    const urlText = data.error?.urlText;
+    const location = data.error?.location;
+    const url = location?.line.url;
+    const urlText = [
+        location?.line.file.path,
+        location?.line.line,
+        location?.column,
+    ].join(':');
 
     return (
         <StyledAction
