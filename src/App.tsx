@@ -1,15 +1,4 @@
 import React from 'react';
-// import { TimelineProvider } from './hooks/timeline';
-// import { TimelineControls } from './components/TimelineControls';
-// import { NetworkPanel, ConsolePanel } from './components/DevTools';
-// import { Steps } from './components/Steps';
-// import * as Expandable from './components/Expandable';
-// import FrameworkError from './components/FrameworkError';
-// import Summary from './components/Summary';
-// import styles from './App.module.scss';
-// import { useLazyLoadQuery } from 'react-relay';
-// import AppQuery from './AppQuery';
-// import { AppQuery as AppQueryType } from './__generated__/AppQuery.graphql';
 import styles from './App.module.scss';
 import { styled } from '@mui/material/styles';
 import { testExecutionPageQuery } from './pages/run/[runId]/test/[testExecutionId]/TestExecutionPageQuery';
