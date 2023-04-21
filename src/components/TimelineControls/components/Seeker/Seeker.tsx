@@ -243,6 +243,13 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
         );
     }, [screenshots.edges]);
 
+    useEffect(() => {
+        // Preload all images so that the UI is responsive and we can support a low expiry time
+        for (const url of Object.values(screenshotsSource)) {
+            new Image().src = url;
+        }
+    }, [screenshotsSource]);
+
     const screenshot = useMemo(() => {
         const hoverTimestamp = hoverTime?.getTime();
         if (!hoverTimestamp) {

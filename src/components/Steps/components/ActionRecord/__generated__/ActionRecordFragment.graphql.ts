@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f90df8fa680b748f88e9a7fb49fef3c3>>
+ * @generated SignedSource<<72dd8d82c088b4538ecb70200af22f5f>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,6 +15,16 @@ export type ActionRecordFragment$data = {
   readonly at: any;
   readonly description: string;
   readonly error: {
+    readonly location: {
+      readonly column: number;
+      readonly line: {
+        readonly file: {
+          readonly path: string;
+        };
+        readonly line: number;
+        readonly url: any;
+      };
+    };
     readonly stackTrace: string;
   } | null;
   readonly id: string;
@@ -90,6 +100,67 @@ const node: ReaderFragment = {
           "kind": "ScalarField",
           "name": "stackTrace",
           "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": null,
+          "kind": "LinkedField",
+          "name": "location",
+          "plural": false,
+          "selections": [
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": null,
+              "kind": "LinkedField",
+              "name": "line",
+              "plural": false,
+              "selections": [
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "line",
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "url",
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": null,
+                  "kind": "LinkedField",
+                  "name": "file",
+                  "plural": false,
+                  "selections": [
+                    {
+                      "alias": null,
+                      "args": null,
+                      "kind": "ScalarField",
+                      "name": "path",
+                      "storageKey": null
+                    }
+                  ],
+                  "storageKey": null
+                }
+              ],
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "column",
+              "storageKey": null
+            }
+          ],
+          "storageKey": null
         }
       ],
       "storageKey": null
@@ -99,6 +170,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "1834494266db4d83f995c12941e30707";
+(node as any).hash = "9321904bc08a26219862d85d87a18582";
 
 export default node;
