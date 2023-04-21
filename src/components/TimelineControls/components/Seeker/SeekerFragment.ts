@@ -42,10 +42,12 @@ const SeekerFragment = graphql`
                         until
                     }
                     ... on CommandEvent {
+                        __typename
                         at
                         status
                     }
                     ... on StepEvent {
+                        __typename
                         at
                         status
                     }

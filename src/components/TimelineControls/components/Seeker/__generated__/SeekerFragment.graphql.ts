@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<0b8ed9f798668340adcd421b7ec62541>>
+ * @generated SignedSource<<5150d8dc0adb708a3251c59acadcc681>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -26,11 +26,22 @@ export type SeekerFragment$data = {
   readonly seekerEvents: {
     readonly edges: ReadonlyArray<{
       readonly node: {
+        readonly __typename: "CommandEvent";
+        readonly at: any;
+        readonly status: CommandEventStatus;
+      } | {
         readonly __typename: "HttpNetworkEvent";
-        readonly at?: any;
-        readonly id?: string;
-        readonly status?: CommandEventStatus;
-        readonly until?: any;
+        readonly at: any;
+        readonly id: string;
+        readonly until: any;
+      } | {
+        readonly __typename: "StepEvent";
+        readonly at: any;
+        readonly status: CommandEventStatus;
+      } | {
+        // This will never be '%other', but we need some
+        // value in case none of the concrete values match.
+        readonly __typename: "%other";
       };
     }>;
   };
@@ -53,10 +64,18 @@ v1 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
+  "name": "__typename",
+  "storageKey": null
+},
+v2 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
-v2 = [
+v3 = [
+  (v1/*: any*/),
   (v0/*: any*/),
   {
     "alias": null,
@@ -233,14 +252,8 @@ return {
                 {
                   "kind": "InlineFragment",
                   "selections": [
-                    {
-                      "alias": null,
-                      "args": null,
-                      "kind": "ScalarField",
-                      "name": "__typename",
-                      "storageKey": null
-                    },
                     (v1/*: any*/),
+                    (v2/*: any*/),
                     (v0/*: any*/),
                     {
                       "alias": null,
@@ -255,13 +268,13 @@ return {
                 },
                 {
                   "kind": "InlineFragment",
-                  "selections": (v2/*: any*/),
+                  "selections": (v3/*: any*/),
                   "type": "CommandEvent",
                   "abstractKey": null
                 },
                 {
                   "kind": "InlineFragment",
-                  "selections": (v2/*: any*/),
+                  "selections": (v3/*: any*/),
                   "type": "StepEvent",
                   "abstractKey": null
                 }
@@ -274,13 +287,13 @@ return {
       ],
       "storageKey": null
     },
-    (v1/*: any*/)
+    (v2/*: any*/)
   ],
   "type": "TestExecution",
   "abstractKey": null
 };
 })();
 
-(node as any).hash = "ad13361b19999713ad3f2a0ac5fb41b7";
+(node as any).hash = "1ca91c8a624e1875d05c30dfc066dc4e";
 
 export default node;

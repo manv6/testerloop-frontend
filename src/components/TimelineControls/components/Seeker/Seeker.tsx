@@ -54,10 +54,12 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
         networkEvents: networkEventData.log.entries,
         steps: stepsData,
     } as any; // eslint-disable-line
-    const [{ screenshots }, refetch] = useRefetchableFragment(
+    const [{ screenshots, seekerEvents }, refetch] = useRefetchableFragment(
         SeekerFragment,
         fragmentKey
     );
+
+    console.log('seeker events', seekerEvents);
 
     const {
         currentTimeFraction,

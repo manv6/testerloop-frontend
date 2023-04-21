@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<9664ba78d854d666bd89c9128e4fab4d>>
+ * @generated SignedSource<<745ee70bbb9ca984ef77e03cd37246f6>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -362,16 +362,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "e3d2d15ca01b85732652576612695a1b",
+    "cacheID": "2ff4afaf113b6a024a3cd7d1bb12767c",
     "id": null,
     "metadata": {},
     "name": "SeekerFragmentRefetchQuery",
     "operationKind": "query",
-    "text": "query SeekerFragmentRefetchQuery(\n  $commandStatus: [CommandEventStatus!] = [FAILED]\n  $eventTypes: [TestExecutionEventType!] = [STEP, NETWORK, COMMAND]\n  $networkStatus: NetworkEventResponseStatusFilterInput = {gte: 400}\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...SeekerFragment_2Gy8Fp\n    id\n  }\n}\n\nfragment SeekerFragment_2Gy8Fp on TestExecution {\n  screenshots: events(filter: {type: SCREENSHOT}) {\n    edges {\n      node {\n        __typename\n        ... on TestExecutionScreenshot {\n          at\n          url {\n            url\n          }\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n  seekerEvents: events(filter: {type: $eventTypes, networkFilter: {status: $networkStatus}, commandFilter: {status: $commandStatus}}) {\n    edges {\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          __typename\n          id\n          at\n          until\n        }\n        ... on CommandEvent {\n          at\n          status\n        }\n        ... on StepEvent {\n          at\n          status\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n    }\n  }\n  id\n}\n"
+    "text": "query SeekerFragmentRefetchQuery(\n  $commandStatus: [CommandEventStatus!] = [FAILED]\n  $eventTypes: [TestExecutionEventType!] = [STEP, NETWORK, COMMAND]\n  $networkStatus: NetworkEventResponseStatusFilterInput = {gte: 400}\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...SeekerFragment_2Gy8Fp\n    id\n  }\n}\n\nfragment SeekerFragment_2Gy8Fp on TestExecution {\n  screenshots: events(filter: {type: SCREENSHOT}) {\n    edges {\n      node {\n        __typename\n        ... on TestExecutionScreenshot {\n          at\n          url {\n            url\n          }\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n  seekerEvents: events(filter: {type: $eventTypes, networkFilter: {status: $networkStatus}, commandFilter: {status: $commandStatus}}) {\n    edges {\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          __typename\n          id\n          at\n          until\n        }\n        ... on CommandEvent {\n          __typename\n          at\n          status\n        }\n        ... on StepEvent {\n          __typename\n          at\n          status\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n    }\n  }\n  id\n}\n"
   }
 };
 })();
 
-(node as any).hash = "ad13361b19999713ad3f2a0ac5fb41b7";
+(node as any).hash = "1ca91c8a624e1875d05c30dfc066dc4e";
 
 export default node;
