@@ -54,7 +54,7 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
         networkEvents: networkEventData.log.entries,
         steps: stepsData,
     } as any; // eslint-disable-line
-    const d = useFragment(SeekerFragment, fragmentKey);
+    const { screenshots } = useFragment(SeekerFragment, fragmentKey);
 
     const {
         currentTimeFraction,
@@ -196,12 +196,12 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
 
     const screenshotsSource = useMemo(() => {
         return Object.fromEntries(
-            d.screenshots.edges.map(({ node }) => [
+            screenshots.edges.map(({ node }) => [
                 new Date(node.at).getTime(),
                 node.url?.url,
             ])
         );
-    }, [d.screenshots.edges]);
+    }, [screenshots.edges]);
 
     const screenshot = useMemo(() => {
         const hoverTimestamp = hoverTime?.getTime();
