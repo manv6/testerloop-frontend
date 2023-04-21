@@ -55,6 +55,7 @@ type CommandEventEdge {
 }
 
 type CommandEventError {
+  location: SourceCodeManagementRevisionFileLineColumn!
   message: String!
   stackTrace: String!
   type: String!
@@ -180,6 +181,22 @@ type GitHubRevision implements GitRevision & SourceCodeManagementRevision {
   url: URL!
 }
 
+type GitHubRevisionFile implements GitRevisionFile & SourceCodeManagementRevisionFile {
+  path: String!
+  revision: GitHubRevision!
+}
+
+type GitHubRevisionFileLine implements GitRevisionFileLine & SourceCodeManagementRevisionFileLine {
+  file: GitHubRevisionFile!
+  line: Int!
+  url: URL!
+}
+
+type GitHubRevisionFileLineColumn implements GitRevisionFileLineColumn & SourceCodeManagementRevisionFileLineColumn {
+  column: Int!
+  line: GitHubRevisionFileLine!
+}
+
 type GitHubUser {
   avatar: URL
   name: String!
@@ -197,6 +214,22 @@ interface GitRevision implements SourceCodeManagementRevision {
   commitId(type: GitCommitIdType! = LONG): String!
   committer: GitActor!
   repository: GitRepository!
+}
+
+interface GitRevisionFile implements SourceCodeManagementRevisionFile {
+  path: String!
+  revision: GitRevision!
+}
+
+interface GitRevisionFileLine implements SourceCodeManagementRevisionFileLine {
+  file: GitRevisionFile!
+  line: Int!
+  url: URL!
+}
+
+interface GitRevisionFileLineColumn implements SourceCodeManagementRevisionFileLineColumn {
+  column: Int!
+  line: GitRevisionFileLine!
 }
 
 interface HttpBody {
@@ -403,6 +436,22 @@ interface SourceCodeManagementRevision {
   repository: SourceCodeManagementRepository!
 }
 
+interface SourceCodeManagementRevisionFile {
+  path: String!
+  revision: SourceCodeManagementRevision!
+}
+
+interface SourceCodeManagementRevisionFileLine {
+  file: SourceCodeManagementRevisionFile!
+  line: Int!
+  url: URL!
+}
+
+interface SourceCodeManagementRevisionFileLineColumn {
+  column: Int!
+  line: SourceCodeManagementRevisionFileLine!
+}
+
 type StepDefinition {
   description: String!
   keyword: GherkinStepKeyword!
@@ -437,6 +486,7 @@ type TestExecution implements Event & IntervalEvent & Node {
   events(after: Cursor, filter: TestExecutionEventFilterInput, first: Int): TestExecutionEventConnection!
   id: ID!
   testRun: TestRun!
+  title: String!
   until: DateTime!
 }
 

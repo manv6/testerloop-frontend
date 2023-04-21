@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b4b997de35f864bb73aa39254c193768>>
+ * @generated SignedSource<<2a78d1392cb2508a2ab7b9b649578653>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,7 +15,16 @@ export type TestExecutionPageQuery$variables = {
 };
 export type TestExecutionPageQuery$data = {
   readonly testExecution: {
-    readonly " $fragmentSpreads": FragmentRefs<"ConsolePanelFragment" | "DomPreviewFragment" | "NetworkPanelFragment" | "SeekerFragment" | "StepsFragment" | "SummaryFragment">;
+    readonly firstStep: {
+      readonly edges: ReadonlyArray<{
+        readonly __typename: "TestExecutionEventEdge";
+        readonly node: {
+          readonly at: any;
+        };
+      }>;
+    };
+    readonly until: any;
+    readonly " $fragmentSpreads": FragmentRefs<"ConsolePanelFragment" | "DomPreviewFragment" | "FrameworkErrorFragment" | "NetworkPanelFragment" | "SeekerFragment" | "StepsFragment" | "SummaryFragment">;
   } | null;
 };
 export type TestExecutionPageQuery = {
@@ -42,19 +51,24 @@ v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "id",
+  "name": "until",
   "storageKey": null
 },
 v3 = {
   "kind": "Literal",
-  "name": "logSearch",
-  "value": null
+  "name": "filter",
+  "value": {
+    "type": "STEP"
+  }
 },
-v4 = {
-  "kind": "Literal",
-  "name": "type",
-  "value": "CONSOLE"
-},
+v4 = [
+  (v3/*: any*/),
+  {
+    "kind": "Literal",
+    "name": "first",
+    "value": 1
+  }
+],
 v5 = {
   "alias": null,
   "args": null,
@@ -69,79 +83,174 @@ v6 = {
   "name": "at",
   "storageKey": null
 },
-v7 = [
-  (v2/*: any*/)
+v7 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+},
+v8 = [
+  (v7/*: any*/)
 ],
-v8 = {
+v9 = {
   "kind": "InlineFragment",
-  "selections": (v7/*: any*/),
+  "selections": (v8/*: any*/),
   "type": "Node",
   "abstractKey": "__isNode"
 },
-v9 = {
+v10 = {
   "kind": "InlineFragment",
-  "selections": (v7/*: any*/),
+  "selections": (v8/*: any*/),
   "type": "HttpNetworkEvent",
   "abstractKey": null
 },
-v10 = {
+v11 = {
+  "kind": "Literal",
+  "name": "logSearch",
+  "value": null
+},
+v12 = {
+  "kind": "Literal",
+  "name": "type",
+  "value": "CONSOLE"
+},
+v13 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "message",
+  "storageKey": null
+},
+v14 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "totalCount",
   "storageKey": null
 },
-v11 = [
-  (v10/*: any*/)
+v15 = [
+  (v14/*: any*/)
 ],
-v12 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "until",
-  "storageKey": null
-},
-v13 = {
+v16 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "url",
   "storageKey": null
 },
-v14 = [
-  (v13/*: any*/)
+v17 = [
+  (v16/*: any*/)
 ],
-v15 = {
+v18 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "status",
   "storageKey": null
 },
-v16 = {
+v19 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "name",
   "storageKey": null
 },
-v17 = [
+v20 = [
   {
     "kind": "Literal",
     "name": "filter",
     "value": {
-      "type": "STEP"
+      "commandFilter": {
+        "status": "FAILED"
+      },
+      "type": "COMMAND"
     }
   }
 ],
-v18 = {
+v21 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "type",
+  "storageKey": null
+},
+v22 = [
+  (v3/*: any*/)
+],
+v23 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "description",
   "storageKey": null
 },
-v19 = [
+v24 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "stackTrace",
+  "storageKey": null
+},
+v25 = {
+  "alias": null,
+  "args": null,
+  "concreteType": null,
+  "kind": "LinkedField",
+  "name": "location",
+  "plural": false,
+  "selections": [
+    (v5/*: any*/),
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": null,
+      "kind": "LinkedField",
+      "name": "line",
+      "plural": false,
+      "selections": [
+        (v5/*: any*/),
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "line",
+          "storageKey": null
+        },
+        (v16/*: any*/),
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": null,
+          "kind": "LinkedField",
+          "name": "file",
+          "plural": false,
+          "selections": [
+            (v5/*: any*/),
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "path",
+              "storageKey": null
+            }
+          ],
+          "storageKey": null
+        }
+      ],
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "column",
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+},
+v26 = [
   {
     "alias": null,
     "args": null,
@@ -150,24 +259,24 @@ v19 = [
     "storageKey": null
   }
 ],
-v20 = {
+v27 = {
   "alias": null,
   "args": null,
   "concreteType": "TestExecutionSnapshot",
   "kind": "LinkedField",
   "name": "previousSnapshot",
   "plural": false,
-  "selections": (v19/*: any*/),
+  "selections": (v26/*: any*/),
   "storageKey": null
 },
-v21 = {
+v28 = {
   "alias": null,
   "args": null,
   "concreteType": "TestExecutionSnapshot",
   "kind": "LinkedField",
   "name": "nextSnapshot",
   "plural": false,
-  "selections": (v19/*: any*/),
+  "selections": (v26/*: any*/),
   "storageKey": null
 };
 return {
@@ -185,6 +294,42 @@ return {
         "name": "testExecution",
         "plural": false,
         "selections": [
+          (v2/*: any*/),
+          {
+            "alias": "firstStep",
+            "args": (v4/*: any*/),
+            "concreteType": "TestExecutionEventConnection",
+            "kind": "LinkedField",
+            "name": "events",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "TestExecutionEventEdge",
+                "kind": "LinkedField",
+                "name": "edges",
+                "plural": true,
+                "selections": [
+                  (v5/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": null,
+                    "kind": "LinkedField",
+                    "name": "node",
+                    "plural": false,
+                    "selections": [
+                      (v6/*: any*/)
+                    ],
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              }
+            ],
+            "storageKey": "events(filter:{\"type\":\"STEP\"},first:1)"
+          },
           {
             "args": null,
             "kind": "FragmentSpread",
@@ -214,6 +359,11 @@ return {
             "args": null,
             "kind": "FragmentSpread",
             "name": "SeekerFragment"
+          },
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "FrameworkErrorFragment"
           }
         ],
         "storageKey": null
@@ -238,6 +388,45 @@ return {
         "selections": [
           (v2/*: any*/),
           {
+            "alias": "firstStep",
+            "args": (v4/*: any*/),
+            "concreteType": "TestExecutionEventConnection",
+            "kind": "LinkedField",
+            "name": "events",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "TestExecutionEventEdge",
+                "kind": "LinkedField",
+                "name": "edges",
+                "plural": true,
+                "selections": [
+                  (v5/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": null,
+                    "kind": "LinkedField",
+                    "name": "node",
+                    "plural": false,
+                    "selections": [
+                      (v5/*: any*/),
+                      (v6/*: any*/),
+                      (v9/*: any*/),
+                      (v10/*: any*/)
+                    ],
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              }
+            ],
+            "storageKey": "events(filter:{\"type\":\"STEP\"},first:1)"
+          },
+          (v7/*: any*/),
+          {
             "alias": "searchedEvents",
             "args": [
               {
@@ -249,12 +438,12 @@ return {
                         "name": "logLevel",
                         "value": null
                       },
-                      (v3/*: any*/)
+                      (v11/*: any*/)
                     ],
                     "kind": "ObjectValue",
                     "name": "consoleFilter"
                   },
-                  (v4/*: any*/)
+                  (v12/*: any*/)
                 ],
                 "kind": "ObjectValue",
                 "name": "filter"
@@ -287,13 +476,7 @@ return {
                         "kind": "InlineFragment",
                         "selections": [
                           (v6/*: any*/),
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "message",
-                            "storageKey": null
-                          },
+                          (v13/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -305,8 +488,8 @@ return {
                         "type": "ConsoleLogEvent",
                         "abstractKey": null
                       },
-                      (v8/*: any*/),
-                      (v9/*: any*/)
+                      (v9/*: any*/),
+                      (v10/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -328,12 +511,12 @@ return {
                         "name": "logLevel",
                         "value": "WARN"
                       },
-                      (v3/*: any*/)
+                      (v11/*: any*/)
                     ],
                     "kind": "ObjectValue",
                     "name": "consoleFilter"
                   },
-                  (v4/*: any*/)
+                  (v12/*: any*/)
                 ],
                 "kind": "ObjectValue",
                 "name": "filter"
@@ -343,7 +526,7 @@ return {
             "kind": "LinkedField",
             "name": "events",
             "plural": false,
-            "selections": (v11/*: any*/),
+            "selections": (v15/*: any*/),
             "storageKey": "events(filter:{\"consoleFilter\":{\"logLevel\":\"WARN\",\"logSearch\":null},\"type\":\"CONSOLE\"})"
           },
           {
@@ -358,12 +541,12 @@ return {
                         "name": "logLevel",
                         "value": "ERROR"
                       },
-                      (v3/*: any*/)
+                      (v11/*: any*/)
                     ],
                     "kind": "ObjectValue",
                     "name": "consoleFilter"
                   },
-                  (v4/*: any*/)
+                  (v12/*: any*/)
                 ],
                 "kind": "ObjectValue",
                 "name": "filter"
@@ -373,7 +556,7 @@ return {
             "kind": "LinkedField",
             "name": "events",
             "plural": false,
-            "selections": (v11/*: any*/),
+            "selections": (v15/*: any*/),
             "storageKey": "events(filter:{\"consoleFilter\":{\"logLevel\":\"ERROR\",\"logSearch\":null},\"type\":\"CONSOLE\"})"
           },
           {
@@ -388,12 +571,12 @@ return {
                         "name": "logLevel",
                         "value": "LOG"
                       },
-                      (v3/*: any*/)
+                      (v11/*: any*/)
                     ],
                     "kind": "ObjectValue",
                     "name": "consoleFilter"
                   },
-                  (v4/*: any*/)
+                  (v12/*: any*/)
                 ],
                 "kind": "ObjectValue",
                 "name": "filter"
@@ -403,7 +586,7 @@ return {
             "kind": "LinkedField",
             "name": "events",
             "plural": false,
-            "selections": (v11/*: any*/),
+            "selections": (v15/*: any*/),
             "storageKey": "events(filter:{\"consoleFilter\":{\"logLevel\":\"LOG\",\"logSearch\":null},\"type\":\"CONSOLE\"})"
           },
           {
@@ -463,9 +646,9 @@ return {
                       {
                         "kind": "InlineFragment",
                         "selections": [
-                          (v2/*: any*/),
+                          (v7/*: any*/),
                           (v6/*: any*/),
-                          (v12/*: any*/),
+                          (v2/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -520,7 +703,7 @@ return {
                                 "kind": "LinkedField",
                                 "name": "url",
                                 "plural": false,
-                                "selections": (v14/*: any*/),
+                                "selections": (v17/*: any*/),
                                 "storageKey": null
                               }
                             ],
@@ -534,7 +717,7 @@ return {
                             "name": "response",
                             "plural": false,
                             "selections": [
-                              (v15/*: any*/),
+                              (v18/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -574,7 +757,7 @@ return {
                         "type": "HttpNetworkEvent",
                         "abstractKey": null
                       },
-                      (v8/*: any*/)
+                      (v9/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -583,6 +766,13 @@ return {
               }
             ],
             "storageKey": "events(filter:{\"networkFilter\":{\"resourceType\":null,\"urlSearch\":null},\"type\":\"NETWORK\"})"
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "title",
+            "storageKey": null
           },
           {
             "alias": "summaryConsoleErrors",
@@ -602,7 +792,7 @@ return {
             "kind": "LinkedField",
             "name": "events",
             "plural": false,
-            "selections": (v11/*: any*/),
+            "selections": (v15/*: any*/),
             "storageKey": "events(filter:{\"consoleFilter\":{\"logLevel\":\"ERROR\"},\"type\":\"CONSOLE\"})"
           },
           {
@@ -625,7 +815,7 @@ return {
             "kind": "LinkedField",
             "name": "events",
             "plural": false,
-            "selections": (v11/*: any*/),
+            "selections": (v15/*: any*/),
             "storageKey": "events(filter:{\"networkFilter\":{\"status\":{\"gte\":400}},\"type\":\"NETWORK\"})"
           },
           (v6/*: any*/),
@@ -637,7 +827,7 @@ return {
             "name": "testRun",
             "plural": false,
             "selections": [
-              (v2/*: any*/),
+              (v7/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -673,7 +863,7 @@ return {
                             "name": "user",
                             "plural": false,
                             "selections": [
-                              (v16/*: any*/),
+                              (v19/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -681,7 +871,7 @@ return {
                                 "name": "avatar",
                                 "storageKey": null
                               },
-                              (v13/*: any*/)
+                              (v16/*: any*/)
                             ],
                             "storageKey": null
                           }
@@ -701,7 +891,7 @@ return {
                         "name": "commitId",
                         "storageKey": "commitId(type:\"SHORT\")"
                       },
-                      (v13/*: any*/),
+                      (v16/*: any*/),
                       {
                         "alias": null,
                         "args": null,
@@ -710,8 +900,8 @@ return {
                         "name": "branch",
                         "plural": false,
                         "selections": [
-                          (v16/*: any*/),
-                          (v13/*: any*/)
+                          (v19/*: any*/),
+                          (v16/*: any*/)
                         ],
                         "storageKey": null
                       }
@@ -726,8 +916,64 @@ return {
             "storageKey": null
           },
           {
+            "alias": "commandWithError",
+            "args": (v20/*: any*/),
+            "concreteType": "TestExecutionEventConnection",
+            "kind": "LinkedField",
+            "name": "events",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "TestExecutionEventEdge",
+                "kind": "LinkedField",
+                "name": "edges",
+                "plural": true,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": null,
+                    "kind": "LinkedField",
+                    "name": "node",
+                    "plural": false,
+                    "selections": [
+                      (v5/*: any*/),
+                      {
+                        "kind": "InlineFragment",
+                        "selections": [
+                          (v7/*: any*/),
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "CommandEventError",
+                            "kind": "LinkedField",
+                            "name": "error",
+                            "plural": false,
+                            "selections": [
+                              (v21/*: any*/)
+                            ],
+                            "storageKey": null
+                          }
+                        ],
+                        "type": "CommandEvent",
+                        "abstractKey": null
+                      },
+                      (v9/*: any*/),
+                      (v10/*: any*/)
+                    ],
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              }
+            ],
+            "storageKey": "events(filter:{\"commandFilter\":{\"status\":\"FAILED\"},\"type\":\"COMMAND\"})"
+          },
+          {
             "alias": "stepEvents",
-            "args": (v17/*: any*/),
+            "args": (v22/*: any*/),
             "concreteType": "TestExecutionEventConnection",
             "kind": "LinkedField",
             "name": "events",
@@ -755,8 +1001,8 @@ return {
                       {
                         "kind": "InlineFragment",
                         "selections": [
+                          (v7/*: any*/),
                           (v2/*: any*/),
-                          (v12/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -765,7 +1011,7 @@ return {
                             "name": "definition",
                             "plural": false,
                             "selections": [
-                              (v18/*: any*/),
+                              (v23/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -776,7 +1022,7 @@ return {
                             ],
                             "storageKey": null
                           },
-                          (v15/*: any*/),
+                          (v18/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -785,7 +1031,7 @@ return {
                             "name": "commandChains",
                             "plural": false,
                             "selections": [
-                              (v10/*: any*/),
+                              (v14/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -803,7 +1049,7 @@ return {
                                     "plural": false,
                                     "selections": [
                                       (v6/*: any*/),
-                                      (v12/*: any*/),
+                                      (v2/*: any*/),
                                       {
                                         "alias": null,
                                         "args": null,
@@ -829,11 +1075,11 @@ return {
                                                 "plural": false,
                                                 "selections": [
                                                   (v6/*: any*/),
+                                                  (v7/*: any*/),
                                                   (v2/*: any*/),
-                                                  (v12/*: any*/),
-                                                  (v15/*: any*/),
-                                                  (v16/*: any*/),
                                                   (v18/*: any*/),
+                                                  (v19/*: any*/),
+                                                  (v23/*: any*/),
                                                   {
                                                     "alias": null,
                                                     "args": null,
@@ -842,13 +1088,8 @@ return {
                                                     "name": "error",
                                                     "plural": false,
                                                     "selections": [
-                                                      {
-                                                        "alias": null,
-                                                        "args": null,
-                                                        "kind": "ScalarField",
-                                                        "name": "stackTrace",
-                                                        "storageKey": null
-                                                      }
+                                                      (v24/*: any*/),
+                                                      (v25/*: any*/)
                                                     ],
                                                     "storageKey": null
                                                   }
@@ -874,8 +1115,8 @@ return {
                         "type": "StepEvent",
                         "abstractKey": null
                       },
-                      (v8/*: any*/),
-                      (v9/*: any*/)
+                      (v9/*: any*/),
+                      (v10/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -887,7 +1128,7 @@ return {
           },
           {
             "alias": "snapshots",
-            "args": (v17/*: any*/),
+            "args": (v22/*: any*/),
             "concreteType": "TestExecutionEventConnection",
             "kind": "LinkedField",
             "name": "events",
@@ -915,8 +1156,8 @@ return {
                         "kind": "InlineFragment",
                         "selections": [
                           (v6/*: any*/),
-                          (v20/*: any*/),
-                          (v21/*: any*/),
+                          (v27/*: any*/),
+                          (v28/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -966,9 +1207,9 @@ return {
                                                 "plural": false,
                                                 "selections": [
                                                   (v6/*: any*/),
-                                                  (v20/*: any*/),
-                                                  (v21/*: any*/),
-                                                  (v2/*: any*/)
+                                                  (v27/*: any*/),
+                                                  (v28/*: any*/),
+                                                  (v7/*: any*/)
                                                 ],
                                                 "storageKey": null
                                               }
@@ -991,8 +1232,8 @@ return {
                         "type": "StepEvent",
                         "abstractKey": null
                       },
-                      (v8/*: any*/),
-                      (v9/*: any*/)
+                      (v9/*: any*/),
+                      (v10/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -1046,15 +1287,15 @@ return {
                             "kind": "LinkedField",
                             "name": "url",
                             "plural": false,
-                            "selections": (v14/*: any*/),
+                            "selections": (v17/*: any*/),
                             "storageKey": null
                           }
                         ],
                         "type": "TestExecutionScreenshot",
                         "abstractKey": null
                       },
-                      (v8/*: any*/),
-                      (v9/*: any*/)
+                      (v9/*: any*/),
+                      (v10/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -1063,6 +1304,65 @@ return {
               }
             ],
             "storageKey": "events(filter:{\"type\":\"SCREENSHOT\"})"
+          },
+          {
+            "alias": "frameworkError",
+            "args": (v20/*: any*/),
+            "concreteType": "TestExecutionEventConnection",
+            "kind": "LinkedField",
+            "name": "events",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "TestExecutionEventEdge",
+                "kind": "LinkedField",
+                "name": "edges",
+                "plural": true,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": null,
+                    "kind": "LinkedField",
+                    "name": "node",
+                    "plural": false,
+                    "selections": [
+                      (v5/*: any*/),
+                      {
+                        "kind": "InlineFragment",
+                        "selections": [
+                          (v7/*: any*/),
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "CommandEventError",
+                            "kind": "LinkedField",
+                            "name": "error",
+                            "plural": false,
+                            "selections": [
+                              (v21/*: any*/),
+                              (v13/*: any*/),
+                              (v24/*: any*/),
+                              (v25/*: any*/)
+                            ],
+                            "storageKey": null
+                          }
+                        ],
+                        "type": "CommandEvent",
+                        "abstractKey": null
+                      },
+                      (v9/*: any*/),
+                      (v10/*: any*/)
+                    ],
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              }
+            ],
+            "storageKey": "events(filter:{\"commandFilter\":{\"status\":\"FAILED\"},\"type\":\"COMMAND\"})"
           }
         ],
         "storageKey": null
@@ -1070,16 +1370,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "9eebdcc1bea1afbd0b7961d32b0578c7",
+    "cacheID": "08eb4024d2780de6bdfdab8d7ab53cf5",
     "id": null,
     "metadata": {},
     "name": "TestExecutionPageQuery",
     "operationKind": "query",
-    "text": "query TestExecutionPageQuery(\n  $id: ID!\n) {\n  testExecution(id: $id) {\n    ...ConsolePanelFragment\n    ...NetworkPanelFragment\n    ...SummaryFragment\n    ...StepsFragment\n    ...DomPreviewFragment\n    ...SeekerFragment\n    id\n  }\n}\n\nfragment ActionRecordFragment on CommandEvent {\n  id\n  at\n  until\n  status\n  name\n  description\n  error {\n    stackTrace\n  }\n}\n\nfragment ConsoleErrorCountFragment on TestExecution {\n  summaryConsoleErrors: events(filter: {type: CONSOLE, consoleFilter: {logLevel: ERROR}}) {\n    totalCount\n  }\n}\n\nfragment ConsolePanelFragment on TestExecution {\n  id\n  searchedEvents: events(filter: {type: CONSOLE, consoleFilter: {}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on ConsoleLogEvent {\n          at\n          ...LogEntryFragment\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n  ...LogFiltersFragment_qvNWU\n}\n\nfragment DomPreviewFragment on TestExecution {\n  id\n  snapshots: events(filter: {type: STEP}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on StepEvent {\n          at\n          previousSnapshot {\n            dom\n          }\n          nextSnapshot {\n            dom\n          }\n          commandChains {\n            edges {\n              node {\n                commands {\n                  edges {\n                    node {\n                      at\n                      previousSnapshot {\n                        dom\n                      }\n                      nextSnapshot {\n                        dom\n                      }\n                      id\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n}\n\nfragment EnvironmentDetailsFragment on TestExecution {\n  at\n  summaryEnvironmentDetails: testRun {\n    id\n    testCodeRevision {\n      __typename\n      ... on GitHubRevision {\n        author {\n          email\n          user {\n            name\n            avatar\n            url\n          }\n        }\n        commitId(type: SHORT)\n        url\n        branch {\n          name\n          url\n        }\n      }\n    }\n  }\n}\n\nfragment LogEntryFragment on ConsoleLogEvent {\n  at\n  message\n  logLevel\n}\n\nfragment LogFiltersFragment_qvNWU on TestExecution {\n  warnings: events(filter: {type: CONSOLE, consoleFilter: {logLevel: WARN}}) {\n    totalCount\n  }\n  errors: events(filter: {type: CONSOLE, consoleFilter: {logLevel: ERROR}}) {\n    totalCount\n  }\n  logs: events(filter: {type: CONSOLE, consoleFilter: {logLevel: LOG}}) {\n    totalCount\n  }\n  id\n}\n\nfragment NetworkErrorCountFragment on TestExecution {\n  summaryNetworkErrors: events(filter: {type: NETWORK, networkFilter: {status: {gte: 400}}}) {\n    totalCount\n  }\n}\n\nfragment NetworkPanelFragment on TestExecution {\n  id\n  searchedNetworkEvents: events(filter: {type: NETWORK, networkFilter: {}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          __typename\n          id\n          at\n          until\n          ...NetworkSliceFragment\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n    }\n  }\n}\n\nfragment NetworkSliceFragment on HttpNetworkEvent {\n  __typename\n  id\n  resourceType\n  at\n  until\n  initiator {\n    origin\n    lineNumber\n  }\n  request {\n    method\n    url {\n      url\n    }\n  }\n  response {\n    status\n    transferSize\n    body {\n      mimeType\n      size\n    }\n  }\n}\n\nfragment SeekerFragment on TestExecution {\n  screenshots: events(filter: {type: SCREENSHOT}) {\n    edges {\n      node {\n        __typename\n        ... on TestExecutionScreenshot {\n          at\n          url {\n            url\n          }\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n}\n\nfragment StepRecordFragment on StepEvent {\n  __typename\n  id\n  at\n  until\n  definition {\n    description\n    keyword\n  }\n  status\n  commandChains {\n    totalCount\n    edges {\n      node {\n        at\n        until\n        commands {\n          edges {\n            node {\n              at\n              ...ActionRecordFragment\n              id\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment StepsFragment on TestExecution {\n  id\n  stepEvents: events(filter: {type: STEP}) {\n    edges {\n      __typename\n      node {\n        __typename\n        at\n        ... on StepEvent {\n          ...StepRecordFragment\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n}\n\nfragment SummaryFragment on TestExecution {\n  id\n  ...ConsoleErrorCountFragment\n  ...NetworkErrorCountFragment\n  ...EnvironmentDetailsFragment\n}\n"
+    "text": "query TestExecutionPageQuery(\n  $id: ID!\n) {\n  testExecution(id: $id) {\n    until\n    firstStep: events(filter: {type: STEP}, first: 1) {\n      edges {\n        __typename\n        node {\n          __typename\n          at\n          ... on Node {\n            __isNode: __typename\n            id\n          }\n          ... on HttpNetworkEvent {\n            id\n          }\n        }\n      }\n    }\n    ...ConsolePanelFragment\n    ...NetworkPanelFragment\n    ...SummaryFragment\n    ...StepsFragment\n    ...DomPreviewFragment\n    ...SeekerFragment\n    ...FrameworkErrorFragment\n    id\n  }\n}\n\nfragment ActionRecordFragment on CommandEvent {\n  id\n  at\n  until\n  status\n  name\n  description\n  error {\n    stackTrace\n    location {\n      __typename\n      line {\n        __typename\n        line\n        url\n        file {\n          __typename\n          path\n        }\n      }\n      column\n    }\n  }\n}\n\nfragment ConsoleErrorCountFragment on TestExecution {\n  summaryConsoleErrors: events(filter: {type: CONSOLE, consoleFilter: {logLevel: ERROR}}) {\n    totalCount\n  }\n}\n\nfragment ConsolePanelFragment on TestExecution {\n  id\n  searchedEvents: events(filter: {type: CONSOLE, consoleFilter: {}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on ConsoleLogEvent {\n          at\n          ...LogEntryFragment\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n  ...LogFiltersFragment_qvNWU\n}\n\nfragment DomPreviewFragment on TestExecution {\n  id\n  snapshots: events(filter: {type: STEP}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on StepEvent {\n          at\n          previousSnapshot {\n            dom\n          }\n          nextSnapshot {\n            dom\n          }\n          commandChains {\n            edges {\n              node {\n                commands {\n                  edges {\n                    node {\n                      at\n                      previousSnapshot {\n                        dom\n                      }\n                      nextSnapshot {\n                        dom\n                      }\n                      id\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n}\n\nfragment EnvironmentDetailsFragment on TestExecution {\n  at\n  summaryEnvironmentDetails: testRun {\n    id\n    testCodeRevision {\n      __typename\n      ... on GitHubRevision {\n        author {\n          email\n          user {\n            name\n            avatar\n            url\n          }\n        }\n        commitId(type: SHORT)\n        url\n        branch {\n          name\n          url\n        }\n      }\n    }\n  }\n}\n\nfragment FrameworkErrorFragment on TestExecution {\n  frameworkError: events(filter: {type: COMMAND, commandFilter: {status: FAILED}}) {\n    edges {\n      node {\n        __typename\n        ... on CommandEvent {\n          id\n          error {\n            type\n            message\n            stackTrace\n            location {\n              __typename\n              line {\n                __typename\n                line\n                url\n                file {\n                  __typename\n                  path\n                }\n              }\n              column\n            }\n          }\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n}\n\nfragment LogEntryFragment on ConsoleLogEvent {\n  at\n  message\n  logLevel\n}\n\nfragment LogFiltersFragment_qvNWU on TestExecution {\n  warnings: events(filter: {type: CONSOLE, consoleFilter: {logLevel: WARN}}) {\n    totalCount\n  }\n  errors: events(filter: {type: CONSOLE, consoleFilter: {logLevel: ERROR}}) {\n    totalCount\n  }\n  logs: events(filter: {type: CONSOLE, consoleFilter: {logLevel: LOG}}) {\n    totalCount\n  }\n  id\n}\n\nfragment NetworkErrorCountFragment on TestExecution {\n  summaryNetworkErrors: events(filter: {type: NETWORK, networkFilter: {status: {gte: 400}}}) {\n    totalCount\n  }\n}\n\nfragment NetworkPanelFragment on TestExecution {\n  id\n  searchedNetworkEvents: events(filter: {type: NETWORK, networkFilter: {}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          __typename\n          id\n          at\n          until\n          ...NetworkSliceFragment\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n    }\n  }\n}\n\nfragment NetworkSliceFragment on HttpNetworkEvent {\n  __typename\n  id\n  resourceType\n  at\n  until\n  initiator {\n    origin\n    lineNumber\n  }\n  request {\n    method\n    url {\n      url\n    }\n  }\n  response {\n    status\n    transferSize\n    body {\n      mimeType\n      size\n    }\n  }\n}\n\nfragment SeekerFragment on TestExecution {\n  screenshots: events(filter: {type: SCREENSHOT}) {\n    edges {\n      node {\n        __typename\n        ... on TestExecutionScreenshot {\n          at\n          url {\n            url\n          }\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n}\n\nfragment StepRecordFragment on StepEvent {\n  __typename\n  id\n  at\n  until\n  definition {\n    description\n    keyword\n  }\n  status\n  commandChains {\n    totalCount\n    edges {\n      node {\n        at\n        until\n        commands {\n          edges {\n            node {\n              at\n              ...ActionRecordFragment\n              id\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment StepsFragment on TestExecution {\n  id\n  stepEvents: events(filter: {type: STEP}) {\n    edges {\n      __typename\n      node {\n        __typename\n        at\n        ... on StepEvent {\n          ...StepRecordFragment\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n}\n\nfragment SummaryFragment on TestExecution {\n  id\n  title\n  ...ConsoleErrorCountFragment\n  ...NetworkErrorCountFragment\n  ...EnvironmentDetailsFragment\n  commandWithError: events(filter: {type: COMMAND, commandFilter: {status: FAILED}}) {\n    edges {\n      node {\n        __typename\n        ... on CommandEvent {\n          id\n          error {\n            type\n          }\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "5f57da7df5e10ca491dc97e33ba620d3";
+(node as any).hash = "713437174db1aeb7225b4bb3c2f7ae1f";
 
 export default node;

@@ -4,12 +4,22 @@ export type { TestExecutionPageQuery } from './__generated__/TestExecutionPageQu
 export const testExecutionPageQuery = graphql`
     query TestExecutionPageQuery($id: ID!) {
         testExecution(id: $id) {
+            until
+            firstStep: events(filter: { type: STEP }, first: 1) {
+                edges {
+                    __typename
+                    node {
+                        at
+                    }
+                }
+            }
             ...ConsolePanelFragment
             ...NetworkPanelFragment
             ...SummaryFragment
             ...StepsFragment
             ...DomPreviewFragment
             ...SeekerFragment
+            ...FrameworkErrorFragment
         }
     }
 `;

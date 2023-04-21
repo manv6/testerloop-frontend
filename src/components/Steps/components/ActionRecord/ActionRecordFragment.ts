@@ -10,6 +10,16 @@ const ActionRecordFragment = graphql`
         description
         error {
             stackTrace
+            location {
+                line {
+                    line
+                    url
+                    file {
+                        path
+                    }
+                }
+                column
+            }
         }
     }
 `;
