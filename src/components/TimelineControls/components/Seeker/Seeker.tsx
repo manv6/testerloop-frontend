@@ -73,6 +73,41 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
     } = useTimeline();
     const [displayHoverTooltip, setDisplayHoverTooltip] = useState(true);
 
+    useEffect(() => {
+        const eventTypes = [];
+        let networkStatus = null;
+        let commandStatus = null;
+
+        if (filters.step) {
+            eventTypes.push('STEP');
+        }
+
+        if (filters.network_error) {
+            networkStatus = { gte: 400 };
+            eventTypes.push('NETWORK');
+        } else if (filters.network_success) {
+            networkStatus = { gte: 200, lte: 299 };
+            eventTypes.push('NETWORK');
+        }
+
+        if (filters.cypress_error) {
+            eventTypes.push('COMMAND');
+            commandStatus = ['FAILED'];
+        }
+
+        refetch({
+            eventTypes,
+            networkStatus,
+            commandStatus,
+        });
+    }, [
+        filters.cypress_error,
+        filters.network_error,
+        filters.network_success,
+        filters.step,
+        refetch,
+    ]);
+
     // Add dates
 
     const steps = useMemo(
