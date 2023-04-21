@@ -390,6 +390,11 @@ type ScenarioEvent implements Event & IntervalEvent & TestExecutionEvent {
   until: DateTime!
 }
 
+type SignedURL {
+  expiresAt: DateTime!
+  url: URL!
+}
+
 interface SourceCodeManagementRepository {
   _unused: Boolean!
 }
@@ -481,6 +486,7 @@ enum TestExecutionEventType {
   COMMAND
   CONSOLE
   NETWORK
+  SCREENSHOT
 
   """
   Returns all of the steps of the `TestExecution`, flattened outside of their containing `BackgroundEvent` or `ScenarioEvent`.
@@ -494,6 +500,15 @@ enum TestExecutionEventType {
   For other tests, this can include `Before All`/`Before Each`/`Test`/`After Each`/`After All` parts
   """
   TEST_PART
+}
+
+type TestExecutionScreenshot implements Event & InstantaneousEvent & Node & TestExecutionEvent {
+  at: DateTime!
+  id: ID!
+  testExecution: TestExecution!
+
+  """Returns a signed URL for fetching this screenshot from S3."""
+  url: SignedURL!
 }
 
 type TestExecutionSnapshot implements Event & InstantaneousEvent & TestExecutionEvent {
