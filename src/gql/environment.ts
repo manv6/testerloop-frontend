@@ -20,6 +20,13 @@ const ftch: FetchFunction = (params, variables) => {
     return Observable.from(
         response.then(async (data) => {
             const json = await data.json();
+            if ('errors' in json) {
+                throw new Error(
+                    `GraphQL errors: ${json.errors
+                        .map(({ message }: { message: string }) => message)
+                        .join('\n')}`
+                );
+            }
             return json;
         })
     );
