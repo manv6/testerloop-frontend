@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<32b03070228fdfda857d950f3ecf500d>>
+ * @generated SignedSource<<8947de3653457df9cf78b7ce4c0ee99e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -119,13 +119,16 @@ v15 = {
   "storageKey": null
 },
 v16 = {
+  "gte": 400
+},
+v17 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "name",
   "storageKey": null
 },
-v17 = [
+v18 = [
   {
     "kind": "Literal",
     "name": "filter",
@@ -134,14 +137,14 @@ v17 = [
     }
   }
 ],
-v18 = {
+v19 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "description",
   "storageKey": null
 },
-v19 = [
+v20 = [
   {
     "alias": null,
     "args": null,
@@ -150,26 +153,30 @@ v19 = [
     "storageKey": null
   }
 ],
-v20 = {
+v21 = {
   "alias": null,
   "args": null,
   "concreteType": "TestExecutionSnapshot",
   "kind": "LinkedField",
   "name": "previousSnapshot",
   "plural": false,
-  "selections": (v19/*: any*/),
+  "selections": (v20/*: any*/),
   "storageKey": null
 },
-v21 = {
+v22 = {
   "alias": null,
   "args": null,
   "concreteType": "TestExecutionSnapshot",
   "kind": "LinkedField",
   "name": "nextSnapshot",
   "plural": false,
-  "selections": (v19/*: any*/),
+  "selections": (v20/*: any*/),
   "storageKey": null
-};
+},
+v23 = [
+  (v6/*: any*/),
+  (v15/*: any*/)
+];
 return {
   "fragment": {
     "argumentDefinitions": (v0/*: any*/),
@@ -613,9 +620,7 @@ return {
                 "name": "filter",
                 "value": {
                   "networkFilter": {
-                    "status": {
-                      "gte": 400
-                    }
+                    "status": (v16/*: any*/)
                   },
                   "type": "NETWORK"
                 }
@@ -673,7 +678,7 @@ return {
                             "name": "user",
                             "plural": false,
                             "selections": [
-                              (v16/*: any*/),
+                              (v17/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -710,7 +715,7 @@ return {
                         "name": "branch",
                         "plural": false,
                         "selections": [
-                          (v16/*: any*/),
+                          (v17/*: any*/),
                           (v13/*: any*/)
                         ],
                         "storageKey": null
@@ -727,7 +732,7 @@ return {
           },
           {
             "alias": "stepEvents",
-            "args": (v17/*: any*/),
+            "args": (v18/*: any*/),
             "concreteType": "TestExecutionEventConnection",
             "kind": "LinkedField",
             "name": "events",
@@ -765,7 +770,7 @@ return {
                             "name": "definition",
                             "plural": false,
                             "selections": [
-                              (v18/*: any*/),
+                              (v19/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -832,8 +837,8 @@ return {
                                                   (v2/*: any*/),
                                                   (v12/*: any*/),
                                                   (v15/*: any*/),
-                                                  (v16/*: any*/),
-                                                  (v18/*: any*/),
+                                                  (v17/*: any*/),
+                                                  (v19/*: any*/),
                                                   {
                                                     "alias": null,
                                                     "args": null,
@@ -887,7 +892,7 @@ return {
           },
           {
             "alias": "snapshots",
-            "args": (v17/*: any*/),
+            "args": (v18/*: any*/),
             "concreteType": "TestExecutionEventConnection",
             "kind": "LinkedField",
             "name": "events",
@@ -915,8 +920,8 @@ return {
                         "kind": "InlineFragment",
                         "selections": [
                           (v6/*: any*/),
-                          (v20/*: any*/),
                           (v21/*: any*/),
+                          (v22/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -966,8 +971,8 @@ return {
                                                 "plural": false,
                                                 "selections": [
                                                   (v6/*: any*/),
-                                                  (v20/*: any*/),
                                                   (v21/*: any*/),
+                                                  (v22/*: any*/),
                                                   (v2/*: any*/)
                                                 ],
                                                 "storageKey": null
@@ -1063,6 +1068,103 @@ return {
               }
             ],
             "storageKey": "events(filter:{\"type\":\"SCREENSHOT\"})"
+          },
+          {
+            "alias": "seekerEvents",
+            "args": [
+              {
+                "fields": [
+                  {
+                    "fields": [
+                      {
+                        "kind": "Literal",
+                        "name": "status",
+                        "value": [
+                          "FAILED"
+                        ]
+                      }
+                    ],
+                    "kind": "ObjectValue",
+                    "name": "commandFilter"
+                  },
+                  {
+                    "fields": [
+                      {
+                        "kind": "Literal",
+                        "name": "status",
+                        "value": (v16/*: any*/)
+                      }
+                    ],
+                    "kind": "ObjectValue",
+                    "name": "networkFilter"
+                  },
+                  {
+                    "kind": "Literal",
+                    "name": "type",
+                    "value": [
+                      "STEP",
+                      "NETWORK",
+                      "COMMAND"
+                    ]
+                  }
+                ],
+                "kind": "ObjectValue",
+                "name": "filter"
+              }
+            ],
+            "concreteType": "TestExecutionEventConnection",
+            "kind": "LinkedField",
+            "name": "events",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "TestExecutionEventEdge",
+                "kind": "LinkedField",
+                "name": "edges",
+                "plural": true,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": null,
+                    "kind": "LinkedField",
+                    "name": "node",
+                    "plural": false,
+                    "selections": [
+                      (v5/*: any*/),
+                      {
+                        "kind": "InlineFragment",
+                        "selections": [
+                          (v2/*: any*/),
+                          (v6/*: any*/),
+                          (v12/*: any*/)
+                        ],
+                        "type": "HttpNetworkEvent",
+                        "abstractKey": null
+                      },
+                      {
+                        "kind": "InlineFragment",
+                        "selections": (v23/*: any*/),
+                        "type": "CommandEvent",
+                        "abstractKey": null
+                      },
+                      {
+                        "kind": "InlineFragment",
+                        "selections": (v23/*: any*/),
+                        "type": "StepEvent",
+                        "abstractKey": null
+                      },
+                      (v8/*: any*/)
+                    ],
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              }
+            ],
+            "storageKey": "events(filter:{\"commandFilter\":{\"status\":[\"FAILED\"]},\"networkFilter\":{\"status\":{\"gte\":400}},\"type\":[\"STEP\",\"NETWORK\",\"COMMAND\"]})"
           }
         ],
         "storageKey": null
@@ -1070,12 +1172,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "0c07072ac9f31aeab65dc72656d8ea94",
+    "cacheID": "d9b4330dded11c15057b5296800dbf8f",
     "id": null,
     "metadata": {},
     "name": "TestExecutionIdPageQuery",
     "operationKind": "query",
-    "text": "query TestExecutionIdPageQuery(\n  $testExecutionId: ID!\n) {\n  testExecution(id: $testExecutionId) {\n    ...ConsolePanelFragment\n    ...NetworkPanelFragment\n    ...SummaryFragment\n    ...StepsFragment\n    ...DomPreviewFragment\n    ...SeekerFragment\n    id\n  }\n}\n\nfragment ActionRecordFragment on CommandEvent {\n  id\n  at\n  until\n  status\n  name\n  description\n  error {\n    stackTrace\n  }\n}\n\nfragment ConsoleErrorCountFragment on TestExecution {\n  summaryConsoleErrors: events(filter: {type: CONSOLE, consoleFilter: {logLevel: ERROR}}) {\n    totalCount\n  }\n}\n\nfragment ConsolePanelFragment on TestExecution {\n  id\n  searchedEvents: events(filter: {type: CONSOLE, consoleFilter: {}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on ConsoleLogEvent {\n          at\n          ...LogEntryFragment\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n  ...LogFiltersFragment_qvNWU\n}\n\nfragment DomPreviewFragment on TestExecution {\n  id\n  snapshots: events(filter: {type: STEP}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on StepEvent {\n          at\n          previousSnapshot {\n            dom\n          }\n          nextSnapshot {\n            dom\n          }\n          commandChains {\n            edges {\n              node {\n                commands {\n                  edges {\n                    node {\n                      at\n                      previousSnapshot {\n                        dom\n                      }\n                      nextSnapshot {\n                        dom\n                      }\n                      id\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n}\n\nfragment EnvironmentDetailsFragment on TestExecution {\n  at\n  summaryEnvironmentDetails: testRun {\n    id\n    testCodeRevision {\n      __typename\n      ... on GitHubRevision {\n        author {\n          email\n          user {\n            name\n            avatar\n            url\n          }\n        }\n        commitId(type: SHORT)\n        url\n        branch {\n          name\n          url\n        }\n      }\n    }\n  }\n}\n\nfragment LogEntryFragment on ConsoleLogEvent {\n  at\n  message\n  logLevel\n}\n\nfragment LogFiltersFragment_qvNWU on TestExecution {\n  warnings: events(filter: {type: CONSOLE, consoleFilter: {logLevel: WARN}}) {\n    totalCount\n  }\n  errors: events(filter: {type: CONSOLE, consoleFilter: {logLevel: ERROR}}) {\n    totalCount\n  }\n  logs: events(filter: {type: CONSOLE, consoleFilter: {logLevel: LOG}}) {\n    totalCount\n  }\n  id\n}\n\nfragment NetworkErrorCountFragment on TestExecution {\n  summaryNetworkErrors: events(filter: {type: NETWORK, networkFilter: {status: {gte: 400}}}) {\n    totalCount\n  }\n}\n\nfragment NetworkPanelFragment on TestExecution {\n  id\n  searchedNetworkEvents: events(filter: {type: NETWORK, networkFilter: {}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          __typename\n          id\n          at\n          until\n          ...NetworkSliceFragment\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n    }\n  }\n}\n\nfragment NetworkSliceFragment on HttpNetworkEvent {\n  __typename\n  id\n  resourceType\n  at\n  until\n  initiator {\n    origin\n    lineNumber\n  }\n  request {\n    method\n    url {\n      url\n    }\n  }\n  response {\n    status\n    transferSize\n    body {\n      mimeType\n      size\n    }\n  }\n}\n\nfragment SeekerFragment on TestExecution {\n  screenshots: events(filter: {type: SCREENSHOT}) {\n    edges {\n      node {\n        __typename\n        ... on TestExecutionScreenshot {\n          at\n          url {\n            url\n          }\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n}\n\nfragment StepRecordFragment on StepEvent {\n  __typename\n  id\n  at\n  until\n  definition {\n    description\n    keyword\n  }\n  status\n  commandChains {\n    totalCount\n    edges {\n      node {\n        at\n        until\n        commands {\n          edges {\n            node {\n              at\n              ...ActionRecordFragment\n              id\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment StepsFragment on TestExecution {\n  id\n  stepEvents: events(filter: {type: STEP}) {\n    edges {\n      __typename\n      node {\n        __typename\n        at\n        ... on StepEvent {\n          ...StepRecordFragment\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n}\n\nfragment SummaryFragment on TestExecution {\n  id\n  ...ConsoleErrorCountFragment\n  ...NetworkErrorCountFragment\n  ...EnvironmentDetailsFragment\n}\n"
+    "text": "query TestExecutionIdPageQuery(\n  $testExecutionId: ID!\n) {\n  testExecution(id: $testExecutionId) {\n    ...ConsolePanelFragment\n    ...NetworkPanelFragment\n    ...SummaryFragment\n    ...StepsFragment\n    ...DomPreviewFragment\n    ...SeekerFragment\n    id\n  }\n}\n\nfragment ActionRecordFragment on CommandEvent {\n  id\n  at\n  until\n  status\n  name\n  description\n  error {\n    stackTrace\n  }\n}\n\nfragment ConsoleErrorCountFragment on TestExecution {\n  summaryConsoleErrors: events(filter: {type: CONSOLE, consoleFilter: {logLevel: ERROR}}) {\n    totalCount\n  }\n}\n\nfragment ConsolePanelFragment on TestExecution {\n  id\n  searchedEvents: events(filter: {type: CONSOLE, consoleFilter: {}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on ConsoleLogEvent {\n          at\n          ...LogEntryFragment\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n  ...LogFiltersFragment_qvNWU\n}\n\nfragment DomPreviewFragment on TestExecution {\n  id\n  snapshots: events(filter: {type: STEP}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on StepEvent {\n          at\n          previousSnapshot {\n            dom\n          }\n          nextSnapshot {\n            dom\n          }\n          commandChains {\n            edges {\n              node {\n                commands {\n                  edges {\n                    node {\n                      at\n                      previousSnapshot {\n                        dom\n                      }\n                      nextSnapshot {\n                        dom\n                      }\n                      id\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n}\n\nfragment EnvironmentDetailsFragment on TestExecution {\n  at\n  summaryEnvironmentDetails: testRun {\n    id\n    testCodeRevision {\n      __typename\n      ... on GitHubRevision {\n        author {\n          email\n          user {\n            name\n            avatar\n            url\n          }\n        }\n        commitId(type: SHORT)\n        url\n        branch {\n          name\n          url\n        }\n      }\n    }\n  }\n}\n\nfragment LogEntryFragment on ConsoleLogEvent {\n  at\n  message\n  logLevel\n}\n\nfragment LogFiltersFragment_qvNWU on TestExecution {\n  warnings: events(filter: {type: CONSOLE, consoleFilter: {logLevel: WARN}}) {\n    totalCount\n  }\n  errors: events(filter: {type: CONSOLE, consoleFilter: {logLevel: ERROR}}) {\n    totalCount\n  }\n  logs: events(filter: {type: CONSOLE, consoleFilter: {logLevel: LOG}}) {\n    totalCount\n  }\n  id\n}\n\nfragment NetworkErrorCountFragment on TestExecution {\n  summaryNetworkErrors: events(filter: {type: NETWORK, networkFilter: {status: {gte: 400}}}) {\n    totalCount\n  }\n}\n\nfragment NetworkPanelFragment on TestExecution {\n  id\n  searchedNetworkEvents: events(filter: {type: NETWORK, networkFilter: {}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          __typename\n          id\n          at\n          until\n          ...NetworkSliceFragment\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n    }\n  }\n}\n\nfragment NetworkSliceFragment on HttpNetworkEvent {\n  __typename\n  id\n  resourceType\n  at\n  until\n  initiator {\n    origin\n    lineNumber\n  }\n  request {\n    method\n    url {\n      url\n    }\n  }\n  response {\n    status\n    transferSize\n    body {\n      mimeType\n      size\n    }\n  }\n}\n\nfragment SeekerFragment on TestExecution {\n  screenshots: events(filter: {type: SCREENSHOT}) {\n    edges {\n      node {\n        __typename\n        ... on TestExecutionScreenshot {\n          at\n          url {\n            url\n          }\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n  seekerEvents: events(filter: {type: [STEP, NETWORK, COMMAND], networkFilter: {status: {gte: 400}}, commandFilter: {status: [FAILED]}}) {\n    edges {\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          __typename\n          id\n          at\n          until\n        }\n        ... on CommandEvent {\n          at\n          status\n        }\n        ... on StepEvent {\n          at\n          status\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n    }\n  }\n  id\n}\n\nfragment StepRecordFragment on StepEvent {\n  __typename\n  id\n  at\n  until\n  definition {\n    description\n    keyword\n  }\n  status\n  commandChains {\n    totalCount\n    edges {\n      node {\n        at\n        until\n        commands {\n          edges {\n            node {\n              at\n              ...ActionRecordFragment\n              id\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment StepsFragment on TestExecution {\n  id\n  stepEvents: events(filter: {type: STEP}) {\n    edges {\n      __typename\n      node {\n        __typename\n        at\n        ... on StepEvent {\n          ...StepRecordFragment\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n}\n\nfragment SummaryFragment on TestExecution {\n  id\n  ...ConsoleErrorCountFragment\n  ...NetworkErrorCountFragment\n  ...EnvironmentDetailsFragment\n}\n"
   }
 };
 })();

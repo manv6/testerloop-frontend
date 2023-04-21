@@ -11,7 +11,7 @@ import MarkerTooltip from '../MarkerTooltip';
 import fractionToPercentage from 'src/utils/fractionToPercentage';
 import { SeekerFragment$key } from './__generated__/SeekerFragment.graphql';
 import SeekerFragment from './SeekerFragment';
-import { useFragment } from 'react-relay';
+import { useRefetchableFragment } from 'react-relay';
 
 const StyledFill = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.base[100],
@@ -54,7 +54,10 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
         networkEvents: networkEventData.log.entries,
         steps: stepsData,
     } as any; // eslint-disable-line
-    const { screenshots } = useFragment(SeekerFragment, fragmentKey);
+    const [{ screenshots }, refetch] = useRefetchableFragment(
+        SeekerFragment,
+        fragmentKey
+    );
 
     const {
         currentTimeFraction,
