@@ -175,11 +175,7 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
                     };
 
                     let type;
-                    const strStatus = node.response.status.toString();
-                    if (
-                        strStatus.startsWith('4') ||
-                        strStatus.startsWith('5')
-                    ) {
+                    if (node.response.status >= 400) {
                         type = EventType.NETWORK_ERROR;
                         return {
                             ...acc,
@@ -191,7 +187,10 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
                                 },
                             ],
                         };
-                    } else if (strStatus.startsWith('2')) {
+                    } else if (
+                        node.response.status >= 200 &&
+                        node.response.status < 300
+                    ) {
                         type = EventType.NETWORK_SUCCESS;
                         return {
                             ...acc,
