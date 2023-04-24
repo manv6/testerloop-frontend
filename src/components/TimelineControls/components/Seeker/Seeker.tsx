@@ -1,15 +1,15 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { startTransition, useEffect, useMemo, useState } from 'react';
 import { EventType, TIMELINE_SVG_PX_WIDTH } from 'src/constants';
 import { useTimeline } from 'src/hooks/timeline';
 import { datesToElapsedTime, datesToFraction } from 'src/utils/date';
-import networkEventData from 'src/data/networkEvents';
-import stepsData from 'src/data/steps';
-import * as formatter from 'src/utils/formatters';
 import styles from './Seeker.module.scss';
 import { styled, Tooltip } from '@mui/material';
 import MarkerTooltip from '../MarkerTooltip';
 import fractionToPercentage from 'src/utils/fractionToPercentage';
-import { SeekerFragment$key } from './__generated__/SeekerFragment.graphql';
+import {
+    CommandEventStatus,
+    SeekerFragment$key,
+} from './__generated__/SeekerFragment.graphql';
 import SeekerFragment from './SeekerFragment';
 import { useRefetchableFragment } from 'react-relay';
 
@@ -37,6 +37,30 @@ interface StyledMarkerProps {
     size: number;
 }
 
+interface Event {
+    id: string;
+    type: EventType;
+    start: Date;
+    startFraction: number;
+    name: string;
+    message: string;
+    hasFailed?: boolean;
+}
+
+type Events = {
+    steps: Event[];
+    successNetwork: Event[];
+    failedNetwork: Event[];
+    frameworkError: Event[];
+};
+
+type TestExecutionEventType = 'STEP' | 'NETWORK' | 'COMMAND';
+
+type NetworkStatus = {
+    lte?: number;
+    gte?: number;
+};
+
 const StyledMarker = styled('div')<StyledMarkerProps>(({ size }) => ({
     svg: {
         height: size,
@@ -50,16 +74,10 @@ type Props = {
 };
 
 const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
-    const data = {
-        networkEvents: networkEventData.log.entries,
-        steps: stepsData,
-    } as any; // eslint-disable-line
     const [{ screenshots, seekerEvents }, refetch] = useRefetchableFragment(
         SeekerFragment,
         fragmentKey
     );
-
-    console.log('seeker events', seekerEvents);
 
     const {
         currentTimeFraction,
@@ -74,20 +92,22 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
     const [displayHoverTooltip, setDisplayHoverTooltip] = useState(true);
 
     useEffect(() => {
-        const eventTypes = [];
-        let networkStatus = null;
-        let commandStatus = null;
+        const eventTypes: TestExecutionEventType[] = [];
+        let networkStatus: NetworkStatus | null = null;
+        let commandStatus: CommandEventStatus[] | null = null;
 
         if (filters.step) {
             eventTypes.push('STEP');
         }
-
-        if (filters.network_error) {
-            networkStatus = { gte: 400 };
+        if (filters.network_error || filters.network_success) {
             eventTypes.push('NETWORK');
+        }
+        if (filters.network_error && filters.network_success) {
+            networkStatus = { gte: 200 };
+        } else if (filters.network_error) {
+            networkStatus = { gte: 400 };
         } else if (filters.network_success) {
             networkStatus = { gte: 200, lte: 299 };
-            eventTypes.push('NETWORK');
         }
 
         if (filters.cypress_error) {
@@ -95,10 +115,12 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
             commandStatus = ['FAILED'];
         }
 
-        refetch({
-            eventTypes,
-            networkStatus,
-            commandStatus,
+        startTransition(() => {
+            refetch({
+                eventTypes,
+                networkStatus,
+                commandStatus,
+            });
         });
     }, [
         filters.cypress_error,
@@ -108,131 +130,123 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
         refetch,
     ]);
 
-    // Add dates
+    const events = useMemo(() => {
+        return seekerEvents.edges.reduce(
+            (acc: Events, { node }) => {
+                if (node.__typename === 'StepEvent') {
+                    return {
+                        ...acc,
+                        steps: [
+                            ...acc.steps,
+                            {
+                                ...node,
+                                id: node.id,
+                                type: EventType.STEP,
+                                start: new Date(node.at),
+                                startFraction: datesToFraction(
+                                    startTime,
+                                    endTime,
+                                    new Date(node.at)
+                                ),
+                                name: node.definition.keyword,
+                                message: node.definition.description.replaceAll(
+                                    '*',
+                                    ''
+                                ),
+                                hasFailed: node.status === 'FAILED',
+                            },
+                        ],
+                    };
+                } else if (node.__typename === 'HttpNetworkEvent') {
+                    if (new Date(node.until) > endTime) {
+                        return acc;
+                    }
+                    const obj = {
+                        ...node,
+                        id: node.id,
+                        start: new Date(node.at),
+                        startFraction: datesToFraction(
+                            startTime,
+                            endTime,
+                            new Date(node.until)
+                        ),
+                        name: `${node.request.method} ${node.response.status}`,
+                        message: node.request.url.url,
+                    };
 
-    const steps = useMemo(
-        () => formatter.formatSteps(data.steps),
-        [data.steps]
-    );
-    const networkEvents = useMemo(
-        () => formatter.formatMockNetworkEvents(data.networkEvents),
-        [data.networkEvents]
-    );
+                    let type;
+                    const strStatus = node.response.status.toString();
+                    if (
+                        strStatus.startsWith('4') ||
+                        strStatus.startsWith('5')
+                    ) {
+                        type = EventType.NETWORK_ERROR;
+                        return {
+                            ...acc,
+                            failedNetwork: [
+                                ...acc.failedNetwork,
+                                {
+                                    ...obj,
+                                    type,
+                                },
+                            ],
+                        };
+                    } else if (strStatus.startsWith('2')) {
+                        type = EventType.NETWORK_SUCCESS;
+                        return {
+                            ...acc,
+                            successNetwork: [
+                                ...acc.successNetwork,
+                                {
+                                    ...obj,
+                                    type,
+                                },
+                            ],
+                        };
+                    }
+                } else if (node.__typename === 'CommandEvent') {
+                    return {
+                        ...acc,
+                        frameworkError: [
+                            ...acc.frameworkError,
+                            {
+                                ...node,
+                                id: node.id,
+                                type: EventType.CYPRESS_ERROR,
+                                start: new Date(node.at),
+                                startFraction: datesToFraction(
+                                    startTime,
+                                    endTime,
+                                    new Date(node.at)
+                                ),
+                                name: node.name,
+                                message: node.description.replaceAll('*', ''),
+                                hasFailed: node.status === 'FAILED',
+                            },
+                        ],
+                    };
+                }
 
-    // Define step markers
+                return acc;
+            },
+            {
+                steps: [],
+                successNetwork: [],
+                failedNetwork: [],
+                frameworkError: [],
+            }
+        );
+    }, [endTime, seekerEvents.edges, startTime]);
 
-    const stepMarkers = useMemo(
-        () =>
-            steps
-                .filter(({ options }) => options.groupStart)
-                .map(({ options }) => ({
-                    id: `${
-                        options.id
-                    }-${options.wallClockStartedAt.getTime()}-${options.state}`,
-                    type: EventType.STEP,
-                    start: options.wallClockStartedAt,
-                    startFraction: datesToFraction(
-                        startTime,
-                        endTime,
-                        options.wallClockStartedAt
-                    ),
-                    name: options.name,
-                    message: options.message.replaceAll('*', ''),
-                    hasFailed: options.state === 'failed',
-                })),
-        [steps, startTime, endTime]
-    );
-
-    const failedNetworkMarkers = useMemo(
-        () =>
-            networkEvents
-                .filter((evt) => {
-                    const status = evt.response.status.toString();
-                    return status.startsWith('4') || status.startsWith('5');
-                })
-                .map((evt) => ({
-                    ...evt,
-                    id: evt.id,
-                    type: EventType.NETWORK_ERROR,
-                    start: evt.startedDateTime,
-                    startFraction: datesToFraction(
-                        startTime,
-                        endTime,
-                        evt.endedDateTime
-                    ),
-                    name: `${evt.request.method} ${evt.response.status}`,
-                    message: evt.request.url,
-                })),
-        [networkEvents, startTime, endTime]
-    );
-
-    const successNetworkMarkers = useMemo(
-        () =>
-            networkEvents
-                .filter((evt) => evt.response.status.toString().startsWith('2'))
-                .map((evt) => ({
-                    ...evt,
-                    id: evt.id,
-                    type: EventType.NETWORK_SUCCESS,
-                    start: evt.startedDateTime,
-                    startFraction: datesToFraction(
-                        startTime,
-                        endTime,
-                        evt.endedDateTime
-                    ),
-                    name: `${evt.request.method} ${evt.response.status}`,
-                    message: evt.request.url,
-                })),
-        [networkEvents, startTime, endTime]
-    );
-
-    const cypressErrorMarkers = useMemo(
-        () =>
-            steps
-                .filter(
-                    ({ options }) => options.state === 'failed' && options.err
-                )
-                .map(({ options }) => ({
-                    id: `${
-                        options.id
-                    }-${options.wallClockStartedAt.getTime()}-${options.state}`,
-                    type: EventType.CYPRESS_ERROR,
-                    start: options.wallClockStartedAt,
-                    startFraction: datesToFraction(
-                        startTime,
-                        endTime,
-                        options.wallClockStartedAt
-                    ),
-                    name: options.name,
-                    message: options.message.replaceAll('*', ''),
-                    hasFailed: true,
-                })),
-        [steps, startTime, endTime]
-    );
-
-    const markers = useMemo(
-        () => [
-            ...(filters.step ? stepMarkers : []),
-            ...(filters.network_error ? failedNetworkMarkers : []),
-            ...(filters.network_success ? successNetworkMarkers : []),
-            ...(filters.cypress_error ? cypressErrorMarkers : []),
-        ],
-        [
-            stepMarkers,
-            failedNetworkMarkers,
-            successNetworkMarkers,
-            cypressErrorMarkers,
-            filters,
-        ]
-    );
+    const markers = useMemo(() => Object.values(events).flat(), [events]);
 
     useEffect(() => {
         // Go to first cypress error
-        const firstErrorStartFraction = cypressErrorMarkers[0]?.startFraction;
+        const firstErrorStartFraction = events.frameworkError[0]?.startFraction;
         if (firstErrorStartFraction) {
             seekFraction(firstErrorStartFraction);
         }
-    }, [cypressErrorMarkers, seekFraction]);
+    }, [events.frameworkError, seekFraction]);
 
     const screenshotsSource = useMemo(() => {
         return Object.fromEntries(
@@ -380,9 +394,7 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
                         right: `${fractionToPercentage(currentTimeFraction)}%`,
                     }}
                 ></div>
-                {/*TODO: remove 'any' once temp data is removed */}
-                {/*eslint-disable-next-line*/}
-                {markers.map((marker: any, i) => {
+                {markers.map((marker: Event, i: number) => {
                     const svgSize =
                         marker.type === EventType.CYPRESS_ERROR
                             ? Math.round(1.8 * TIMELINE_SVG_PX_WIDTH)
@@ -405,7 +417,7 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
                                             : marker.name
                                     }
                                     message={
-                                        marker?.message?.length > 100
+                                        marker.message.length > 100
                                             ? marker.message.slice(0, 100) +
                                               '...'
                                             : marker.message

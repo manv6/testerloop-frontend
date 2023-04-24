@@ -40,16 +40,33 @@ const SeekerFragment = graphql`
                         id
                         at
                         until
+                        request {
+                            method
+                            url {
+                                url
+                            }
+                        }
+                        response {
+                            status
+                        }
                     }
                     ... on CommandEvent {
                         __typename
+                        id
                         at
                         status
+                        name
+                        description
                     }
                     ... on StepEvent {
                         __typename
+                        id
                         at
                         status
+                        definition {
+                            description
+                            keyword
+                        }
                     }
                 }
             }

@@ -17,7 +17,7 @@ type Props = {
     message: ReactNode;
     time: ReactNode;
     type: EventType;
-    hasFailed: boolean;
+    hasFailed?: boolean;
 };
 
 const MarkerTooltip: React.FC<Props> = ({

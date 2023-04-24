@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<745ee70bbb9ca984ef77e03cd37246f6>>
+ * @generated SignedSource<<a0341c4402da983826d9799faffb6c76>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -90,24 +90,37 @@ v7 = {
   "storageKey": null
 },
 v8 = [
-  (v6/*: any*/)
-],
-v9 = {
-  "kind": "InlineFragment",
-  "selections": (v8/*: any*/),
-  "type": "Node",
-  "abstractKey": "__isNode"
-},
-v10 = [
-  (v7/*: any*/),
   {
     "alias": null,
     "args": null,
     "kind": "ScalarField",
-    "name": "status",
+    "name": "url",
     "storageKey": null
   }
-];
+],
+v9 = [
+  (v6/*: any*/)
+],
+v10 = {
+  "kind": "InlineFragment",
+  "selections": (v9/*: any*/),
+  "type": "Node",
+  "abstractKey": "__isNode"
+},
+v11 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "status",
+  "storageKey": null
+},
+v12 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "description",
+  "storageKey": null
+};
 return {
   "fragment": {
     "argumentDefinitions": [
@@ -224,25 +237,17 @@ return {
                                 "kind": "LinkedField",
                                 "name": "url",
                                 "plural": false,
-                                "selections": [
-                                  {
-                                    "alias": null,
-                                    "args": null,
-                                    "kind": "ScalarField",
-                                    "name": "url",
-                                    "storageKey": null
-                                  }
-                                ],
+                                "selections": (v8/*: any*/),
                                 "storageKey": null
                               }
                             ],
                             "type": "TestExecutionScreenshot",
                             "abstractKey": null
                           },
-                          (v9/*: any*/),
+                          (v10/*: any*/),
                           {
                             "kind": "InlineFragment",
-                            "selections": (v8/*: any*/),
+                            "selections": (v9/*: any*/),
                             "type": "HttpNetworkEvent",
                             "abstractKey": null
                           }
@@ -325,6 +330,46 @@ return {
                                 "kind": "ScalarField",
                                 "name": "until",
                                 "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "HttpNetworkRequest",
+                                "kind": "LinkedField",
+                                "name": "request",
+                                "plural": false,
+                                "selections": [
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "kind": "ScalarField",
+                                    "name": "method",
+                                    "storageKey": null
+                                  },
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "concreteType": "HttpNetworkRequestUrl",
+                                    "kind": "LinkedField",
+                                    "name": "url",
+                                    "plural": false,
+                                    "selections": (v8/*: any*/),
+                                    "storageKey": null
+                                  }
+                                ],
+                                "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "HttpNetworkResponse",
+                                "kind": "LinkedField",
+                                "name": "response",
+                                "plural": false,
+                                "selections": [
+                                  (v11/*: any*/)
+                                ],
+                                "storageKey": null
                               }
                             ],
                             "type": "HttpNetworkEvent",
@@ -332,17 +377,52 @@ return {
                           },
                           {
                             "kind": "InlineFragment",
-                            "selections": (v10/*: any*/),
+                            "selections": [
+                              (v6/*: any*/),
+                              (v7/*: any*/),
+                              (v11/*: any*/),
+                              {
+                                "alias": null,
+                                "args": null,
+                                "kind": "ScalarField",
+                                "name": "name",
+                                "storageKey": null
+                              },
+                              (v12/*: any*/)
+                            ],
                             "type": "CommandEvent",
                             "abstractKey": null
                           },
                           {
                             "kind": "InlineFragment",
-                            "selections": (v10/*: any*/),
+                            "selections": [
+                              (v6/*: any*/),
+                              (v7/*: any*/),
+                              (v11/*: any*/),
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "StepDefinition",
+                                "kind": "LinkedField",
+                                "name": "definition",
+                                "plural": false,
+                                "selections": [
+                                  (v12/*: any*/),
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "kind": "ScalarField",
+                                    "name": "keyword",
+                                    "storageKey": null
+                                  }
+                                ],
+                                "storageKey": null
+                              }
+                            ],
                             "type": "StepEvent",
                             "abstractKey": null
                           },
-                          (v9/*: any*/)
+                          (v10/*: any*/)
                         ],
                         "storageKey": null
                       }
@@ -362,16 +442,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "2ff4afaf113b6a024a3cd7d1bb12767c",
+    "cacheID": "646ebae5b9e94a9e4ad4bb92258eba69",
     "id": null,
     "metadata": {},
     "name": "SeekerFragmentRefetchQuery",
     "operationKind": "query",
-    "text": "query SeekerFragmentRefetchQuery(\n  $commandStatus: [CommandEventStatus!] = [FAILED]\n  $eventTypes: [TestExecutionEventType!] = [STEP, NETWORK, COMMAND]\n  $networkStatus: NetworkEventResponseStatusFilterInput = {gte: 400}\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...SeekerFragment_2Gy8Fp\n    id\n  }\n}\n\nfragment SeekerFragment_2Gy8Fp on TestExecution {\n  screenshots: events(filter: {type: SCREENSHOT}) {\n    edges {\n      node {\n        __typename\n        ... on TestExecutionScreenshot {\n          at\n          url {\n            url\n          }\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n  seekerEvents: events(filter: {type: $eventTypes, networkFilter: {status: $networkStatus}, commandFilter: {status: $commandStatus}}) {\n    edges {\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          __typename\n          id\n          at\n          until\n        }\n        ... on CommandEvent {\n          __typename\n          at\n          status\n        }\n        ... on StepEvent {\n          __typename\n          at\n          status\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n    }\n  }\n  id\n}\n"
+    "text": "query SeekerFragmentRefetchQuery(\n  $commandStatus: [CommandEventStatus!] = [FAILED]\n  $eventTypes: [TestExecutionEventType!] = [STEP, NETWORK, COMMAND]\n  $networkStatus: NetworkEventResponseStatusFilterInput = {gte: 400}\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...SeekerFragment_2Gy8Fp\n    id\n  }\n}\n\nfragment SeekerFragment_2Gy8Fp on TestExecution {\n  screenshots: events(filter: {type: SCREENSHOT}) {\n    edges {\n      node {\n        __typename\n        ... on TestExecutionScreenshot {\n          at\n          url {\n            url\n          }\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n  seekerEvents: events(filter: {type: $eventTypes, networkFilter: {status: $networkStatus}, commandFilter: {status: $commandStatus}}) {\n    edges {\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          __typename\n          id\n          at\n          until\n          request {\n            method\n            url {\n              url\n            }\n          }\n          response {\n            status\n          }\n        }\n        ... on CommandEvent {\n          __typename\n          id\n          at\n          status\n          name\n          description\n        }\n        ... on StepEvent {\n          __typename\n          id\n          at\n          status\n          definition {\n            description\n            keyword\n          }\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n    }\n  }\n  id\n}\n"
   }
 };
 })();
 
-(node as any).hash = "1ca91c8a624e1875d05c30dfc066dc4e";
+(node as any).hash = "4bbd3d8c798bda8c4a3963f2385e43c3";
 
 export default node;

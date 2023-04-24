@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5150d8dc0adb708a3251c59acadcc681>>
+ * @generated SignedSource<<9aa3d5701e233b9f4bc16a87a7409ce1>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,6 +10,7 @@
 
 import { ReaderFragment, RefetchableFragment } from 'relay-runtime';
 export type CommandEventStatus = "FAILED" | "SUCCESS" | "%future added value";
+export type GherkinStepKeyword = "AND" | "BUT" | "GIVEN" | "THEN" | "WHEN" | "%future added value";
 import { FragmentRefs } from "relay-runtime";
 export type SeekerFragment$data = {
   readonly id: string;
@@ -28,15 +29,32 @@ export type SeekerFragment$data = {
       readonly node: {
         readonly __typename: "CommandEvent";
         readonly at: any;
+        readonly description: string;
+        readonly id: string;
+        readonly name: string;
         readonly status: CommandEventStatus;
       } | {
         readonly __typename: "HttpNetworkEvent";
         readonly at: any;
         readonly id: string;
+        readonly request: {
+          readonly method: string;
+          readonly url: {
+            readonly url: string;
+          };
+        };
+        readonly response: {
+          readonly status: number;
+        };
         readonly until: any;
       } | {
         readonly __typename: "StepEvent";
         readonly at: any;
+        readonly definition: {
+          readonly description: string;
+          readonly keyword: GherkinStepKeyword;
+        };
+        readonly id: string;
         readonly status: CommandEventStatus;
       } | {
         // This will never be '%other', but we need some
@@ -60,31 +78,43 @@ var v0 = {
   "name": "at",
   "storageKey": null
 },
-v1 = {
+v1 = [
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "url",
+    "storageKey": null
+  }
+],
+v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "__typename",
   "storageKey": null
 },
-v2 = {
+v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
-v3 = [
-  (v1/*: any*/),
-  (v0/*: any*/),
-  {
-    "alias": null,
-    "args": null,
-    "kind": "ScalarField",
-    "name": "status",
-    "storageKey": null
-  }
-];
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "status",
+  "storageKey": null
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "description",
+  "storageKey": null
+};
 return {
   "argumentDefinitions": [
     {
@@ -167,15 +197,7 @@ return {
                       "kind": "LinkedField",
                       "name": "url",
                       "plural": false,
-                      "selections": [
-                        {
-                          "alias": null,
-                          "args": null,
-                          "kind": "ScalarField",
-                          "name": "url",
-                          "storageKey": null
-                        }
-                      ],
+                      "selections": (v1/*: any*/),
                       "storageKey": null
                     }
                   ],
@@ -252,14 +274,54 @@ return {
                 {
                   "kind": "InlineFragment",
                   "selections": [
-                    (v1/*: any*/),
                     (v2/*: any*/),
+                    (v3/*: any*/),
                     (v0/*: any*/),
                     {
                       "alias": null,
                       "args": null,
                       "kind": "ScalarField",
                       "name": "until",
+                      "storageKey": null
+                    },
+                    {
+                      "alias": null,
+                      "args": null,
+                      "concreteType": "HttpNetworkRequest",
+                      "kind": "LinkedField",
+                      "name": "request",
+                      "plural": false,
+                      "selections": [
+                        {
+                          "alias": null,
+                          "args": null,
+                          "kind": "ScalarField",
+                          "name": "method",
+                          "storageKey": null
+                        },
+                        {
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "HttpNetworkRequestUrl",
+                          "kind": "LinkedField",
+                          "name": "url",
+                          "plural": false,
+                          "selections": (v1/*: any*/),
+                          "storageKey": null
+                        }
+                      ],
+                      "storageKey": null
+                    },
+                    {
+                      "alias": null,
+                      "args": null,
+                      "concreteType": "HttpNetworkResponse",
+                      "kind": "LinkedField",
+                      "name": "response",
+                      "plural": false,
+                      "selections": [
+                        (v4/*: any*/)
+                      ],
                       "storageKey": null
                     }
                   ],
@@ -268,13 +330,50 @@ return {
                 },
                 {
                   "kind": "InlineFragment",
-                  "selections": (v3/*: any*/),
+                  "selections": [
+                    (v2/*: any*/),
+                    (v3/*: any*/),
+                    (v0/*: any*/),
+                    (v4/*: any*/),
+                    {
+                      "alias": null,
+                      "args": null,
+                      "kind": "ScalarField",
+                      "name": "name",
+                      "storageKey": null
+                    },
+                    (v5/*: any*/)
+                  ],
                   "type": "CommandEvent",
                   "abstractKey": null
                 },
                 {
                   "kind": "InlineFragment",
-                  "selections": (v3/*: any*/),
+                  "selections": [
+                    (v2/*: any*/),
+                    (v3/*: any*/),
+                    (v0/*: any*/),
+                    (v4/*: any*/),
+                    {
+                      "alias": null,
+                      "args": null,
+                      "concreteType": "StepDefinition",
+                      "kind": "LinkedField",
+                      "name": "definition",
+                      "plural": false,
+                      "selections": [
+                        (v5/*: any*/),
+                        {
+                          "alias": null,
+                          "args": null,
+                          "kind": "ScalarField",
+                          "name": "keyword",
+                          "storageKey": null
+                        }
+                      ],
+                      "storageKey": null
+                    }
+                  ],
                   "type": "StepEvent",
                   "abstractKey": null
                 }
@@ -287,13 +386,13 @@ return {
       ],
       "storageKey": null
     },
-    (v2/*: any*/)
+    (v3/*: any*/)
   ],
   "type": "TestExecution",
   "abstractKey": null
 };
 })();
 
-(node as any).hash = "1ca91c8a624e1875d05c30dfc066dc4e";
+(node as any).hash = "4bbd3d8c798bda8c4a3963f2385e43c3";
 
 export default node;
