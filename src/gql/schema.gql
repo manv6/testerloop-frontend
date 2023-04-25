@@ -122,9 +122,12 @@ interface Event {
 }
 
 enum GherkinStepKeyword {
+  AFTER
   AND
+  BEFORE
   BUT
   GIVEN
+  STEP
   THEN
   WHEN
 }

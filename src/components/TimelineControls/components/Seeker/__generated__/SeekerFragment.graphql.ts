@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<9aa3d5701e233b9f4bc16a87a7409ce1>>
+ * @generated SignedSource<<475e4c27f312573a5263bdf2012e6b92>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,7 +10,7 @@
 
 import { ReaderFragment, RefetchableFragment } from 'relay-runtime';
 export type CommandEventStatus = "FAILED" | "SUCCESS" | "%future added value";
-export type GherkinStepKeyword = "AND" | "BUT" | "GIVEN" | "THEN" | "WHEN" | "%future added value";
+export type GherkinStepKeyword = "AFTER" | "AND" | "BEFORE" | "BUT" | "GIVEN" | "STEP" | "THEN" | "WHEN" | "%future added value";
 import { FragmentRefs } from "relay-runtime";
 export type SeekerFragment$data = {
   readonly id: string;
