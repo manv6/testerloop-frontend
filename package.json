@@ -1,5 +1,5 @@
 {
-    "name": "overloop-testing-framework-frontend",
+    "name": "otf-frontend",
     "version": "0.1.0",
     "private": true,
     "proxy": "https://otf.overloop.io",
