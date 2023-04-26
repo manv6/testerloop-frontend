@@ -46,7 +46,7 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     const frameworkErrorName =
-        summaryData.commandWithError.edges[0].node.error?.type;
+        summaryData.commandWithError.edges[0]?.node.error?.type;
     const title = summaryData.title;
 
     return (
@@ -54,7 +54,7 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
             <div className={styles.row}>
                 <div className={styles.pageTitle}>
                     <h1>Scenario: {title}</h1>
-                    <Tag text="Failed" />
+                    {frameworkErrorName && <Tag text="Failed" />}
                 </div>
             </div>
             {isExpanded && (

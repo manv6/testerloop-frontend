@@ -22,7 +22,7 @@ const FrameworkError: React.FC<Props> = ({ fragmentKey }) => {
     const data = useFragment(FrameworkErrorFragment, fragmentKey);
     const [isExpanded, setIsExpanded] = useState(false);
 
-    const error = data.frameworkError.edges[0].node.error;
+    const error = data.frameworkError.edges[0]?.node.error;
 
     if (!error) {
         return null;
