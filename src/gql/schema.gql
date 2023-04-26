@@ -412,6 +412,7 @@ type Query {
   node(id: ID!): Node
   test: Boolean!
   testExecution(id: ID!): TestExecution
+  testRun(id: ID!): TestRun
 }
 
 type ScenarioDefinition {
@@ -493,6 +494,17 @@ type TestExecution implements Event & IntervalEvent & Node {
   until: DateTime!
 }
 
+type TestExecutionConnection {
+  edges: [TestExecutionEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type TestExecutionEdge {
+  cursor: Cursor!
+  node: TestExecution!
+}
+
 type TestExecutionEnvironment {
   browser: BrowserVersion!
 }
@@ -571,6 +583,7 @@ type TestExecutionSnapshot implements Event & InstantaneousEvent & TestExecution
 }
 
 type TestRun implements Node {
+  executions(after: Cursor, first: Int): TestExecutionConnection!
   id: ID!
 
   """This field may be null if the data was not provided for collection."""

@@ -9,6 +9,7 @@ import {
 } from 'react-router-dom';
 import { loadQuery } from 'react-relay';
 import { environment } from './gql/RelayEnvironment';
+import { testRunPageQuery } from './pages/run/[runId]/TestRunPageQuery';
 
 const StyledApp = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.base[500],
@@ -21,6 +22,27 @@ const router = createBrowserRouter([
             return redirect(
                 '/run/d7a674e5-9726-4c62-924b-0bb846e9f213/test/00343af4-acf3-473b-9975-0c2bd26e47o1'
             );
+        },
+    },
+    {
+        path: '/run/:runId',
+        loader: ({ params }) => {
+            const { runId } = params;
+            const id = window.btoa(`TestRun/${runId}`);
+
+            const queryReference = loadQuery(environment, testRunPageQuery, {
+                id,
+            });
+
+            return queryReference;
+        },
+        lazy: async () => {
+            const { default: TestRunPage } = await import(
+                './pages/run/[runId]/index'
+            );
+            return {
+                element: <TestRunPage />,
+            };
         },
     },
     {
