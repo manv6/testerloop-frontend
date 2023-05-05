@@ -1,0 +1,6 @@
+.github/
+.storybook/
+script/
+src/
+.env
+.npmrc
