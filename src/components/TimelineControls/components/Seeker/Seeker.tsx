@@ -6,10 +6,7 @@ import styles from './Seeker.module.scss';
 import { styled, Tooltip } from '@mui/material';
 import MarkerTooltip from '../MarkerTooltip';
 import fractionToPercentage from 'src/utils/fractionToPercentage';
-import {
-    CommandEventStatus,
-    SeekerFragment$key,
-} from './__generated__/SeekerFragment.graphql';
+import { SeekerFragment$key } from './__generated__/SeekerFragment.graphql';
 import SeekerFragment from './SeekerFragment';
 import { useRefetchableFragment } from 'react-relay';
 
@@ -54,13 +51,6 @@ type Events = {
     frameworkError: Event[];
 };
 
-type TestExecutionEventType = 'STEP' | 'NETWORK' | 'COMMAND';
-
-type NetworkStatus = {
-    lte?: number;
-    gte?: number;
-};
-
 const StyledMarker = styled('div')<StyledMarkerProps>(({ size }) => ({
     svg: {
         height: size,
@@ -75,10 +65,16 @@ type Props = {
 };
 
 const Seeker: React.FC<Props> = ({ getMarker, filters, fragmentKey }) => {
-    const [{ screenshots, seekerEvents }, refetch] = useRefetchableFragment(
-        SeekerFragment,
-        fragmentKey
-    );
+    const [
+        {
+            screenshots,
+            seekerCypressErrors,
+            seekerNetworkErrors,
+            seekerNetworkSuccesses,
+            seekerSteps,
+        },
+        refetch,
+    ] = useRefetchableFragment(SeekerFragment, fragmentKey);
 
     const {
         currentTimeFraction,
@@ -92,46 +88,18 @@ const Seeker: React.FC<Props> = ({ getMarker, filters, fragmentKey }) => {
     const [displayHoverTooltip, setDisplayHoverTooltip] = useState(true);
 
     useEffect(() => {
-        const eventTypes: TestExecutionEventType[] = [];
-        let networkStatus: NetworkStatus | null = null;
-        let commandStatus: CommandEventStatus[] | null = null;
-
-        if (filters.step) {
-            eventTypes.push('STEP');
-        }
-        if (filters.networkError || filters.networkSuccess) {
-            eventTypes.push('NETWORK');
-        }
-        if (filters.networkError && filters.networkSuccess) {
-            networkStatus = { gte: 200 };
-        } else if (filters.networkError) {
-            networkStatus = { gte: 400 };
-        } else if (filters.networkSuccess) {
-            networkStatus = { gte: 200, lte: 299 };
-        }
-
-        if (filters.cypressError) {
-            eventTypes.push('COMMAND');
-            commandStatus = ['FAILED'];
-        }
-
         startTransition(() => {
-            refetch({
-                eventTypes,
-                networkStatus,
-                commandStatus,
-            });
+            refetch(filters);
         });
-    }, [
-        filters.cypressError,
-        filters.networkError,
-        filters.networkSuccess,
-        filters.step,
-        refetch,
-    ]);
+    }, [filters, refetch]);
 
     const events = useMemo(() => {
-        return seekerEvents.edges.reduce(
+        return [
+            ...(seekerCypressErrors?.edges ?? []),
+            ...(seekerNetworkErrors?.edges ?? []),
+            ...(seekerNetworkSuccesses?.edges ?? []),
+            ...(seekerSteps?.edges ?? []),
+        ].reduce(
             (acc: Events, { node }) => {
                 if (node.__typename === 'StepEvent') {
                     return {
@@ -235,7 +203,14 @@ const Seeker: React.FC<Props> = ({ getMarker, filters, fragmentKey }) => {
                 frameworkError: [],
             }
         );
-    }, [endTime, seekerEvents.edges, startTime]);
+    }, [
+        endTime,
+        startTime,
+        seekerCypressErrors,
+        seekerNetworkErrors,
+        seekerNetworkSuccesses,
+        seekerSteps,
+    ]);
 
     const markers = useMemo(() => Object.values(events).flat(), [events]);
 

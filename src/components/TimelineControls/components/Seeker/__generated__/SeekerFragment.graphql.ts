@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<475e4c27f312573a5263bdf2012e6b92>>
+ * @generated SignedSource<<dd4851f43497f7de50ba6e08edf2eacf>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -24,7 +24,7 @@ export type SeekerFragment$data = {
       };
     }>;
   };
-  readonly seekerEvents: {
+  readonly seekerCypressErrors?: {
     readonly edges: ReadonlyArray<{
       readonly node: {
         readonly __typename: "CommandEvent";
@@ -34,6 +34,15 @@ export type SeekerFragment$data = {
         readonly name: string;
         readonly status: CommandEventStatus;
       } | {
+        // This will never be '%other', but we need some
+        // value in case none of the concrete values match.
+        readonly __typename: "%other";
+      };
+    }>;
+  };
+  readonly seekerNetworkErrors?: {
+    readonly edges: ReadonlyArray<{
+      readonly node: {
         readonly __typename: "HttpNetworkEvent";
         readonly at: any;
         readonly id: string;
@@ -48,6 +57,38 @@ export type SeekerFragment$data = {
         };
         readonly until: any;
       } | {
+        // This will never be '%other', but we need some
+        // value in case none of the concrete values match.
+        readonly __typename: "%other";
+      };
+    }>;
+  };
+  readonly seekerNetworkSuccesses?: {
+    readonly edges: ReadonlyArray<{
+      readonly node: {
+        readonly __typename: "HttpNetworkEvent";
+        readonly at: any;
+        readonly id: string;
+        readonly request: {
+          readonly method: string;
+          readonly url: {
+            readonly url: string;
+          };
+        };
+        readonly response: {
+          readonly status: number;
+        };
+        readonly until: any;
+      } | {
+        // This will never be '%other', but we need some
+        // value in case none of the concrete values match.
+        readonly __typename: "%other";
+      };
+    }>;
+  };
+  readonly seekerSteps?: {
+    readonly edges: ReadonlyArray<{
+      readonly node: {
         readonly __typename: "StepEvent";
         readonly at: any;
         readonly definition: {
@@ -114,31 +155,109 @@ v5 = {
   "kind": "ScalarField",
   "name": "description",
   "storageKey": null
-};
+},
+v6 = [
+  {
+    "alias": null,
+    "args": null,
+    "concreteType": "TestExecutionEventEdge",
+    "kind": "LinkedField",
+    "name": "edges",
+    "plural": true,
+    "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": null,
+        "kind": "LinkedField",
+        "name": "node",
+        "plural": false,
+        "selections": [
+          {
+            "kind": "InlineFragment",
+            "selections": [
+              (v2/*: any*/),
+              (v3/*: any*/),
+              (v0/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "until",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "HttpNetworkRequest",
+                "kind": "LinkedField",
+                "name": "request",
+                "plural": false,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "method",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "HttpNetworkRequestUrl",
+                    "kind": "LinkedField",
+                    "name": "url",
+                    "plural": false,
+                    "selections": (v1/*: any*/),
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "HttpNetworkResponse",
+                "kind": "LinkedField",
+                "name": "response",
+                "plural": false,
+                "selections": [
+                  (v4/*: any*/)
+                ],
+                "storageKey": null
+              }
+            ],
+            "type": "HttpNetworkEvent",
+            "abstractKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ],
+    "storageKey": null
+  }
+];
 return {
   "argumentDefinitions": [
     {
-      "defaultValue": [
-        "FAILED"
-      ],
+      "defaultValue": true,
       "kind": "LocalArgument",
-      "name": "commandStatus"
+      "name": "cypressError"
     },
     {
-      "defaultValue": [
-        "STEP",
-        "NETWORK",
-        "COMMAND"
-      ],
+      "defaultValue": true,
       "kind": "LocalArgument",
-      "name": "eventTypes"
+      "name": "networkError"
     },
     {
-      "defaultValue": {
-        "gte": 400
-      },
+      "defaultValue": false,
       "kind": "LocalArgument",
-      "name": "networkStatus"
+      "name": "networkSuccess"
+    },
+    {
+      "defaultValue": true,
+      "kind": "LocalArgument",
+      "name": "step"
     }
   ],
   "kind": "Fragment",
@@ -214,177 +333,213 @@ return {
       "storageKey": "events(filter:{\"type\":\"SCREENSHOT\"})"
     },
     {
-      "alias": "seekerEvents",
-      "args": [
-        {
-          "fields": [
-            {
-              "fields": [
-                {
-                  "kind": "Variable",
-                  "name": "status",
-                  "variableName": "commandStatus"
-                }
-              ],
-              "kind": "ObjectValue",
-              "name": "commandFilter"
-            },
-            {
-              "fields": [
-                {
-                  "kind": "Variable",
-                  "name": "status",
-                  "variableName": "networkStatus"
-                }
-              ],
-              "kind": "ObjectValue",
-              "name": "networkFilter"
-            },
-            {
-              "kind": "Variable",
-              "name": "type",
-              "variableName": "eventTypes"
-            }
-          ],
-          "kind": "ObjectValue",
-          "name": "filter"
-        }
-      ],
-      "concreteType": "TestExecutionEventConnection",
-      "kind": "LinkedField",
-      "name": "events",
-      "plural": false,
+      "condition": "cypressError",
+      "kind": "Condition",
+      "passingValue": true,
       "selections": [
         {
-          "alias": null,
-          "args": null,
-          "concreteType": "TestExecutionEventEdge",
+          "alias": "seekerCypressErrors",
+          "args": [
+            {
+              "kind": "Literal",
+              "name": "filter",
+              "value": {
+                "commandFilter": {
+                  "status": "FAILED"
+                },
+                "type": "COMMAND"
+              }
+            }
+          ],
+          "concreteType": "TestExecutionEventConnection",
           "kind": "LinkedField",
-          "name": "edges",
-          "plural": true,
+          "name": "events",
+          "plural": false,
           "selections": [
             {
               "alias": null,
               "args": null,
-              "concreteType": null,
+              "concreteType": "TestExecutionEventEdge",
               "kind": "LinkedField",
-              "name": "node",
-              "plural": false,
+              "name": "edges",
+              "plural": true,
               "selections": [
                 {
-                  "kind": "InlineFragment",
+                  "alias": null,
+                  "args": null,
+                  "concreteType": null,
+                  "kind": "LinkedField",
+                  "name": "node",
+                  "plural": false,
                   "selections": [
-                    (v2/*: any*/),
-                    (v3/*: any*/),
-                    (v0/*: any*/),
                     {
-                      "alias": null,
-                      "args": null,
-                      "kind": "ScalarField",
-                      "name": "until",
-                      "storageKey": null
-                    },
-                    {
-                      "alias": null,
-                      "args": null,
-                      "concreteType": "HttpNetworkRequest",
-                      "kind": "LinkedField",
-                      "name": "request",
-                      "plural": false,
+                      "kind": "InlineFragment",
                       "selections": [
+                        (v2/*: any*/),
+                        (v3/*: any*/),
+                        (v0/*: any*/),
+                        (v4/*: any*/),
                         {
                           "alias": null,
                           "args": null,
                           "kind": "ScalarField",
-                          "name": "method",
+                          "name": "name",
                           "storageKey": null
                         },
-                        {
-                          "alias": null,
-                          "args": null,
-                          "concreteType": "HttpNetworkRequestUrl",
-                          "kind": "LinkedField",
-                          "name": "url",
-                          "plural": false,
-                          "selections": (v1/*: any*/),
-                          "storageKey": null
-                        }
+                        (v5/*: any*/)
                       ],
-                      "storageKey": null
-                    },
-                    {
-                      "alias": null,
-                      "args": null,
-                      "concreteType": "HttpNetworkResponse",
-                      "kind": "LinkedField",
-                      "name": "response",
-                      "plural": false,
-                      "selections": [
-                        (v4/*: any*/)
-                      ],
-                      "storageKey": null
+                      "type": "CommandEvent",
+                      "abstractKey": null
                     }
                   ],
-                  "type": "HttpNetworkEvent",
-                  "abstractKey": null
-                },
-                {
-                  "kind": "InlineFragment",
-                  "selections": [
-                    (v2/*: any*/),
-                    (v3/*: any*/),
-                    (v0/*: any*/),
-                    (v4/*: any*/),
-                    {
-                      "alias": null,
-                      "args": null,
-                      "kind": "ScalarField",
-                      "name": "name",
-                      "storageKey": null
-                    },
-                    (v5/*: any*/)
-                  ],
-                  "type": "CommandEvent",
-                  "abstractKey": null
-                },
-                {
-                  "kind": "InlineFragment",
-                  "selections": [
-                    (v2/*: any*/),
-                    (v3/*: any*/),
-                    (v0/*: any*/),
-                    (v4/*: any*/),
-                    {
-                      "alias": null,
-                      "args": null,
-                      "concreteType": "StepDefinition",
-                      "kind": "LinkedField",
-                      "name": "definition",
-                      "plural": false,
-                      "selections": [
-                        (v5/*: any*/),
-                        {
-                          "alias": null,
-                          "args": null,
-                          "kind": "ScalarField",
-                          "name": "keyword",
-                          "storageKey": null
-                        }
-                      ],
-                      "storageKey": null
-                    }
-                  ],
-                  "type": "StepEvent",
-                  "abstractKey": null
+                  "storageKey": null
                 }
               ],
               "storageKey": null
             }
           ],
-          "storageKey": null
+          "storageKey": "events(filter:{\"commandFilter\":{\"status\":\"FAILED\"},\"type\":\"COMMAND\"})"
         }
-      ],
-      "storageKey": null
+      ]
+    },
+    {
+      "condition": "networkError",
+      "kind": "Condition",
+      "passingValue": true,
+      "selections": [
+        {
+          "alias": "seekerNetworkErrors",
+          "args": [
+            {
+              "kind": "Literal",
+              "name": "filter",
+              "value": {
+                "networkFilter": {
+                  "status": {
+                    "gte": 400
+                  }
+                },
+                "type": "NETWORK"
+              }
+            }
+          ],
+          "concreteType": "TestExecutionEventConnection",
+          "kind": "LinkedField",
+          "name": "events",
+          "plural": false,
+          "selections": (v6/*: any*/),
+          "storageKey": "events(filter:{\"networkFilter\":{\"status\":{\"gte\":400}},\"type\":\"NETWORK\"})"
+        }
+      ]
+    },
+    {
+      "condition": "networkSuccess",
+      "kind": "Condition",
+      "passingValue": true,
+      "selections": [
+        {
+          "alias": "seekerNetworkSuccesses",
+          "args": [
+            {
+              "kind": "Literal",
+              "name": "filter",
+              "value": {
+                "networkFilter": {
+                  "status": {
+                    "gte": 200,
+                    "lte": 299
+                  }
+                },
+                "type": "NETWORK"
+              }
+            }
+          ],
+          "concreteType": "TestExecutionEventConnection",
+          "kind": "LinkedField",
+          "name": "events",
+          "plural": false,
+          "selections": (v6/*: any*/),
+          "storageKey": "events(filter:{\"networkFilter\":{\"status\":{\"gte\":200,\"lte\":299}},\"type\":\"NETWORK\"})"
+        }
+      ]
+    },
+    {
+      "condition": "step",
+      "kind": "Condition",
+      "passingValue": true,
+      "selections": [
+        {
+          "alias": "seekerSteps",
+          "args": [
+            {
+              "kind": "Literal",
+              "name": "filter",
+              "value": {
+                "type": "STEP"
+              }
+            }
+          ],
+          "concreteType": "TestExecutionEventConnection",
+          "kind": "LinkedField",
+          "name": "events",
+          "plural": false,
+          "selections": [
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "TestExecutionEventEdge",
+              "kind": "LinkedField",
+              "name": "edges",
+              "plural": true,
+              "selections": [
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": null,
+                  "kind": "LinkedField",
+                  "name": "node",
+                  "plural": false,
+                  "selections": [
+                    {
+                      "kind": "InlineFragment",
+                      "selections": [
+                        (v2/*: any*/),
+                        (v3/*: any*/),
+                        (v0/*: any*/),
+                        (v4/*: any*/),
+                        {
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "StepDefinition",
+                          "kind": "LinkedField",
+                          "name": "definition",
+                          "plural": false,
+                          "selections": [
+                            (v5/*: any*/),
+                            {
+                              "alias": null,
+                              "args": null,
+                              "kind": "ScalarField",
+                              "name": "keyword",
+                              "storageKey": null
+                            }
+                          ],
+                          "storageKey": null
+                        }
+                      ],
+                      "type": "StepEvent",
+                      "abstractKey": null
+                    }
+                  ],
+                  "storageKey": null
+                }
+              ],
+              "storageKey": null
+            }
+          ],
+          "storageKey": "events(filter:{\"type\":\"STEP\"})"
+        }
+      ]
     },
     (v3/*: any*/)
   ],
@@ -393,6 +548,6 @@ return {
 };
 })();
 
-(node as any).hash = "4bbd3d8c798bda8c4a3963f2385e43c3";
+(node as any).hash = "27944685bb4da6a1ac41af7f7bd0f26c";
 
 export default node;
