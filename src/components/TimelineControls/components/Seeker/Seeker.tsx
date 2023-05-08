@@ -239,14 +239,6 @@ const Seeker: React.FC<Props> = ({ getMarker, filters, fragmentKey }) => {
 
     const markers = useMemo(() => Object.values(events).flat(), [events]);
 
-    useEffect(() => {
-        // Go to first cypress error
-        const firstErrorStartFraction = events.frameworkError[0]?.startFraction;
-        if (firstErrorStartFraction) {
-            seekFraction(firstErrorStartFraction);
-        }
-    }, [events.frameworkError, seekFraction]);
-
     const screenshotsSource = useMemo(() => {
         return Object.fromEntries(
             screenshots.edges.map(({ node }) => [

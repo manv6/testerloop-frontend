@@ -3,14 +3,15 @@ import { datesToFraction } from 'src/utils/date';
 import { TimelineContext } from './context';
 
 type Props = React.PropsWithChildren<{
+    initialSeekTime: Date;
     startTime: Date;
     endTime: Date;
 }>;
 
 export const TimelineProvider: React.FC<Props> = (props) => {
-    const { startTime, endTime } = props;
+    const { initialSeekTime, startTime, endTime } = props;
 
-    const [currentTime, seek] = useState(startTime);
+    const [currentTime, seek] = useState(initialSeekTime);
     const [speed, setSpeed] = useState(0.25);
     useEffect(() => {
         seek((currentTime) => {

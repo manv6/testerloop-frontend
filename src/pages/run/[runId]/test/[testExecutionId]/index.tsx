@@ -33,9 +33,16 @@ export default function TestExecutionPage() {
     // timeline can be viewed and scrubbed to easily.
     const startTime = new Date(testExecution.firstStep.edges[0].node.at);
     const endTime = new Date(testExecution.until);
+    const initialSeekTime = new Date(
+        testExecution.commandFailures.edges[0]?.node.at ?? startTime
+    );
 
     return (
-        <TimelineProvider startTime={startTime} endTime={endTime}>
+        <TimelineProvider
+            initialSeekTime={initialSeekTime}
+            startTime={startTime}
+            endTime={endTime}
+        >
             <Summary fragmentKey={testExecution} />
             <div className={styles.appContent}>
                 <FrameworkError fragmentKey={testExecution} />

@@ -13,6 +13,15 @@ export const testExecutionPageQuery = graphql`
                     }
                 }
             }
+            commandFailures: events(
+                filter: { type: COMMAND, commandFilter: { status: FAILED } }
+            ) {
+                edges {
+                    node {
+                        at
+                    }
+                }
+            }
             ...ConsolePanelFragment
             ...NetworkPanelFragment
             ...SummaryFragment
