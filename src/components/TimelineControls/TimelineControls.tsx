@@ -1,6 +1,6 @@
 // TODO: Remove this check once temp data is removed!!
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useTimeline } from 'src/hooks/timeline';
 import { datesToElapsedTime } from 'src/utils/date';
 import styles from './TimelineControls.module.scss';
@@ -32,8 +32,13 @@ type Props = {
 };
 
 export const TimelineControls: React.FC<Props> = ({ fragmentKey }) => {
-    const { currentTime, startTime, endTime, filters, setFilters } =
-        useTimeline();
+    const { currentTime, startTime, endTime } = useTimeline();
+    const [filters, setFilters] = useState<{ [k in EventType]: boolean }>({
+        step: true,
+        cypressError: true,
+        networkError: true,
+        networkSuccess: false,
+    });
 
     const getMarker = useCallback((type: EventType): JSX.Element => {
         switch (type) {
@@ -65,7 +70,11 @@ export const TimelineControls: React.FC<Props> = ({ fragmentKey }) => {
                     setFilters={setFilters}
                 />
             </StyledControlSection>
-            <Seeker getMarker={getMarker} fragmentKey={fragmentKey} />
+            <Seeker
+                getMarker={getMarker}
+                filters={filters}
+                fragmentKey={fragmentKey}
+            />
         </Panel>
     );
 };

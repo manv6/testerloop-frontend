@@ -70,10 +70,11 @@ const StyledMarker = styled('div')<StyledMarkerProps>(({ size }) => ({
 
 type Props = {
     getMarker: (ev: EventType) => JSX.Element;
+    filters: { [k in EventType]: boolean };
     fragmentKey: SeekerFragment$key;
 };
 
-const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
+const Seeker: React.FC<Props> = ({ getMarker, filters, fragmentKey }) => {
     const [{ screenshots, seekerEvents }, refetch] = useRefetchableFragment(
         SeekerFragment,
         fragmentKey
@@ -87,7 +88,6 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
         seekFraction,
         startTime,
         endTime,
-        filters,
     } = useTimeline();
     const [displayHoverTooltip, setDisplayHoverTooltip] = useState(true);
 
@@ -99,18 +99,18 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
         if (filters.step) {
             eventTypes.push('STEP');
         }
-        if (filters.network_error || filters.network_success) {
+        if (filters.networkError || filters.networkSuccess) {
             eventTypes.push('NETWORK');
         }
-        if (filters.network_error && filters.network_success) {
+        if (filters.networkError && filters.networkSuccess) {
             networkStatus = { gte: 200 };
-        } else if (filters.network_error) {
+        } else if (filters.networkError) {
             networkStatus = { gte: 400 };
-        } else if (filters.network_success) {
+        } else if (filters.networkSuccess) {
             networkStatus = { gte: 200, lte: 299 };
         }
 
-        if (filters.cypress_error) {
+        if (filters.cypressError) {
             eventTypes.push('COMMAND');
             commandStatus = ['FAILED'];
         }
@@ -123,9 +123,9 @@ const Seeker: React.FC<Props> = ({ getMarker, fragmentKey }) => {
             });
         });
     }, [
-        filters.cypress_error,
-        filters.network_error,
-        filters.network_success,
+        filters.cypressError,
+        filters.networkError,
+        filters.networkSuccess,
         filters.step,
         refetch,
     ]);

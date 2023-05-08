@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { EventType } from 'src/constants';
 import { datesToFraction } from 'src/utils/date';
-import { fillObjFromType } from 'src/utils/fillObjFromType';
-import { TimelineContext, TimelineContextValue } from './context';
+import { TimelineContext } from './context';
 
 type Props = React.PropsWithChildren<{
     startTime: Date;
@@ -93,11 +91,6 @@ export const TimelineProvider: React.FC<Props> = (props) => {
         [startTime, endTime, setHoverTime]
     );
 
-    const [filters, setFilters] = useState<TimelineContextValue['filters']>({
-        ...fillObjFromType(EventType, true),
-        [EventType.NETWORK_SUCCESS]: false,
-    });
-
     const contextValue = {
         currentTime,
         currentTimeFraction,
@@ -111,8 +104,6 @@ export const TimelineProvider: React.FC<Props> = (props) => {
         setHoverTimeFraction,
         isPlaying,
         setPlaying,
-        filters,
-        setFilters,
         speed,
         setSpeed,
     };
