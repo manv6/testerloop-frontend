@@ -17,6 +17,7 @@
         "@types/react-dom": "^18.0.10",
         "babel-plugin-relay": "^14.1.0",
         "classnames": "^2.3.2",
+        "fetch-multipart-graphql": "^3.1.1",
         "react": "^18.2.0",
         "react-bootstrap-icons": "^1.10.2",
         "react-dom": "^18.2.0",
@@ -91,6 +92,9 @@
         "stylelint": "^14.16.1",
         "stylelint-config-standard-scss": "^6.1.0",
         "webpack": "^5.75.0"
+    },
+    "overrides": {
+        "react-refresh": "0.11.0"
     },
     "eslintConfig": {
         "overrides": [
