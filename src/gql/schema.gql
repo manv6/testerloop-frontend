@@ -413,6 +413,7 @@ type Query {
   test: Boolean!
   testExecution(id: ID!): TestExecution
   testRun(id: ID!): TestRun
+  testRuns(after: Cursor, first: Int): TestRunConnection!
 }
 
 type ScenarioDefinition {
@@ -588,6 +589,17 @@ type TestRun implements Node {
 
   """This field may be null if the data was not provided for collection."""
   testCodeRevision: SourceCodeManagementRevision
+}
+
+type TestRunConnection {
+  edges: [TestRunEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type TestRunEdge {
+  cursor: Cursor!
+  node: TestRun!
 }
 
 scalar URL

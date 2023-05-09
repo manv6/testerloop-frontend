@@ -2,14 +2,11 @@ import React from 'react';
 import styles from './App.module.scss';
 import { styled } from '@mui/material/styles';
 import { testExecutionPageQuery } from './pages/run/[runId]/test/[testExecutionId]/TestExecutionPageQuery';
-import {
-    RouterProvider,
-    createBrowserRouter,
-    redirect,
-} from 'react-router-dom';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { loadQuery } from 'react-relay';
 import { environment } from './gql/RelayEnvironment';
 import { testRunPageQuery } from './pages/run/[runId]/TestRunPageQuery';
+import { indexPageQuery } from './pages/IndexPageQuery';
 
 const StyledApp = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.base[500],
@@ -19,9 +16,15 @@ const router = createBrowserRouter([
     {
         path: '/',
         loader: () => {
-            return redirect(
-                '/run/d7a674e5-9726-4c62-924b-0bb846e9f213/test/00343af4-acf3-473b-9975-0c2bd26e47o1'
-            );
+            const queryReference = loadQuery(environment, indexPageQuery, {});
+
+            return queryReference;
+        },
+        lazy: async () => {
+            const { default: IndexPage } = await import('./pages/index');
+            return {
+                element: <IndexPage />,
+            };
         },
     },
     {
