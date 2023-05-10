@@ -7,16 +7,14 @@ This is the frontend repository for Testerloop. The backend repository is [here]
 Before getting started, make sure you have the following installed:
 
 - [NVM](https://github.com/nvm-sh/nvm) 
-- [Node.js](https://nodejs.org/en/download/) (with v.18 set as the active version using NVM)
 - [npm](https://www.npmjs.com/get-npm)
 
 ## Setup
 
-1. Ensure NVM is installed and set to use Node version 18:
+1. Ensure NVM is installed and run the below to install and use [Node.js](https://nodejs.org/en/) v. 18.16.0:
 
 ```bash
-nvm install 18
-nvm use 18
+nvm install
 ```
 
 2. Clone the repository:
