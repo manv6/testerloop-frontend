@@ -2,6 +2,7 @@ import {
     DataID,
     FetchFunction,
     NormalizationLinkedField,
+    PayloadError,
     PayloadData,
     ROOT_ID,
     ROOT_TYPE,
@@ -18,6 +19,26 @@ import {
     Observable,
 } from 'relay-runtime';
 import { ReadOnlyRecordSourceProxy } from 'relay-runtime/lib/store/RelayStoreTypes';
+import { PayloadExtensions } from 'relay-runtime/lib/network/RelayNetworkTypes';
+
+interface ExtendedPayloadError extends PayloadError {
+    path?: Array<string | number>;
+    extensions?: PayloadExtensions;
+}
+
+export class GraphQLError extends Error implements ExtendedPayloadError {
+    path?: Array<string | number>;
+    locations?: Array<{ line: number; column: number }>;
+    extensions?: PayloadExtensions;
+
+    constructor(payloadError: ExtendedPayloadError) {
+        super(payloadError.message);
+        this.name = 'GraphQLError';
+        this.locations = payloadError.locations;
+        this.path = payloadError.path;
+        this.extensions = payloadError.extensions;
+    }
+}
 
 const ftch: FetchFunction = (params, variables) => {
     return Observable.create((sink) => {
@@ -40,8 +61,13 @@ const ftch: FetchFunction = (params, variables) => {
                               label: string;
                               data: PayloadData;
                           }[];
+                          errors?: ExtendedPayloadError[];
                       }
-                    | { data: PayloadData; hasNext?: boolean }
+                    | {
+                          data: PayloadData;
+                          hasNext?: boolean;
+                          errors?: ExtendedPayloadError[];
+                      }
                 )[];
                 const formatted = parts
                     .map((part) => {
@@ -51,9 +77,19 @@ const ftch: FetchFunction = (params, variables) => {
                         return part;
                     })
                     .flat();
-                sink.next(formatted);
+                const errorPart = parts.find(
+                    (part) => part.errors && part.errors.length > 0
+                );
+                if (errorPart?.errors) {
+                    const error = new GraphQLError(errorPart.errors[0]);
+                    sink.error(error);
+                } else {
+                    sink.next(formatted);
+                }
             },
-            onError: (err) => sink.error(err as Error),
+            onError: (err) => {
+                sink.error(err as Error);
+            },
             onComplete: () => sink.complete(),
         });
     });

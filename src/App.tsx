@@ -7,6 +7,7 @@ import { loadQuery } from 'react-relay';
 import { environment } from './gql/RelayEnvironment';
 import { testRunPageQuery } from './pages/run/[runId]/TestRunPageQuery';
 import { indexPageQuery } from './pages/IndexPageQuery';
+import ErrorFallback from './components/ErrorFallback/ErrorFallback';
 
 const StyledApp = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.base[500],
@@ -26,6 +27,7 @@ const router = createBrowserRouter([
                 element: <IndexPage />,
             };
         },
+        errorElement: <ErrorFallback />,
     },
     {
         path: '/run/:runId',
@@ -47,6 +49,7 @@ const router = createBrowserRouter([
                 element: <TestRunPage />,
             };
         },
+        errorElement: <ErrorFallback />,
     },
     {
         path: '/run/:runId/test/:testExecutionId',
@@ -72,6 +75,7 @@ const router = createBrowserRouter([
                 element: <TestExecutionPage />,
             };
         },
+        errorElement: <ErrorFallback />,
     },
 ]);
 
