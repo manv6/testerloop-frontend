@@ -4,6 +4,13 @@ directive @stream(if: Boolean! = true, initialCount: Int = 0, label: String) on 
 
 union BrowserVersion = ChromiumVersion
 
+type CallFrame {
+  columnNumber: Int!
+  functionName: String!
+  lineNumber: Int!
+  url: URL!
+}
+
 """See https://www.chromium.org/developers/version-numbers/"""
 type ChromiumVersion {
   build: Int!
@@ -84,6 +91,7 @@ type ConsoleLogEvent implements ConsoleEvent & Event & InstantaneousEvent & Test
   at: DateTime!
   logLevel: ConsoleLogLevel!
   message: String!
+  stackTrace: StackTrace!
   testExecution: TestExecution!
 }
 
@@ -455,6 +463,10 @@ interface SourceCodeManagementRevisionFileLine {
 interface SourceCodeManagementRevisionFileLineColumn {
   column: Int!
   line: SourceCodeManagementRevisionFileLine!
+}
+
+type StackTrace {
+  callFrames: [CallFrame!]!
 }
 
 type StepDefinition {

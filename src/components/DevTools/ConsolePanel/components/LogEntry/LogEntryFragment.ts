@@ -5,6 +5,9 @@ const LogEntryFragment = graphql`
         at
         message
         logLevel
+        stackTrace {
+            ...StackTraceFragment
+        }
     }
 `;
 

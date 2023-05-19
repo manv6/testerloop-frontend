@@ -14,7 +14,7 @@ import { LogErrorIcon, LogWarnIcon, OtherLogIcon } from '..';
 import { ChevronIcon } from 'src/components/common';
 import ElapsedTime from 'src/components/common/ElapsedTime';
 import entryStyles from 'src/components/common/styles/entryStyles';
-
+import StackTrace from '../StackTrace/StackTrace';
 interface Props {
     isLogSelected: boolean;
     isLogHovered: boolean;
@@ -94,28 +94,33 @@ const LogEntry = forwardRef<HTMLLIElement, LogEntryWithRefProps>(
                 className={styles.logEntry}
                 ref={ref}
             >
-                <StyledLineMarker
-                    className={styles.lineMarker}
-                    logType={data.logLevel}
-                />
-                <ElapsedTime timestamp={timestamp} />
-                <span
-                    className={cx(styles.message, {
-                        [styles.expanded]: isExpanded,
-                    })}
-                >
-                    <span className={styles.logIcon}>{logIcon}</span>
-                    <span ref={messageRef} className={styles.messageText}>
-                        {message}
-                    </span>
-                    <button
-                        onClick={() => setIsExpanded(!isExpanded)}
-                        className={styles.expandButton}
-                        style={!textOverflows ? { visibility: 'hidden' } : {}}
+                <div className={styles.mainContent}>
+                    <StyledLineMarker
+                        className={styles.lineMarker}
+                        logType={data.logLevel}
+                    />
+                    <ElapsedTime timestamp={timestamp} />
+                    <span
+                        className={cx(styles.message, {
+                            [styles.expanded]: isExpanded,
+                        })}
                     >
-                        <ChevronIcon direction={isExpanded ? 'up' : 'down'} />
-                    </button>
-                </span>
+                        <span className={styles.logIcon}>{logIcon}</span>
+                        <span ref={messageRef} className={styles.messageText}>
+                            {message}
+                        </span>
+
+                        <button
+                            onClick={() => setIsExpanded(!isExpanded)}
+                            className={styles.expandButton}
+                        >
+                            <ChevronIcon
+                                direction={isExpanded ? 'up' : 'down'}
+                            />
+                        </button>
+                    </span>
+                </div>
+                {isExpanded && <StackTrace fragmentKey={data.stackTrace} />}{' '}
             </StyledLogEntry>
         );
     }

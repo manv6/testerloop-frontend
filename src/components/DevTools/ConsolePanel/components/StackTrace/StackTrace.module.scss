@@ -1,0 +1,37 @@
+.expanded {
+    overflow: inherit;
+    white-space: inherit;
+    word-break: break-all;
+}
+
+.stackTrace {
+    border-radius: 4px;
+    margin-top: 8px;
+    max-height: calc(1.5em * 8);
+    overflow-y: auto;
+    padding: 8px;
+    width: 100%;
+}
+
+.stackTrace table {
+    width: 100%;
+}
+
+.stackTrace td {
+    padding: 4px;
+}
+
+.functionName {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: break-word;
+    max-width: 100px;
+}
+
+.location {
+    width: 80%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

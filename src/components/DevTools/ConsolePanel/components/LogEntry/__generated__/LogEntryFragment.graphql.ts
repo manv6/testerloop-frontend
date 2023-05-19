@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<fadda4c759b99413bd0a44ef058380a6>>
+ * @generated SignedSource<<3aac57b1354c664a6dd38c146341d1af>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,6 +15,9 @@ export type LogEntryFragment$data = {
   readonly at: any;
   readonly logLevel: ConsoleLogLevel;
   readonly message: string;
+  readonly stackTrace: {
+    readonly " $fragmentSpreads": FragmentRefs<"StackTraceFragment">;
+  };
   readonly " $fragmentType": "LogEntryFragment";
 };
 export type LogEntryFragment$key = {
@@ -48,12 +51,28 @@ const node: ReaderFragment = {
       "kind": "ScalarField",
       "name": "logLevel",
       "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "StackTrace",
+      "kind": "LinkedField",
+      "name": "stackTrace",
+      "plural": false,
+      "selections": [
+        {
+          "args": null,
+          "kind": "FragmentSpread",
+          "name": "StackTraceFragment"
+        }
+      ],
+      "storageKey": null
     }
   ],
   "type": "ConsoleLogEvent",
   "abstractKey": null
 };
 
-(node as any).hash = "3593e562b9809a843fbc4c6d49d83418";
+(node as any).hash = "0595dad469c6390188cba51253789d1e";
 
 export default node;
