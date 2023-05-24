@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3aac57b1354c664a6dd38c146341d1af>>
+ * @generated SignedSource<<4092af561d70a4cad0bfcbc7f7cfdb26>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,6 +13,7 @@ export type ConsoleLogLevel = "ERROR" | "INFO" | "LOG" | "WARN" | "%future added
 import { FragmentRefs } from "relay-runtime";
 export type LogEntryFragment$data = {
   readonly at: any;
+  readonly id: string;
   readonly logLevel: ConsoleLogLevel;
   readonly message: string;
   readonly stackTrace: {
@@ -31,6 +32,13 @@ const node: ReaderFragment = {
   "metadata": null,
   "name": "LogEntryFragment",
   "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "id",
+      "storageKey": null
+    },
     {
       "alias": null,
       "args": null,
@@ -73,6 +81,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "0595dad469c6390188cba51253789d1e";
+(node as any).hash = "b077dd76b97da9749b5308cd3f507974";
 
 export default node;

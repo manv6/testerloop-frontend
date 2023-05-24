@@ -54,6 +54,8 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
                         node {
                             __typename
                             ... on ConsoleLogEvent {
+                                __typename
+                                id
                                 at
                                 ...LogEntryFragment
                             }
@@ -179,7 +181,7 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
                             // TODO: Timestamp is not unique, provide an id or a way to make it unique.
                             return (
                                 <LogEntry
-                                    key={idx}
+                                    key={node.id}
                                     ref={
                                         currentLogIdx === idx
                                             ? logEntryRef

@@ -87,8 +87,9 @@ input ConsoleEventFilterInput {
   logSearch: String
 }
 
-type ConsoleLogEvent implements ConsoleEvent & Event & InstantaneousEvent & TestExecutionEvent {
+type ConsoleLogEvent implements ConsoleEvent & Event & InstantaneousEvent & Node & TestExecutionEvent {
   at: DateTime!
+  id: ID!
   logLevel: ConsoleLogLevel!
   message: String!
   stackTrace: StackTrace!
@@ -416,6 +417,7 @@ type PageInfo {
 }
 
 type Query {
+  consoleLogEvent(id: ID!): ConsoleLogEvent
   httpNetworkEvent(id: ID!): HttpNetworkEvent
   node(id: ID!): Node
   test: Boolean!

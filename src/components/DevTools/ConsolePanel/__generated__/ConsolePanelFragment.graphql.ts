@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<869be4a88d804c6afaa4a0b28da60bbe>>
+ * @generated SignedSource<<6bdae559a067d56531cfb22b92954d6c>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -17,7 +17,9 @@ export type ConsolePanelFragment$data = {
       readonly __typename: "TestExecutionEventEdge";
       readonly node: {
         readonly __typename: "ConsoleLogEvent";
+        readonly __typename: "ConsoleLogEvent";
         readonly at: any;
+        readonly id: string;
         readonly " $fragmentSpreads": FragmentRefs<"LogEntryFragment">;
       } | {
         // This will never be '%other', but we need some
@@ -36,11 +38,18 @@ export type ConsolePanelFragment$key = {
 
 const node: ReaderFragment = (function(){
 var v0 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+},
+v1 = {
   "kind": "Variable",
   "name": "logSearch",
   "variableName": "logSearch"
 },
-v1 = {
+v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -73,13 +82,7 @@ return {
   },
   "name": "ConsolePanelFragment",
   "selections": [
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "id",
-      "storageKey": null
-    },
+    (v0/*: any*/),
     {
       "alias": "searchedEvents",
       "args": [
@@ -92,7 +95,7 @@ return {
                   "name": "logLevel",
                   "variableName": "logLevels"
                 },
-                (v0/*: any*/)
+                (v1/*: any*/)
               ],
               "kind": "ObjectValue",
               "name": "consoleFilter"
@@ -120,7 +123,7 @@ return {
           "name": "edges",
           "plural": true,
           "selections": [
-            (v1/*: any*/),
+            (v2/*: any*/),
             {
               "alias": null,
               "args": null,
@@ -129,10 +132,11 @@ return {
               "name": "node",
               "plural": false,
               "selections": [
-                (v1/*: any*/),
+                (v2/*: any*/),
                 {
                   "kind": "InlineFragment",
                   "selections": [
+                    (v0/*: any*/),
                     {
                       "alias": null,
                       "args": null,
@@ -160,7 +164,7 @@ return {
     },
     {
       "args": [
-        (v0/*: any*/)
+        (v1/*: any*/)
       ],
       "kind": "FragmentSpread",
       "name": "LogFiltersFragment"
@@ -171,6 +175,6 @@ return {
 };
 })();
 
-(node as any).hash = "80d49805182dc77101a9cfd21781a0e7";
+(node as any).hash = "9137c1358bdf7c5ba3515aa988e77894";
 
 export default node;

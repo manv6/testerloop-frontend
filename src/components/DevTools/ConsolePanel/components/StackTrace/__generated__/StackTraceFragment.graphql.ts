@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<193fb5a1fd3b941277d3ce24e43c45b0>>
+ * @generated SignedSource<<5ce02af9add9d61273df91ab4a9bf033>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,7 +12,6 @@ import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type StackTraceFragment$data = {
   readonly callFrames: ReadonlyArray<{
-    readonly columnNumber: number;
     readonly functionName: string;
     readonly lineNumber: number;
     readonly url: any;
@@ -58,13 +57,6 @@ const node: ReaderFragment = {
           "kind": "ScalarField",
           "name": "lineNumber",
           "storageKey": null
-        },
-        {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "columnNumber",
-          "storageKey": null
         }
       ],
       "storageKey": null
@@ -74,6 +66,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "3f51a01beca3e9a5304a49b821d34317";
+(node as any).hash = "3261de986d81ac2ae685ad67cd75878b";
 
 export default node;

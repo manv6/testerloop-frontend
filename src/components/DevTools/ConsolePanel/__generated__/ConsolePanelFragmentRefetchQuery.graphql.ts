@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f29fdfbe47dba71cee6710d86c305eae>>
+ * @generated SignedSource<<5de4caffb746bfa78a86d06f9c3e83ee>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -195,6 +195,7 @@ return {
                           {
                             "kind": "InlineFragment",
                             "selections": [
+                              (v6/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -251,13 +252,6 @@ return {
                                         "args": null,
                                         "kind": "ScalarField",
                                         "name": "lineNumber",
-                                        "storageKey": null
-                                      },
-                                      {
-                                        "alias": null,
-                                        "args": null,
-                                        "kind": "ScalarField",
-                                        "name": "columnNumber",
                                         "storageKey": null
                                       }
                                     ],
@@ -391,16 +385,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "0f56023641e608b7d0bb8dc0c8722baf",
+    "cacheID": "3bdc642bfe1d5df3c46f783a756c0f1d",
     "id": null,
     "metadata": {},
     "name": "ConsolePanelFragmentRefetchQuery",
     "operationKind": "query",
-    "text": "query ConsolePanelFragmentRefetchQuery(\n  $logLevels: [ConsoleLogLevel!] = null\n  $logSearch: String = null\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...ConsolePanelFragment_22FwjD\n    id\n  }\n}\n\nfragment ConsolePanelFragment_22FwjD on TestExecution {\n  id\n  searchedEvents: events(filter: {type: CONSOLE, consoleFilter: {logSearch: $logSearch, logLevel: $logLevels}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on ConsoleLogEvent {\n          at\n          ...LogEntryFragment\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n  ...LogFiltersFragment_1imbBq\n}\n\nfragment LogEntryFragment on ConsoleLogEvent {\n  at\n  message\n  logLevel\n  stackTrace {\n    ...StackTraceFragment\n  }\n}\n\nfragment LogFiltersFragment_1imbBq on TestExecution {\n  warnings: events(filter: {type: CONSOLE, consoleFilter: {logSearch: $logSearch, logLevel: WARN}}) {\n    totalCount\n  }\n  errors: events(filter: {type: CONSOLE, consoleFilter: {logSearch: $logSearch, logLevel: ERROR}}) {\n    totalCount\n  }\n  logs: events(filter: {type: CONSOLE, consoleFilter: {logSearch: $logSearch, logLevel: LOG}}) {\n    totalCount\n  }\n  id\n}\n\nfragment StackTraceFragment on StackTrace {\n  callFrames {\n    functionName\n    url\n    lineNumber\n    columnNumber\n  }\n}\n"
+    "text": "query ConsolePanelFragmentRefetchQuery(\n  $logLevels: [ConsoleLogLevel!] = null\n  $logSearch: String = null\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...ConsolePanelFragment_22FwjD\n    id\n  }\n}\n\nfragment ConsolePanelFragment_22FwjD on TestExecution {\n  id\n  searchedEvents: events(filter: {type: CONSOLE, consoleFilter: {logSearch: $logSearch, logLevel: $logLevels}}) {\n    edges {\n      __typename\n      node {\n        __typename\n        ... on ConsoleLogEvent {\n          __typename\n          id\n          at\n          ...LogEntryFragment\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n  ...LogFiltersFragment_1imbBq\n}\n\nfragment LogEntryFragment on ConsoleLogEvent {\n  id\n  at\n  message\n  logLevel\n  stackTrace {\n    ...StackTraceFragment\n  }\n}\n\nfragment LogFiltersFragment_1imbBq on TestExecution {\n  warnings: events(filter: {type: CONSOLE, consoleFilter: {logSearch: $logSearch, logLevel: WARN}}) {\n    totalCount\n  }\n  errors: events(filter: {type: CONSOLE, consoleFilter: {logSearch: $logSearch, logLevel: ERROR}}) {\n    totalCount\n  }\n  logs: events(filter: {type: CONSOLE, consoleFilter: {logSearch: $logSearch, logLevel: LOG}}) {\n    totalCount\n  }\n  id\n}\n\nfragment StackTraceFragment on StackTrace {\n  callFrames {\n    functionName\n    url\n    lineNumber\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "80d49805182dc77101a9cfd21781a0e7";
+(node as any).hash = "9137c1358bdf7c5ba3515aa988e77894";
 
 export default node;
