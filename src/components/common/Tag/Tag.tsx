@@ -4,7 +4,7 @@ import cx from 'classnames';
 import styles from './Tag.module.scss';
 
 type StyledTagProps = {
-    tagType?: 'error';
+    tagType?: 'error' | 'success';
 };
 
 const StyledTag = styled('div')<StyledTagProps>(({ theme, tagType }) => {
@@ -15,6 +15,10 @@ const StyledTag = styled('div')<StyledTagProps>(({ theme, tagType }) => {
         case 'error':
             backgroundColor = theme.palette.status.error[500];
             borderColor = theme.palette.status.error[400];
+            break;
+        case 'success':
+            backgroundColor = theme.palette.status.success[500];
+            borderColor = theme.palette.status.success[400];
             break;
         default:
             backgroundColor = theme.palette.base[500];

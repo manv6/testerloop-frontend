@@ -48,13 +48,15 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
     const frameworkErrorName =
         summaryData.commandWithError.edges[0]?.node.error?.type;
     const title = summaryData.title;
+    const tagType = frameworkErrorName ? 'error' : 'success';
+    const tagText = frameworkErrorName ? 'Failed' : 'Passed';
 
     return (
         <Panel className={cx(styles.summary, className)}>
             <div className={styles.row}>
                 <div className={styles.pageTitle}>
                     <h1>Scenario: {title}</h1>
-                    {frameworkErrorName && <Tag text="Failed" />}
+                    <Tag tagType={tagType} text={tagText} />
                 </div>
             </div>
             {isExpanded && (
