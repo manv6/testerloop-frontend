@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<699dcbb5738472480f49ffe827fd2251>>
+ * @generated SignedSource<<87394553db3f3febaf79249de74e0c3f>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,10 +13,10 @@ import { FragmentRefs } from "relay-runtime";
 export type SnapshotEventRendererFragment$data = {
   readonly nextSnapshot: {
     readonly dom: string;
-  };
+  } | null;
   readonly previousSnapshot: {
     readonly dom: string;
-  };
+  } | null;
   readonly " $fragmentType": "SnapshotEventRendererFragment";
 };
 export type SnapshotEventRendererFragment$key = {

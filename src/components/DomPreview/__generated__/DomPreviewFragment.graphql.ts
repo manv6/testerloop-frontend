@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e82cebfa43222f11aec5c53fe6c417b9>>
+ * @generated SignedSource<<4110f2e66441b10fc3eabc00e2259c5e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -26,20 +26,15 @@ const node: ReaderFragment = {
   "name": "DomPreviewFragment",
   "selections": [
     {
-      "kind": "Defer",
-      "selections": [
-        {
-          "args": null,
-          "kind": "FragmentSpread",
-          "name": "DomPreviewRendererFragment"
-        }
-      ]
+      "args": null,
+      "kind": "FragmentSpread",
+      "name": "DomPreviewRendererFragment"
     }
   ],
   "type": "TestExecution",
   "abstractKey": null
 };
 
-(node as any).hash = "1932fb05a77ccf3ee0eaf84e44e76192";
+(node as any).hash = "3f653d8a33da74a625a804a5690547f3";
 
 export default node;
