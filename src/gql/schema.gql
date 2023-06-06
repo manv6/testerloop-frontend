@@ -37,7 +37,7 @@ type CommandChainEventEdge {
   node: CommandChainEvent!
 }
 
-type CommandEvent implements Event & IntervalEvent & Node & TestExecutionEvent {
+type CommandEvent implements Event & IntervalEvent & Node & SnapshotEvent & TestExecutionEvent {
   at: DateTime!
   description: String!
   error: CommandEventError
@@ -443,6 +443,12 @@ type SignedURL {
   url: URL!
 }
 
+interface SnapshotEvent implements Event {
+  at: DateTime!
+  nextSnapshot: TestExecutionSnapshot!
+  previousSnapshot: TestExecutionSnapshot!
+}
+
 interface SourceCodeManagementRepository {
   _unused: Boolean!
 }
@@ -476,7 +482,7 @@ type StepDefinition {
   keyword: GherkinStepKeyword!
 }
 
-type StepEvent implements Event & IntervalEvent & Node & TestExecutionEvent {
+type StepEvent implements Event & IntervalEvent & Node & SnapshotEvent & TestExecutionEvent {
   at: DateTime!
   commandChains: CommandChainEventConnection!
   definition: StepDefinition!
