@@ -16,12 +16,12 @@ const StackTrace: React.FC<Props> = ({ fragmentKey }) => {
         <div className={cx(styles.stackTrace, styles.expanded)}>
             <table>
                 <tbody>
-                    {stackTrace.map((frame, index) => {
+                    {stackTrace.map((frame) => {
                         const url = frame.url;
                         const functionName = frame.functionName;
                         const lineNumber = frame.lineNumber;
                         return (
-                            <tr key={index}>
+                            <tr key={frame.id}>
                                 <td
                                     className={styles.functionName}
                                     title={functionName}

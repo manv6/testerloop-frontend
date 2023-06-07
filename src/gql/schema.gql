@@ -7,6 +7,7 @@ union BrowserVersion = ChromiumVersion
 type CallFrame {
   columnNumber: Int!
   functionName: String!
+  id: ID!
   lineNumber: Int!
   url: URL!
 }
@@ -475,6 +476,7 @@ interface SourceCodeManagementRevisionFileLineColumn {
 
 type StackTrace {
   callFrames: [CallFrame!]!
+  id: ID!
 }
 
 type StepDefinition {

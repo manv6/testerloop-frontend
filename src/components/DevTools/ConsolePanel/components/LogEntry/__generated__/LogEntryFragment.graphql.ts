@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4092af561d70a4cad0bfcbc7f7cfdb26>>
+ * @generated SignedSource<<7ace5cdc94a5af770cc3113a345581cb>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -8,7 +8,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { Fragment, ReaderFragment } from 'relay-runtime';
+import { ReaderFragment, RefetchableFragment } from 'relay-runtime';
 export type ConsoleLogLevel = "ERROR" | "INFO" | "LOG" | "WARN" | "%future added value";
 import { FragmentRefs } from "relay-runtime";
 export type LogEntryFragment$data = {
@@ -27,9 +27,24 @@ export type LogEntryFragment$key = {
 };
 
 const node: ReaderFragment = {
-  "argumentDefinitions": [],
+  "argumentDefinitions": [
+    {
+      "defaultValue": false,
+      "kind": "LocalArgument",
+      "name": "open"
+    }
+  ],
   "kind": "Fragment",
-  "metadata": null,
+  "metadata": {
+    "refetch": {
+      "connection": null,
+      "fragmentPathInResult": [
+        "node"
+      ],
+      "operation": require('./LogEntryRefetchQuery.graphql'),
+      "identifierField": "id"
+    }
+  },
   "name": "LogEntryFragment",
   "selections": [
     {
@@ -69,9 +84,16 @@ const node: ReaderFragment = {
       "plural": false,
       "selections": [
         {
-          "args": null,
-          "kind": "FragmentSpread",
-          "name": "StackTraceFragment"
+          "condition": "open",
+          "kind": "Condition",
+          "passingValue": true,
+          "selections": [
+            {
+              "args": null,
+              "kind": "FragmentSpread",
+              "name": "StackTraceFragment"
+            }
+          ]
         }
       ],
       "storageKey": null
@@ -81,6 +103,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "b077dd76b97da9749b5308cd3f507974";
+(node as any).hash = "47d4a72b873e687da69ad68ed82890f7";
 
 export default node;

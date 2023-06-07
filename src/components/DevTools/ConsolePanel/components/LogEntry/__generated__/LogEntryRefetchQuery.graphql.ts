@@ -1,0 +1,211 @@
+/**
+ * @generated SignedSource<<645c35323c539a5308ce1eae483f721a>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
+/* tslint:disable */
+/* eslint-disable */
+// @ts-nocheck
+
+import { ConcreteRequest, Query } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
+export type LogEntryRefetchQuery$variables = {
+  id: string;
+  open?: boolean | null;
+};
+export type LogEntryRefetchQuery$data = {
+  readonly node: {
+    readonly " $fragmentSpreads": FragmentRefs<"LogEntryFragment">;
+  } | null;
+};
+export type LogEntryRefetchQuery = {
+  response: LogEntryRefetchQuery$data;
+  variables: LogEntryRefetchQuery$variables;
+};
+
+const node: ConcreteRequest = (function(){
+var v0 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "id"
+},
+v1 = {
+  "defaultValue": false,
+  "kind": "LocalArgument",
+  "name": "open"
+},
+v2 = [
+  {
+    "kind": "Variable",
+    "name": "id",
+    "variableName": "id"
+  }
+],
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+};
+return {
+  "fragment": {
+    "argumentDefinitions": [
+      (v0/*: any*/),
+      (v1/*: any*/)
+    ],
+    "kind": "Fragment",
+    "metadata": null,
+    "name": "LogEntryRefetchQuery",
+    "selections": [
+      {
+        "alias": null,
+        "args": (v2/*: any*/),
+        "concreteType": null,
+        "kind": "LinkedField",
+        "name": "node",
+        "plural": false,
+        "selections": [
+          {
+            "args": [
+              {
+                "kind": "Variable",
+                "name": "open",
+                "variableName": "open"
+              }
+            ],
+            "kind": "FragmentSpread",
+            "name": "LogEntryFragment"
+          }
+        ],
+        "storageKey": null
+      }
+    ],
+    "type": "Query",
+    "abstractKey": null
+  },
+  "kind": "Request",
+  "operation": {
+    "argumentDefinitions": [
+      (v1/*: any*/),
+      (v0/*: any*/)
+    ],
+    "kind": "Operation",
+    "name": "LogEntryRefetchQuery",
+    "selections": [
+      {
+        "alias": null,
+        "args": (v2/*: any*/),
+        "concreteType": null,
+        "kind": "LinkedField",
+        "name": "node",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "__typename",
+            "storageKey": null
+          },
+          (v3/*: any*/),
+          {
+            "kind": "InlineFragment",
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "at",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "message",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "logLevel",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "StackTrace",
+                "kind": "LinkedField",
+                "name": "stackTrace",
+                "plural": false,
+                "selections": [
+                  (v3/*: any*/),
+                  {
+                    "condition": "open",
+                    "kind": "Condition",
+                    "passingValue": true,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "CallFrame",
+                        "kind": "LinkedField",
+                        "name": "callFrames",
+                        "plural": true,
+                        "selections": [
+                          (v3/*: any*/),
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "functionName",
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "url",
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "lineNumber",
+                            "storageKey": null
+                          }
+                        ],
+                        "storageKey": null
+                      }
+                    ]
+                  }
+                ],
+                "storageKey": null
+              }
+            ],
+            "type": "ConsoleLogEvent",
+            "abstractKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
+  },
+  "params": {
+    "cacheID": "ab19a1eea502b804dde01faa6ade5d31",
+    "id": null,
+    "metadata": {},
+    "name": "LogEntryRefetchQuery",
+    "operationKind": "query",
+    "text": "query LogEntryRefetchQuery(\n  $open: Boolean = false\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...LogEntryFragment_3Qbc3L\n    id\n  }\n}\n\nfragment LogEntryFragment_3Qbc3L on ConsoleLogEvent {\n  id\n  at\n  message\n  logLevel\n  stackTrace {\n    ...StackTraceFragment @include(if: $open)\n    id\n  }\n}\n\nfragment StackTraceFragment on StackTrace {\n  id\n  callFrames {\n    id\n    functionName\n    url\n    lineNumber\n  }\n}\n"
+  }
+};
+})();
+
+(node as any).hash = "47d4a72b873e687da69ad68ed82890f7";
+
+export default node;

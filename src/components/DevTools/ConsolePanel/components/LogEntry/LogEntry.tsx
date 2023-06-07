@@ -2,7 +2,7 @@ import React, { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
 import cx from 'classnames';
 import styles from './LogEntry.module.scss';
 import LogEntryFragment from './LogEntryFragment';
-import { useFragment } from 'react-relay';
+import { useRefetchableFragment } from 'react-relay';
 
 import type {
     ConsoleLogLevel,
@@ -61,8 +61,10 @@ type LogEntryWithRefProps = Props & {
 // eslint-disable-next-line react/display-name
 const LogEntry = forwardRef<HTMLLIElement, LogEntryWithRefProps>(
     ({ isLogSelected, isLogHovered, logEntry }, ref) => {
-        const data = useFragment(LogEntryFragment, logEntry);
-
+        const [data, refetch] = useRefetchableFragment(
+            LogEntryFragment,
+            logEntry
+        );
         const timestamp = data.at;
         const message = data.message;
         const [textOverflows, setTextOverflows] = useState<boolean>(false);
@@ -85,6 +87,11 @@ const LogEntry = forwardRef<HTMLLIElement, LogEntryWithRefProps>(
             const element = messageRef.current;
             setTextOverflows(element.scrollWidth > element.offsetWidth);
         }, [messageRef, textOverflows]);
+
+        const handleExpandClick = () => {
+            setIsExpanded(!isExpanded);
+            refetch({ open: !isExpanded });
+        };
 
         return (
             <StyledLogEntry
@@ -111,7 +118,7 @@ const LogEntry = forwardRef<HTMLLIElement, LogEntryWithRefProps>(
                         </span>
 
                         <button
-                            onClick={() => setIsExpanded(!isExpanded)}
+                            onClick={handleExpandClick}
                             className={styles.expandButton}
                         >
                             <ChevronIcon
@@ -120,7 +127,11 @@ const LogEntry = forwardRef<HTMLLIElement, LogEntryWithRefProps>(
                         </button>
                     </span>
                 </div>
-                {isExpanded && <StackTrace fragmentKey={data.stackTrace} />}{' '}
+                {isExpanded && (
+                    <React.Suspense fallback="...">
+                        <StackTrace fragmentKey={data.stackTrace} />
+                    </React.Suspense>
+                )}{' '}
             </StyledLogEntry>
         );
     }

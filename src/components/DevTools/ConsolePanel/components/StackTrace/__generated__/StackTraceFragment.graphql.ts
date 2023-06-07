@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5ce02af9add9d61273df91ab4a9bf033>>
+ * @generated SignedSource<<b3a58310ce326ecfd4756662cbda1fa1>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,9 +13,11 @@ import { FragmentRefs } from "relay-runtime";
 export type StackTraceFragment$data = {
   readonly callFrames: ReadonlyArray<{
     readonly functionName: string;
+    readonly id: string;
     readonly lineNumber: number;
     readonly url: any;
   }>;
+  readonly id: string;
   readonly " $fragmentType": "StackTraceFragment";
 };
 export type StackTraceFragment$key = {
@@ -23,12 +25,21 @@ export type StackTraceFragment$key = {
   readonly " $fragmentSpreads": FragmentRefs<"StackTraceFragment">;
 };
 
-const node: ReaderFragment = {
+const node: ReaderFragment = (function(){
+var v0 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+};
+return {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
   "name": "StackTraceFragment",
   "selections": [
+    (v0/*: any*/),
     {
       "alias": null,
       "args": null,
@@ -37,6 +48,7 @@ const node: ReaderFragment = {
       "name": "callFrames",
       "plural": true,
       "selections": [
+        (v0/*: any*/),
         {
           "alias": null,
           "args": null,
@@ -65,7 +77,8 @@ const node: ReaderFragment = {
   "type": "StackTrace",
   "abstractKey": null
 };
+})();
 
-(node as any).hash = "3261de986d81ac2ae685ad67cd75878b";
+(node as any).hash = "cc0f86f658dfc9ec0618ea58147470df";
 
 export default node;
