@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<13a75ac6b9c2fab56a8a7cb782e58ad7>>
+ * @generated SignedSource<<aa3f78fb7fb9e2537402550b05c12c93>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,6 +15,12 @@ export type DomPreviewRendererFragment$data = {
     readonly edges: ReadonlyArray<{
       readonly node: {
         readonly at: any;
+        readonly nextSnapshot?: {
+          readonly dom: string;
+        } | null;
+        readonly previousSnapshot?: {
+          readonly dom: string;
+        } | null;
         readonly " $fragmentSpreads": FragmentRefs<"SnapshotEventRendererFragment">;
       };
     }>;
@@ -26,7 +32,17 @@ export type DomPreviewRendererFragment$key = {
   readonly " $fragmentSpreads": FragmentRefs<"DomPreviewRendererFragment">;
 };
 
-const node: ReaderFragment = {
+const node: ReaderFragment = (function(){
+var v0 = [
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "dom",
+    "storageKey": null
+  }
+];
+return {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
@@ -78,6 +94,33 @@ const node: ReaderFragment = {
                   "args": null,
                   "kind": "FragmentSpread",
                   "name": "SnapshotEventRendererFragment"
+                },
+                {
+                  "kind": "InlineFragment",
+                  "selections": [
+                    {
+                      "alias": null,
+                      "args": null,
+                      "concreteType": "TestExecutionSnapshot",
+                      "kind": "LinkedField",
+                      "name": "previousSnapshot",
+                      "plural": false,
+                      "selections": (v0/*: any*/),
+                      "storageKey": null
+                    },
+                    {
+                      "alias": null,
+                      "args": null,
+                      "concreteType": "TestExecutionSnapshot",
+                      "kind": "LinkedField",
+                      "name": "nextSnapshot",
+                      "plural": false,
+                      "selections": (v0/*: any*/),
+                      "storageKey": null
+                    }
+                  ],
+                  "type": "SnapshotEvent",
+                  "abstractKey": "__isSnapshotEvent"
                 }
               ],
               "storageKey": null
@@ -92,7 +135,8 @@ const node: ReaderFragment = {
   "type": "TestExecution",
   "abstractKey": null
 };
+})();
 
-(node as any).hash = "3a5c0a68f65fdc83adba5cf9a85526fb";
+(node as any).hash = "b422f7c964e95dd68e6dd470429d9c2e";
 
 export default node;

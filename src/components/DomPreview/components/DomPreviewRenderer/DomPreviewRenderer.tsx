@@ -28,6 +28,14 @@ const DomPreviewRenderer: React.FC<Props> = ({
                         node {
                             at
                             ...SnapshotEventRendererFragment
+                            ... on SnapshotEvent {
+                                previousSnapshot {
+                                    dom
+                                }
+                                nextSnapshot {
+                                    dom
+                                }
+                            }
                         }
                     }
                 }
@@ -37,16 +45,25 @@ const DomPreviewRenderer: React.FC<Props> = ({
     );
 
     const currentSnapshot = useMemo(() => {
-        const nextStepIdx = edges.findIndex(
+        const filteredEdges = edges.filter((edge) => {
+            if (!edge.node.previousSnapshot || !edge.node.nextSnapshot) {
+                return false;
+            }
+            return true;
+        });
+        const nextStepIdx = filteredEdges.findIndex(
             (step) => new Date(step.node.at).getTime() > currentTime.getTime()
         );
         const mostRecentIdx =
-            (nextStepIdx === -1 ? edges.length : nextStepIdx) - 1;
+            (nextStepIdx === -1 ? filteredEdges.length : nextStepIdx) - 1;
         // NOTE: TS incorrectly types array indexes as always existing.
         // as we don't know that is correct, we change the type manually.
         return (
-            (edges[mostRecentIdx] as (typeof edges)[0] | undefined)?.node ??
-            null
+            (
+                filteredEdges[mostRecentIdx] as
+                    | (typeof filteredEdges)[0]
+                    | undefined
+            )?.node ?? null
         );
     }, [edges, currentTime]);
 
