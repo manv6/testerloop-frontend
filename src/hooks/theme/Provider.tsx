@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from 'react';
-import useMediaQuery from '@mui/material/useMediaQuery'; // eslint-disable-line
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { StyledEngineProvider } from '@mui/material/styles';
@@ -13,13 +12,39 @@ const LIGHT = createTheme({
     },
 });
 
+const LINE_HEIGHT = 1.5;
 const DARK = createTheme({
     typography: {
         fontFamily: 'Roboto, sans-serif',
+        h1: {
+            fontSize: '2.488rem',
+            fontWeight: 800,
+            lineHeight: LINE_HEIGHT,
+        },
+        h2: {
+            fontSize: '2.074rem',
+            fontWeight: 800,
+            lineHeight: LINE_HEIGHT,
+        },
+        h3: {
+            fontSize: '1.728rem',
+            fontWeight: 500,
+            lineHeight: LINE_HEIGHT,
+        },
+        h4: {
+            fontSize: '1.44rem',
+            fontWeight: 500,
+            lineHeight: LINE_HEIGHT,
+        },
+        h5: {
+            fontSize: '1.2rem',
+            fontWeight: 500,
+            lineHeight: LINE_HEIGHT,
+        },
         body1: {
-            fontSize: '13.33px',
+            fontSize: '16px',
             fontWeight: 400,
-            lineHeight: '20px',
+            lineHeight: LINE_HEIGHT,
         },
     },
     palette: {

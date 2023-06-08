@@ -9,6 +9,7 @@ import { FrameworkErrorIcon, EnvironmentDetails } from './components';
 import splitCamelCase from 'src/utils/splitCamelCase';
 import NetworkErrorCount from './components/NetworkErrorCount';
 import ConsoleErrorCount from './components/ConsoleErrorCount';
+import { Typography } from '@mui/material';
 
 type Props = {
     fragmentKey: SummaryFragment$key;
@@ -55,7 +56,7 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
         <Panel className={cx(styles.summary, className)}>
             <div className={styles.row}>
                 <div className={styles.pageTitle}>
-                    <h1>Scenario: {title}</h1>
+                    <Typography variant="h1">Scenario: {title}</Typography>
                     <Tag tagType={tagType} text={tagText} />
                 </div>
             </div>
