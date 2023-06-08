@@ -15,7 +15,7 @@ const testRunIdToUrl = (id: string) => {
 };
 
 export const TestRunListRow: React.FC<Props> = ({ fragmentKey }) => {
-    const testExecution = useFragment(
+    const testRun = useFragment(
         graphql`
             fragment TestRunListRowFragment on TestRun {
                 id
@@ -30,11 +30,11 @@ export const TestRunListRow: React.FC<Props> = ({ fragmentKey }) => {
     return (
         <tr>
             <td>
-                <Link to={testRunIdToUrl(testExecution.id)}>
-                    {window.atob(testExecution.id).split('/')[1]}
+                <Link to={testRunIdToUrl(testRun.id)}>
+                    {window.atob(testRun.id).split('/')[1]}
                 </Link>
             </td>
-            <td>{testExecution.executions.totalCount}</td>
+            <td>{testRun.executions.totalCount}</td>
         </tr>
     );
 };
