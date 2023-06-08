@@ -8,7 +8,8 @@ import { styled } from '@mui/material';
 import { ActionRecordFragment$key } from './__generated__/ActionRecordFragment.graphql';
 import ActionRecordFragment from './ActionRecordFragment';
 import { useFragment } from 'react-relay';
-
+import StepFailIcon from '../StepFailIcon/StepFailIcon';
+import StepSuccessIcon from '../StepSuccessIcon';
 interface Props {
     action: ActionRecordFragment$key;
     isActionSelected: boolean;
@@ -28,7 +29,7 @@ const StyledAction = styled('div')<StyledActionProps>(
         let borderColor = theme.palette.base[300];
         let backgroundColor = theme.palette.base[400];
         if (isSelected) {
-            borderColor = theme.palette.primary[400];
+            borderColor = theme.palette.primary[300];
             backgroundColor = theme.palette.primary[500];
         }
         return {
@@ -80,9 +81,13 @@ const ActionRecord: React.FC<Props> = ({
                 }
             )}
         >
+            <span className={styles.actionStatus}>
+                {hasFailed ? <StepFailIcon /> : <StepSuccessIcon />}
+            </span>
             <StepPrefix
                 type={hasFailed ? EventType.CYPRESS_ERROR : EventType.STEP}
                 isAction={true}
+                isSelected={isActionSelected}
                 hasFailed={hasFailed}
                 className={styles.expandedActionName}
             >

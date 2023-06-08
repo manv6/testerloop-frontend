@@ -9,6 +9,8 @@ import getMostRecentIdx from 'src/utils/getMostRecentIdx';
 import ActionRecord from '../ActionRecord';
 import styles from './StepRecord.module.scss';
 import StepRecordFragment from './StepRecordFragment';
+import StepFailIcon from '../StepFailIcon/StepFailIcon';
+import StepSuccessIcon from '../StepSuccessIcon';
 import { StepRecordFragment$key } from './__generated__/StepRecordFragment.graphql';
 
 interface Props {
@@ -89,6 +91,10 @@ const StepRecord: React.FC<Props> = ({
                     [styles.hovered]: isStepHovered,
                 })}
             >
+                <td className={styles.stepStatus}>
+                    {hasFailed ? <StepFailIcon /> : <StepSuccessIcon />}
+                </td>
+
                 <td className={styles.stepName}>
                     <StepPrefix
                         type={

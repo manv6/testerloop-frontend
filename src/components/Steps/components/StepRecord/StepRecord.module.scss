@@ -14,7 +14,7 @@
     }
 
     .stepPrefix {
-        margin-left: 24px;
+        margin-left: 8px;
         margin-right: 8px;
     }
 
@@ -23,5 +23,9 @@
         height: 7px !important;
         margin: 0 8px;
         border: none;
+    }
+
+    .stepStatus {
+        margin-left: 24px;
     }
 }

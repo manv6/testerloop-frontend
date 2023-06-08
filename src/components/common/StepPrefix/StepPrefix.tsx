@@ -6,17 +6,18 @@ interface StyledPrefixProps {
     type: EventType;
     hasFailed?: boolean;
     isAction?: boolean;
+    isSelected?: boolean;
 }
 
 const StyledPrefix = styled('span')<StyledPrefixProps>(
-    ({ theme, type, hasFailed, isAction }) => {
-        let color = theme.palette.base[200];
-        if ([EventType.STEP, EventType.CYPRESS_ERROR].includes(type)) {
-            if (hasFailed) {
-                color = theme.palette.status.error[400];
-            } else if (isAction === false) {
-                color = theme.palette.status.success[400];
-            }
+    ({ theme, isAction, isSelected }) => {
+        let color;
+        if (isAction) {
+            color = isSelected
+                ? theme.palette.base[100]
+                : theme.palette.base[200];
+        } else {
+            color = theme.palette.base[100];
         }
         return {
             color,
@@ -35,9 +36,11 @@ const StepPrefix: React.FC<Props> = ({
     children,
     className,
     isAction = false,
+    isSelected = false,
 }) => (
     <StyledPrefix
         isAction={isAction}
+        isSelected={isSelected}
         type={type}
         hasFailed={hasFailed}
         className={className}
