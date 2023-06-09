@@ -84,6 +84,18 @@ const ftch: FetchFunction = (params, variables) => {
                     const error = new GraphQLError(errorPart.errors[0]);
                     sink.error(error);
                 } else {
+                    // This is to work-around a relay bug: https://github.com/facebook/relay/issues/3904
+                    if (
+                        formatted.length === 1 &&
+                        (!('hasNext' in formatted[0]) || !formatted[0].hasNext)
+                    )
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        (formatted[0] as any).extensions = {
+                            // eslint-disable-next-line camelcase
+                            is_final: true,
+                        };
+                    // End relay bug workaround
+
                     sink.next(formatted);
                 }
             },
