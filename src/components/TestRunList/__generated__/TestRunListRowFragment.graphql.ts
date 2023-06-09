@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c313ec6d208cd41f926b1f43df057188>>
+ * @generated SignedSource<<7cb42e100ba2ed4f2a027b4cdf57bd64>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,6 +15,7 @@ export type TestRunListRowFragment$data = {
     readonly totalCount: number;
   };
   readonly id: string;
+  readonly " $fragmentSpreads": FragmentRefs<"TestRunTitleFragment">;
   readonly " $fragmentType": "TestRunListRowFragment";
 };
 export type TestRunListRowFragment$key = {
@@ -52,12 +53,17 @@ const node: ReaderFragment = {
         }
       ],
       "storageKey": null
+    },
+    {
+      "args": null,
+      "kind": "FragmentSpread",
+      "name": "TestRunTitleFragment"
     }
   ],
   "type": "TestRun",
   "abstractKey": null
 };
 
-(node as any).hash = "329e61b74c69038f5f1fb67610a200af";
+(node as any).hash = "44f7e75ef37b841a86f711702f91c096";
 
 export default node;

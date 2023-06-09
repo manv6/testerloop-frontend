@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d924789b5241d2331e688d60dc70ed86>>
+ * @generated SignedSource<<56df4e310f1a597030f5df6e610251da>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -19,6 +19,7 @@ export type TestRunPageQuery$data = {
       readonly " $fragmentSpreads": FragmentRefs<"TestExecutionListFragment">;
     };
     readonly id: string;
+    readonly " $fragmentSpreads": FragmentRefs<"TestRunTitleFragment">;
   } | null;
 };
 export type TestRunPageQuery = {
@@ -79,6 +80,11 @@ return {
               }
             ],
             "storageKey": null
+          },
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "TestRunTitleFragment"
           }
         ],
         "storageKey": null
@@ -192,16 +198,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "e4c3d0276020c72bb8b94db02e3b1583",
+    "cacheID": "6056c40b9f8d073927d2a4f91f6f2020",
     "id": null,
     "metadata": {},
     "name": "TestRunPageQuery",
     "operationKind": "query",
-    "text": "query TestRunPageQuery(\n  $id: ID!\n) {\n  testRun(id: $id) {\n    id\n    executions {\n      ...TestExecutionListFragment\n    }\n  }\n}\n\nfragment TestExecutionListFragment on TestExecutionConnection {\n  edges {\n    node {\n      id\n      ...TestExecutionListRowFragment\n    }\n  }\n}\n\nfragment TestExecutionListRowFragment on TestExecution {\n  id\n  at\n  title\n  until\n  failedCommands: events(filter: {type: COMMAND, commandFilter: {status: FAILED}}) {\n    totalCount\n  }\n}\n"
+    "text": "query TestRunPageQuery(\n  $id: ID!\n) {\n  testRun(id: $id) {\n    id\n    executions {\n      ...TestExecutionListFragment\n    }\n    ...TestRunTitleFragment\n  }\n}\n\nfragment TestExecutionListFragment on TestExecutionConnection {\n  edges {\n    node {\n      id\n      ...TestExecutionListRowFragment\n    }\n  }\n}\n\nfragment TestExecutionListRowFragment on TestExecution {\n  id\n  at\n  title\n  until\n  failedCommands: events(filter: {type: COMMAND, commandFilter: {status: FAILED}}) {\n    totalCount\n  }\n}\n\nfragment TestRunTitleFragment on TestRun {\n  id\n}\n"
   }
 };
 })();
 
-(node as any).hash = "f8989df6cf990c8a8fac883b1caf533d";
+(node as any).hash = "fd8a83c4fe101d9821a50450a63f80c2";
 
 export default node;

@@ -8,6 +8,7 @@ export const testRunPageQuery = graphql`
             executions {
                 ...TestExecutionListFragment
             }
+            ...TestRunTitleFragment
         }
     }
 `;

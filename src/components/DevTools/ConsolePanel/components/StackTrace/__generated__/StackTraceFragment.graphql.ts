@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b3a58310ce326ecfd4756662cbda1fa1>>
+ * @generated SignedSource<<8d18cb1e99de685cffaa10eb8c392922>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -17,7 +17,6 @@ export type StackTraceFragment$data = {
     readonly lineNumber: number;
     readonly url: any;
   }>;
-  readonly id: string;
   readonly " $fragmentType": "StackTraceFragment";
 };
 export type StackTraceFragment$key = {
@@ -25,21 +24,12 @@ export type StackTraceFragment$key = {
   readonly " $fragmentSpreads": FragmentRefs<"StackTraceFragment">;
 };
 
-const node: ReaderFragment = (function(){
-var v0 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "id",
-  "storageKey": null
-};
-return {
+const node: ReaderFragment = {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
   "name": "StackTraceFragment",
   "selections": [
-    (v0/*: any*/),
     {
       "alias": null,
       "args": null,
@@ -48,7 +38,13 @@ return {
       "name": "callFrames",
       "plural": true,
       "selections": [
-        (v0/*: any*/),
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "id",
+          "storageKey": null
+        },
         {
           "alias": null,
           "args": null,
@@ -77,8 +73,7 @@ return {
   "type": "StackTrace",
   "abstractKey": null
 };
-})();
 
-(node as any).hash = "cc0f86f658dfc9ec0618ea58147470df";
+(node as any).hash = "694f30e2c2c63e33344200c86c44f2ad";
 
 export default node;

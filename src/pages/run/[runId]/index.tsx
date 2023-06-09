@@ -3,6 +3,7 @@ import { PreloadedQuery, usePreloadedQuery } from 'react-relay';
 import { useLoaderData } from 'react-router-dom';
 import { TestRunPageQuery, testRunPageQuery } from './TestRunPageQuery';
 import { TestExecutionList } from 'src/components/TestExecutionList';
+import TestRunTitle from 'src/components/TestRun/TestRunTitle';
 
 export default function TestExecutionPage() {
     // NOTE: Type is only guaranteed outside of the type system by configuration in the router setup.
@@ -15,7 +16,9 @@ export default function TestExecutionPage() {
 
     return (
         <div>
-            <h2>Test Run {testRun.id}</h2>
+            <h2>
+                Test Run <TestRunTitle testRunKey={testRun} />
+            </h2>
             <TestExecutionList fragmentKey={testRun.executions} />
         </div>
     );

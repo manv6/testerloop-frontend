@@ -3,6 +3,7 @@ import { useFragment } from 'react-relay';
 import graphql from 'babel-plugin-relay/macro';
 import { TestRunListRowFragment$key } from './__generated__/TestRunListRowFragment.graphql';
 import { Link } from 'react-router-dom';
+import TestRunTitle from '../TestRun/TestRunTitle';
 
 type Props = {
     fragmentKey: TestRunListRowFragment$key;
@@ -22,6 +23,7 @@ export const TestRunListRow: React.FC<Props> = ({ fragmentKey }) => {
                 executions {
                     totalCount
                 }
+                ...TestRunTitleFragment
             }
         `,
         fragmentKey
@@ -31,7 +33,7 @@ export const TestRunListRow: React.FC<Props> = ({ fragmentKey }) => {
         <tr>
             <td>
                 <Link to={testRunIdToUrl(testRun.id)}>
-                    {window.atob(testRun.id).split('/')[1]}
+                    <TestRunTitle testRunKey={testRun} />
                 </Link>
             </td>
             <td>{testRun.executions.totalCount}</td>

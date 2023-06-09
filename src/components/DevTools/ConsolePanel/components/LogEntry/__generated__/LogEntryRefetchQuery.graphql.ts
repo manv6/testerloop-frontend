@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<645c35323c539a5308ce1eae483f721a>>
+ * @generated SignedSource<<7d336a6afc779b2ca4fab253694c2522>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -142,7 +142,6 @@ return {
                 "name": "stackTrace",
                 "plural": false,
                 "selections": [
-                  (v3/*: any*/),
                   {
                     "condition": "open",
                     "kind": "Condition",
@@ -182,7 +181,8 @@ return {
                         "storageKey": null
                       }
                     ]
-                  }
+                  },
+                  (v3/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -196,12 +196,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "ab19a1eea502b804dde01faa6ade5d31",
+    "cacheID": "f980a11f0ffd57395747f054c749b331",
     "id": null,
     "metadata": {},
     "name": "LogEntryRefetchQuery",
     "operationKind": "query",
-    "text": "query LogEntryRefetchQuery(\n  $open: Boolean = false\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...LogEntryFragment_3Qbc3L\n    id\n  }\n}\n\nfragment LogEntryFragment_3Qbc3L on ConsoleLogEvent {\n  id\n  at\n  message\n  logLevel\n  stackTrace {\n    ...StackTraceFragment @include(if: $open)\n    id\n  }\n}\n\nfragment StackTraceFragment on StackTrace {\n  id\n  callFrames {\n    id\n    functionName\n    url\n    lineNumber\n  }\n}\n"
+    "text": "query LogEntryRefetchQuery(\n  $open: Boolean = false\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...LogEntryFragment_3Qbc3L\n    id\n  }\n}\n\nfragment LogEntryFragment_3Qbc3L on ConsoleLogEvent {\n  id\n  at\n  message\n  logLevel\n  stackTrace {\n    ...StackTraceFragment @include(if: $open)\n    id\n  }\n}\n\nfragment StackTraceFragment on StackTrace {\n  callFrames {\n    id\n    functionName\n    url\n    lineNumber\n  }\n}\n"
   }
 };
 })();

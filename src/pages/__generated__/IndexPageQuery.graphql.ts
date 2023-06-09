@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c24012be1fedd7c39ac367ca122aef83>>
+ * @generated SignedSource<<1d1141356271c8156b31e19a67576008>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -115,12 +115,12 @@ const node: ConcreteRequest = {
     ]
   },
   "params": {
-    "cacheID": "f42748c930d3aa86f193e706615810ae",
+    "cacheID": "558ccd4ecbc736af5486c9ebee2f8f7d",
     "id": null,
     "metadata": {},
     "name": "IndexPageQuery",
     "operationKind": "query",
-    "text": "query IndexPageQuery {\n  testRuns {\n    ...TestRunListFragment\n  }\n}\n\nfragment TestRunListFragment on TestRunConnection {\n  edges {\n    node {\n      id\n      ...TestRunListRowFragment\n    }\n  }\n}\n\nfragment TestRunListRowFragment on TestRun {\n  id\n  executions {\n    totalCount\n  }\n}\n"
+    "text": "query IndexPageQuery {\n  testRuns {\n    ...TestRunListFragment\n  }\n}\n\nfragment TestRunListFragment on TestRunConnection {\n  edges {\n    node {\n      id\n      ...TestRunListRowFragment\n    }\n  }\n}\n\nfragment TestRunListRowFragment on TestRun {\n  id\n  executions {\n    totalCount\n  }\n  ...TestRunTitleFragment\n}\n\nfragment TestRunTitleFragment on TestRun {\n  id\n}\n"
   }
 };
 
