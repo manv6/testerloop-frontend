@@ -1,5 +1,6 @@
 /**
- * @generated SignedSource<<7d336a6afc779b2ca4fab253694c2522>>
+ * @generated SignedSource<<95ba0ea8bc8ce025e7bde533e280d040>>
+ * @relayHash f980a11f0ffd57395747f054c749b331
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -7,6 +8,8 @@
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
+
+// @relayRequestID 726de9e5743d97381fb7bad092e924ad2c5cddc4a6d6242a9cd960b55c50ff28
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
@@ -196,12 +199,11 @@ return {
     ]
   },
   "params": {
-    "cacheID": "f980a11f0ffd57395747f054c749b331",
-    "id": null,
+    "id": "726de9e5743d97381fb7bad092e924ad2c5cddc4a6d6242a9cd960b55c50ff28",
     "metadata": {},
     "name": "LogEntryRefetchQuery",
     "operationKind": "query",
-    "text": "query LogEntryRefetchQuery(\n  $open: Boolean = false\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...LogEntryFragment_3Qbc3L\n    id\n  }\n}\n\nfragment LogEntryFragment_3Qbc3L on ConsoleLogEvent {\n  id\n  at\n  message\n  logLevel\n  stackTrace {\n    ...StackTraceFragment @include(if: $open)\n    id\n  }\n}\n\nfragment StackTraceFragment on StackTrace {\n  callFrames {\n    id\n    functionName\n    url\n    lineNumber\n  }\n}\n"
+    "text": null
   }
 };
 })();

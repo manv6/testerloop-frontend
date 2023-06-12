@@ -40,7 +40,22 @@ export class GraphQLError extends Error implements ExtendedPayloadError {
     }
 }
 
-const ftch: FetchFunction = (params, variables) => {
+interface APQRequest {
+    variables: Variables;
+    extensions: {
+        persistedQuery: {
+            sha256Hash: string;
+            version: 1;
+        };
+    };
+}
+interface APQNotFoundRequest extends APQRequest {
+    query: string;
+}
+
+type RequestBody = APQRequest | APQNotFoundRequest;
+
+const runRequest = (body: RequestBody) => {
     return Observable.create((sink) => {
         fetchMultipart('/api', {
             method: 'POST',
@@ -48,10 +63,7 @@ const ftch: FetchFunction = (params, variables) => {
                 Accept: 'multipart/mixed; deferSpec=20220824, application/json',
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                query: params.text,
-                variables,
-            }),
+            body: JSON.stringify(body),
             onNext: (res) => {
                 const parts = res as (
                     | {
@@ -105,6 +117,62 @@ const ftch: FetchFunction = (params, variables) => {
             onComplete: () => sink.complete(),
         });
     });
+};
+
+let pqLookup: {
+    [index: string]: string;
+} | null = null;
+
+const getPersistedQueries = async () => {
+    if (!pqLookup)
+        pqLookup = (await import('./__generated__/persistedQueries.json'))
+            .default;
+    return pqLookup;
+};
+
+const executePersistedQuery = (
+    queryId: string,
+    variables: Variables,
+    sendQuery: boolean
+) => {
+    let queryObservable: Observable<string | undefined> =
+        Observable.from(undefined);
+    if (sendQuery)
+        queryObservable = Observable.from(getPersistedQueries()).map(
+            (queries) => queries[queryId]
+        );
+
+    let resultObservable = queryObservable.mergeMap((query) =>
+        runRequest({
+            query,
+            variables,
+            extensions: {
+                persistedQuery: {
+                    sha256Hash: queryId,
+                    version: 1,
+                },
+            },
+        })
+    );
+
+    if (!sendQuery)
+        resultObservable = resultObservable.catch((err) => {
+            if (err.message === 'PersistedQueryNotFound')
+                return executePersistedQuery(queryId, variables, true);
+            return Observable.create((sink) => sink.error(err));
+        });
+
+    return resultObservable;
+};
+
+const ftch: FetchFunction = (params, variables) => {
+    if (!params.id) throw new Error('Received non-persisted Query');
+
+    return executePersistedQuery(
+        params.id,
+        variables,
+        process.env.NODE_ENV === 'development'
+    );
 };
 
 export function createEnvironment() {

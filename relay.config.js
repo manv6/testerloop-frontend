@@ -3,5 +3,8 @@ module.exports = {
     language: 'typescript',
     schema: './src/gql/schema.gql',
     exclude: ['**/node_modules/**', 'src/gql/**/*'],
-    // artifactDirectory: './src/gql/definitions'
+    persistConfig: {
+        file: './src/gql/__generated__/persistedQueries.json',
+        algorithm: 'SHA256',
+    }
 };

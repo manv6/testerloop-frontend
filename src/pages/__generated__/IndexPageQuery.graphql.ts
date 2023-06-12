@@ -1,5 +1,6 @@
 /**
- * @generated SignedSource<<1d1141356271c8156b31e19a67576008>>
+ * @generated SignedSource<<2f76e8beacee5fc6e12abd4d23dd9459>>
+ * @relayHash 558ccd4ecbc736af5486c9ebee2f8f7d
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -7,6 +8,8 @@
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
+
+// @relayRequestID 3d152d7d94b18031691e9da0bd56e8f22a14fb493221aa3d82d38898bc0b00ca
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
@@ -115,12 +118,11 @@ const node: ConcreteRequest = {
     ]
   },
   "params": {
-    "cacheID": "558ccd4ecbc736af5486c9ebee2f8f7d",
-    "id": null,
+    "id": "3d152d7d94b18031691e9da0bd56e8f22a14fb493221aa3d82d38898bc0b00ca",
     "metadata": {},
     "name": "IndexPageQuery",
     "operationKind": "query",
-    "text": "query IndexPageQuery {\n  testRuns {\n    ...TestRunListFragment\n  }\n}\n\nfragment TestRunListFragment on TestRunConnection {\n  edges {\n    node {\n      id\n      ...TestRunListRowFragment\n    }\n  }\n}\n\nfragment TestRunListRowFragment on TestRun {\n  id\n  executions {\n    totalCount\n  }\n  ...TestRunTitleFragment\n}\n\nfragment TestRunTitleFragment on TestRun {\n  id\n}\n"
+    "text": null
   }
 };
 

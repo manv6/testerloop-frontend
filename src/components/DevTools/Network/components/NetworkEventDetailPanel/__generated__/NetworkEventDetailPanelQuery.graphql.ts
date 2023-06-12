@@ -1,5 +1,6 @@
 /**
- * @generated SignedSource<<29289aa350c3d008bb8e02b6901a58e9>>
+ * @generated SignedSource<<35e0df5b4747ce8e7e3aae13bf51480c>>
+ * @relayHash dc237b051a16fe520e99023449247b24
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -7,6 +8,8 @@
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
+
+// @relayRequestID 572dbdc6bddc617d3e5aa4315be2d417d004c2a1d22c461559f494dd34f79387
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
@@ -316,12 +319,11 @@ return {
     ]
   },
   "params": {
-    "cacheID": "dc237b051a16fe520e99023449247b24",
-    "id": null,
+    "id": "572dbdc6bddc617d3e5aa4315be2d417d004c2a1d22c461559f494dd34f79387",
     "metadata": {},
     "name": "NetworkEventDetailPanelQuery",
     "operationKind": "query",
-    "text": "query NetworkEventDetailPanelQuery(\n  $httpNetworkEventId: ID!\n) {\n  httpNetworkEvent(id: $httpNetworkEventId) {\n    __typename\n    id\n    resourceType\n    at\n    until\n    initiator {\n      origin\n      lineNumber\n    }\n    ...RequestTabFragment\n    ...ResponseTabFragment\n  }\n}\n\nfragment QueryParamsFragment on HttpNetworkRequest {\n  queryString {\n    value\n    key\n  }\n}\n\nfragment RequestDataFragment on HttpNetworkRequest {\n  body {\n    data\n    mimeType\n  }\n}\n\nfragment RequestHeadersFragment on HttpNetworkRequest {\n  headers {\n    values(order: {by: ALPHABETICAL, direction: ASCENDING}) {\n      value\n      key\n    }\n  }\n}\n\nfragment RequestTabFragment on HttpNetworkEvent {\n  request {\n    ...RequestHeadersFragment\n    ...RequestDataFragment\n    ...QueryParamsFragment\n    ...RequestToUrlFragment\n  }\n}\n\nfragment RequestToUrlFragment on HttpNetworkRequest {\n  url {\n    url\n  }\n}\n\nfragment ResponseDataFragment on HttpNetworkResponse {\n  body {\n    mimeType\n    data\n    size\n  }\n}\n\nfragment ResponseHeadersFragment on HttpNetworkResponse {\n  headers {\n    values(order: {by: ALPHABETICAL, direction: ASCENDING}) {\n      value\n      key\n    }\n  }\n}\n\nfragment ResponseTabFragment on HttpNetworkEvent {\n  response {\n    ...ResponseDataFragment\n    ...ResponseHeadersFragment\n  }\n}\n"
+    "text": null
   }
 };
 })();

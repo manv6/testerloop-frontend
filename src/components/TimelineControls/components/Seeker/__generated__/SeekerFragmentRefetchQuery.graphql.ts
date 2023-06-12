@@ -1,5 +1,6 @@
 /**
- * @generated SignedSource<<1d288ffa030c015d338b9fd252c9efd5>>
+ * @generated SignedSource<<56e79b16466f27d9da42ac2cff69475a>>
+ * @relayHash 673546ab90aab8fee4c05bb8f577dc65
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -7,6 +8,8 @@
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
+
+// @relayRequestID 57ebafe99b7ffe7c9c51bece5dd5ca641e9f5be2423efa5f599cd4690ba14c5a
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
@@ -565,12 +568,11 @@ return {
     ]
   },
   "params": {
-    "cacheID": "673546ab90aab8fee4c05bb8f577dc65",
-    "id": null,
+    "id": "57ebafe99b7ffe7c9c51bece5dd5ca641e9f5be2423efa5f599cd4690ba14c5a",
     "metadata": {},
     "name": "SeekerFragmentRefetchQuery",
     "operationKind": "query",
-    "text": "query SeekerFragmentRefetchQuery(\n  $cypressError: Boolean = true\n  $networkError: Boolean = true\n  $networkSuccess: Boolean = false\n  $step: Boolean = true\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...SeekerFragment_4vmzTL\n    id\n  }\n}\n\nfragment SeekerFragment_4vmzTL on TestExecution {\n  screenshots: events(filter: {type: SCREENSHOT}) {\n    edges {\n      node {\n        __typename\n        ... on TestExecutionScreenshot {\n          at\n          url {\n            url\n          }\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n  seekerCypressErrors: events(filter: {type: COMMAND, commandFilter: {status: FAILED}}) @include(if: $cypressError) {\n    edges {\n      node {\n        __typename\n        ... on CommandEvent {\n          __typename\n          id\n          at\n          status\n          name\n          description\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n  seekerNetworkErrors: events(filter: {type: NETWORK, networkFilter: {status: {gte: 400}}}) @include(if: $networkError) {\n    edges {\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          __typename\n          id\n          at\n          until\n          request {\n            method\n            url {\n              url\n            }\n          }\n          response {\n            status\n          }\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n    }\n  }\n  seekerNetworkSuccesses: events(filter: {type: NETWORK, networkFilter: {status: {gte: 200, lte: 299}}}) @include(if: $networkSuccess) {\n    edges {\n      node {\n        __typename\n        ... on HttpNetworkEvent {\n          __typename\n          id\n          at\n          until\n          request {\n            method\n            url {\n              url\n            }\n          }\n          response {\n            status\n          }\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n    }\n  }\n  seekerSteps: events(filter: {type: STEP}) @include(if: $step) {\n    edges {\n      node {\n        __typename\n        ... on StepEvent {\n          __typename\n          id\n          at\n          status\n          definition {\n            description\n            keyword\n          }\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n        ... on HttpNetworkEvent {\n          id\n        }\n      }\n    }\n  }\n  id\n}\n"
+    "text": null
   }
 };
 })();

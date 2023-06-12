@@ -1,5 +1,6 @@
 /**
- * @generated SignedSource<<746565bff79c3ab5a9f6e02af84c747f>>
+ * @generated SignedSource<<7fcb39ec22e6ce9b1da59430d62887ff>>
+ * @relayHash 4c460312311bd4faf2d96dd5371abecd
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -7,6 +8,8 @@
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
+
+// @relayRequestID d93a7d9d9ef2efaaefbab8b823a9dcce4a20984627b9749f4851db6c1348ee56
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
@@ -227,12 +230,11 @@ return {
     ]
   },
   "params": {
-    "cacheID": "4c460312311bd4faf2d96dd5371abecd",
-    "id": null,
+    "id": "d93a7d9d9ef2efaaefbab8b823a9dcce4a20984627b9749f4851db6c1348ee56",
     "metadata": {},
     "name": "LogFiltersFragmentRefetchQuery",
     "operationKind": "query",
-    "text": "query LogFiltersFragmentRefetchQuery(\n  $logSearch: String = null\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...LogFiltersFragment_1imbBq\n    id\n  }\n}\n\nfragment LogFiltersFragment_1imbBq on TestExecution {\n  warnings: events(filter: {type: CONSOLE, consoleFilter: {logSearch: $logSearch, logLevel: WARN}}) {\n    totalCount\n  }\n  errors: events(filter: {type: CONSOLE, consoleFilter: {logSearch: $logSearch, logLevel: ERROR}}) {\n    totalCount\n  }\n  logs: events(filter: {type: CONSOLE, consoleFilter: {logSearch: $logSearch, logLevel: LOG}}) {\n    totalCount\n  }\n  id\n}\n"
+    "text": null
   }
 };
 })();
