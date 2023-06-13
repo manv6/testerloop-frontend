@@ -1,7 +1,7 @@
 .github/
 .storybook/
 script/
-src/
+src/**
 .env
 .npmrc
 node_modules/
