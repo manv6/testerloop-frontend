@@ -10,15 +10,10 @@
 
 .expandableParent {
     flex-grow: 1;
-    gap: 10px;
+    gap: 24px;
     grid-template-rows: 1.5fr 1fr;
     grid-template-columns: 2fr 2fr 2fr 2fr;
     grid-template-areas:
         'steps dom dom dom'
         'console console network network';
-}
-
-@font-face {
-    font-family: 'PPMori';
-    src: url('../public/PPMori-ExtraBold.woff2') format('woff2');
 }

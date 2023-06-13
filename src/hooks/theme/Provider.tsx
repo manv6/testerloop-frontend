@@ -20,19 +20,16 @@ const DARK = createTheme({
             fontSize: '1.728rem',
             fontWeight: 800,
             lineHeight: LINE_HEIGHT,
-            fontFamily: 'PPMori, sans-serif',
         },
         h2: {
             fontSize: '1.44rem',
             fontWeight: 800,
             lineHeight: LINE_HEIGHT,
-            fontFamily: 'PPMori, sans-serif',
         },
         h3: {
             fontSize: '1.2rem',
             fontWeight: 500,
             lineHeight: LINE_HEIGHT,
-            fontFamily: 'PPMori, sans-serif',
         },
         body1: {
             fontSize: '16px',
