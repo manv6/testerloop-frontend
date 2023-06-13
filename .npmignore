@@ -5,3 +5,4 @@ src/
 .env
 .npmrc
 node_modules/
+!src/gql/__generated__/persistedQueries.json
