@@ -32,6 +32,7 @@ const StyledHover = styled('div')(({ theme }) => ({
 
 interface StyledMarkerProps {
     size: number;
+    type: EventType;
 }
 
 interface Event {
@@ -51,10 +52,10 @@ type Events = {
     frameworkError: Event[];
 };
 
-const StyledMarker = styled('div')<StyledMarkerProps>(({ size }) => ({
+const StyledMarker = styled('div')<StyledMarkerProps>(({ size, type }) => ({
     svg: {
-        height: size,
-        width: size,
+        height: type === EventType.NETWORK_SUCCESS ? '10px' : size,
+        width: type === EventType.NETWORK_SUCCESS ? '10px' : size,
     },
 }));
 
@@ -361,10 +362,7 @@ const Seeker: React.FC<Props> = ({ getMarker, filters, fragmentKey }) => {
                     }}
                 ></div>
                 {markers.map((marker: Event, i: number) => {
-                    const svgSize =
-                        marker.type === EventType.CYPRESS_ERROR
-                            ? Math.round(1.8 * TIMELINE_SVG_PX_WIDTH)
-                            : TIMELINE_SVG_PX_WIDTH;
+                    const svgSize = TIMELINE_SVG_PX_WIDTH;
                     return (
                         <Tooltip
                             key={i}
@@ -397,6 +395,7 @@ const Seeker: React.FC<Props> = ({ getMarker, filters, fragmentKey }) => {
                         >
                             <StyledMarker
                                 size={svgSize}
+                                type={marker.type}
                                 key={marker.id}
                                 className={styles.marker}
                                 style={{

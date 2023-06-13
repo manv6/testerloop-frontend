@@ -1,7 +1,8 @@
 import { styled } from '@mui/material';
 import React, { useState } from 'react';
-import { ExpandButton, Panel } from 'src/components/common';
+import { Panel } from 'src/components/common';
 import splitCamelCase from 'src/utils/splitCamelCase';
+import { ChevronIcon } from 'src/components/common';
 import { ErrorIcon, GoToCodeButton } from './components';
 import cx from 'classnames';
 
@@ -11,7 +12,7 @@ import FrameworkErrorFragment from './FrameworkErrorFragment';
 import { useFragment } from 'react-relay';
 
 const StyledErrorName = styled('div')(({ theme }) => ({
-    color: theme.palette.status.error[400],
+    color: theme.palette.status.error[300],
 }));
 
 type Props = {
@@ -51,7 +52,14 @@ const FrameworkError: React.FC<Props> = ({ fragmentKey }) => {
                         <StyledErrorName className={styles.errorName}>
                             {splitCamelCase(error.type)}
                         </StyledErrorName>
-                        <div>{error.message}</div>
+                        <div onClick={() => setIsExpanded(!isExpanded)}>
+                            {error.message}
+                            <span className={styles.chevron}>
+                                <ChevronIcon
+                                    direction={isExpanded ? 'up' : 'down'}
+                                />
+                            </span>
+                        </div>
                         <br />
                         {isExpanded && (
                             <div className={styles.stackMessage}>
@@ -62,10 +70,6 @@ const FrameworkError: React.FC<Props> = ({ fragmentKey }) => {
                 </div>
                 <GoToCodeButton url={url} tooltipText={tooltipText} />
             </div>
-            <ExpandButton
-                onClick={() => setIsExpanded(!isExpanded)}
-                isExpanded={isExpanded}
-            />
         </Panel>
     );
 };

@@ -2,9 +2,9 @@ import React from 'react';
 
 const StepMarker: React.FC = () => (
     <svg
-        width="16"
-        height="16"
-        viewBox="-4 0 12 16"
+        width="7"
+        height="20"
+        viewBox="0 0 7 20"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
     >
@@ -12,10 +12,10 @@ const StepMarker: React.FC = () => (
             x="1"
             y="1"
             width="5"
-            height="14"
+            height="18"
             rx="2"
-            fill="#2871FE"
-            stroke="#1B2028"
+            fill="#9C78FF"
+            stroke="#121418"
             strokeWidth="2"
         />
     </svg>

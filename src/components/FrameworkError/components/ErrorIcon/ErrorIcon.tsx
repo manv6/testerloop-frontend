@@ -4,7 +4,7 @@ import styles from './ErrorIcon.module.scss';
 
 const StyledErrorCircle = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.status.error[500],
-    border: `1px solid ${theme.palette.status.error[400]}`,
+    border: `1px solid ${theme.palette.status.error[300]}`,
 }));
 
 const ErrorIcon: React.FC = () => (

@@ -14,15 +14,15 @@ const StyledTag = styled('div')<StyledTagProps>(({ theme, tagType }) => {
     switch (tagType) {
         case 'error':
             backgroundColor = theme.palette.status.error[500];
-            borderColor = theme.palette.status.error[400];
+            borderColor = theme.palette.status.error[300];
             break;
         case 'success':
             backgroundColor = theme.palette.status.success[500];
-            borderColor = theme.palette.status.success[400];
+            borderColor = theme.palette.status.success[300];
             break;
         default:
             backgroundColor = theme.palette.base[500];
-            borderColor = theme.palette.base[400];
+            borderColor = theme.palette.base[300];
             break;
     }
     return {

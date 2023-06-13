@@ -5,7 +5,7 @@ import { SummaryFragment$key } from './__generated__/SummaryFragment.graphql';
 import graphql from 'babel-plugin-relay/macro';
 import { Panel, Tag, Divider, ExpandButton } from 'src/components/common';
 import cx from 'classnames';
-import { FrameworkErrorIcon, EnvironmentDetails } from './components';
+import { EnvironmentDetails } from './components';
 import splitCamelCase from 'src/utils/splitCamelCase';
 import NetworkErrorCount from './components/NetworkErrorCount';
 import ConsoleErrorCount from './components/ConsoleErrorCount';
@@ -45,6 +45,7 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
     );
 
     const [isExpanded, setIsExpanded] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
 
     const frameworkErrorName =
         summaryData.commandWithError.edges[0]?.node.error?.type;
@@ -53,7 +54,11 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
     const tagText = frameworkErrorName ? 'Failed' : 'Passed';
 
     return (
-        <Panel className={cx(styles.summary, className)}>
+        <Panel
+            className={cx(styles.summary, className)}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+        >
             <div className={styles.row}>
                 <div className={styles.pageTitle}>
                     <Typography variant="h1">Scenario: {title}</Typography>
@@ -67,7 +72,6 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
                         <ul>
                             {frameworkErrorName && (
                                 <li>
-                                    <FrameworkErrorIcon />
                                     <span>
                                         1 {splitCamelCase(frameworkErrorName)}
                                     </span>
@@ -81,10 +85,12 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
                     </div>
                 </div>
             )}
-            <ExpandButton
-                onClick={() => setIsExpanded(!isExpanded)}
-                isExpanded={isExpanded}
-            />
+            {isHovered && (
+                <ExpandButton
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    isExpanded={isExpanded}
+                />
+            )}
         </Panel>
     );
 };

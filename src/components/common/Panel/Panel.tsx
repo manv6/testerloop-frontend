@@ -6,6 +6,8 @@ import styles from './Panel.module.scss';
 const StyledDiv = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.base[400],
     borderColor: theme.palette.base[300],
+    border: `1px solid ${theme.palette.base[300]}`,
+    borderRadius: '5px',
 }));
 
 const SuspensePanel: React.FC<React.PropsWithChildren> = ({ children }) => (

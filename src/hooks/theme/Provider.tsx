@@ -17,29 +17,22 @@ const DARK = createTheme({
     typography: {
         fontFamily: 'Roboto, sans-serif',
         h1: {
-            fontSize: '2.488rem',
+            fontSize: '1.728rem',
             fontWeight: 800,
             lineHeight: LINE_HEIGHT,
+            fontFamily: 'PPMori, sans-serif',
         },
         h2: {
-            fontSize: '2.074rem',
+            fontSize: '1.44rem',
             fontWeight: 800,
             lineHeight: LINE_HEIGHT,
+            fontFamily: 'PPMori, sans-serif',
         },
         h3: {
-            fontSize: '1.728rem',
-            fontWeight: 500,
-            lineHeight: LINE_HEIGHT,
-        },
-        h4: {
-            fontSize: '1.44rem',
-            fontWeight: 500,
-            lineHeight: LINE_HEIGHT,
-        },
-        h5: {
             fontSize: '1.2rem',
             fontWeight: 500,
             lineHeight: LINE_HEIGHT,
+            fontFamily: 'PPMori, sans-serif',
         },
         body1: {
             fontSize: '16px',

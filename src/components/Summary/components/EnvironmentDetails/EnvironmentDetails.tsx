@@ -12,6 +12,10 @@ const StyledLink = styled('a')(({ theme }) => ({
     color: theme.palette.base[100],
 }));
 
+const BranchLink = styled('a')(({ theme }) => ({
+    color: theme.palette.status.success[200],
+}));
+
 type Props = {
     fragmentKey: EnvironmentDetailsFragment$key;
 };
@@ -29,14 +33,14 @@ const EnvironmentDetails: React.FC<Props> = ({ fragmentKey }) => {
             </DetailColumn>
             <DetailColumn title="Branch">
                 {testCodeRevision?.branch ? (
-                    <StyledLink
+                    <BranchLink
                         className={styles.columnContent}
                         target="_blank"
                         rel="noreferrer"
                         href={testCodeRevision.branch.url}
                     >
                         {testCodeRevision.branch.name}
-                    </StyledLink>
+                    </BranchLink>
                 ) : (
                     '-'
                 )}
@@ -55,7 +59,7 @@ const EnvironmentDetails: React.FC<Props> = ({ fragmentKey }) => {
                     '-'
                 )}
             </DetailColumn>
-            <DetailColumn title="Execution time">
+            <DetailColumn title="Date/Time">
                 <div className={styles.columnContent}>
                     {formatDate(data.at)}
                 </div>
