@@ -27,16 +27,11 @@ interface StyledStepHeaderProps {
 }
 
 const StyledStepHeader = styled('tr')<StyledStepHeaderProps>(
-    ({ theme, isSelected, isPreviousToSelected }) => {
-        let backgroundColor = theme.palette.base[400];
-        let borderColor = theme.palette.base[300];
-        if (isSelected) {
-            backgroundColor = theme.palette.base[300];
-            borderColor = `${theme.palette.base[200]}`;
-        }
+    ({ theme, isPreviousToSelected }) => {
+        const borderColor = theme.palette.base[300];
 
         return {
-            backgroundColor,
+            backgroundColor: theme.palette.base[400],
             borderBottom: `1px solid ${borderColor}`,
             ...(isPreviousToSelected && { borderBottom: 'none' }),
             borderTop: `1px solid ${borderColor}`,

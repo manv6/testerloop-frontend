@@ -9,7 +9,6 @@ import StepsFragment from './StepsFragment';
 import { useFragment } from 'react-relay';
 import { StepsFragment$key } from './__generated__/StepsFragment.graphql';
 import getMostRecentIdx from 'src/utils/getMostRecentIdx';
-import { styled } from '@mui/material';
 
 type Props = {
     className?: string;
@@ -21,11 +20,6 @@ export type StepHierarchy = {
     step: Step;
     actions: Step[];
 };
-
-const StyledExpandableChild = styled(Expandable.Child)(({ theme }) => ({
-    border: `1px solid ${theme.palette.base[300]}`,
-    backgroundColor: theme.palette.base[400],
-}));
 
 // eslint-disable-next-line react/display-name
 export const Steps: React.FC<Props> = memo(({ className, fragmentKey }) => {
@@ -45,7 +39,7 @@ export const Steps: React.FC<Props> = memo(({ className, fragmentKey }) => {
         : null;
 
     return (
-        <StyledExpandableChild
+        <Expandable.Child
             className={styles.steps}
             notExpandable={true}
             header={<StepsHeader headerTitle="Scenario" />}
@@ -71,6 +65,6 @@ export const Steps: React.FC<Props> = memo(({ className, fragmentKey }) => {
                     })}
                 </tbody>
             </table>
-        </StyledExpandableChild>
+        </Expandable.Child>
     );
 });
