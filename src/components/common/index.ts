@@ -12,3 +12,4 @@ export { default as Accordion } from './Accordion';
 export { default as Tabs } from './Tabs';
 export { default as Divider } from './Divider';
 export { default as ExpandButton } from './ExpandButton';
+export { default as ButtonGroup } from './ButtonGroup';

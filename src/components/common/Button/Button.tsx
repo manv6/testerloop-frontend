@@ -4,10 +4,11 @@ import { styled } from '@mui/material';
 
 type StyledButtonProps = {
     styletype?: 'default' | 'primary';
+    customHeight?: string;
 };
 
 const StyledButton = styled(MUIButton)<StyledButtonProps>(
-    ({ theme, styletype }) => {
+    ({ theme, styletype, customHeight }) => {
         let backgroundColor;
         let borderColor;
         switch (styletype) {
@@ -20,6 +21,7 @@ const StyledButton = styled(MUIButton)<StyledButtonProps>(
                 borderColor = theme.palette.base[300];
         }
         return {
+            height: customHeight || 'auto',
             border: `1px solid ${borderColor}`,
             color: theme.palette.base[100],
             backgroundColor,
@@ -28,13 +30,19 @@ const StyledButton = styled(MUIButton)<StyledButtonProps>(
 );
 
 type Props = React.ComponentProps<typeof MUIButton> & StyledButtonProps;
+
 const Button: React.FC<Props> = ({
     children,
     styletype = 'default',
+    customHeight,
     ...props
 }) => {
     return (
-        <StyledButton styletype={styletype} {...props}>
+        <StyledButton
+            styletype={styletype}
+            customHeight={customHeight}
+            {...props}
+        >
             {children}
         </StyledButton>
     );

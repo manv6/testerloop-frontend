@@ -148,6 +148,24 @@ const DARK = createTheme({
                 },
             },
         },
+        MuiButtonGroup: {
+            styleOverrides: {
+                root: ({ theme }) => ({
+                    '& .MuiButtonGroup-grouped': {
+                        '&:hover': {
+                            zIndex: 1,
+                            backgroundColor: theme.palette.base[300],
+                            border: `1px solid ${theme.palette.base[200]}`,
+                        },
+                        '&.selected': {
+                            zIndex: 1,
+                            backgroundColor: theme.palette.base[300],
+                            border: `1px solid ${theme.palette.base[200]}`,
+                        },
+                    },
+                }),
+            },
+        },
         MuiButton: {
             styleOverrides: {
                 root: ({ theme }) => ({

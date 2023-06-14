@@ -27,14 +27,12 @@ const DomPreview: React.FC<Props> = ({ fragmentKey }) => {
         (direction: 'in' | 'out') => {
             const newZoom =
                 direction === 'in'
-                    ? DOM_ZOOM_STEP_PERCENTAGE
-                    : -DOM_ZOOM_STEP_PERCENTAGE;
-            const currentZoom = zoom;
-            const newZoomValue = currentZoom + newZoom;
-            if (newZoomValue === 0 || newZoomValue > 1) {
+                    ? zoom + DOM_ZOOM_STEP_PERCENTAGE
+                    : zoom - DOM_ZOOM_STEP_PERCENTAGE;
+            if (newZoom < 0.1 || newZoom > 1) {
                 return;
             }
-            setZoom(newZoomValue);
+            setZoom(newZoom);
         },
         [zoom]
     );

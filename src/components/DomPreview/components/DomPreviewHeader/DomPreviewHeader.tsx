@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'src/components/common';
+import { Button, ButtonGroup } from 'src/components/common';
 import { DOMTab } from '../../DomPreview';
 import styles from './DomPreviewHeader.module.scss';
 import cx from 'classnames';
@@ -21,33 +21,41 @@ const DomPreviewHeader: React.FC<Props> = ({
         <div className={styles.domPreviewHeader}>
             <div>Snapshot</div>
             <div className={styles.controls}>
+                <ButtonGroup>
+                    <Button
+                        customHeight="32px"
+                        className={cx({ selected: tab === DOMTab.BEFORE })}
+                        onClick={() => setTab(DOMTab.BEFORE)}
+                    >
+                        Before
+                    </Button>
+                    <Button
+                        customHeight="32px"
+                        className={cx({ selected: tab === DOMTab.AFTER })}
+                        onClick={() => setTab(DOMTab.AFTER)}
+                    >
+                        After
+                    </Button>
+                </ButtonGroup>
+
                 <div className={styles.zoomValue}>{`${Math.round(
                     zoom * 100
                 )}%`}</div>
-                <Button size="small" onClick={() => handleZoom('in')}>
-                    +
-                </Button>
-                <Button size="small" onClick={() => handleZoom('out')}>
-                    -
-                </Button>
-                <Button
-                    size="small"
-                    className={cx({
-                        selected: tab === DOMTab.BEFORE,
-                    })}
-                    onClick={() => setTab(DOMTab.BEFORE)}
-                >
-                    Before
-                </Button>
-                <Button
-                    size="small"
-                    className={cx({
-                        selected: tab === DOMTab.AFTER,
-                    })}
-                    onClick={() => setTab(DOMTab.AFTER)}
-                >
-                    After
-                </Button>
+
+                <ButtonGroup>
+                    <Button
+                        customHeight="32px"
+                        onClick={() => handleZoom('out')}
+                    >
+                        -
+                    </Button>
+                    <Button
+                        customHeight="32px"
+                        onClick={() => handleZoom('in')}
+                    >
+                        +
+                    </Button>
+                </ButtonGroup>
             </div>
         </div>
     );
