@@ -2,11 +2,12 @@ import React, { useMemo } from 'react';
 import { useFragment } from 'react-relay';
 import graphql from 'babel-plugin-relay/macro';
 import { TestExecutionListRowFragment$key } from './__generated__/TestExecutionListRowFragment.graphql';
-import { Link } from 'react-router-dom';
+import { FetcherWithComponents, Link } from 'react-router-dom';
 import { formatIntervalEvent } from 'src/utils/formatters';
 
 type Props = {
     fragmentKey: TestExecutionListRowFragment$key;
+    preloadFetcher: FetcherWithComponents<unknown>;
 };
 
 const testExecutionIdToUrl = (id: string) => {
@@ -15,7 +16,10 @@ const testExecutionIdToUrl = (id: string) => {
     return `/run/${runId}/test/${testId}`;
 };
 
-export const TestExecutionListRow: React.FC<Props> = ({ fragmentKey }) => {
+export const TestExecutionListRow: React.FC<Props> = ({
+    fragmentKey,
+    preloadFetcher,
+}) => {
     const testExecutionRaw = useFragment(
         graphql`
             fragment TestExecutionListRowFragment on TestExecution {
@@ -38,7 +42,11 @@ export const TestExecutionListRow: React.FC<Props> = ({ fragmentKey }) => {
     );
 
     return (
-        <tr>
+        <tr
+            onMouseEnter={() =>
+                preloadFetcher.load(testExecutionIdToUrl(testExecution.id))
+            }
+        >
             <td>
                 <Link to={testExecutionIdToUrl(testExecution.id)}>
                     {testExecution.title}

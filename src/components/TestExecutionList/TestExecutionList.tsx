@@ -3,6 +3,7 @@ import { useFragment } from 'react-relay';
 import graphql from 'babel-plugin-relay/macro';
 import { TestExecutionListFragment$key } from './__generated__/TestExecutionListFragment.graphql';
 import { TestExecutionListRow } from './TestExecutionListRow';
+import { useFetcher } from 'react-router-dom';
 
 type Props = {
     fragmentKey: TestExecutionListFragment$key;
@@ -22,6 +23,7 @@ export const TestExecutionList: React.FC<Props> = ({ fragmentKey }) => {
         `,
         fragmentKey
     );
+    const preloadFetcher = useFetcher();
 
     return (
         <table>
@@ -35,7 +37,11 @@ export const TestExecutionList: React.FC<Props> = ({ fragmentKey }) => {
             </thead>
             <tbody>
                 {edges.map(({ node }) => (
-                    <TestExecutionListRow key={node.id} fragmentKey={node} />
+                    <TestExecutionListRow
+                        key={node.id}
+                        fragmentKey={node}
+                        preloadFetcher={preloadFetcher}
+                    />
                 ))}
             </tbody>
         </table>

@@ -55,9 +55,14 @@ interface APQNotFoundRequest extends APQRequest {
 
 type RequestBody = APQRequest | APQNotFoundRequest;
 
-const runRequest = (body: RequestBody) => {
+const runRequest = (body: RequestBody, signal?: AbortSignal) => {
+    // NOTE: This is a bit hacky, but the typings for `fetchMultipart` don't include
+    // signal support despite it working, so this works around that by telling TS
+    // that the signal doesn't exist.
+    const signalConfig = { signal } as unknown as Record<string, never>;
     return Observable.create((sink) => {
         fetchMultipart('/api', {
+            ...signalConfig,
             method: 'POST',
             headers: {
                 Accept: 'multipart/mixed; deferSpec=20220824, application/json',
@@ -133,7 +138,8 @@ const getPersistedQueries = async () => {
 const executePersistedQuery = (
     queryId: string,
     variables: Variables,
-    sendQuery: boolean
+    sendQuery: boolean,
+    signal?: AbortSignal
 ) => {
     let queryObservable: Observable<string | undefined> =
         Observable.from(undefined);
@@ -143,35 +149,41 @@ const executePersistedQuery = (
         );
 
     let resultObservable = queryObservable.mergeMap((query) =>
-        runRequest({
-            query,
-            variables,
-            extensions: {
-                persistedQuery: {
-                    sha256Hash: queryId,
-                    version: 1,
+        runRequest(
+            {
+                query,
+                variables,
+                extensions: {
+                    persistedQuery: {
+                        sha256Hash: queryId,
+                        version: 1,
+                    },
                 },
             },
-        })
+            signal
+        )
     );
 
     if (!sendQuery)
         resultObservable = resultObservable.catch((err) => {
             if (err.message === 'PersistedQueryNotFound')
-                return executePersistedQuery(queryId, variables, true);
+                return executePersistedQuery(queryId, variables, true, signal);
             return Observable.create((sink) => sink.error(err));
         });
 
     return resultObservable;
 };
 
-const ftch: FetchFunction = (params, variables) => {
+const ftch: FetchFunction = (params, variables, { metadata }) => {
     if (!params.id) throw new Error('Received non-persisted Query');
+
+    const signal = metadata?.signal as AbortSignal | undefined;
 
     return executePersistedQuery(
         params.id,
         variables,
-        process.env.NODE_ENV === 'development'
+        process.env.NODE_ENV === 'development',
+        signal
     );
 };
 

@@ -16,8 +16,19 @@ const StyledApp = styled('div')(({ theme }) => ({
 const router = createBrowserRouter([
     {
         path: '/',
-        loader: () => {
-            const queryReference = loadQuery(environment, indexPageQuery, {});
+        loader: ({ request: { signal } }) => {
+            const queryReference = loadQuery(
+                environment,
+                indexPageQuery,
+                {},
+                {
+                    networkCacheConfig: {
+                        metadata: {
+                            signal,
+                        },
+                    },
+                }
+            );
 
             return queryReference;
         },
@@ -31,13 +42,24 @@ const router = createBrowserRouter([
     },
     {
         path: '/run/:runId',
-        loader: ({ params }) => {
+        loader: ({ params, request: { signal } }) => {
             const { runId } = params;
             const id = window.btoa(`TestRun/${runId}`);
 
-            const queryReference = loadQuery(environment, testRunPageQuery, {
-                id,
-            });
+            const queryReference = loadQuery(
+                environment,
+                testRunPageQuery,
+                {
+                    id,
+                },
+                {
+                    networkCacheConfig: {
+                        metadata: {
+                            signal,
+                        },
+                    },
+                }
+            );
 
             return queryReference;
         },
@@ -53,7 +75,7 @@ const router = createBrowserRouter([
     },
     {
         path: '/run/:runId/test/:testExecutionId',
-        loader: ({ params }) => {
+        loader: ({ params, request: { signal } }) => {
             const { runId, testExecutionId } = params;
             const id = window.btoa(`TestExecution/${runId}/${testExecutionId}`);
 
@@ -62,6 +84,13 @@ const router = createBrowserRouter([
                 testExecutionPageQuery,
                 {
                     id,
+                },
+                {
+                    networkCacheConfig: {
+                        metadata: {
+                            signal,
+                        },
+                    },
                 }
             );
 
