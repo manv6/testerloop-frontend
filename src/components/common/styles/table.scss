@@ -20,11 +20,13 @@
     border-width: 1px;
     border-left: none;
     border-right: none;
+    border-color: #262a32;
 }
 
 .th {
     @extend %cell;
 
+    color: #9fa8b6;
     text-align: left;
 }
 

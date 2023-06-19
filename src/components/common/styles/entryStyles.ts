@@ -14,7 +14,7 @@ const entryStyles = ({
     let borderColor = theme.palette.base[300];
     if (isSelected) {
         backgroundColor = theme.palette.primary[500];
-        borderColor = `${theme.palette.primary[400]}`;
+        borderColor = `${theme.palette.primary[300]}`;
     }
     if (isHovered) {
         backgroundColor = `${theme.palette.base[300]}7F`;

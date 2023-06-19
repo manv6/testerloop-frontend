@@ -14,11 +14,11 @@ const StyledCircle = styled('div')<StyledCircleProps>(({ theme, progress }) => {
     switch (progress) {
         case ProgressFilterType.IN_PROGRESS:
             backgroundColor = theme.palette.status.caution[500];
-            borderColor = theme.palette.status.caution[400];
+            borderColor = theme.palette.status.caution[300];
             break;
         case ProgressFilterType.COMPLETED:
             backgroundColor = theme.palette.status.success[500];
-            borderColor = theme.palette.status.success[400];
+            borderColor = theme.palette.status.success[300];
             break;
         default:
             backgroundColor = theme.palette.base[300];

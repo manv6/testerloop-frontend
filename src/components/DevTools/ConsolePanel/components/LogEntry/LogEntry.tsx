@@ -39,10 +39,10 @@ const StyledLineMarker = styled('div')<StyledLineMarkertProps>(
         let backgroundColor;
         switch (logType) {
             case LogLevel.ERROR:
-                backgroundColor = theme.palette.status.error[400];
+                backgroundColor = theme.palette.status.error[300];
                 break;
             case LogLevel.WARN:
-                backgroundColor = theme.palette.status.caution[400];
+                backgroundColor = theme.palette.status.caution[300];
                 break;
             default:
                 backgroundColor = theme.palette.base[200];

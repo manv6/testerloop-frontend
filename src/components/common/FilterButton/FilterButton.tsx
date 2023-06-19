@@ -1,18 +1,28 @@
 import React from 'react';
 import { Button } from 'src/components/common';
 import styles from './FilterButton.module.scss';
+import { styled } from '@mui/material';
 
 type Props = {
     onClick: () => void;
+    isActive?: boolean;
 };
 
-const FilterButton: React.FC<Props> = ({ onClick }) => {
+const StyledFilterButton = styled(Button)<Props>(({ theme, isActive }) => ({
+    backgroundColor: isActive
+        ? theme.palette.base[300]
+        : theme.palette.base[400],
+    borderColor: isActive ? theme.palette.base[200] : theme.palette.base[300],
+}));
+
+const FilterButton: React.FC<Props> = ({ onClick, isActive }) => {
     return (
-        <Button
+        <StyledFilterButton
             className={styles.filterButton}
             onClick={onClick}
             size="small"
             variant="text"
+            isActive={isActive}
         >
             <svg
                 width="16"
@@ -34,7 +44,7 @@ const FilterButton: React.FC<Props> = ({ onClick }) => {
                 </defs>
             </svg>
             <span>Filter</span>
-        </Button>
+        </StyledFilterButton>
     );
 };
 

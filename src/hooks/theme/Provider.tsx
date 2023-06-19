@@ -94,24 +94,39 @@ const DARK = createTheme({
         },
         MuiInputBase: {
             styleOverrides: {
-                root: {
+                root: ({ theme }) => ({
+                    height: '32px',
                     '&::after': {
                         display: 'none',
                     },
                     '&::before': {
                         display: 'none',
                     },
-                },
+                    '&:hover': {
+                        backgroundColor: theme.palette.base[300],
+                    },
+                    '&.Mui-focused': {
+                        backgroundColor: theme.palette.base[500],
+                    },
+                    '& input': {
+                        '&::placeholder': {
+                            color: theme.palette.base[200],
+                        },
+                        '&:focus::placeholder': {
+                            color: theme.palette.base[100],
+                        },
+                    },
+                }),
             },
         },
         MuiOutlinedInput: {
             styleOverrides: {
                 root: ({ theme }) => ({
                     '& .MuiOutlinedInput-notchedOutline': {
-                        borderColor: theme.palette.base[200],
+                        borderColor: theme.palette.base[300],
                     },
                     '&:hover .MuiOutlinedInput-notchedOutline': {
-                        borderColor: theme.palette.base[200],
+                        borderColor: theme.palette.base[100],
                     },
                     '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
                         borderColor: theme.palette.base[100],
@@ -196,7 +211,7 @@ const DARK = createTheme({
         MuiAccordionDetails: {
             styleOverrides: {
                 root: {
-                    padding: '12px 24px',
+                    padding: '0px 24px',
                 },
             },
         },
@@ -210,6 +225,7 @@ const DARK = createTheme({
         MuiTab: {
             styleOverrides: {
                 root: ({ theme }) => ({
+                    fontSize: '1.2rem',
                     color: theme.palette.base[200],
                     '&.Mui-selected': {
                         color: theme.palette.base[100],

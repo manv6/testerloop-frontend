@@ -42,6 +42,7 @@ const LogFilters: React.FC<Props> = ({
                 inputProps={{ value: filterTerm }}
                 variant="outlined"
                 placeholder="Filter events"
+                width="266px"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     setFilterTerm(e.target.value);
                 }}

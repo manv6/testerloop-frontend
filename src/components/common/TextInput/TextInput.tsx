@@ -2,7 +2,12 @@ import React from 'react';
 import cx from 'classnames';
 
 import styles from './TextInput.module.scss';
-import { InputAdornment, TextField, TextFieldProps } from '@mui/material';
+import {
+    InputAdornment,
+    TextField,
+    TextFieldProps,
+    styled,
+} from '@mui/material';
 import SearchIcon from '../SearchIcon';
 
 type TextInputProps = TextFieldProps & {
@@ -10,15 +15,21 @@ type TextInputProps = TextFieldProps & {
         value: string;
     };
     inputIcon?: JSX.Element;
+    width?: string | number;
 };
+
+const StyledTextField = styled(TextField)<{ width?: string | number }>`
+    width: ${(props) => props.width ?? 'auto'};
+`;
 
 const TextInput: React.FC<TextInputProps> = ({
     className,
     inputProps,
     inputIcon,
+    width,
     ...props
 }) => (
-    <TextField
+    <StyledTextField
         className={cx(className, styles.textField)}
         variant="standard"
         inputProps={inputProps}
@@ -29,6 +40,7 @@ const TextInput: React.FC<TextInputProps> = ({
                 </InputAdornment>
             ),
         }}
+        width={width} // Pass width prop here
         {...props}
     />
 );

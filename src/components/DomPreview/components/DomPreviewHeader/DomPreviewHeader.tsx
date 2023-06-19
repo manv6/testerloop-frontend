@@ -23,14 +23,12 @@ const DomPreviewHeader: React.FC<Props> = ({
             <div className={styles.controls}>
                 <ButtonGroup>
                     <Button
-                        customHeight="32px"
                         className={cx({ selected: tab === DOMTab.BEFORE })}
                         onClick={() => setTab(DOMTab.BEFORE)}
                     >
                         Before
                     </Button>
                     <Button
-                        customHeight="32px"
                         className={cx({ selected: tab === DOMTab.AFTER })}
                         onClick={() => setTab(DOMTab.AFTER)}
                     >
@@ -43,18 +41,8 @@ const DomPreviewHeader: React.FC<Props> = ({
                 )}%`}</div>
 
                 <ButtonGroup>
-                    <Button
-                        customHeight="32px"
-                        onClick={() => handleZoom('out')}
-                    >
-                        -
-                    </Button>
-                    <Button
-                        customHeight="32px"
-                        onClick={() => handleZoom('in')}
-                    >
-                        +
-                    </Button>
+                    <Button onClick={() => handleZoom('out')}>-</Button>
+                    <Button onClick={() => handleZoom('in')}>+</Button>
                 </ButtonGroup>
             </div>
         </div>

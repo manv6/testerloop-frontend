@@ -16,7 +16,7 @@ import {
 } from './components/';
 import styles from './Network.module.scss';
 import { useTimeline } from 'src/hooks/timeline';
-import { Button, TextInput } from 'src/components/common';
+import { Button, ButtonGroup, TextInput } from 'src/components/common';
 import * as formatter from 'src/utils/formatters';
 import * as Expandable from 'src/components/Expandable';
 import { HeaderWithFilter } from 'src/components/common';
@@ -69,11 +69,11 @@ const StyledButton = styled(Button)<StyledButtonProps>(
         switch (statetype) {
             case ProgressFilterType.IN_PROGRESS:
                 backgroundColor = theme.palette.status.caution[500];
-                borderColor = theme.palette.status.caution[400];
+                borderColor = theme.palette.status.caution[300];
                 break;
             case ProgressFilterType.COMPLETED:
                 backgroundColor = theme.palette.status.success[500];
-                borderColor = theme.palette.status.success[400];
+                borderColor = theme.palette.status.success[300];
                 break;
             default:
                 backgroundColor = theme.palette.base[300];
@@ -82,15 +82,21 @@ const StyledButton = styled(Button)<StyledButtonProps>(
         }
 
         return {
-            ...(active
-                ? {
-                      backgroundColor,
-                      borderColor,
-                  }
-                : {
-                      backgroundColor: theme.palette.base[400],
-                      borderColor: theme.palette.base[300],
-                  }),
+            '&&': {
+                backgroundColor: theme.palette.base[400],
+                borderColor: theme.palette.base[300],
+                ...(active
+                    ? {
+                          backgroundColor,
+                          borderColor,
+                          '&:not(:last-child)': {
+                              '.group > &': {
+                                  boxShadow: `inset -1px 0 0 ${borderColor}`,
+                              },
+                          },
+                      }
+                    : {}),
+            },
         };
     }
 );
@@ -253,6 +259,7 @@ export const NetworkPanel: React.FC<Props> = ({ fragmentKey }) => {
     const header = useMemo(
         () => (
             <HeaderWithFilter
+                isFilterOn={showFilters}
                 title="Network"
                 toggleFilter={() => setShowFilters(!showFilters)}
             />
@@ -295,6 +302,7 @@ export const NetworkPanel: React.FC<Props> = ({ fragmentKey }) => {
                                     inputProps={{ value: filterTerm ?? '' }}
                                     variant="outlined"
                                     onChange={filterTermInputOnChange}
+                                    width="100%"
                                     placeholder="Filter"
                                 ></TextInput>
                             </label>
@@ -331,45 +339,47 @@ export const NetworkPanel: React.FC<Props> = ({ fragmentKey }) => {
                                 </div>
                             </div>
                             <div className={styles.filterBlock}>
-                                <StyledButton
-                                    size="small"
-                                    onClick={() => {
-                                        onChangeResourceTypeAllFilter();
-                                    }}
-                                    active={
-                                        !selectedResourceTypeFilters?.size
-                                            ? 1
-                                            : 0
-                                    }
-                                    className={styles.resourceTypeFilter}
-                                >
-                                    all
-                                </StyledButton>
-                                {Object.values(ResourceTypeFilterType).map(
-                                    (value) => (
-                                        <StyledButton
-                                            key={`${value}`}
-                                            size="small"
-                                            onClick={() => {
-                                                onChangeResourceTypeFilters(
-                                                    value
-                                                );
-                                            }}
-                                            active={
-                                                selectedResourceTypeFilters?.has(
-                                                    value
-                                                )
-                                                    ? 1
-                                                    : 0
-                                            }
-                                            className={
-                                                styles.resourceTypeFilter
-                                            }
-                                        >
-                                            {value}
-                                        </StyledButton>
-                                    )
-                                )}
+                                <ButtonGroup className="group">
+                                    <StyledButton
+                                        size="small"
+                                        onClick={() => {
+                                            onChangeResourceTypeAllFilter();
+                                        }}
+                                        active={
+                                            !selectedResourceTypeFilters?.size
+                                                ? 1
+                                                : 0
+                                        }
+                                        className={styles.resourceTypeFilter}
+                                    >
+                                        all
+                                    </StyledButton>
+                                    {Object.values(ResourceTypeFilterType).map(
+                                        (value) => (
+                                            <StyledButton
+                                                key={`${value}`}
+                                                size="small"
+                                                onClick={() => {
+                                                    onChangeResourceTypeFilters(
+                                                        value
+                                                    );
+                                                }}
+                                                active={
+                                                    selectedResourceTypeFilters?.has(
+                                                        value
+                                                    )
+                                                        ? 1
+                                                        : 0
+                                                }
+                                                className={
+                                                    styles.resourceTypeFilter
+                                                }
+                                            >
+                                                {value}
+                                            </StyledButton>
+                                        )
+                                    )}
+                                </ButtonGroup>
                             </div>
                         </div>
                     </div>

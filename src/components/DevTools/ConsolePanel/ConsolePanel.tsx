@@ -143,6 +143,7 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
     const header = useMemo(
         () => (
             <HeaderWithFilter
+                isFilterOn={showLogFilters}
                 title="Console"
                 toggleFilter={() => setShowLogFilters(!showLogFilters)}
             />
