@@ -4,6 +4,8 @@ import graphql from 'babel-plugin-relay/macro';
 import { TestExecutionListRowFragment$key } from './__generated__/TestExecutionListRowFragment.graphql';
 import { FetcherWithComponents, Link } from 'react-router-dom';
 import { formatIntervalEvent } from 'src/utils/formatters';
+import { getDuration } from 'src/utils/getDuration';
+import { Tag } from 'src/components/common';
 
 type Props = {
     fragmentKey: TestExecutionListRowFragment$key;
@@ -41,6 +43,11 @@ export const TestExecutionListRow: React.FC<Props> = ({
         [testExecutionRaw]
     );
 
+    const duration = useMemo(
+        () => getDuration(testExecution.at, testExecution.until),
+        [testExecution.at, testExecution.until]
+    );
+
     return (
         <tr
             onMouseEnter={() =>
@@ -53,21 +60,20 @@ export const TestExecutionListRow: React.FC<Props> = ({
                 </Link>
             </td>
             <td>
-                {testExecution.failedCommands.totalCount
-                    ? 'Failed'
-                    : 'Succeeded'}
-            </td>
-            <td>
                 {Intl.DateTimeFormat(undefined, {
                     dateStyle: 'short',
                     timeStyle: 'medium',
                 }).format(testExecution.at)}
             </td>
+            <td>{duration}</td>
             <td>
-                {Intl.DateTimeFormat(undefined, {
-                    dateStyle: 'short',
-                    timeStyle: 'medium',
-                }).format(testExecution.until)}
+                <div style={{ display: 'inline-block' }}>
+                    {testExecution.failedCommands.totalCount ? (
+                        <Tag tagType="error" text="Failed" />
+                    ) : (
+                        <Tag tagType="success" text="Passed" />
+                    )}
+                </div>
             </td>
         </tr>
     );

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<bbad8b553e3301ee75c26043ac9616be>>
+ * @generated SignedSource<<a95f984e747ccaa9f846ecb31fe0b071>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,12 +16,7 @@ export type EnvironmentDetailsFragment$data = {
     readonly id: string;
     readonly testCodeRevision: {
       readonly author?: {
-        readonly email: string;
-        readonly user: {
-          readonly avatar: any | null;
-          readonly name: string;
-          readonly url: any;
-        } | null;
+        readonly name: string;
       };
       readonly branch?: {
         readonly name: string;
@@ -100,33 +95,7 @@ return {
                   "name": "author",
                   "plural": false,
                   "selections": [
-                    {
-                      "alias": null,
-                      "args": null,
-                      "kind": "ScalarField",
-                      "name": "email",
-                      "storageKey": null
-                    },
-                    {
-                      "alias": null,
-                      "args": null,
-                      "concreteType": "GitHubUser",
-                      "kind": "LinkedField",
-                      "name": "user",
-                      "plural": false,
-                      "selections": [
-                        (v0/*: any*/),
-                        {
-                          "alias": null,
-                          "args": null,
-                          "kind": "ScalarField",
-                          "name": "avatar",
-                          "storageKey": null
-                        },
-                        (v1/*: any*/)
-                      ],
-                      "storageKey": null
-                    }
+                    (v0/*: any*/)
                   ],
                   "storageKey": null
                 },
@@ -173,6 +142,6 @@ return {
 };
 })();
 
-(node as any).hash = "0203ecd2d78131d09a89dfa6f5ad176b";
+(node as any).hash = "d6a1f7b5e1d8aac9088096e685071385";
 
 export default node;

@@ -1,6 +1,6 @@
 /**
- * @generated SignedSource<<d9fa234678594c5f8c4c29b000e655ea>>
- * @relayHash 6056c40b9f8d073927d2a4f91f6f2020
+ * @generated SignedSource<<1668b8b059e6c2a42baebbd039b018e0>>
+ * @relayHash 29865475ce503f7b814386b0e2f93156
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,7 +9,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-// @relayRequestID a7fcce0007a6338ea3ffdd6e3225379425487a82f43f3bad1e1fa472904740a2
+// @relayRequestID 8a7884c031700c8ed7443f5adb6fb3ba94701cf35fac364f1460bf5c58385ade
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
@@ -22,7 +22,10 @@ export type TestRunPageQuery$data = {
       readonly " $fragmentSpreads": FragmentRefs<"TestExecutionListFragment">;
     };
     readonly id: string;
-    readonly " $fragmentSpreads": FragmentRefs<"TestRunTitleFragment">;
+    readonly testCodeRevision: {
+      readonly " $fragmentSpreads": FragmentRefs<"TestRunAuthorFragment" | "TestRunBranchFragment">;
+    } | null;
+    readonly " $fragmentSpreads": FragmentRefs<"RunSummaryFragment" | "TestRunTitleFragment">;
   } | null;
 };
 export type TestRunPageQuery = {
@@ -51,7 +54,43 @@ v2 = {
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
-};
+},
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "__typename",
+  "storageKey": null
+},
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "name",
+  "storageKey": null
+},
+v5 = [
+  {
+    "kind": "Literal",
+    "name": "filter",
+    "value": {
+      "commandFilter": {
+        "status": "FAILED"
+      },
+      "type": "COMMAND"
+    }
+  }
+],
+v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "totalCount",
+  "storageKey": null
+},
+v7 = [
+  (v6/*: any*/)
+];
 return {
   "fragment": {
     "argumentDefinitions": (v0/*: any*/),
@@ -68,6 +107,27 @@ return {
         "plural": false,
         "selections": [
           (v2/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": null,
+            "kind": "LinkedField",
+            "name": "testCodeRevision",
+            "plural": false,
+            "selections": [
+              {
+                "args": null,
+                "kind": "FragmentSpread",
+                "name": "TestRunAuthorFragment"
+              },
+              {
+                "args": null,
+                "kind": "FragmentSpread",
+                "name": "TestRunBranchFragment"
+              }
+            ],
+            "storageKey": null
+          },
           {
             "alias": null,
             "args": null,
@@ -88,6 +148,11 @@ return {
             "args": null,
             "kind": "FragmentSpread",
             "name": "TestRunTitleFragment"
+          },
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "RunSummaryFragment"
           }
         ],
         "storageKey": null
@@ -114,6 +179,64 @@ return {
           {
             "alias": null,
             "args": null,
+            "concreteType": null,
+            "kind": "LinkedField",
+            "name": "testCodeRevision",
+            "plural": false,
+            "selections": [
+              (v3/*: any*/),
+              {
+                "kind": "InlineFragment",
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": null,
+                    "kind": "LinkedField",
+                    "name": "author",
+                    "plural": false,
+                    "selections": [
+                      (v3/*: any*/),
+                      (v4/*: any*/)
+                    ],
+                    "storageKey": null
+                  }
+                ],
+                "type": "GitRevision",
+                "abstractKey": "__isGitRevision"
+              },
+              {
+                "kind": "InlineFragment",
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "GitHubBranch",
+                    "kind": "LinkedField",
+                    "name": "branch",
+                    "plural": false,
+                    "selections": [
+                      (v4/*: any*/),
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "url",
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  }
+                ],
+                "type": "GitHubRevision",
+                "abstractKey": null
+              }
+            ],
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
             "concreteType": "TestExecutionConnection",
             "kind": "LinkedField",
             "name": "executions",
@@ -135,6 +258,13 @@ return {
                     "name": "node",
                     "plural": false,
                     "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "title",
+                        "storageKey": null
+                      },
                       (v2/*: any*/),
                       {
                         "alias": null,
@@ -147,43 +277,27 @@ return {
                         "alias": null,
                         "args": null,
                         "kind": "ScalarField",
-                        "name": "title",
-                        "storageKey": null
-                      },
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
                         "name": "until",
                         "storageKey": null
                       },
                       {
                         "alias": "failedCommands",
-                        "args": [
-                          {
-                            "kind": "Literal",
-                            "name": "filter",
-                            "value": {
-                              "commandFilter": {
-                                "status": "FAILED"
-                              },
-                              "type": "COMMAND"
-                            }
-                          }
-                        ],
+                        "args": (v5/*: any*/),
                         "concreteType": "TestExecutionEventConnection",
                         "kind": "LinkedField",
                         "name": "events",
                         "plural": false,
-                        "selections": [
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "totalCount",
-                            "storageKey": null
-                          }
-                        ],
+                        "selections": (v7/*: any*/),
+                        "storageKey": "events(filter:{\"commandFilter\":{\"status\":\"FAILED\"},\"type\":\"COMMAND\"})"
+                      },
+                      {
+                        "alias": null,
+                        "args": (v5/*: any*/),
+                        "concreteType": "TestExecutionEventConnection",
+                        "kind": "LinkedField",
+                        "name": "events",
+                        "plural": false,
+                        "selections": (v7/*: any*/),
                         "storageKey": "events(filter:{\"commandFilter\":{\"status\":\"FAILED\"},\"type\":\"COMMAND\"})"
                       }
                     ],
@@ -191,7 +305,8 @@ return {
                   }
                 ],
                 "storageKey": null
-              }
+              },
+              (v6/*: any*/)
             ],
             "storageKey": null
           }
@@ -201,7 +316,7 @@ return {
     ]
   },
   "params": {
-    "id": "a7fcce0007a6338ea3ffdd6e3225379425487a82f43f3bad1e1fa472904740a2",
+    "id": "8a7884c031700c8ed7443f5adb6fb3ba94701cf35fac364f1460bf5c58385ade",
     "metadata": {},
     "name": "TestRunPageQuery",
     "operationKind": "query",
@@ -210,6 +325,6 @@ return {
 };
 })();
 
-(node as any).hash = "fd8a83c4fe101d9821a50450a63f80c2";
+(node as any).hash = "b424c8447172dba363158a9e264d5feb";
 
 export default node;

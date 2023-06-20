@@ -8,12 +8,7 @@ const EnvironmentDetailsFragment = graphql`
             testCodeRevision {
                 ... on GitHubRevision {
                     author {
-                        email
-                        user {
-                            name
-                            avatar
-                            url
-                        }
+                        name
                     }
                     commitId(type: SHORT)
                     url

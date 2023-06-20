@@ -66,20 +66,8 @@ const EnvironmentDetails: React.FC<Props> = ({ fragmentKey }) => {
             </DetailColumn>
             <DetailColumn title="By">
                 <div className={styles.columnContent}>
-                    {testCodeRevision?.author?.user ? (
-                        <StyledLink
-                            href={testCodeRevision.author.user.url}
-                            target="_blank"
-                            rel="noreferrer"
-                            className={styles.engineerLink}
-                        >
-                            <img
-                                src={testCodeRevision.author.user.avatar}
-                                alt="avatar"
-                                className={styles.avatar}
-                            />
-                            {testCodeRevision.author.user.name}
-                        </StyledLink>
+                    {testCodeRevision?.author ? (
+                        <div>{testCodeRevision.author.name}</div>
                     ) : (
                         '-'
                     )}

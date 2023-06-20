@@ -1,6 +1,6 @@
 /**
- * @generated SignedSource<<aa63bff34174b3054342197c9a743684>>
- * @relayHash ee5f622293fc98733b5353b7fc33c8a9
+ * @generated SignedSource<<77607ffe7a8c9b5e8234b898b463f615>>
+ * @relayHash 7864583b501df33ab5012d906757d7a4
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,7 +9,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-// @relayRequestID 43da421483ae58cb8f3471bbf70fea185306ead8cf044f04ca8b0f8d67f7cf0d
+// @relayRequestID 56d6de6f190b30227bd9a7483316fd8e1dacccebe71daad2443c14ff65dacbfd
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
@@ -918,33 +918,7 @@ return {
                         "name": "author",
                         "plural": false,
                         "selections": [
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "email",
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "GitHubUser",
-                            "kind": "LinkedField",
-                            "name": "user",
-                            "plural": false,
-                            "selections": [
-                              (v24/*: any*/),
-                              {
-                                "alias": null,
-                                "args": null,
-                                "kind": "ScalarField",
-                                "name": "avatar",
-                                "storageKey": null
-                              },
-                              (v19/*: any*/)
-                            ],
-                            "storageKey": null
-                          }
+                          (v24/*: any*/)
                         ],
                         "storageKey": null
                       },
@@ -1540,7 +1514,7 @@ return {
     ]
   },
   "params": {
-    "id": "43da421483ae58cb8f3471bbf70fea185306ead8cf044f04ca8b0f8d67f7cf0d",
+    "id": "56d6de6f190b30227bd9a7483316fd8e1dacccebe71daad2443c14ff65dacbfd",
     "metadata": {},
     "name": "TestExecutionPageQuery",
     "operationKind": "query",

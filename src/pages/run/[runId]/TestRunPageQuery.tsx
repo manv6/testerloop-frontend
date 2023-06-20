@@ -5,10 +5,15 @@ export const testRunPageQuery = graphql`
     query TestRunPageQuery($id: ID!) {
         testRun(id: $id) {
             id
+            testCodeRevision {
+                ...TestRunAuthorFragment
+                ...TestRunBranchFragment
+            }
             executions {
                 ...TestExecutionListFragment
             }
             ...TestRunTitleFragment
+            ...RunSummaryFragment
         }
     }
 `;

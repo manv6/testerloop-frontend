@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<2d87131c34f96d4da760c729887fcecd>>
+ * @generated SignedSource<<15871f9c0e8a720c0a95d67f267e1899>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,6 +14,7 @@ export type TestExecutionListFragment$data = {
   readonly edges: ReadonlyArray<{
     readonly node: {
       readonly id: string;
+      readonly title: string;
       readonly " $fragmentSpreads": FragmentRefs<"TestExecutionListRowFragment">;
     };
   }>;
@@ -50,6 +51,13 @@ const node: ReaderFragment = {
               "alias": null,
               "args": null,
               "kind": "ScalarField",
+              "name": "title",
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
               "name": "id",
               "storageKey": null
             },
@@ -69,6 +77,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "864cba3d464fa5169abc8f82861be37c";
+(node as any).hash = "77b0fcae746e59c8118ded05135860a4";
 
 export default node;
