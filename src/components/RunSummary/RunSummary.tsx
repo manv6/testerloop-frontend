@@ -2,7 +2,7 @@ import React from 'react';
 import { useFragment } from 'react-relay';
 import { RunSummaryFragment$key } from './__generated__/RunSummaryFragment.graphql';
 import graphql from 'babel-plugin-relay/macro';
-import { Panel } from 'src/components/common';
+import { Panel, BreadCrumb } from 'src/components/common';
 import { Typography } from '@mui/material';
 import { RunEnvironmentDetails, RunStatus } from './components';
 import TestRunTitle from '../TestRun/TestRunTitle';
@@ -30,6 +30,14 @@ const RunSummary: React.FC<Props> = ({ fragmentKey, className }) => {
 
     return (
         <Panel className={cx(styles.summary, className)}>
+            <BreadCrumb
+                paths={[
+                    {
+                        text: 'RUNS',
+                        link: '/',
+                    },
+                ]}
+            />
             <div className={styles.row}>
                 <div className={styles.pageTitle}>
                     <Typography variant="h1">

@@ -3,13 +3,20 @@ import styles from './Summary.module.scss';
 import { useFragment } from 'react-relay';
 import { SummaryFragment$key } from './__generated__/SummaryFragment.graphql';
 import graphql from 'babel-plugin-relay/macro';
-import { Panel, Tag, Divider, ExpandButton } from 'src/components/common';
+import {
+    Panel,
+    Tag,
+    Divider,
+    ExpandButton,
+    BreadCrumb,
+} from 'src/components/common';
 import cx from 'classnames';
 import { EnvironmentDetails } from './components';
 import splitCamelCase from 'src/utils/splitCamelCase';
 import NetworkErrorCount from './components/NetworkErrorCount';
 import ConsoleErrorCount from './components/ConsoleErrorCount';
 import { Typography } from '@mui/material';
+import { extractRunId } from 'src/utils/extractRunId';
 
 type Props = {
     fragmentKey: SummaryFragment$key;
@@ -52,13 +59,26 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
     const title = summaryData.title;
     const tagType = frameworkErrorName ? 'error' : 'success';
     const tagText = frameworkErrorName ? 'Failed' : 'Passed';
-
+    const runId = extractRunId(summaryData.id);
     return (
         <Panel
             className={cx(styles.summary, className)}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
+            <BreadCrumb
+                paths={[
+                    {
+                        text: 'RUNS',
+                        link: '/',
+                    },
+                    {
+                        text: runId,
+                        link: `/run/${runId}`,
+                    },
+                ]}
+            />
+
             <div className={styles.row}>
                 <div className={styles.pageTitle}>
                     <Typography variant="h1">Scenario: {title}</Typography>
