@@ -1,10 +1,12 @@
 import React from 'react';
-import { Breadcrumbs, Link, Typography } from '@mui/material';
+import { Breadcrumbs } from '@mui/material';
 import { styled } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { useFetcher } from 'react-router-dom';
 
 type BreadcrumbPath = {
     text: string;
-    link?: string;
+    link: string;
 };
 
 type Props = {
@@ -17,14 +19,20 @@ const StyledLink = styled(Link)(({ theme }) => ({
 }));
 
 const BreadCrumb: React.FC<Props> = ({ paths }) => {
+    const preloadFetcher = useFetcher();
+
     return (
         <Breadcrumbs>
-            {paths.map((path, index) => (
-                <StyledLink color="inherit" href={path.link} key={index}>
+            {paths.map((path) => (
+                <StyledLink
+                    key={path.link}
+                    to={path.link}
+                    onMouseEnter={() => preloadFetcher.load(path.link)}
+                >
                     {path.text}
                 </StyledLink>
             ))}
-            <Typography color="textPrimary"></Typography>
+            <></>
         </Breadcrumbs>
     );
 };

@@ -2,21 +2,16 @@ import React, { useMemo } from 'react';
 import { useFragment } from 'react-relay';
 import graphql from 'babel-plugin-relay/macro';
 import { TestExecutionListRowFragment$key } from './__generated__/TestExecutionListRowFragment.graphql';
-import { FetcherWithComponents, Link } from 'react-router-dom';
+import { FetcherWithComponents } from 'react-router-dom';
 import { formatIntervalEvent } from 'src/utils/formatters';
 import { getDuration } from 'src/utils/getDuration';
 import { Tag } from 'src/components/common';
-import { styled } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
     fragmentKey: TestExecutionListRowFragment$key;
     preloadFetcher: FetcherWithComponents<unknown>;
 };
-
-const StyledLink = styled(Link)(({ theme }) => ({
-    color: theme.palette.base[100],
-    textDecoration: 'none',
-}));
 
 const testExecutionIdToUrl = (id: string) => {
     const [type, runId, testId] = window.atob(id).split('/');
@@ -53,18 +48,17 @@ export const TestExecutionListRow: React.FC<Props> = ({
         () => getDuration(testExecution.at, testExecution.until),
         [testExecution.at, testExecution.until]
     );
+    const navigate = useNavigate();
 
     return (
         <tr
             onMouseEnter={() =>
                 preloadFetcher.load(testExecutionIdToUrl(testExecution.id))
             }
+            onClick={() => navigate(testExecutionIdToUrl(testExecution.id))}
+            style={{ cursor: 'pointer' }}
         >
-            <td>
-                <StyledLink to={testExecutionIdToUrl(testExecution.id)}>
-                    {testExecution.title}
-                </StyledLink>
-            </td>
+            <td>{testExecution.title}</td>
             <td>
                 {Intl.DateTimeFormat(undefined, {
                     dateStyle: 'short',
