@@ -8,6 +8,7 @@ const StyledMuiTable = styled(Table)(({ theme }) => ({
         height: '52px',
         borderBottom: `1px solid ${theme.palette.base[300]}`,
         paddingLeft: '24px',
+        textTransform: 'uppercase',
     },
     '& thead th:last-child': {
         textAlign: 'center',
