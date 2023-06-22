@@ -38,7 +38,7 @@ const FrameworkError: React.FC<Props> = ({ fragmentKey }) => {
     ].join(':');
 
     return (
-        <Panel className={styles.errorPanel}>
+        <Panel className={styles.errorPanel} data-cy="framework-error-panel">
             <div onClick={() => setIsExpanded(!isExpanded)}>
                 <div className={styles.frameworkError}>
                     <div className={styles.errorDetail}>
@@ -66,7 +66,11 @@ const FrameworkError: React.FC<Props> = ({ fragmentKey }) => {
                             )}
                         </div>
                     </div>
-                    <GoToCodeButton url={url} tooltipText={tooltipText} />
+                    <GoToCodeButton
+                        url={url}
+                        tooltipText={tooltipText}
+                        data-cy="go-to-code-button"
+                    />
                 </div>
             </div>
         </Panel>

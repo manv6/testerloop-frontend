@@ -25,12 +25,14 @@ const DomPreviewHeader: React.FC<Props> = ({
                     <Button
                         className={cx({ selected: tab === DOMTab.BEFORE })}
                         onClick={() => setTab(DOMTab.BEFORE)}
+                        data-cy="dom-preview-before-button"
                     >
                         Before
                     </Button>
                     <Button
                         className={cx({ selected: tab === DOMTab.AFTER })}
                         onClick={() => setTab(DOMTab.AFTER)}
+                        data-cy="dom-preview-after-button"
                     >
                         After
                     </Button>
@@ -41,8 +43,18 @@ const DomPreviewHeader: React.FC<Props> = ({
                 )}%`}</div>
 
                 <ButtonGroup>
-                    <Button onClick={() => handleZoom('out')}>-</Button>
-                    <Button onClick={() => handleZoom('in')}>+</Button>
+                    <Button
+                        onClick={() => handleZoom('out')}
+                        data-cy="dom-preview-zoom-out-button"
+                    >
+                        -
+                    </Button>
+                    <Button
+                        onClick={() => handleZoom('in')}
+                        data-cy="dom-preview-zoom-in-button"
+                    >
+                        +
+                    </Button>
                 </ButtonGroup>
             </div>
         </div>

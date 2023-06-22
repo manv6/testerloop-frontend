@@ -85,8 +85,12 @@ const StepRecord: React.FC<Props> = ({
                     [styles.selected]: isStepSelected,
                     [styles.hovered]: isStepHovered,
                 })}
+                data-cy={`step-header-${data.id}`}
             >
-                <td className={styles.stepStatus}>
+                <td
+                    className={styles.stepStatus}
+                    data-cy={`step-status-${data.id}`}
+                >
                     {hasFailed ? <StepFailIcon /> : <StepSuccessIcon />}
                 </td>
 
@@ -116,7 +120,10 @@ const StepRecord: React.FC<Props> = ({
                 </td>
             </StyledStepHeader>
             {isStepSelected && (
-                <tr className={styles.expandedPanel}>
+                <tr
+                    className={styles.expandedPanel}
+                    data-cy={`expanded-panel-${data.id}`}
+                >
                     <td colSpan={4}>
                         {actions.map(({ node }, idx) => (
                             <ActionRecord

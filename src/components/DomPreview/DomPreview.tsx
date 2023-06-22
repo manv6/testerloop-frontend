@@ -50,7 +50,11 @@ const DomPreview: React.FC<Props> = ({ fragmentKey }) => {
     );
 
     return (
-        <Expandable.Child className={styles.expandableDom} header={header}>
+        <Expandable.Child
+            className={styles.expandableDom}
+            header={header}
+            data-cy="dom-preview"
+        >
             <React.Suspense fallback={<DomPreviewFallback />}>
                 <DomPreviewRenderer
                     tab={tab}

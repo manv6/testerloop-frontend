@@ -146,6 +146,7 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
                 isFilterOn={showLogFilters}
                 title="Console"
                 toggleFilter={() => setShowLogFilters(!showLogFilters)}
+                dataCyPrefix="console-panel"
             />
         ),
         [showLogFilters]
@@ -161,7 +162,11 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
     });
 
     return (
-        <Expandable.Child className={styles.expandableConsole} header={header}>
+        <Expandable.Child
+            className={styles.expandableConsole}
+            header={header}
+            data-cy="console-panel"
+        >
             <section className={styles.consolePanel}>
                 {showLogFilters && (
                     <LogFilters
@@ -172,6 +177,7 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
                             activeLogLevels ?? defaultActiveLogLevels
                         }
                         toggleActiveLogLevel={toggleActiveLogLevel}
+                        data-cy="console-panel-log-filters"
                     />
                 )}
                 {isPending ? (
@@ -191,6 +197,7 @@ const ConsolePanel: React.FC<Props> = ({ fragmentKey }) => {
                                     isLogSelected={currentLogIdx === idx}
                                     isLogHovered={hoveredLogIdx === idx}
                                     logEntry={node}
+                                    data-cy={`log-entry-${idx}`}
                                 />
                             );
                         })}

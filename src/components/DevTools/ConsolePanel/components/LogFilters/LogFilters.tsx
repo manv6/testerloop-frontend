@@ -46,12 +46,14 @@ const LogFilters: React.FC<Props> = ({
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     setFilterTerm(e.target.value);
                 }}
+                data-cy="console-panel-filter-input"
             />
             <div className={styles.toggleButtons}>
                 <StyledButton
                     onClick={() => toggleActiveLogLevel(LogLevel.ERROR)}
                     active={activeLogLevels.ERROR ? 1 : 0}
                     className={styles.toggleLogLevelButton}
+                    data-cy="error-log-filter-button"
                 >
                     <LogErrorIcon />
                     <small className={styles.logLevelCount}>
@@ -63,6 +65,7 @@ const LogFilters: React.FC<Props> = ({
                     onClick={() => toggleActiveLogLevel(LogLevel.WARN)}
                     active={activeLogLevels.WARN ? 1 : 0}
                     className={styles.toggleLogLevelButton}
+                    data-cy="warn-log-filter-button"
                 >
                     <LogWarnIcon />
                     <small className={styles.logLevelCount}>
@@ -74,6 +77,7 @@ const LogFilters: React.FC<Props> = ({
                     onClick={() => toggleActiveLogLevel(LogLevel.LOG)}
                     active={activeLogLevels.LOG ? 1 : 0}
                     className={styles.toggleLogLevelButton}
+                    data-cy="other-log-filter-button"
                 >
                     <OtherLogIcon />
                     <small className={styles.logLevelCount}>

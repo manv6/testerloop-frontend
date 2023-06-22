@@ -262,6 +262,7 @@ export const NetworkPanel: React.FC<Props> = ({ fragmentKey }) => {
                 isFilterOn={showFilters}
                 title="Network"
                 toggleFilter={() => setShowFilters(!showFilters)}
+                dataCyPrefix="network-panel"
             />
         ),
         [showFilters]
@@ -304,6 +305,7 @@ export const NetworkPanel: React.FC<Props> = ({ fragmentKey }) => {
                                     onChange={filterTermInputOnChange}
                                     width="100%"
                                     placeholder="Filter"
+                                    data-cy="network-panel-filter-input"
                                 ></TextInput>
                             </label>
                         </div>
@@ -331,6 +333,7 @@ export const NetworkPanel: React.FC<Props> = ({ fragmentKey }) => {
                                                 className={
                                                     styles.toggleNetworkStateType
                                                 }
+                                                data-cy={`progress-filter-button-${value}`}
                                             >
                                                 {value}
                                             </StyledButton>
@@ -351,6 +354,7 @@ export const NetworkPanel: React.FC<Props> = ({ fragmentKey }) => {
                                                 : 0
                                         }
                                         className={styles.resourceTypeFilter}
+                                        data-cy="resource-type-filter-button-all"
                                     >
                                         all
                                     </StyledButton>
@@ -374,6 +378,7 @@ export const NetworkPanel: React.FC<Props> = ({ fragmentKey }) => {
                                                 className={
                                                     styles.resourceTypeFilter
                                                 }
+                                                data-cy={`resource-type-filter-button-${value}`}
                                             >
                                                 {value}
                                             </StyledButton>
@@ -433,6 +438,7 @@ export const NetworkPanel: React.FC<Props> = ({ fragmentKey }) => {
                                         lastStartedNetworkEvent?.id ===
                                         networkEvent.id
                                     }
+                                    data-cy={`network-slice-${networkEvent.id}`}
                                 />
                             ))}
                         </tbody>
@@ -446,6 +452,7 @@ export const NetworkPanel: React.FC<Props> = ({ fragmentKey }) => {
                         activeTab={activeTab}
                         onSelectTab={(value: number) => setActiveTab(value)}
                         onDetailPanelClose={onDetailPanelClose}
+                        data-cy="network-event-detail-panel"
                     />
                 </React.Suspense>
             )}

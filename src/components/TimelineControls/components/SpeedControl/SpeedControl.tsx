@@ -55,7 +55,11 @@ const SpeedControl: React.FC = () => {
                     onClose={() => setMenuOpen(false)}
                 >
                     {AVAILABLE_SPEEDS.map((s, idx) => (
-                        <MenuItem key={`speed-${s}-${idx}`} value={s}>
+                        <MenuItem
+                            key={`speed-${s}-${idx}`}
+                            value={s}
+                            data-cy={`speed-option-${s}`}
+                        >
                             {s}x
                         </MenuItem>
                     ))}

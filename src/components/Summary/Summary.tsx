@@ -72,6 +72,7 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
             className={cx(styles.summary, styles.panel, className)}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
+            data-cy="summary-panel"
         >
             <BreadCrumb
                 paths={[
@@ -88,18 +89,25 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
                         link: '',
                     },
                 ]}
+                data-cy="breadcrumb"
             />
 
             <div className={styles.row}>
-                <div className={styles.pageTitle}>
+                <div className={styles.pageTitle} data-cy="debug-page-title">
                     <Typography variant="h1">Scenario: {title}</Typography>
                     <Tag tagType={tagType} text={tagText} />
                 </div>
             </div>
             {isExpanded && (
                 <div className={cx(styles.row, styles.detailsRow)}>
-                    <EnvironmentDetails fragmentKey={summaryData} />
-                    <div className={styles.errorsContainer}>
+                    <EnvironmentDetails
+                        fragmentKey={summaryData}
+                        data-cy="environment-details"
+                    />
+                    <div
+                        className={styles.errorsContainer}
+                        data-cy="errors-container"
+                    >
                         <ul>
                             {frameworkErrorName && (
                                 <li>
@@ -120,6 +128,7 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
                 <ExpandButton
                     onClick={() => setIsExpanded(!isExpanded)}
                     isExpanded={isExpanded}
+                    data-cy="summary-expand-button"
                 />
             )}
         </Panel>

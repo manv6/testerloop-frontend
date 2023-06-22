@@ -54,7 +54,7 @@ export const TimelineControls: React.FC<Props> = ({ fragmentKey }) => {
     }, []);
 
     return (
-        <Panel className={styles.timeline}>
+        <Panel className={styles.timeline} data-cy="timeline-controls">
             <StyledControlSection className={styles.controlSection}>
                 <div className={styles.controlsContainer}>
                     <PlayButton />
@@ -68,12 +68,14 @@ export const TimelineControls: React.FC<Props> = ({ fragmentKey }) => {
                     getMarker={getMarker}
                     filters={filters}
                     setFilters={setFilters}
+                    data-cy="timeline-filters"
                 />
             </StyledControlSection>
             <Seeker
                 getMarker={getMarker}
                 filters={filters}
                 fragmentKey={fragmentKey}
+                data-cy="timeline-seeker"
             />
         </Panel>
     );

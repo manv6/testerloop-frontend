@@ -43,6 +43,7 @@ export const Steps: React.FC<Props> = memo(({ className, fragmentKey }) => {
             className={styles.steps}
             notExpandable={true}
             header={<StepsHeader headerTitle="Scenario" />}
+            data-cy="steps-panel"
         >
             <table className={cx(className, styles.stepsTable)}>
                 <tbody className={styles.stepsTableBody}>

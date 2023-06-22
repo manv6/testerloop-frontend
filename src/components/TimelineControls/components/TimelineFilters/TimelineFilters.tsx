@@ -27,21 +27,22 @@ const TimelineFilters: React.FC<Props> = ({
 }) => (
     <div className={styles.filters}>
         {Object.values(EventType).map((et) => (
-            <label key={`filter-${et}`} className={styles.filter}>
+            <label
+                key={`filter-${et}`}
+                className={styles.filter}
+                data-cy={`filter-${et}`}
+                onClick={() =>
+                    setFilters({
+                        ...filters,
+                        [et]: !filters[et],
+                    })
+                }
+            >
                 {getMarker(et)}
                 <FilterItem active={filters[et]}>
                     {FILTER_LABELS[et]}
                 </FilterItem>
-                <span
-                    role="button"
-                    tabIndex={0}
-                    onClick={() =>
-                        setFilters({
-                            ...filters,
-                            [et]: !filters[et],
-                        })
-                    }
-                >
+                <span role="button" tabIndex={0}>
                     {filters[et] ? (
                         <VisibilityToggleOn />
                     ) : (

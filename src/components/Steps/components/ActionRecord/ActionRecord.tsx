@@ -80,8 +80,12 @@ const ActionRecord: React.FC<Props> = ({
                     [styles.hovered]: isActionHovered,
                 }
             )}
+            data-cy={`action-record-${data.id}`}
         >
-            <span className={styles.actionStatus}>
+            <span
+                className={styles.actionStatus}
+                data-cy={`action-status-${data.id}`}
+            >
                 {hasFailed ? <StepFailIcon /> : <StepSuccessIcon />}
             </span>
             <StepPrefix
@@ -98,7 +102,10 @@ const ActionRecord: React.FC<Props> = ({
             </span>
             {hasFailed && (
                 <>
-                    <div className={styles.errorUrl}>
+                    <div
+                        className={styles.errorUrl}
+                        data-cy={`error-url-${data.id}`}
+                    >
                         <StyledLink href={url} target="_blank" rel="noreferrer">
                             {urlText}
                         </StyledLink>

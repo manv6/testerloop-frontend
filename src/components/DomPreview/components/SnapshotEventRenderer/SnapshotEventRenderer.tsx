@@ -146,6 +146,7 @@ const SnapshotEventRenderer: React.FC<Props> = ({
                 id="dom-iframe"
                 title="domSnapshot"
                 ref={setIframeRef}
+                data-cy="dom-snapshot-iframe"
             />
         </div>
     );
