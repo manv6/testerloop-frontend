@@ -12,13 +12,14 @@ type Props = {
 };
 
 export const TestExecutionList: React.FC<Props> = ({ fragmentKey }) => {
-    const { edges } = useFragment(
+    const data = useFragment(
         graphql`
             fragment TestExecutionListFragment on TestExecutionConnection {
                 edges {
                     node {
                         title
                         id
+                        at
                         ...TestExecutionListRowFragment
                     }
                 }
@@ -27,6 +28,13 @@ export const TestExecutionList: React.FC<Props> = ({ fragmentKey }) => {
         fragmentKey
     );
     const preloadFetcher = useFetcher();
+
+    const edges = [...data.edges].sort((a, b) => {
+        if (a.node.title < b.node.title) return -1;
+        if (a.node.title > b.node.title) return 1;
+
+        return new Date(b.node.at).getTime() - new Date(a.node.at).getTime();
+    });
 
     return (
         <>
