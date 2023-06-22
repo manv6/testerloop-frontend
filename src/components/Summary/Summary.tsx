@@ -17,6 +17,7 @@ import NetworkErrorCount from './components/NetworkErrorCount';
 import ConsoleErrorCount from './components/ConsoleErrorCount';
 import { Typography } from '@mui/material';
 import { extractRunId } from 'src/utils/extractRunId';
+import { styled } from '@mui/material';
 
 type Props = {
     fragmentKey: SummaryFragment$key;
@@ -60,9 +61,15 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
     const tagType = frameworkErrorName ? 'error' : 'success';
     const tagText = frameworkErrorName ? 'Failed' : 'Passed';
     const runId = extractRunId(summaryData.id);
+
+    const StyledSpan = styled('span')(({ theme }) => ({
+        color: frameworkErrorName
+            ? theme.palette.base[100]
+            : theme.palette.base[200],
+    }));
     return (
         <Panel
-            className={cx(styles.summary, className)}
+            className={cx(styles.summary, styles.panel, className)}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
@@ -75,6 +82,10 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
                     {
                         text: runId,
                         link: `/run/${runId}`,
+                    },
+                    {
+                        text: '',
+                        link: '',
                     },
                 ]}
             />
@@ -92,9 +103,9 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
                         <ul>
                             {frameworkErrorName && (
                                 <li>
-                                    <span>
+                                    <StyledSpan>
                                         1 {splitCamelCase(frameworkErrorName)}
-                                    </span>
+                                    </StyledSpan>
                                 </li>
                             )}
                             <Divider className={styles.divider} />

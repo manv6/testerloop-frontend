@@ -32,7 +32,6 @@ const BreadCrumb: React.FC<Props> = ({ paths }) => {
                     {path.text}
                 </StyledLink>
             ))}
-            <></>
         </Breadcrumbs>
     );
 };

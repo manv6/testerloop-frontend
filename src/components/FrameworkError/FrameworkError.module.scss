@@ -1,6 +1,7 @@
 .errorPanel {
     position: relative;
     margin-bottom: 16px;
+    cursor: pointer;
 }
 
 .frameworkError {
@@ -13,6 +14,7 @@
 .errorDetail {
     display: flex;
     align-items: flex-start;
+    align-items: center;
     margin-right: 8px;
 }
 

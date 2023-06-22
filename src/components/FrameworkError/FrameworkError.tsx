@@ -39,36 +39,35 @@ const FrameworkError: React.FC<Props> = ({ fragmentKey }) => {
 
     return (
         <Panel className={styles.errorPanel}>
-            <div className={styles.frameworkError}>
-                <div className={styles.errorDetail}>
-                    <div className={styles.title}>
-                        <ErrorIcon />
-                    </div>
-                    <div
-                        className={cx(styles.errorContent, {
-                            [styles.contentMargin]: isExpanded,
-                        })}
-                    >
-                        <StyledErrorName className={styles.errorName}>
-                            {splitCamelCase(error.type)}
-                        </StyledErrorName>
-                        <div onClick={() => setIsExpanded(!isExpanded)}>
+            <div onClick={() => setIsExpanded(!isExpanded)}>
+                <div className={styles.frameworkError}>
+                    <div className={styles.errorDetail}>
+                        <div className={styles.title}>
+                            <ErrorIcon />
+                        </div>
+                        <div
+                            className={cx(styles.errorContent, {
+                                [styles.contentMargin]: isExpanded,
+                            })}
+                        >
+                            <StyledErrorName className={styles.errorName}>
+                                {splitCamelCase(error.type)}
+                            </StyledErrorName>
                             {error.message}
                             <span className={styles.chevron}>
                                 <ChevronIcon
                                     direction={isExpanded ? 'up' : 'down'}
                                 />
                             </span>
+                            {isExpanded && (
+                                <div className={styles.stackMessage}>
+                                    {error.stackTrace}
+                                </div>
+                            )}
                         </div>
-                        <br />
-                        {isExpanded && (
-                            <div className={styles.stackMessage}>
-                                {error.stackTrace}
-                            </div>
-                        )}
                     </div>
+                    <GoToCodeButton url={url} tooltipText={tooltipText} />
                 </div>
-                <GoToCodeButton url={url} tooltipText={tooltipText} />
             </div>
         </Panel>
     );

@@ -9,10 +9,6 @@ import EnvironmentDetailsFragment from './EnvironmentDetailsFragment';
 import { EnvironmentDetailsFragment$key } from './__generated__/EnvironmentDetailsFragment.graphql';
 
 const StyledLink = styled('a')(({ theme }) => ({
-    color: theme.palette.base[100],
-}));
-
-const BranchLink = styled('a')(({ theme }) => ({
     color: theme.palette.status.success[200],
 }));
 
@@ -33,14 +29,14 @@ const EnvironmentDetails: React.FC<Props> = ({ fragmentKey }) => {
             </DetailColumn>
             <DetailColumn title="Branch">
                 {testCodeRevision?.branch ? (
-                    <BranchLink
+                    <StyledLink
                         className={styles.columnContent}
                         target="_blank"
                         rel="noreferrer"
                         href={testCodeRevision.branch.url}
                     >
                         {testCodeRevision.branch.name}
-                    </BranchLink>
+                    </StyledLink>
                 ) : (
                     '-'
                 )}

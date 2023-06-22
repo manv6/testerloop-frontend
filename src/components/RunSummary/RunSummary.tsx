@@ -36,6 +36,10 @@ const RunSummary: React.FC<Props> = ({ fragmentKey, className }) => {
                         text: 'RUNS',
                         link: '/',
                     },
+                    {
+                        text: '',
+                        link: '',
+                    },
                 ]}
             />
             <div className={styles.row}>
