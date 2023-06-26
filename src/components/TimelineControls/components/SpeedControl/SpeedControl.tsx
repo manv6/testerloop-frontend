@@ -1,12 +1,13 @@
-import { MenuItem, Select, SelectChangeEvent, styled } from '@mui/material';
+import { SelectChangeEvent, styled } from '@mui/material';
 import React, { useState } from 'react';
 import { useTimeline } from 'src/hooks/timeline';
 import styles from './SpeedControl.module.scss';
+import { Select, MenuItem } from 'src/components/common';
 
 const AVAILABLE_SPEEDS = [0.25, 0.5, 0.75, 1];
 
 const StyledPrimarySvg = styled('svg')(({ theme }) => ({
-    fill: theme.palette.primary[400],
+    fill: theme.palette.status.success[300],
 }));
 const StyledWhiteSvg = styled('svg')(({ theme }) => ({
     fill: theme.palette.base[100],
@@ -53,6 +54,13 @@ const SpeedControl: React.FC = () => {
                     }
                     onOpen={() => setMenuOpen(true)}
                     onClose={() => setMenuOpen(false)}
+                    MenuProps={{
+                        PaperProps: {
+                            style: {
+                                width: '102px',
+                            },
+                        },
+                    }}
                 >
                     {AVAILABLE_SPEEDS.map((s, idx) => (
                         <MenuItem

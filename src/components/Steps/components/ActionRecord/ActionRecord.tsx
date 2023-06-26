@@ -36,11 +36,8 @@ const StyledAction = styled('div')<StyledActionProps>(
             backgroundColor,
             borderBottom: `1px solid ${borderColor}`,
             borderTop: `1px solid ${borderColor}`,
-            '&:first-of-type': {
-                borderTop: 0,
-            },
-            '&:last-of-type': {
-                borderBottom: 0,
+            '&:hover': {
+                backgroundColor: 'rgba(38, 42, 50, 0.5)',
             },
         };
     }

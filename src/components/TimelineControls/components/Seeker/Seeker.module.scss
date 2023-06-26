@@ -83,7 +83,12 @@
     height: 100%;
     width: 3px;
     z-index: var(--timeline-cursor-layer);
-    background: var(--cursor-linear-gradient-normal-state);
+    background: linear-gradient(
+        to bottom,
+        rgb(244 244 245 / 0%) 0%,
+        rgb(244 244 245 / 100%) 50%,
+        rgb(244 244 245 / 0%) 100%
+    );
 }
 
 .hoverCursor {
@@ -130,4 +135,19 @@
     top: 100%;
     z-index: var(--timeline-screenshot-layer);
     pointer-events: none;
+}
+
+.screenshotImage {
+    display: flex;
+    width: 600px;
+    height: 338.224px;
+    padding: 16px 12px 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 11.583px;
+    border-radius: 0 0 5px 5px;
+    border-right: 1px solid var(--primary-base-300, #262a32);
+    border-bottom: 1px solid var(--primary-base-300, #262a32);
+    border-left: 1px solid var(--primary-base-300, #262a32);
+    background: var(--primary-base-400, #121418);
 }

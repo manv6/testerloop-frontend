@@ -3,6 +3,7 @@ import cx from 'classnames';
 import styles from './Child.module.scss';
 import { Button, Panel, PanelHeader } from 'src/components/common';
 import { CollapseIcon, ExpandIcon } from './components';
+import { Tooltip } from '@mui/material';
 
 type Props = React.PropsWithChildren<{
     notExpandable?: boolean;
@@ -17,6 +18,7 @@ const Child: React.FC<Props> = ({
     header,
 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
+    const [isButtonHovered, setIsButtonHovered] = useState(false);
 
     return (
         <Panel
@@ -26,17 +28,26 @@ const Child: React.FC<Props> = ({
         >
             <PanelHeader>
                 <div className={styles.header}>{header}</div>
-                <div>
-                    <Button
-                        size="small"
-                        className={cx(styles.expand, {
-                            [styles.hide]: notExpandable,
-                        })}
-                        onClick={() => setIsExpanded(!isExpanded)}
-                    >
-                        {isExpanded ? <CollapseIcon /> : <ExpandIcon />}
-                    </Button>
-                </div>
+                <Tooltip
+                    title={isExpanded ? 'Collapse' : 'Expand'}
+                    placement="top"
+                    arrow
+                    open={isButtonHovered}
+                >
+                    <div>
+                        <Button
+                            size="small"
+                            className={cx(styles.expand, {
+                                [styles.hide]: notExpandable,
+                            })}
+                            onClick={() => setIsExpanded(!isExpanded)}
+                            onMouseEnter={() => setIsButtonHovered(true)}
+                            onMouseLeave={() => setIsButtonHovered(false)}
+                        >
+                            {isExpanded ? <CollapseIcon /> : <ExpandIcon />}
+                        </Button>
+                    </div>
+                </Tooltip>
             </PanelHeader>
             {children}
         </Panel>

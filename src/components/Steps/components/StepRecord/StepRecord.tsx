@@ -35,6 +35,9 @@ const StyledStepHeader = styled('tr')<StyledStepHeaderProps>(
             borderBottom: `1px solid ${borderColor}`,
             ...(isPreviousToSelected && { borderBottom: 'none' }),
             borderTop: `1px solid ${borderColor}`,
+            '&:hover': {
+                backgroundColor: 'rgba(38, 42, 50, 0.5)',
+            },
         };
     }
 );

@@ -241,6 +241,14 @@ const DARK = createTheme({
                 }),
             },
         },
+        MuiMenu: {
+            styleOverrides: {
+                paper: ({ theme }) => ({
+                    border: `1px solid ${theme.palette.base[300]}`,
+                    borderRadius: '5px',
+                }),
+            },
+        },
     },
 });
 

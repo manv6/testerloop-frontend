@@ -342,6 +342,7 @@ const Seeker: React.FC<Props> = ({ getMarker, filters, fragmentKey }) => {
                         <img
                             src={screenshot}
                             alt="screenshot"
+                            className={styles.screenshotImage}
                             style={{
                                 width: `${screenshotWidth}px`,
                                 height: `${screenshotHeight}px`,

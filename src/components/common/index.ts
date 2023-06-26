@@ -15,3 +15,5 @@ export { default as ExpandButton } from './ExpandButton';
 export { default as ButtonGroup } from './ButtonGroup';
 export { default as Table } from './Table';
 export { default as BreadCrumb } from './BreadCrumb';
+export { default as Select } from './Select';
+export { default as MenuItem } from './MenuItem';

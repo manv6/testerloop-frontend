@@ -1,12 +1,14 @@
 .filters {
     display: flex;
     flex-direction: row;
+    font-weight: 500;
 }
 
 .filter {
     display: flex;
     align-items: center;
     margin-left: 24px;
+    cursor: pointer;
 
     input {
         width: 16px;
