@@ -10,6 +10,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-size: 13.33px;
 }
 
 .detailsRow {
@@ -17,6 +18,8 @@
 }
 
 .errorsContainer {
+    margin-top: 24px;
+
     ul {
         display: flex;
         list-style-type: none;
@@ -43,7 +46,13 @@
     display: flex;
     align-items: center;
 
-    h1 {
+    h2 {
         margin-right: 0.5rem;
     }
+}
+
+.panel {
+    border: none;
+    border-bottom: 1px solid var(--primary-base-300, #262a32);
+    border-radius: 0 !important;
 }

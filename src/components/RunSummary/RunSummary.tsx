@@ -29,7 +29,7 @@ const RunSummary: React.FC<Props> = ({ fragmentKey, className }) => {
     );
 
     return (
-        <Panel className={cx(styles.summary, className)}>
+        <Panel className={cx(styles.summary, styles.panel, className)}>
             <BreadCrumb
                 paths={[
                     {
@@ -44,7 +44,7 @@ const RunSummary: React.FC<Props> = ({ fragmentKey, className }) => {
             />
             <div className={styles.row}>
                 <div className={styles.pageTitle}>
-                    <Typography variant="h1">
+                    <Typography variant="h2">
                         <TestRunTitle testRunKey={runData} />
                     </Typography>
                     <RunStatus fragmentKey={runData} />

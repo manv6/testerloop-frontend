@@ -67,6 +67,7 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
             ? theme.palette.base[100]
             : theme.palette.base[200],
     }));
+
     return (
         <Panel
             className={cx(styles.summary, styles.panel, className)}
@@ -94,7 +95,7 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
 
             <div className={styles.row}>
                 <div className={styles.pageTitle} data-cy="debug-page-title">
-                    <Typography variant="h1">Scenario: {title}</Typography>
+                    <Typography variant="h2">Scenario: {title}</Typography>
                     <Tag tagType={tagType} text={tagText} />
                 </div>
             </div>

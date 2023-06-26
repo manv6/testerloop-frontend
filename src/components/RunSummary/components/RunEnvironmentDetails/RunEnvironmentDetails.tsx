@@ -32,51 +32,45 @@ const RunEnvironmentDetails: React.FC<Props> = ({ fragmentKey }) => {
     );
 
     return (
-        <>
-            <div className={styles.envDetails}>
-                <DetailColumn title="Tests">
-                    <div className={styles.columnContent}>
-                        <TestCount fragmentKey={environmentDetails} />
-                    </div>
-                </DetailColumn>
-                <DetailColumn title="Browser">
-                    <div className={styles.columnContent}>
-                        <TestRunBrowser />
-                    </div>
-                </DetailColumn>
-                <DetailColumn title="Branch">
-                    <div className={styles.columnContent}>
-                        {environmentDetails.testCodeRevision ? (
-                            <TestRunBranch
-                                fragmentKey={
-                                    environmentDetails.testCodeRevision
-                                }
-                            />
-                        ) : (
-                            <div>No Branch Information</div>
-                        )}
-                    </div>
-                </DetailColumn>
-                <DetailColumn title="Date/Time">
-                    <div className={styles.columnContent}>
-                        <TestRunDateTime fragmentKey={environmentDetails} />
-                    </div>
-                </DetailColumn>
-                <DetailColumn title="By">
-                    <div className={styles.columnContent}>
-                        {environmentDetails.testCodeRevision ? (
-                            <TestRunAuthor
-                                fragmentKey={
-                                    environmentDetails.testCodeRevision
-                                }
-                            />
-                        ) : (
-                            <div>No Author Information</div>
-                        )}
-                    </div>
-                </DetailColumn>
-            </div>
-        </>
+        <div className={styles.envDetails}>
+            <DetailColumn title="Tests">
+                <div className={styles.columnContent}>
+                    <TestCount fragmentKey={environmentDetails} />
+                </div>
+            </DetailColumn>
+            <DetailColumn title="Browser">
+                <div className={styles.columnContent}>
+                    <TestRunBrowser />
+                </div>
+            </DetailColumn>
+            <DetailColumn title="Branch">
+                <div className={styles.columnContent}>
+                    {environmentDetails.testCodeRevision ? (
+                        <TestRunBranch
+                            fragmentKey={environmentDetails.testCodeRevision}
+                        />
+                    ) : (
+                        <div>No Branch Information</div>
+                    )}
+                </div>
+            </DetailColumn>
+            <DetailColumn title="Date/Time">
+                <div className={styles.columnContent}>
+                    <TestRunDateTime fragmentKey={environmentDetails} />
+                </div>
+            </DetailColumn>
+            <DetailColumn title="By">
+                <div className={styles.columnContent}>
+                    {environmentDetails.testCodeRevision ? (
+                        <TestRunAuthor
+                            fragmentKey={environmentDetails.testCodeRevision}
+                        />
+                    ) : (
+                        <div>No Author Information</div>
+                    )}
+                </div>
+            </DetailColumn>
+        </div>
     );
 };
 

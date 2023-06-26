@@ -10,6 +10,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-size: 13.33px;
+}
+
+.panel {
+    border: none;
+    border-bottom: 1px solid var(--primary-base-300, #262a32);
+    border-radius: 0 !important;
 }
 
 .detailsRow {
@@ -20,7 +27,7 @@
     display: flex;
     align-items: center;
 
-    h1 {
+    h2 {
         margin-right: 0.5rem;
     }
 }

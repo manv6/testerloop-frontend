@@ -81,6 +81,13 @@ const DARK = createTheme({
         },
     },
     components: {
+        MuiBreadcrumbs: {
+            styleOverrides: {
+                root: ({ theme }) => ({
+                    fontSize: '11.11px',
+                }),
+            },
+        },
         MuiSelect: {
             styleOverrides: {
                 standard: ({ theme }) => ({
@@ -89,6 +96,7 @@ const DARK = createTheme({
                     '&::after': {
                         display: 'none',
                     },
+                    fontSize: '13.33px',
                 }),
             },
         },
@@ -138,6 +146,7 @@ const DARK = createTheme({
         MuiMenuItem: {
             styleOverrides: {
                 root: ({ theme }) => ({
+                    fontSize: '13.33px',
                     '&.Mui-selected': {
                         backgroundColor: theme.palette.primary[500],
                         borderTop: `1px solid ${theme.palette.primary[400]}`,
@@ -225,7 +234,7 @@ const DARK = createTheme({
         MuiTab: {
             styleOverrides: {
                 root: ({ theme }) => ({
-                    fontSize: '1.2rem',
+                    fontSize: '1rem',
                     color: theme.palette.base[200],
                     '&.Mui-selected': {
                         color: theme.palette.base[100],
