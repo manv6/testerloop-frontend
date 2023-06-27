@@ -52,10 +52,21 @@ type Events = {
     frameworkError: Event[];
 };
 
+const getMarkerSize = (type: EventType, size: number): string => {
+    switch (type) {
+        case EventType.NETWORK_SUCCESS:
+            return '10px';
+        case EventType.NETWORK_ERROR:
+            return '12px';
+        default:
+            return `${size}px`;
+    }
+};
+
 const StyledMarker = styled('div')<StyledMarkerProps>(({ size, type }) => ({
     svg: {
-        height: type === EventType.NETWORK_SUCCESS ? '10px' : size,
-        width: type === EventType.NETWORK_SUCCESS ? '10px' : size,
+        height: getMarkerSize(type, size),
+        width: getMarkerSize(type, size),
     },
 }));
 

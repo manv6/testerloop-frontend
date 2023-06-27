@@ -12,6 +12,11 @@
 
     & > .stepContent {
         flex-grow: 1;
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* the number of lines to show */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .stepPrefix {
