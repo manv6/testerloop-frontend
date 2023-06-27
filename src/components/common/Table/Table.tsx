@@ -22,6 +22,9 @@ const StyledMuiTable = styled(Table)(({ theme }) => ({
         borderBottom: `1px solid ${theme.palette.base[300]}`,
         paddingLeft: '24px',
     },
+    '& tbody tr:hover': {
+        backgroundColor: 'rgba(38, 42, 50, 0.5)',
+    },
     '& tbody td:last-child': {
         textAlign: 'center',
         paddingRight: '24px',
