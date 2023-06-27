@@ -1,7 +1,14 @@
 module.exports = {
     root: true,
     env: { browser: true },
-    ignorePatterns: ['src/data/*', '*/__generated__/*', '/.eslintrc.js', '*/node_modules/*'],
+    ignorePatterns: [
+        'src/data/*',
+        '*/__generated__/*',
+        '/.eslintrc.js',
+        '*/node_modules/*',
+        'cypress.config.ts',
+        'cypress/*',
+    ],
     extends: [
         'react-app',
         'react-app/jest',
@@ -14,7 +21,7 @@ module.exports = {
     parser: '@typescript-eslint/parser',
     parserOptions: {
         project: ['tsconfig.json'],
-      },
+    },
     plugins: ['prettier', '@typescript-eslint'],
     rules: {
         semi: ['error', 'always'],

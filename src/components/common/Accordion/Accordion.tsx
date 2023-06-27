@@ -48,11 +48,16 @@ const Accordion: React.FC<Props> = ({
                 content: summaryContentClassName,
                 expanded: summaryContentClassName,
             }}
+            data-cy="accordion-summary"
             {...summaryProps}
         >
             {title}
         </StyledAccordionSummary>
-        <AccordionDetails className={detailsClassName} {...detailsProps}>
+        <AccordionDetails
+            data-cy="accordion-details"
+            className={detailsClassName}
+            {...detailsProps}
+        >
             {children}
         </AccordionDetails>
     </MUIAccordion>
