@@ -50,27 +50,32 @@ const FrameworkError: React.FC<Props> = ({ fragmentKey }) => {
                                 [styles.contentMargin]: isExpanded,
                             })}
                         >
-                            <StyledErrorName className={styles.errorName}>
+                            <StyledErrorName
+                                className={styles.errorName}
+                                data-cy="framework-error-name"
+                            >
                                 {splitCamelCase(error.type)}
                             </StyledErrorName>
                             {error.message}
-                            <span className={styles.chevron}>
+                            <span
+                                className={styles.chevron}
+                                data-cy="framework-error-expand-button"
+                            >
                                 <ChevronIcon
                                     direction={isExpanded ? 'up' : 'down'}
                                 />
                             </span>
                             {isExpanded && (
-                                <div className={styles.stackMessage}>
+                                <div
+                                    className={styles.stackMessage}
+                                    data-cy="framework-error-stacktrace"
+                                >
                                     {error.stackTrace}
                                 </div>
                             )}
                         </div>
                     </div>
-                    <GoToCodeButton
-                        url={url}
-                        tooltipText={tooltipText}
-                        data-cy="go-to-code-button"
-                    />
+                    <GoToCodeButton url={url} tooltipText={tooltipText} />
                 </div>
             </div>
         </Panel>

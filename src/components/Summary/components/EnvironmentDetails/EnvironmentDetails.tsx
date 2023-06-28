@@ -23,7 +23,7 @@ const EnvironmentDetails: React.FC<Props> = ({ fragmentKey }) => {
     return (
         <div className={styles.envDetails}>
             <DetailColumn title="Browser">
-                <div className={styles.columnContent}>
+                <div className={styles.columnContent} data-cy="browser">
                     <ChromeIcon /> Chrome
                 </div>
             </DetailColumn>
@@ -34,6 +34,7 @@ const EnvironmentDetails: React.FC<Props> = ({ fragmentKey }) => {
                         target="_blank"
                         rel="noreferrer"
                         href={testCodeRevision.branch.url}
+                        data-cy="branch-link"
                     >
                         {testCodeRevision.branch.name}
                     </StyledLink>
@@ -48,6 +49,7 @@ const EnvironmentDetails: React.FC<Props> = ({ fragmentKey }) => {
                         target="_blank"
                         rel="noreferrer"
                         href={testCodeRevision.url}
+                        data-cy="commit-link"
                     >
                         {testCodeRevision.commitId}
                     </StyledLink>

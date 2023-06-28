@@ -19,7 +19,7 @@ const ConsoleErrorCount: React.FC<Props> = ({ fragmentKey }) => {
     errorCount = data.summaryConsoleErrors.totalCount;
     return (
         <li>
-            <StyledSpan>
+            <StyledSpan data-cy="console-error-count">
                 {data.summaryConsoleErrors.totalCount} Console errors
             </StyledSpan>
         </li>

@@ -15,7 +15,12 @@ const StyledButton = styled(Button)<StyledComponentProps>(({ theme }) => ({
 }));
 
 const GoToCodeButton: React.FC<Props> = ({ url, tooltipText }) => (
-    <StyledButton className={styles.goToCodeButton} variant="text" size="small">
+    <StyledButton
+        className={styles.goToCodeButton}
+        variant="text"
+        size="small"
+        data-cy="go-to-code-button"
+    >
         <Tooltip title={tooltipText} placement="top" arrow>
             <a href={url} target="_blank" rel="noreferrer">
                 <svg

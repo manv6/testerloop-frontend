@@ -37,7 +37,11 @@ type Props = {
 } & StyledTagProps;
 
 const Tag: React.FC<Props> = ({ text, tagType = 'error', className }) => (
-    <StyledTag className={cx(styles.tag, className)} tagType={tagType}>
+    <StyledTag
+        className={cx(styles.tag, className)}
+        tagType={tagType}
+        data-cy="status-tag"
+    >
         {text}
     </StyledTag>
 );

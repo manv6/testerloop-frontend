@@ -61,6 +61,7 @@ const SpeedControl: React.FC = () => {
                             },
                         },
                     }}
+                    data-cy="speed-control"
                 >
                     {AVAILABLE_SPEEDS.map((s, idx) => (
                         <MenuItem

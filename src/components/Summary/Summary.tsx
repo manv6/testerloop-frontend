@@ -94,8 +94,13 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
             />
 
             <div className={styles.row}>
-                <div className={styles.pageTitle} data-cy="debug-page-title">
-                    <Typography variant="h2">Scenario: {title}</Typography>
+                <div
+                    className={styles.pageTitle}
+                    data-cy="debug-page-title-container"
+                >
+                    <Typography variant="h2" data-cy="debug-page-title-text">
+                        Scenario: {title}
+                    </Typography>
                     <Tag tagType={tagType} text={tagText} />
                 </div>
             </div>
@@ -112,7 +117,7 @@ const Summary: React.FC<Props> = ({ fragmentKey, className }) => {
                         <ul>
                             {frameworkErrorName && (
                                 <li>
-                                    <StyledSpan>
+                                    <StyledSpan data-cy="framework-error-count">
                                         1 {splitCamelCase(frameworkErrorName)}
                                     </StyledSpan>
                                 </li>

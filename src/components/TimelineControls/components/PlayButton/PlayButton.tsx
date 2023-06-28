@@ -6,7 +6,11 @@ const PlayButton: React.FC = () => {
     const { setPlaying, isPlaying } = useTimeline();
 
     return (
-        <button onClick={() => setPlaying(!isPlaying)} className={styles.play}>
+        <button
+            onClick={() => setPlaying(!isPlaying)}
+            className={styles.play}
+            data-cy="play-button"
+        >
             {isPlaying ? (
                 <svg
                     width="12"

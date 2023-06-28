@@ -21,7 +21,7 @@ const NetworkErrorCount: React.FC<Props> = ({ fragmentKey }) => {
 
     return (
         <li>
-            <StyledSpan>
+            <StyledSpan data-cy="network-error-count">
                 {data.summaryNetworkErrors.totalCount} Network errors
             </StyledSpan>
         </li>
