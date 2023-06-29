@@ -23,12 +23,13 @@ const BreadCrumb: React.FC<Props> = ({ paths }) => {
 
     return (
         <div className={styles.breadcrumb}>
-            <Breadcrumbs>
+            <Breadcrumbs data-cy="breadcrumb">
                 {paths.map((path) => (
                     <StyledLink
                         key={path.link}
                         to={path.link}
                         onMouseEnter={() => preloadFetcher.load(path.link)}
+                        data-cy="breadcrumb-link"
                     >
                         {path.text}
                     </StyledLink>

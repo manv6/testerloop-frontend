@@ -12,7 +12,10 @@ type Props = {
 };
 
 const Divider: React.FC<Props> = ({ className }) => (
-    <StyledDivider className={cx(styles.divider, className)} />
+    <StyledDivider
+        className={cx(styles.divider, className)}
+        data-cy="divider"
+    />
 );
 
 export default Divider;

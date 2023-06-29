@@ -13,7 +13,7 @@ const LIGHT = createTheme({
 });
 
 const LINE_HEIGHT = 1.5;
-const DARK = createTheme({
+export const DARK = createTheme({
     typography: {
         fontFamily: 'Roboto, sans-serif',
         h1: {

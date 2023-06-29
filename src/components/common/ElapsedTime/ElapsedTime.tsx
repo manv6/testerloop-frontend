@@ -17,10 +17,10 @@ const ElapsedTime: React.FC<Props> = ({ timestamp, className }) => {
     const { startTime } = useTimeline();
 
     const displayTime = useMemo(() => {
-        const date = timestamp ? new Date(timestamp) : undefined;
-        if (!date) {
+        if (timestamp <= 0) {
             return;
         }
+        const date = new Date(timestamp);
         const elapsedTime = datesToElapsedTime(startTime, date);
         return elapsedTime.replace('.', ' • ') + ' ms';
     }, [startTime, timestamp]);

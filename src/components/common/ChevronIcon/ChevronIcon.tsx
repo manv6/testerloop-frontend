@@ -17,6 +17,7 @@ const ChevronIcon: React.FC<Props> = ({ direction }) => {
             viewBox="0 0 14 7"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            data-cy={`chevron-icon-svg-${direction}`}
         >
             <path d={iconDrawPath[direction]} fill="#FEFDFF" />
         </svg>

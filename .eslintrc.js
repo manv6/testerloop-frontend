@@ -8,6 +8,7 @@ module.exports = {
         '*/node_modules/*',
         'cypress.config.ts',
         'cypress/*',
+        'jest.config.js',
     ],
     extends: [
         'react-app',
