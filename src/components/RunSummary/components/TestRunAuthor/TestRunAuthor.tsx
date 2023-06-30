@@ -19,7 +19,11 @@ export const TestRunAuthor: React.FC<Props> = ({ fragmentKey }) => {
         fragmentKey
     );
 
-    return data.author.name ? <div>{data.author.name}</div> : <div>-</div>;
+    return data.author.name ? (
+        <div data-cy="test-run-author">{data.author.name}</div>
+    ) : (
+        <div>-</div>
+    );
 };
 
 export default TestRunAuthor;

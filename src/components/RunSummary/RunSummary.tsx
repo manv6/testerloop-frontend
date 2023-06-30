@@ -44,7 +44,7 @@ const RunSummary: React.FC<Props> = ({ fragmentKey, className }) => {
             />
             <div className={styles.row}>
                 <div className={styles.pageTitle}>
-                    <Typography variant="h2">
+                    <Typography variant="h2" data-cy="run-summary-title">
                         <TestRunTitle testRunKey={runData} />
                     </Typography>
                     <RunStatus fragmentKey={runData} />

@@ -49,8 +49,9 @@ export const TestExecutionList: React.FC<Props> = ({ fragmentKey }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {edges.map(({ node }) => (
+                        {edges.map(({ node }, idx) => (
                             <TestExecutionListRow
+                                idx={idx}
                                 key={node.id}
                                 fragmentKey={node}
                                 preloadFetcher={preloadFetcher}

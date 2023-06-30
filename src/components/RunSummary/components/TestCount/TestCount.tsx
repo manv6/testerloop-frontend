@@ -21,7 +21,7 @@ const TestCount: React.FC<Props> = ({ fragmentKey }) => {
 
     const numberOfTests = data.executions.totalCount;
 
-    return <div>{numberOfTests}</div>;
+    return <div data-cy="test-count">{numberOfTests}</div>;
 };
 
 export default TestCount;

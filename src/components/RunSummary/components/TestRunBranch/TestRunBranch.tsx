@@ -26,7 +26,12 @@ const TestRunBranch: React.FC<Props> = ({ fragmentKey }) => {
     );
 
     return (
-        <StyledLink target="_blank" rel="noreferrer" href={data.branch?.url}>
+        <StyledLink
+            target="_blank"
+            rel="noreferrer"
+            href={data.branch?.url}
+            data-cy="test-run-branch"
+        >
             {data.branch?.name}
         </StyledLink>
     );

@@ -34,7 +34,11 @@ const TestRunDateTime: React.FC<Props> = ({ fragmentKey }) => {
                   )
               ).toISOString();
 
-    return <>{timestamp ? new Date(timestamp).toLocaleString() : '-'}</>;
+    return (
+        <span data-cy="test-run-datetime">
+            {timestamp ? new Date(timestamp).toLocaleString() : '-'}
+        </span>
+    );
 };
 
 export default TestRunDateTime;

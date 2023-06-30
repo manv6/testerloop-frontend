@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 type Props = {
     fragmentKey: TestExecutionListRowFragment$key;
     preloadFetcher: FetcherWithComponents<unknown>;
+    idx: number;
 };
 
 const testExecutionIdToUrl = (id: string) => {
@@ -22,6 +23,7 @@ const testExecutionIdToUrl = (id: string) => {
 export const TestExecutionListRow: React.FC<Props> = ({
     fragmentKey,
     preloadFetcher,
+    idx,
 }) => {
     const testExecutionRaw = useFragment(
         graphql`
@@ -52,6 +54,7 @@ export const TestExecutionListRow: React.FC<Props> = ({
 
     return (
         <tr
+            data-cy={`test-execution-${idx}`}
             onMouseEnter={() =>
                 preloadFetcher.load(testExecutionIdToUrl(testExecution.id))
             }
