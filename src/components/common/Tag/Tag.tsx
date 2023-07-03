@@ -20,10 +20,6 @@ const StyledTag = styled('div')<StyledTagProps>(({ theme, tagType }) => {
             backgroundColor = theme.palette.status.success[500];
             borderColor = theme.palette.status.success[300];
             break;
-        default:
-            backgroundColor = theme.palette.base[500];
-            borderColor = theme.palette.base[300];
-            break;
     }
     return {
         backgroundColor,

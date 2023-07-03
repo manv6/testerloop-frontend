@@ -44,6 +44,7 @@ const StepPrefix: React.FC<Props> = ({
         type={type}
         hasFailed={hasFailed}
         className={className}
+        data-cy="step-prefix"
     >
         {children}
     </StyledPrefix>

@@ -9,6 +9,7 @@ module.exports = {
         'cypress.config.ts',
         'cypress/*',
         'jest.config.js',
+        'gql.codegen.ts',
     ],
     extends: [
         'react-app',

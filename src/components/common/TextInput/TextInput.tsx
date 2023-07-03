@@ -31,6 +31,7 @@ const TextInput: React.FC<TextInputProps> = ({
 }) => (
     <StyledTextField
         className={cx(className, styles.textField)}
+        data-cy="text-input"
         variant="standard"
         inputProps={inputProps}
         InputProps={{

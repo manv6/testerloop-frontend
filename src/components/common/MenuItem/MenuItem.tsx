@@ -1,17 +1,17 @@
 import React from 'react';
-import { MenuItem, MenuItemProps, styled } from '@mui/material';
+import { MenuItem as MuiMenuItem, MenuItemProps, styled } from '@mui/material';
 
-const StyledMenuItem = styled((props: MenuItemProps) => (
-    <MenuItem {...props} />
-))(({ theme }) => ({
-    '&.Mui-selected': {
-        borderTopColor: theme.palette.status.success[300],
-        borderBottomColor: theme.palette.status.success[300],
-        backgroundColor: theme.palette.status.success[500],
-    },
-    '&:hover': {
-        backgroundColor: theme.palette.base[300],
-    },
-}));
+const MenuItem = styled((props: MenuItemProps) => <MuiMenuItem {...props} />)(
+    ({ theme }) => ({
+        '&.Mui-selected': {
+            borderTopColor: theme.palette.status.success[300],
+            borderBottomColor: theme.palette.status.success[300],
+            backgroundColor: theme.palette.status.success[500],
+        },
+        '&:hover': {
+            backgroundColor: theme.palette.base[300],
+        },
+    })
+);
 
-export default StyledMenuItem;
+export default MenuItem;

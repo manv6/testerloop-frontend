@@ -1,7 +1,7 @@
-import { Table, TableProps, styled } from '@mui/material';
+import { Table as MUITable, TableProps, styled } from '@mui/material';
 import React from 'react';
 
-const StyledMuiTable = styled(Table)(({ theme }) => ({
+const StyledMuiTable = styled(MUITable)(({ theme }) => ({
     '& thead th': {
         color: theme.palette.base[100],
         textAlign: 'left',
@@ -37,8 +37,12 @@ type Props = TableProps &
         className?: string;
     }>;
 
-const StyledTable: React.FC<Props> = ({ children, ...props }) => {
-    return <StyledMuiTable {...props}>{children}</StyledMuiTable>;
+const Table: React.FC<Props> = ({ children, ...props }) => {
+    return (
+        <StyledMuiTable {...props} data-cy="table">
+            {children}
+        </StyledMuiTable>
+    );
 };
 
-export default StyledTable;
+export default Table;

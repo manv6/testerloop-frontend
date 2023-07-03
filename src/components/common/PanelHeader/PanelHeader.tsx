@@ -16,7 +16,7 @@ const PanelHeader: React.FC<Props> = ({ children, className }) => {
     return (
         <StyledHeader
             className={cx(styles.panelHeader, className)}
-            id="stepsHeader"
+            data-cy="panel-header"
         >
             {children}
         </StyledHeader>

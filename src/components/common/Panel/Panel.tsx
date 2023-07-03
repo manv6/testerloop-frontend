@@ -20,9 +20,21 @@ interface Props extends React.PropsWithChildren {
     className?: string;
 }
 
-const Panel: React.FC<Props> = ({ children, className, ...props }) => (
+const Panel: React.FC<Props> = ({
+    children,
+    className,
+    onMouseEnter,
+    onMouseLeave,
+    ...props
+}) => (
     <SuspensePanel>
-        <StyledDiv className={cx(styles.panel, className)} {...props}>
+        <StyledDiv
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+            className={cx(styles.panel, className)}
+            data-cy="panel-div"
+            {...props}
+        >
             {children}
         </StyledDiv>
     </SuspensePanel>
