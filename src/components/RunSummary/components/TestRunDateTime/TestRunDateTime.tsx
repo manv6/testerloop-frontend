@@ -2,6 +2,7 @@ import React from 'react';
 import { useFragment } from 'react-relay';
 import { TestRunDateTimeFragment$key } from './__generated__/TestRunDateTimeFragment.graphql';
 import graphql from 'babel-plugin-relay/macro';
+import { formatDate } from 'src/utils/date';
 
 type Props = {
     fragmentKey: TestRunDateTimeFragment$key;
@@ -36,7 +37,7 @@ const TestRunDateTime: React.FC<Props> = ({ fragmentKey }) => {
 
     return (
         <span data-cy="test-run-datetime">
-            {timestamp ? new Date(timestamp).toLocaleString() : '-'}
+            {timestamp ? formatDate(timestamp) : '-'}{' '}
         </span>
     );
 };
