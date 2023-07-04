@@ -81,6 +81,32 @@ export const DARK = createTheme({
         },
     },
     components: {
+        MuiCssBaseline: {
+            styleOverrides: `
+            /* Chrome, Edge, and Safari */
+            ::-webkit-scrollbar {
+                width: 9px;
+                height: 9px;
+                background-color: #121418;
+                border: 1px solid #262A32;
+            }
+            ::-webkit-scrollbar-thumb {
+                background-color: #262A32;
+                border: 3px solid transparent;
+                border-radius: 9px;
+                background-clip: content-box;
+            }
+            ::-webkit-scrollbar-corner {
+                background-color: #121418;
+            }
+            /* Firefox */
+            * {
+                scrollbar-width: thin;
+                scrollbar-color: #262A32 #121418;
+            }
+            `,
+        },
+
         MuiBreadcrumbs: {
             styleOverrides: {
                 root: ({ theme }) => ({

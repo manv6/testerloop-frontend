@@ -20,6 +20,13 @@ const Child: React.FC<Props> = ({
     const [isExpanded, setIsExpanded] = useState(false);
     const [isButtonHovered, setIsButtonHovered] = useState(false);
 
+    const handleExpansion = () => {
+        setIsExpanded(!isExpanded);
+        if (!isExpanded) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    };
+
     return (
         <Panel
             className={cx(className, styles.child, {
@@ -40,7 +47,7 @@ const Child: React.FC<Props> = ({
                             className={cx(styles.expand, {
                                 [styles.hide]: notExpandable,
                             })}
-                            onClick={() => setIsExpanded(!isExpanded)}
+                            onClick={() => handleExpansion()}
                             onMouseEnter={() => setIsButtonHovered(true)}
                             onMouseLeave={() => setIsButtonHovered(false)}
                         >

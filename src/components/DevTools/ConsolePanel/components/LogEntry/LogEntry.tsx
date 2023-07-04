@@ -100,6 +100,7 @@ const LogEntry = forwardRef<HTMLLIElement, LogEntryWithRefProps>(
                 isHovered={isLogHovered}
                 className={styles.logEntry}
                 ref={ref}
+                onClick={handleExpandClick}
             >
                 <div className={styles.mainContent}>
                     <StyledLineMarker
@@ -117,21 +118,14 @@ const LogEntry = forwardRef<HTMLLIElement, LogEntryWithRefProps>(
                             {message}
                         </span>
 
-                        <button
-                            onClick={handleExpandClick}
-                            className={styles.expandButton}
-                        >
-                            <ChevronIcon
-                                direction={isExpanded ? 'up' : 'down'}
-                            />
-                        </button>
+                        <ChevronIcon direction={isExpanded ? 'up' : 'down'} />
                     </span>
                 </div>
                 {isExpanded && (
                     <React.Suspense fallback="...">
                         <StackTrace fragmentKey={data.stackTrace} />
                     </React.Suspense>
-                )}{' '}
+                )}
             </StyledLogEntry>
         );
     }

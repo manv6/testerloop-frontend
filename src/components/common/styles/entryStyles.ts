@@ -25,6 +25,10 @@ const entryStyles = ({
         backgroundColor,
         borderBottom: `1px solid ${borderColor}`,
         borderTop: `1px solid ${borderColor}`,
+        cursor: 'pointer',
+        '&:hover': {
+            backgroundColor: 'rgba(38, 42, 50, 0.5)',
+        },
     };
 };
 
