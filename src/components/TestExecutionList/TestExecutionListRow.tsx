@@ -7,6 +7,7 @@ import { formatIntervalEvent } from 'src/utils/formatters';
 import { getDuration } from 'src/utils/getDuration';
 import { Tag } from 'src/components/common';
 import { useNavigate } from 'react-router-dom';
+import { formatDate } from 'src/utils/date';
 
 type Props = {
     fragmentKey: TestExecutionListRowFragment$key;
@@ -51,7 +52,7 @@ export const TestExecutionListRow: React.FC<Props> = ({
         [testExecution.at, testExecution.until]
     );
     const navigate = useNavigate();
-
+    const timestamp = testExecution.at.toISOString();
     return (
         <tr
             data-cy={`test-execution-${idx}`}
@@ -62,12 +63,7 @@ export const TestExecutionListRow: React.FC<Props> = ({
             style={{ cursor: 'pointer' }}
         >
             <td>{testExecution.title}</td>
-            <td>
-                {Intl.DateTimeFormat(undefined, {
-                    dateStyle: 'short',
-                    timeStyle: 'medium',
-                }).format(testExecution.at)}
-            </td>
+            <td>{formatDate(timestamp)}</td>
             <td>{duration}</td>
             <td>
                 <div style={{ display: 'inline-block' }}>
