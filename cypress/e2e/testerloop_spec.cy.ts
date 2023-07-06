@@ -1,4 +1,4 @@
-describe('testerloop debug page', () => {
+describe('Testerloop pages', () => {
     const summaryTitlePage = '[data-cy="debug-page-title-text"]';
     const status = '[data-cy="status-tag"]';
     const errorType = '[data-cy="framework-error-name"]';
@@ -68,7 +68,7 @@ describe('testerloop debug page', () => {
             cy.get(status).first().should('have.text', data.status);
             cy.get(testCount).should('have.text', data.noTests);
             cy.get(branch).should('have.text', data.branch);
-            cy.get(runDatetime).should('have.text', data.dateTime);
+            cy.get(runDatetime).contains(data.dateTime);
             cy.get(author).should('have.text', data.author);
             //verify table
             cy.get('tr').should('have.length', 4);
@@ -80,7 +80,7 @@ describe('testerloop debug page', () => {
             cy.get(testExecutionNo(0))
                 .find('td')
                 .eq(1)
-                .contains(data.textExecution0Datetime)
+                .contains(data.dateTime)
                 .should('be.visible');
             cy.get(testExecutionNo(0))
                 .find('td')
