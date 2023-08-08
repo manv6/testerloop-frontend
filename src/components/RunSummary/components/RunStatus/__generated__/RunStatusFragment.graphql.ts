@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e71758176bd774e1bdcfe3ac144e57f9>>
+ * @generated SignedSource<<51c518880224915c7434ba64fd68e1c7>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -18,7 +18,7 @@ export type RunStatusFragment$data = {
         readonly events: {
           readonly totalCount: number;
         };
-      };
+      } | null;
     }>;
     readonly totalCount: number;
   };

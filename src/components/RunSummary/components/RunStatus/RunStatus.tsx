@@ -34,7 +34,7 @@ const RunStatus: React.FC<Props> = ({ fragmentKey }) => {
     );
 
     const didAnyTestFail = runStatus.executions.edges.some(
-        (edge) => edge.node.events.totalCount > 0
+        (edge) => !edge.node || edge.node.events.totalCount > 0
     );
 
     const tagType = didAnyTestFail ? 'error' : 'success';

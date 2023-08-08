@@ -98,23 +98,32 @@ const runRequest = (body: RequestBody, signal?: AbortSignal) => {
                     (part) => part.errors && part.errors.length > 0
                 );
                 if (errorPart?.errors) {
-                    const error = new GraphQLError(errorPart.errors[0]);
-                    sink.error(error);
-                } else {
-                    // This is to work-around a relay bug: https://github.com/facebook/relay/issues/3904
-                    if (
-                        formatted.length === 1 &&
-                        (!('hasNext' in formatted[0]) || !formatted[0].hasNext)
-                    )
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        (formatted[0] as any).extensions = {
-                            // eslint-disable-next-line camelcase
-                            is_final: true,
-                        };
-                    // End relay bug workaround
-
-                    sink.next(formatted);
+                    const ignoreError = errorPart.errors.every((error) => {
+                        if (!error.path) return false;
+                        const pathStr = error.path.join('.');
+                        const regex = /^testRun\.executions\.edges\.\d+\.node/;
+                        return regex.test(pathStr);
+                    });
+                    console.log(errorPart.errors);
+                    if (!ignoreError) {
+                        const error = new GraphQLError(errorPart.errors[0]);
+                        sink.error(error);
+                        return;
+                    }
                 }
+                // This is to work-around a relay bug: https://github.com/facebook/relay/issues/3904
+                if (
+                    formatted.length === 1 &&
+                    (!('hasNext' in formatted[0]) || !formatted[0].hasNext)
+                )
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    (formatted[0] as any).extensions = {
+                        // eslint-disable-next-line camelcase
+                        is_final: true,
+                    };
+                // End relay bug workaround
+
+                sink.next(formatted);
             },
             onError: (err) => {
                 sink.error(err as Error);

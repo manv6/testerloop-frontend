@@ -26,26 +26,32 @@ export const TestExecutionListRow: React.FC<Props> = ({
     preloadFetcher,
     idx,
 }) => {
+    console.log('Mounting');
     const testExecutionRaw = useFragment(
         graphql`
-            fragment TestExecutionListRowFragment on TestExecution {
-                id
-                at
-                title
-                until
-                failedCommands: events(
-                    filter: { type: COMMAND, commandFilter: { status: FAILED } }
-                ) {
-                    totalCount
+            fragment TestExecutionListRowFragment on TestExecutionEdge {
+                node {
+                    id
+                    at
+                    title
+                    until
+                    failedCommands: events(
+                        filter: {
+                            type: COMMAND
+                            commandFilter: { status: FAILED }
+                        }
+                    ) {
+                        totalCount
+                    }
                 }
             }
         `,
         fragmentKey
     );
-    const testExecution = useMemo(
-        () => formatIntervalEvent(testExecutionRaw),
-        [testExecutionRaw]
-    );
+    if (!testExecutionRaw.node)
+        throw new Error('Missing or incomplete log files.');
+    const node = testExecutionRaw.node;
+    const testExecution = useMemo(() => formatIntervalEvent(node), [node]);
 
     const duration = useMemo(
         () => getDuration(testExecution.at, testExecution.until),

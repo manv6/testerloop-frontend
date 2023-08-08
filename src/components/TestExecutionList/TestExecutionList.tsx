@@ -6,6 +6,7 @@ import { TestExecutionListRow } from './TestExecutionListRow';
 import { useFetcher } from 'react-router-dom';
 import { Table, Panel } from 'src/components/common';
 import styles from './TestExecutionList.module.scss';
+import ErrorBoundary from './ErrorBoundary';
 
 type Props = {
     fragmentKey: TestExecutionListFragment$key;
@@ -16,12 +17,12 @@ export const TestExecutionList: React.FC<Props> = ({ fragmentKey }) => {
         graphql`
             fragment TestExecutionListFragment on TestExecutionConnection {
                 edges {
+                    cursor
                     node {
                         title
-                        id
                         at
-                        ...TestExecutionListRowFragment
                     }
+                    ...TestExecutionListRowFragment
                 }
             }
         `,
@@ -30,9 +31,12 @@ export const TestExecutionList: React.FC<Props> = ({ fragmentKey }) => {
     const preloadFetcher = useFetcher();
 
     const edges = [...data.edges].sort((a, b) => {
+        if (a.node === null && b.node === null) return 0;
+        if (a.node === null) return 1;
+        if (b.node === null) return -1;
+
         if (a.node.title < b.node.title) return -1;
         if (a.node.title > b.node.title) return 1;
-
         return new Date(b.node.at).getTime() - new Date(a.node.at).getTime();
     });
 
@@ -49,13 +53,14 @@ export const TestExecutionList: React.FC<Props> = ({ fragmentKey }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {edges.map(({ node }, idx) => (
-                            <TestExecutionListRow
-                                idx={idx}
-                                key={node.id}
-                                fragmentKey={node}
-                                preloadFetcher={preloadFetcher}
-                            />
+                        {edges.map((edge, idx) => (
+                            <ErrorBoundary key={edge.cursor}>
+                                <TestExecutionListRow
+                                    idx={idx}
+                                    fragmentKey={edge}
+                                    preloadFetcher={preloadFetcher}
+                                />
+                            </ErrorBoundary>
                         ))}
                     </tbody>
                 </Table>

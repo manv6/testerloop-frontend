@@ -24,22 +24,19 @@ const TestRunDateTime: React.FC<Props> = ({ fragmentKey }) => {
         fragmentKey
     );
 
-    const timestamp =
-        testRunData.executions.edges.length === 0
-            ? null
-            : new Date(
-                  Math.min(
-                      ...testRunData.executions.edges.map(({ node: { at } }) =>
-                          new Date(at).getTime()
-                      )
-                  )
-              ).toISOString();
+    const validDates = testRunData.executions.edges
+        .map(({ node }) => node?.at)
+        .filter((at) => at != null && !isNaN(new Date(at).getTime()))
+        .map((at) => new Date(at).getTime());
 
-    return (
-        <span data-cy="test-run-datetime">
-            {timestamp ? formatDate(timestamp) : '-'}{' '}
-        </span>
-    );
+    if (validDates.length === 0) {
+        return <span data-cy="test-run-datetime">-</span>;
+    }
+
+    const minTimestamp = Math.min(...validDates);
+    const timestamp = new Date(minTimestamp).toISOString();
+
+    return <span data-cy="test-run-datetime">{formatDate(timestamp)}</span>;
 };
 
 export default TestRunDateTime;

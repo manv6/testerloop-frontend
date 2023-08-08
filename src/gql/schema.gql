@@ -525,7 +525,7 @@ type TestExecutionConnection {
 
 type TestExecutionEdge {
   cursor: Cursor!
-  node: TestExecution!
+  node: TestExecution
 }
 
 type TestExecutionEnvironment {

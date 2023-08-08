@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<df2e86611c231524d7540b9ca47753ba>>
+ * @generated SignedSource<<9cf7022a06c7cc328f464fbf2900a579>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,13 +11,15 @@
 import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type TestExecutionListRowFragment$data = {
-  readonly at: any;
-  readonly failedCommands: {
-    readonly totalCount: number;
-  };
-  readonly id: string;
-  readonly title: string;
-  readonly until: any;
+  readonly node: {
+    readonly at: any;
+    readonly failedCommands: {
+      readonly totalCount: number;
+    };
+    readonly id: string;
+    readonly title: string;
+    readonly until: any;
+  } | null;
   readonly " $fragmentType": "TestExecutionListRowFragment";
 };
 export type TestExecutionListRowFragment$key = {
@@ -34,65 +36,76 @@ const node: ReaderFragment = {
     {
       "alias": null,
       "args": null,
-      "kind": "ScalarField",
-      "name": "id",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "at",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "title",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "until",
-      "storageKey": null
-    },
-    {
-      "alias": "failedCommands",
-      "args": [
-        {
-          "kind": "Literal",
-          "name": "filter",
-          "value": {
-            "commandFilter": {
-              "status": "FAILED"
-            },
-            "type": "COMMAND"
-          }
-        }
-      ],
-      "concreteType": "TestExecutionEventConnection",
+      "concreteType": "TestExecution",
       "kind": "LinkedField",
-      "name": "events",
+      "name": "node",
       "plural": false,
       "selections": [
         {
           "alias": null,
           "args": null,
           "kind": "ScalarField",
-          "name": "totalCount",
+          "name": "id",
           "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "at",
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "title",
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "until",
+          "storageKey": null
+        },
+        {
+          "alias": "failedCommands",
+          "args": [
+            {
+              "kind": "Literal",
+              "name": "filter",
+              "value": {
+                "commandFilter": {
+                  "status": "FAILED"
+                },
+                "type": "COMMAND"
+              }
+            }
+          ],
+          "concreteType": "TestExecutionEventConnection",
+          "kind": "LinkedField",
+          "name": "events",
+          "plural": false,
+          "selections": [
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "totalCount",
+              "storageKey": null
+            }
+          ],
+          "storageKey": "events(filter:{\"commandFilter\":{\"status\":\"FAILED\"},\"type\":\"COMMAND\"})"
         }
       ],
-      "storageKey": "events(filter:{\"commandFilter\":{\"status\":\"FAILED\"},\"type\":\"COMMAND\"})"
+      "storageKey": null
     }
   ],
-  "type": "TestExecution",
+  "type": "TestExecutionEdge",
   "abstractKey": null
 };
 
-(node as any).hash = "861f206f6f79489f5f6a2fbc7125fa7a";
+(node as any).hash = "30eb03fd158e99b8c46164a317f91cfe";
 
 export default node;

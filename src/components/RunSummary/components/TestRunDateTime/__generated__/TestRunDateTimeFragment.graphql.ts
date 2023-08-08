@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f088ae0b541f7cf1ab6b6bd766b3ef45>>
+ * @generated SignedSource<<525fb408bc958f6b3ca66c7d4b2eae0d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,7 +15,7 @@ export type TestRunDateTimeFragment$data = {
     readonly edges: ReadonlyArray<{
       readonly node: {
         readonly at: any;
-      };
+      } | null;
     }>;
   };
   readonly " $fragmentType": "TestRunDateTimeFragment";
