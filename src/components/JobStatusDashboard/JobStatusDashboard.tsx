@@ -59,7 +59,7 @@ const JobStatusDashboard: React.FC = () => {
 
     useEffect(() => {
         loadJobs();
-        const intervalId = setInterval(loadJobs, 10000); // Poll every 10 seconds
+        const intervalId = setInterval(loadJobs, 30000); // Poll every 10 seconds
 
         return () => clearInterval(intervalId);
     }, []);
@@ -77,7 +77,7 @@ const JobStatusDashboard: React.FC = () => {
     if (loading) return <div>Loading...</div>;
     return (
         <div>
-            <h1>Job Statuses</h1>
+            <h1>CI/CD Job Status Dashboard</h1>
             {jobs.map((job) => (
                 <JobStatus
                     key={job.fileName}
