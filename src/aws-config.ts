@@ -2,18 +2,18 @@
 import AWS from 'aws-sdk';
 
 if (
-    !process.env.AWS_ACCESS_KEY_ID ||
-    !process.env.AWS_SECRET_ACCESS_KEY ||
-    !process.env.AWS_REGION
+    !process.env.REACT_APP_AWS_ACCESS_KEY_ID ||
+    !process.env.REACT_APP_AWS_SECRET_ACCESS_KEY ||
+    !process.env.REACT_APP_AWS_REGION
 ) {
     throw new Error('AWS configuration environment variables must be set');
 }
 
 const config = {
-    region: process.env.AWS_REGION!,
+    region: process.env.REACT_APP_AWS_REGION!,
     credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-        secretAccessKey: process.env.RAWS_SECRET_ACCESS_KEY!,
+        accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID!,
+        secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY!,
     },
 };
 

@@ -19,8 +19,7 @@ export const listFilesInFolder = async (
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 (item) => item.Key!
             ) || [];
-        // return keys;
-        return ['job1:0', 'job2:1'];
+        return keys;
     } catch (err) {
         console.error('Error listing files from S3:', err);
         throw err;
