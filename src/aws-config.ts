@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import AWS from 'aws-sdk';
 const env = process.env;
-
+console.log(env);
 if (
     !env.REACT_APP_AWS_ACCESS_KEY_ID ||
     !env.REACT_APP_AWS_SECRET_ACCESS_KEY ||
