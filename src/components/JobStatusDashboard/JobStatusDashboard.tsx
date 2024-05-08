@@ -1,17 +1,22 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useState, useMemo } from 'react';
 import styles from './JobStatusDashboard.module.scss';
-
-import { fetchDataFromS3, listFilesInFolder } from '../../utils/s3Data';
-// leaving this here for testing purposes
-// import { fetchDataFromFile, listFilesInFolder } from '../../utils/localData';
+import { useLazyLoadQuery } from 'react-relay/hooks';
+import graphql from 'babel-plugin-relay/macro';
 
 interface JobStatusProps {
     status: string;
     fileName: string;
+    lastRun: string;
     onClick: (fileName: string) => void;
 }
 
-const JobStatus: React.FC<JobStatusProps> = ({ status, fileName, onClick }) => {
+const JobStatus: React.FC<JobStatusProps> = ({
+    status,
+    fileName,
+    lastRun,
+    onClick,
+}) => {
     const jobClass = status === '0' ? styles.jobSuccess : styles.jobFailed;
     return (
         <button
@@ -20,49 +25,27 @@ const JobStatus: React.FC<JobStatusProps> = ({ status, fileName, onClick }) => {
             type="button"
         >
             {fileName}: {status === '0' ? 'Success' : 'Failed'}
+            <br></br><br></br>Last Run: {lastRun}
         </button>
     );
 };
 
-interface Job {
-    fileName: string;
-    status: string;
-}
-
 const JobStatusDashboard: React.FC = () => {
-    const [jobs, setJobs] = useState<Job[]>([]);
-    const [loading, setLoading] = useState(true);
-
-    const loadJobs = async () => {
-        const bucket = 'qa-orcd-cypress-tests';
-        const prefix = 'job_status/'; // The folder within the bucket
-
-        try {
-            const fileKeys = await listFilesInFolder(bucket, prefix);
-            // leaving this here for testing purposes
-            // const fileKeys = await listFilesInFolder();
-            const jobData = await Promise.all(
-                fileKeys.map(async (key) => {
-                    const status = await fetchDataFromS3(bucket, key);
-                    // leaving this here for testing purposes
-                    // const status = await fetchDataFromFile(key);
-                    return { fileName: key, status: status.trim() };
-                })
-            );
-
-            setJobs(jobData);
-        } catch (error) {
-            console.error('Failed to load job statuses:', error);
-        }
-        setLoading(false);
-    };
-
-    useEffect(() => {
-        loadJobs();
-        const intervalId = setInterval(loadJobs, 30000); // Poll every 10 seconds
-
-        return () => clearInterval(intervalId);
-    }, []);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filter, setFilter] = useState('all');
+    const [sortDirection, setSortDirection] = useState('asc');
+    const data: any = useLazyLoadQuery(
+        graphql`
+            query JobStatusDashboardQuery {
+                getAllStatuses {
+                    fileName
+                    status
+                    lastRun
+                }
+            }
+        `,
+        { fetchPolicy: 'store-or-network' }
+    );
 
     const handleJobClick = (fileName: string) => {
         console.log('Clicked:', fileName);
@@ -74,18 +57,83 @@ const JobStatusDashboard: React.FC = () => {
         );
     };
 
-    if (loading) return <div>Loading...</div>;
+    if (!data.getAllStatuses) return <div>Loading...</div>;
+
+    // Use useMemo to optimize recalculations only when needed
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const filteredAndSortedJobs = useMemo(() => {
+        const filteredJobs = data.getAllStatuses.filter(
+            (job: { fileName: string; status: string }) =>
+                (filter === 'all' ||
+                    (filter === 'running' && job.status === 'R') ||
+                    (filter === 'success' && job.status === '0') ||
+                    (filter === 'failed' && job.status !== '0')) &&
+                job.fileName.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        return filteredJobs.sort((a: any, b: any) => {
+            const modifier = sortDirection === 'asc' ? 1 : -1;
+            return a.fileName.localeCompare(b.fileName) * modifier;
+        });
+    }, [data, filter, searchTerm, sortDirection]);
+
     return (
         <div>
             <h1>CI/CD Job Status Dashboard</h1>
-            {jobs.map((job) => (
-                <JobStatus
-                    key={job.fileName}
-                    status={job.status}
-                    fileName={job.fileName}
-                    onClick={handleJobClick}
+            <div>
+                <input
+                    type="text"
+                    placeholder="Search by file name"
+                    className={` ${styles.filterClass}`}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                 />
-            ))}
+                <button
+                    className={` ${styles.filterClass}`}
+                    onClick={() => setFilter('all')}
+                >
+                    All
+                </button>
+                <button
+                    className={` ${styles.filterClass}`}
+                    onClick={() => setFilter('success')}
+                >
+                    Success
+                </button>
+                <button
+                    className={` ${styles.filterClass}`}
+                    onClick={() => setFilter('failed')}
+                >
+                    Failed
+                </button>
+                <button
+                    className={` ${styles.filterClass}`}
+                    onClick={() => setSortDirection('asc')}
+                >
+                    Sort Asc
+                </button>
+                <button
+                    className={` ${styles.filterClass}`}
+                    onClick={() => setSortDirection('desc')}
+                >
+                    Sort Desc
+                </button>
+            </div>
+            <div className="jobDashboardContainer">
+                {filteredAndSortedJobs.map(
+                    (job: {
+                        fileName: string;
+                        status: string;
+                        lastRun: string;
+                    }) => (
+                        <JobStatus
+                            key={job.fileName + job.status + job.lastRun}
+                            status={job.status}
+                            fileName={job.fileName}
+                            lastRun={job.lastRun}
+                            onClick={handleJobClick}
+                        />
+                    )
+                )}
+            </div>
         </div>
     );
 };
