@@ -17,15 +17,36 @@ const JobStatus: React.FC<JobStatusProps> = ({
     lastRun,
     onClick,
 }) => {
-    const jobClass = status === '0' ? styles.jobSuccess : styles.jobFailed;
+    let jobClass;
+    let jobStatusLabel;
+    switch (status) {
+        case '0':
+            jobClass = styles.jobSuccess;
+            jobStatusLabel = 'Success';
+            break;
+        case '1':
+            jobClass = styles.jobFailed;
+            jobStatusLabel = 'Failed';
+            break;
+        case 'R':
+            jobClass = styles.jobRunning;
+            jobStatusLabel = 'Running';
+            break;
+        default:
+            jobClass = styles.jobDefault;
+            jobStatusLabel = 'Unknown';
+            break;
+    }
+
     return (
         <button
             className={`${styles.jobButton} ${jobClass}`}
             onClick={() => onClick(fileName)}
             type="button"
         >
-            {fileName}: {status === '0' ? 'Success' : 'Failed'}
-            <br></br><br></br>Last Run: {lastRun}
+            {fileName}: {jobStatusLabel}
+            <br></br>
+            <br></br>Last Run: {lastRun}
         </button>
     );
 };
@@ -108,7 +129,7 @@ const JobStatusDashboard: React.FC = () => {
                     className={` ${styles.filterClass}`}
                     onClick={() => setFilter('running')}
                 >
-                    Failed
+                    Running
                 </button>
                 <button
                     className={` ${styles.filterClass}`}

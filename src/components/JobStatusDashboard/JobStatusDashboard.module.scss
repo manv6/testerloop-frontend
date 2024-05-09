@@ -8,7 +8,7 @@
 .jobButton {
     flex: 1 0 250px; /* Grow to fill space, but not shrink below 250px */
     padding: 20px;
-    width:23%;
+    width: 23%;
     height: 100px;
     margin-bottom: 10px; /* Ensures spacing only at the top */
     margin-right: 10px; /* Ensures spacing only at the right */
@@ -19,6 +19,7 @@
     text-align: left;
     transition: background-color 0.3s, opacity 0.3s;
     font-size: medium;
+
     &:hover {
         opacity: 0.8;
     }
@@ -46,6 +47,14 @@
 
 .jobFailed {
     background-color: red;
+}
+
+.jobRunning {
+    background-color: #5a5252;
+}
+
+.jobDefault {
+    background-color: rgb(204, 199, 199);
 }
 
 /* Responsive adjustments */
