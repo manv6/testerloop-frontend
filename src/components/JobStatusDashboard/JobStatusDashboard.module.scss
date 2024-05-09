@@ -1,14 +1,40 @@
-.jobButton {
-    display: block; // Make the button behave like a block element
-    width: 100%; // Ensure it spans the full width of its container
+.jobDashboardContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
     padding: 20px;
-    margin: 10px;
+}
+
+.jobButton {
+    flex: 1 0 250px; /* Grow to fill space, but not shrink below 250px */
+    padding: 20px;
+    width: 23%;
+    height: 100px;
+    margin-bottom: 10px; /* Ensures spacing only at the top */
+    margin-right: 10px; /* Ensures spacing only at the right */
     background-color: transparent;
     border: none;
     cursor: pointer;
     color: white;
     text-align: left;
-    transition: background-color 0.3s ease, opacity 0.3s ease;
+    transition: background-color 0.3s, opacity 0.3s;
+    font-size: medium;
+
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
+.filterClass {
+    width: 15%;
+    padding: 20px;
+    margin: 2px; /* Ensures spacing only at the bottom */
+    background-color: #5a5252;
+    border: none;
+    cursor: pointer;
+    color: white;
+    text-align: left;
+    transition: background-color 0.3s, opacity 0.3s;
 
     &:hover {
         opacity: 0.8;
@@ -21,4 +47,43 @@
 
 .jobFailed {
     background-color: red;
+}
+
+.jobRunning {
+    background-color: #5a5252;
+}
+
+.jobDefault {
+    background-color: rgb(204 199 199);
+}
+
+/* Responsive adjustments */
+@media (min-width: 1251px) {
+    .jobDashboardContainer {
+        grid-template-columns: repeat(5, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 1250px) {
+    .jobDashboardContainer {
+        grid-template-columns: repeat(4, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 1000px) {
+    .jobDashboardContainer {
+        grid-template-columns: repeat(3, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 750px) {
+    .jobDashboardContainer {
+        grid-template-columns: repeat(2, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 500px) {
+    .jobDashboardContainer {
+        grid-template-columns: 1fr; /* All items will stack in a single column */
+    }
 }
