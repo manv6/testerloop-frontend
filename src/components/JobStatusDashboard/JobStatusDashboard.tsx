@@ -67,7 +67,7 @@ const JobStatusDashboard: React.FC = () => {
                 (filter === 'all' ||
                     (filter === 'running' && job.status === 'R') ||
                     (filter === 'success' && job.status === '0') ||
-                    (filter === 'failed' && job.status !== '0')) &&
+                    (filter === 'failed' && job.status === '1')) &&
                 job.fileName.toLowerCase().includes(searchTerm.toLowerCase())
         );
         return filteredJobs.sort((a: any, b: any) => {
@@ -101,6 +101,12 @@ const JobStatusDashboard: React.FC = () => {
                 <button
                     className={` ${styles.filterClass}`}
                     onClick={() => setFilter('failed')}
+                >
+                    Failed
+                </button>
+                <button
+                    className={` ${styles.filterClass}`}
+                    onClick={() => setFilter('running')}
                 >
                     Failed
                 </button>
