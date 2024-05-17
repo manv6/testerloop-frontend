@@ -7,7 +7,7 @@
 
 .jobButton {
     flex: 1 0 250px; /* Grow to fill space, but not shrink below 250px */
-    padding: 20px;
+    padding: 22px;
     width: 23%;
     height: 100px;
     margin-bottom: 10px; /* Ensures spacing only at the top */
@@ -26,7 +26,7 @@
 }
 
 .filterClass {
-    width: 15%;
+    width: 19%;
     padding: 20px;
     margin: 2px; /* Ensures spacing only at the bottom */
     background-color: #5a5252;
@@ -39,6 +39,48 @@
     &:hover {
         opacity: 0.8;
     }
+}
+
+.searchClass {
+    width: 19%;
+    padding: 20px;
+    margin: 2px; /* Ensures spacing only at the bottom */
+    background-color: #b9b1b1;
+    border: none;
+    cursor: pointer;
+    color: white;
+    text-align: left;
+    transition: background-color 0.3s, opacity 0.3s;
+
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
+.sortClass {
+    width: 19%;
+    padding: 20px;
+    margin: 2px; /* Ensures spacing only at the bottom */
+    background-color: #756e6e;
+    border: none;
+    cursor: pointer;
+    color: white;
+    text-align: left;
+    transition: background-color 0.3s, opacity 0.3s;
+
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
+.selectedFilter {
+    background-color: orange;
+    color: white;
+}
+
+.selectedSort {
+    background-color: orange;
+    color: white;
 }
 
 .jobSuccess {
