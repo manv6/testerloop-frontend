@@ -1,6 +1,6 @@
 {
-    "name": "otf-frontend",
-    "version": "0.1.1",
+    "name": "testerloop-frontend",
+    "version": "0.2.0",
     "private": true,
     "proxy": "https://testerloop.theorchard.io",
     "dependencies": {
